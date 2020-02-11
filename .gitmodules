@@ -1,0 +1,3 @@
+[submodule "azure-pipelines-vscode"]
+	path = azure-pipelines-vscode
+	url = https://github.com/microsoft/azure-pipelines-vscode
