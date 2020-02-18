@@ -1,0 +1,69 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/arnimagnusson/Desktop/Hr/Vor 2020/Lokaverkefni/bakendi/Tjonustukerfi/Bakendi/ThjonustukerfiWebAPI/ThjonustukerfiWebAPI.csproj": {}
+  },
+  "projects": {
+    "/Users/arnimagnusson/Desktop/Hr/Vor 2020/Lokaverkefni/bakendi/Tjonustukerfi/Bakendi/ThjonustukerfiWebAPI/ThjonustukerfiWebAPI.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/arnimagnusson/Desktop/Hr/Vor 2020/Lokaverkefni/bakendi/Tjonustukerfi/Bakendi/ThjonustukerfiWebAPI/ThjonustukerfiWebAPI.csproj",
+        "projectName": "ThjonustukerfiWebAPI",
+        "projectPath": "/Users/arnimagnusson/Desktop/Hr/Vor 2020/Lokaverkefni/bakendi/Tjonustukerfi/Bakendi/ThjonustukerfiWebAPI/ThjonustukerfiWebAPI.csproj",
+        "packagesPath": "/Users/arnimagnusson/.nuget/packages/",
+        "outputPath": "/Users/arnimagnusson/Desktop/Hr/Vor 2020/Lokaverkefni/bakendi/Tjonustukerfi/Bakendi/ThjonustukerfiWebAPI/obj/",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "/Users/arnimagnusson/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp2.2"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp2.2": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp2.2": {
+          "dependencies": {
+            "Microsoft.AspNetCore.App": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.2.0, )",
+              "autoReferenced": true
+            },
+            "Microsoft.AspNetCore.Razor.Design": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.NETCore.App": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.2.0, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461"
+          ],
+          "assetTargetFallback": true,
+          "warn": true
+        }
+      }
+    }
+  }
+}
