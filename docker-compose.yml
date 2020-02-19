@@ -1,0 +1,47 @@
+version: "3"
+
+volumes:
+  local_postgres_data: {}
+
+services:
+  thjonustukerfi-webapi:
+    build: ./Bakendi/ThjonustukerfiWebAPI
+    image: thjonustukerfi-webapi:latest
+    container_name: thjonustukerfi-webapi
+    ports:
+      - "5000:5000"
+    depends_on: 
+      - "postgres_image"
+    networks:
+      - "thjonustukerfi-network"
+    environment:
+      DB_CONNECTION_STRING: Host=postgres_image;Port=5432;Database=${postgresDatabase};Username=${postgresUser};Password=${postgresPassword}
+  
+  postgres_image:
+    image: postgres:latest
+    container_name: postgres_image
+    restart: always
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${postgresUser}
+      POSTGRES_PASSWORD: ${postgresPassword}
+      POSTGRES_DB: ${postgresDatabase}
+    networks:
+      - "thjonustukerfi-network"
+    
+  thjonustukerfi-react-app:
+    build: ./Vefur/thjonustukerfi-react-app
+    image: thjonustukerfi-react-app:latest
+    container_name: thjonustukerfi-react-app
+    ports:
+      - "80:5000"
+    networks:
+      - "thjonustukerfi-network"
+
+volumes:
+  db_volume:
+
+networks:
+  thjonustukerfi-network:
+    driver: bridge
