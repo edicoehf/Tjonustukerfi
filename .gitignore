@@ -141,6 +141,7 @@ bin/
 obj/
 TestResults/
 out/
+build/
 ###################
 # Web publish log #
 ###################
