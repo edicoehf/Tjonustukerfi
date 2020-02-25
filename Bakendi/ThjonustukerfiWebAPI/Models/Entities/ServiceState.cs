@@ -4,6 +4,7 @@ namespace ThjonustukerfiWebAPI.Models.Entities
 {
     public class ServiceState
     {
+        public long Id { get; set; }
         [ForeignKey("Service")]
         public long ServiceId { get; set; }
         [ForeignKey("State")]
