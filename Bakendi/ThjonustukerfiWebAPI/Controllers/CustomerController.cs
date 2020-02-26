@@ -13,6 +13,8 @@ namespace ThjonustukerfiWebAPI.Controllers
         {
             _customerService = customerService;
         }
+        [Route("")]
+        [HttpPost]
         public IActionResult CreateCustomer([FromBody] CustomerInputModel customer)
         {
             if(!ModelState.IsValid) { return BadRequest("Input model is not valid"); }
