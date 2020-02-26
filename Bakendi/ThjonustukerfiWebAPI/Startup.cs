@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,7 +12,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ThjonustukerfiWebAPI.Mappings;
 using ThjonustukerfiWebAPI.Models;
+using ThjonustukerfiWebAPI.Repositories.Implementations;
+using ThjonustukerfiWebAPI.Repositories.Interfaces;
+using ThjonustukerfiWebAPI.Services.Implementations;
+using ThjonustukerfiWebAPI.Services.Interfaces;
 
 namespace ThjonustukerfiWebAPI
 {
@@ -28,6 +34,8 @@ namespace ThjonustukerfiWebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            // Adding database connection
             var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
             services.AddDbContext<DataContext>(options => {
                 if (connectionString != null)
@@ -39,6 +47,18 @@ namespace ThjonustukerfiWebAPI
                     options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
                 }
             });
+
+            // Adding automapper
+            var mappingProfile = new MapperConfiguration(mc => {
+                mc.AddProfile(new MappingProfile());
+            });
+            var mapper = mappingProfile.CreateMapper();
+            services.AddSingleton(mapper);
+
+            //* Adding Interfaces for dependency injections
+            // Adding for customer
+            services.AddTransient<ICustomerService, CustomerService>();
+            services.AddTransient<ICustomerRepo, CustomerRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

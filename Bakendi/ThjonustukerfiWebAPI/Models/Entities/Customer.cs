@@ -1,3 +1,5 @@
+using System;
+
 namespace ThjonustukerfiWebAPI.Models.Entities
 {
     public class Customer
@@ -10,5 +12,8 @@ namespace ThjonustukerfiWebAPI.Models.Entities
         public string Address { get; set; }
         public string PostalCode { get; set; }
         public string JSON { get; set; }
+        // Auto generated
+        public DateTime DateCreated { get; set; }
+        public DateTime DateModified { get; set; }
     }
 }
