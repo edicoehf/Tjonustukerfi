@@ -6,6 +6,7 @@ namespace ThjonustukerfiWebAPI.Models.Entities
     public class Item
     {
         public long Id { get; set; }
+        public string Type { get; set; }
         [ForeignKey("Order")]
         public long OrderId { get; set; }
         [ForeignKey("State")]
