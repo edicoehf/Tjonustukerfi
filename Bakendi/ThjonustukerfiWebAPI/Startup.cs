@@ -31,9 +31,16 @@ namespace ThjonustukerfiWebAPI
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        readonly string MyAllowSpecificOrigins = "AllowOrigins";
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            // CORS
+            services.AddCors(c =>
+            {
+                c.AddPolicy(MyAllowSpecificOrigins, options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            });
 
             // Adding database connection
             var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
@@ -69,7 +76,9 @@ namespace ThjonustukerfiWebAPI
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            app.UseCors(MyAllowSpecificOrigins);
+
+            // app.UseHttpsRedirection();
 
             app.UseRouting();
 
