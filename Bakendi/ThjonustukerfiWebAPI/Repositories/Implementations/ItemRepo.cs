@@ -19,7 +19,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
         public ItemDTO CreateItem(ItemInputModel item)
         {
             // Mapping from input to entity and adding to database
-            var entity = _dbContext.Item.Add(_mapper.Map<Item>(item));
+            var entity = _dbContext.Item.Add(_mapper.Map<Item>(item)).Entity;
             _dbContext.SaveChanges();
             // Mapping from entity to DTO
             return _mapper.Map<ItemDTO>(entity);
