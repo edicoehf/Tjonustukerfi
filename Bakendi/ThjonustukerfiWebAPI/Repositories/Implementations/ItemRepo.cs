@@ -7,23 +7,23 @@ using ThjonustukerfiWebAPI.Repositories.Interfaces;
 
 namespace ThjonustukerfiWebAPI.Repositories.Implementations
 {
-    public class CustomerRepo : ICustomerRepo
+    public class ItemRepo : IItemRepo
     {
         private DataContext _dbContext;
         private IMapper _mapper;
-        public CustomerRepo(DataContext context, IMapper mapper)
+        public ItemRepo(DataContext context, IMapper mapper)
         {
             _dbContext = context;
             _mapper = mapper;
         }
-        public CustomerDTO CreateCustomer(CustomerInputModel customer)
+        public ItemDTO CreateItem(ItemInputModel item)
         {
             // Mapping from input to entity and adding to database
-            var entity = _dbContext.Customer.Add(_mapper.Map<Customer>(customer)).Entity;
+            var entity = _dbContext.Item.Add(_mapper.Map<Item>(item));
             _dbContext.SaveChanges();
-
             // Mapping from entity to DTO
-            return _mapper.Map<CustomerDTO>(entity);
+            return _mapper.Map<ItemDTO>(entity);
         }
+        
     }
 }

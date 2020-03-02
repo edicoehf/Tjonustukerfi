@@ -10,6 +10,7 @@ namespace ThjonustukerfiWebAPI.Mappings
     {
         public MappingProfile()
         {
+            //* Customer Mappings
             // Automapper for CustomerInputModel to Customer entity
             CreateMap<CustomerInputModel, Customer>()
                 .ForMember(src => src.DateCreated, opt => opt.MapFrom(src => DateTime.Now))
@@ -17,6 +18,14 @@ namespace ThjonustukerfiWebAPI.Mappings
             
             // Automapper for Customer entity to Customer DTO
             CreateMap<Customer, CustomerDTO>();
+
+            //* Item Mappings
+            // Automapper for ItemInputModel to Item entity
+            CreateMap<ItemInputModel, Item>()
+                .ForMember(src => src.DateCreated, opt => opt.MapFrom(src => DateTime.Now))
+                .ForMember(src => src.DateModified, opt => opt.MapFrom(src => DateTime.Now));
+
+            CreateMap<Item, ItemDTO>();
         }
     }
 }

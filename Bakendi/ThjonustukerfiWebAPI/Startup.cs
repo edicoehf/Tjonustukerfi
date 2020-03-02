@@ -63,9 +63,13 @@ namespace ThjonustukerfiWebAPI
             services.AddSingleton(mapper);
 
             //* Adding Interfaces for dependency injections
-            // Adding for customer
+            // Adding for Customer
             services.AddTransient<ICustomerService, CustomerService>();
             services.AddTransient<ICustomerRepo, CustomerRepo>();
+
+            // Adding for Item
+            services.AddTransient<IItemService, ItemService>();
+            services.AddTransient<IItemRepo, ItemRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
