@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "Vefvidmot fyrir thjonustukerfi",
   "main": "index.js",
-  "scripts": {
-    "test": "jest"
-  },
   "author": "Edico ehf.",
   "license": "ISC",
   "dependencies": {
