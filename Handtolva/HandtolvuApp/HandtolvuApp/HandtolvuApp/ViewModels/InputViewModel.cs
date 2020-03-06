@@ -22,8 +22,6 @@ namespace HandtolvuApp.ViewModels
                 var args = new PropertyChangedEventArgs(nameof(InputVariable));
 
                 PropertyChanged?.Invoke(this, args);
-
-                System.Diagnostics.Debug.WriteLine("Input: " + inputVariable);
             }
         }
     }
