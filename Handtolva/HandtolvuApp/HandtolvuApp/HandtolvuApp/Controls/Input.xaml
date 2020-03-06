@@ -20,7 +20,8 @@
         </Grid.ColumnDefinitions>
 
         <Editor Grid.Column="0" Grid.ColumnSpan="3"
-                Placeholder="Sláðu inn vörunúmer" Margin="10,0" 
+                Placeholder="Sláðu inn vörunúmer" Margin="10,0"
+                AutomationId="inputEntry"
                 Text="{Binding InputVariable}"/>
 
         <Button Grid.Column="3" Text="Ok"
