@@ -17,10 +17,5 @@ namespace HandtolvuApp
         {
             InitializeComponent();
         }
-
-        private void Button_SizeChanged()
-        {
-
-        }
     }
 }

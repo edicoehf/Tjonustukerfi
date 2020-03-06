@@ -4,6 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
+             xmlns:local="clr-namespace:HandtolvuApp.Controls"
              x:Class="HandtolvuApp.MainPage">
 
     <Grid>
@@ -28,14 +29,11 @@
         <Label Text="Sláðu inn vörunúmer eða skannaðu strikamerki." FontSize="18"
                Grid.Row="1" Grid.ColumnSpan="4"
                HorizontalOptions="Center"
-               VerticalOptions="CenterAndExpand" />
+               VerticalOptions="CenterAndExpand" 
+               />
 
-        <Editor Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2"
-                Placeholder="Sláðu inn vörunúmer" Margin="10,0" />
+        <local:Input Grid.Row="2" Grid.ColumnSpan="4"/>
 
-        <Button Grid.Row="2" Grid.Column="3" Text="Ok"
-                Margin="0, 5, 10, 5"
-                BackgroundColor="Green" TextColor="White" />
     </Grid>
 
 
