@@ -28,6 +28,8 @@ steps:
     command: custom
     workingDir: 'Vefur/thjonustukerfi-react-app'
     verbose: false
+    variables:
+        CI: false
     customCommand: 'run build'
   
 - task: ArchiveFiles@2
