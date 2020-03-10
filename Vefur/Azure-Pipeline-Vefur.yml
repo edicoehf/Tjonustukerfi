@@ -16,7 +16,8 @@ steps:
     command: custom
     workingDir: 'Vefur/thjonustukerfi-react-app'
     verbose: false
-    customCommand: 'run CItest'
+    # customCommand: 'run CItest'
+- script: npm run CItest
   
 - task: Npm@1
   displayName: 'Build app'
