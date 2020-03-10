@@ -3,8 +3,8 @@ pool:
     demands: npm
     vmImage: 'ubuntu-latest'
 
-# variables:
-#     CI: true
+variables:
+    CI: true
 
 steps:
 - task: Npm@1
@@ -13,14 +13,14 @@ steps:
     workingDir: 'Vefur/thjonustukerfi-react-app'
     verbose: false
   
-# - task: Npm@1
-#   displayName: 'Run Tests'
-#   inputs:
-#     command: custom
-#     workingDir: 'Vefur/thjonustukerfi-react-app'
-#     verbose: false
-#     variables: $(CI)
-#     customCommand: 'run test'
+- task: Npm@1
+  displayName: 'Run Tests'
+  inputs:
+    command: custom
+    workingDir: 'Vefur/thjonustukerfi-react-app'
+    verbose: false
+    variables: $(CI)
+    customCommand: 'run test'
 
 - task: Npm@1
   displayName: 'Build app'
