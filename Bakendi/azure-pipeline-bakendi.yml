@@ -35,7 +35,7 @@ pool:
       projects: '*Tests/*.csproj'
       arguments: '--configuration $(BuildConfiguration)'
     
-  - script: dotnet test "ThjonustukerfiTests.csproj" --logger trx --collect "Code coverage"
+  - script: dotnet test "ThjonustukerfiTests/ThjonustukerfiTests.csproj" --logger trx --collect "Code coverage"
   - task: PublishTestResults@2
     inputs:
       testRunner: VSTest
