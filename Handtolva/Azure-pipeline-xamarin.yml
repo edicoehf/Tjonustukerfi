@@ -7,7 +7,7 @@ trigger:
     - master
     
 pool:
-    vmImage: 'macos-latest'
+    vmImage: 'windows-latest'
 
 variables:
     buildConfiguration: 'Release'
@@ -18,10 +18,10 @@ steps:
 
 - task: NuGetCommand@2
     inputs:
-    restoreSolution: '**/*.sln'
+      restoreSolution: '**/*.sln'
 
 - task: XamarinAndroid@1
     inputs:
-    projectFile: '**/*droid*.csproj'
-    outputDirectory: '$(outputDirectory)'
-    configuration: '$(buildConfiguration)'
+      projectFile: '**/*droid*.csproj'
+      outputDirectory: '$(outputDirectory)'
+      configuration: '$(buildConfiguration)'
