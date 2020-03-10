@@ -22,14 +22,16 @@ steps:
     variables: $(CI)
     customCommand: 'run test'
   
+variables:
+    CI: false
+
 - task: Npm@1
   displayName: 'Build app'
   inputs:
     command: custom
     workingDir: 'Vefur/thjonustukerfi-react-app'
     verbose: false
-    variables:
-        CI: false
+    variables: $(CI)
     customCommand: 'run build'
   
 - task: ArchiveFiles@2
