@@ -19,7 +19,7 @@ steps:
   displayName: Test
   inputs:
     command: test
-    projects: '*Tests/*.csproj'
+    projects: 'Bakendi/*Tests/*.csproj'
     arguments: '--configuration Release'
 
 - task: DotNetCoreCLI@2
