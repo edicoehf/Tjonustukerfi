@@ -3,8 +3,8 @@ pool:
     demands: npm
     vmImage: 'ubuntu-latest'
 
-variables:
-    CI: true
+# variables:
+#     CI: true
 
 steps:
 - task: Npm@1
