@@ -23,7 +23,6 @@ steps:
     customCommand: 'run test'
 
 - task:
-    displayName: 'Set CI variable to false'
     set_fact:
         CI: false
 
