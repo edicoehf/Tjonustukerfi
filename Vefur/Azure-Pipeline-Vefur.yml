@@ -22,8 +22,6 @@ steps:
     variables: $(CI)
     customCommand: 'run test'
 
-- script: set CI=false
-
 - task: Npm@1
   displayName: 'Build app'
   inputs:
