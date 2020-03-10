@@ -1,5 +1,6 @@
 const validateForm = (values) => {
-    const { name, ssn, email, telephone, postalCode, address } = values;
+    //  name, ssn, email, telephone, postalCode, address
+    const { name, email } = values;
     const errors = {};
     if (name === '') { errors.name = 'Nafn vantar'; }
     if (name.length > 100) { errors.name = 'Nafn verður að vera minna en 100 stafir'; }

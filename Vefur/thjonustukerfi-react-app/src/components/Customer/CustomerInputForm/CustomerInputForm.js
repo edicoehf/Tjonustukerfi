@@ -20,7 +20,8 @@ const CustomerInputForm = () => {
 		createCustomer(values);
 	};
 
-    const { handleSubmit, handleChangeText, values, errors, isSubmitting, resetFields } = useForm(
+    // isSubmitting, resetFields
+    const { handleSubmit, handleChangeText, values, errors } = useForm(
 		initialState,
 		validateForm,
 		submitHandler

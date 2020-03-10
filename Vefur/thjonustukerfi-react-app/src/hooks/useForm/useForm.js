@@ -11,11 +11,12 @@ const useForm = (initialState, validate, submitHandler) => {
 			if (noErrors) {
 				submitHandler(values);
 				setSubmitting(false);
-			} else {
+			} 
+			else {
 				setSubmitting(false);
 			}
 		}
-	}, [errors]);
+	}, [errors, values, submitHandler, isSubmitting]);
 
 	const handleChangeText = e => {
 		setValues({
@@ -31,12 +32,13 @@ const useForm = (initialState, validate, submitHandler) => {
 		setErrors(validationErrors);
 	};
 
-	const resetFields = () => {
-		setValues(initialState);
-		setErrors({});
-	};
+	// const resetFields = () => {
+	// 	setValues(initialState);
+	// 	setErrors({});
+	// };
 
-	return { handleSubmit, handleChangeText, values, errors, isSubmitting, resetFields };
+	// , isSubmitting, resetFields
+	return { handleSubmit, handleChangeText, values, errors };
 };
 
 export default useForm;
