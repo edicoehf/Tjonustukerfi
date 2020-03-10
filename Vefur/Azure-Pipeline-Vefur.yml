@@ -1,6 +1,7 @@
 pool:
     name: Azure Pipelines
     demands: npm
+    vmImage: 'ubuntu-latest'
   
 steps:
 - task: Npm@1
