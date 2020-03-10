@@ -10,12 +10,12 @@ steps:
     workingDir: 'Vefur/thjonustukerfi-react-app'
     verbose: false
   
-- task: Npm@1
-  displayName: 'Run Tests'
-  inputs:
-    command: custom
-    workingDir: 'Vefur/thjonustukerfi-react-app'
-    verbose: false
+# - task: Npm@1
+#   displayName: 'Run Tests'
+#   inputs:
+#     command: custom
+#     workingDir: 'Vefur/thjonustukerfi-react-app'
+#     verbose: false
     # customCommand: 'run CItest'
 - script: npm run CItest
   
