@@ -1,49 +1,41 @@
-# pool:
-#     name: Azure Pipelines
-#     demands: npm
-#     vmImage: 'ubuntu-latest'
+pool:
+    name: Azure Pipelines
+    demands: npm
+    vmImage: 'ubuntu-latest'
 
-stages:
-- stage: build
-  displayName: build
-  variables:
+steps:
+- task: Npm@1
+  displayName: 'Install npm'
+  inputs:
+    workingDir: 'Vefur/thjonustukerfi-react-app'
+    verbose: false
+  
+- task: Npm@1
+  variable:
     CI: true
-  jobs:
-  - job: mainbuild
-    pool:
-      name: Azure Pipelines
-      vmImage: 'ubuntu-latest'
-    steps:
-    - task: Npm@1
-    displayName: 'Install npm'
-    inputs:
-        workingDir: 'Vefur/thjonustukerfi-react-app'
-        verbose: false
-    
-    - task: Npm@1
-    displayName: 'Run Tests'
-    inputs:
-        command: custom
-        workingDir: 'Vefur/thjonustukerfi-react-app'
-        verbose: false
-        customCommand: 'run CItest'
-    
-    - task: Npm@1
-    displayName: 'Build app'
-    inputs:
-        command: custom
-        workingDir: 'Vefur/thjonustukerfi-react-app'
-        verbose: false
-        customCommand: 'run build'
-    
-    - task: ArchiveFiles@2
-    displayName: 'Archive Vefur/thjonustukerfi-react-app/build'
-    inputs:
-        rootFolderOrFile: 'Vefur/thjonustukerfi-react-app/build'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/ReactApp.zip'
-    
-    - task: PublishBuildArtifacts@1
-    displayName: 'Publish Artifact: drop'
-    inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)/ReactApp.zip'
-        
+  displayName: 'Run Tests'
+  inputs:
+    command: custom
+    workingDir: 'Vefur/thjonustukerfi-react-app'
+    verbose: false
+    customCommand: 'run CItest'
+  
+- task: Npm@1
+  displayName: 'Build app'
+  inputs:
+    command: custom
+    workingDir: 'Vefur/thjonustukerfi-react-app'
+    verbose: false
+    customCommand: 'run build'
+  
+- task: ArchiveFiles@2
+  displayName: 'Archive Vefur/thjonustukerfi-react-app/build'
+  inputs:
+    rootFolderOrFile: 'Vefur/thjonustukerfi-react-app/build'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/ReactApp.zip'
+  
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/ReactApp.zip'
+  
