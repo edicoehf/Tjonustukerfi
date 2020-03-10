@@ -22,10 +22,13 @@ steps:
     variables: $(CI)
     customCommand: 'run test'
 
+- task:
+    displayName: 'Set CI variable to false'
+    set_fact:
+        CI: false
+
 - task: Npm@1
   displayName: 'Build app'
-  set_fact:
-    CI: false
   inputs:
     command: custom
     workingDir: 'Vefur/thjonustukerfi-react-app'
