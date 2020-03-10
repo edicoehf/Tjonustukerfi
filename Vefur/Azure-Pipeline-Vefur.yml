@@ -13,18 +13,14 @@ steps:
     workingDir: 'Vefur/thjonustukerfi-react-app'
     verbose: false
   
-- task: Npm@1
-  displayName: 'Run Tests'
-  inputs:
-    command: custom
-    workingDir: 'Vefur/thjonustukerfi-react-app'
-    verbose: false
-    variables: $(CI)
-    customCommand: 'run test'
-
-- task:
-    set_fact:
-        CI: false
+# - task: Npm@1
+#   displayName: 'Run Tests'
+#   inputs:
+#     command: custom
+#     workingDir: 'Vefur/thjonustukerfi-react-app'
+#     verbose: false
+#     variables: $(CI)
+#     customCommand: 'run test'
 
 - task: Npm@1
   displayName: 'Build app'
@@ -32,7 +28,6 @@ steps:
     command: custom
     workingDir: 'Vefur/thjonustukerfi-react-app'
     verbose: false
-    variables: $(CI)
     customCommand: 'run build'
   
 - task: ArchiveFiles@2
