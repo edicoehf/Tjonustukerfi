@@ -17,11 +17,11 @@ steps:
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
-    inputs:
-      restoreSolution: '**/*.sln'
+  inputs:
+    restoreSolution: '**/*.sln'
 
 - task: XamarinAndroid@1
-    inputs:
-      projectFile: '**/*droid*.csproj'
-      outputDirectory: '$(outputDirectory)'
-      configuration: '$(buildConfiguration)'
+  inputs:
+    projectFile: '**/*droid*.csproj'
+    outputDirectory: '$(outputDirectory)'
+    configuration: '$(buildConfiguration)'
