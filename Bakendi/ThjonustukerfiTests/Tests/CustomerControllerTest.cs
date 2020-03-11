@@ -64,13 +64,13 @@ namespace ThjonustukerfiTests.Tests
                 Id = id,
                 Name = "Viggi Siggi"
             };
-            _customerServiceMock.Setup(method => method.GetCustomer(id)).Returns(mockCustomerDTO);
+            _customerServiceMock.Setup(method => method.GetCustomerById(id)).Returns(mockCustomerDTO);
 
             // Create controller
             _customerController = new CustomerController(_customerServiceMock.Object);
 
             // Act
-            var response = _customerController.GetCustomer(id) as OkObjectResult;
+            var response = _customerController.GetCustomerById(id) as OkObjectResult;
 
             //Assert
             // Check if got response with correct status code
