@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ThjonustukerfiWebAPI.Extensions;
 using ThjonustukerfiWebAPI.Mappings;
 using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Repositories.Implementations;
@@ -70,6 +71,10 @@ namespace ThjonustukerfiWebAPI
             // Adding for Item
             services.AddTransient<IItemService, ItemService>();
             services.AddTransient<IItemRepo, ItemRepo>();
+
+            // Adding for Log Repository
+            services.AddTransient<ILogService, LogService>();
+            services.AddTransient<ILogRepository, LogRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,6 +88,10 @@ namespace ThjonustukerfiWebAPI
             app.UseCors(MyAllowSpecificOrigins);
 
             // app.UseHttpsRedirection();
+
+            // Exception Middleware, new exceptions must be added to exception folder in models
+            // and then implemented in the middleware extension
+            app.UseMiddleware<ExceptionMiddlewareExtension>();
 
             app.UseRouting();
 

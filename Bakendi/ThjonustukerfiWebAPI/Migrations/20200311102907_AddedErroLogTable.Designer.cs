@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ThjonustukerfiWebAPI.Models;
@@ -9,9 +10,10 @@ using ThjonustukerfiWebAPI.Models;
 namespace ThjonustukerfiWebAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200311102907_AddedErroLogTable")]
+    partial class AddedErroLogTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,7 +138,7 @@ namespace ThjonustukerfiWebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ExceptionLog");
+                    b.ToTable("EceptionLog");
                 });
 
             modelBuilder.Entity("ThjonustukerfiWebAPI.Models.Entities.Order", b =>

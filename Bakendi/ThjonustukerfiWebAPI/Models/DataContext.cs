@@ -13,5 +13,8 @@ namespace ThjonustukerfiWebAPI.Models
         public DbSet<Service> Service { get; set; }
         public DbSet<State> State { get; set; }
         public DbSet<ServiceState> ServiceState { get; set; }
+
+        //* Error logs
+        public DbSet<Log> ExceptionLog { get; set; }
     }
 }

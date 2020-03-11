@@ -1,6 +1,5 @@
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.InputModels;
-using ThjonustukerfiWebAPI.Repositories.Implementations;
 using ThjonustukerfiWebAPI.Repositories.Interfaces;
 using ThjonustukerfiWebAPI.Services.Interfaces;
 
