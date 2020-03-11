@@ -13,6 +13,7 @@ namespace ThjonustukerfiWebAPI.Controllers
         {
             _customerService = customerService;
         }
+
         [Route("")]
         [HttpPost]
         public IActionResult CreateCustomer([FromBody] CustomerInputModel customer)
@@ -21,6 +22,15 @@ namespace ThjonustukerfiWebAPI.Controllers
             var entity = _customerService.CreateCustomer(customer);
             
             return NoContent();
+        }
+
+        [Route("{id:int}")]
+        [HttpGet]
+        public IActionResult GetCustomer(string id)
+        {
+            var customer = _customerService.GetCustomer(id);
+
+            return Ok(customer);
         }
     }
 }

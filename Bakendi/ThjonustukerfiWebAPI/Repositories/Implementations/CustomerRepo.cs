@@ -2,8 +2,10 @@ using AutoMapper;
 using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.Entities;
+using ThjonustukerfiWebAPI.Models.Exceptions;
 using ThjonustukerfiWebAPI.Models.InputModels;
 using ThjonustukerfiWebAPI.Repositories.Interfaces;
+
 
 namespace ThjonustukerfiWebAPI.Repositories.Implementations
 {
@@ -22,6 +24,15 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             var entity = _dbContext.Customer.Add(_mapper.Map<Customer>(customer)).Entity;
             _dbContext.SaveChanges();
 
+            // Mapping from entity to DTO
+            return _mapper.Map<CustomerDTO>(entity);
+        }
+        public CustomerDTO GetCustomer(string id)
+        {
+            // Get customer customer entity form database
+            var entity = _dbContext.Customer.Find(id);
+            // Check if found
+            if(entity == null) { throw new NotFoundException($"Customer with id {id} was not found."); }
             // Mapping from entity to DTO
             return _mapper.Map<CustomerDTO>(entity);
         }
