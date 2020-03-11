@@ -60,13 +60,13 @@ namespace ThjonustukerfiTests.Tests
                 Id = id,
                 Name = "Viggi Siggi"
             };
-            _customerRepoMock.Setup(method => method.GetCustomer(id)).Returns(mockCustomerDTO);
+            _customerRepoMock.Setup(method => method.GetCustomerById(id)).Returns(mockCustomerDTO);
 
             // Create service
             _customerService = new CustomerService(_customerRepoMock.Object);
 
             // Act
-            var customerDTOReturn = _customerService.GetCustomer(id);
+            var customerDTOReturn = _customerService.GetCustomerById(id);
 
             //Assert
             Assert.IsNotNull(customerDTOReturn);
