@@ -21,10 +21,10 @@ namespace ThjonustukerfiWebAPI.Controllers
             if(!ModelState.IsValid) { return BadRequest("Input model is not valid"); }
             var entity = _customerService.CreateCustomer(customer);
             
-            return NoContent();
+            return CreatedAtRoute("GetCustomerById", new { id = entity.Id}, null);
         }
 
-        [Route("{id:int}")]
+        [Route("{id:int}", Name="GetCustomerById")]
         [HttpGet]
         public IActionResult GetCustomer(long id)
         {

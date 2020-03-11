@@ -75,7 +75,7 @@ namespace ThjonustukerfiTests.Tests
             //Assert
             // Check if got response with correct status code
             Assert.IsNotNull(response);
-            Assert.AreEqual(200, response.StatusCode);
+            Assert.AreEqual(201, response.StatusCode);
 
             // Check if response contains correct data
             CustomerDTO customerDTO = response.Value as CustomerDTO;
