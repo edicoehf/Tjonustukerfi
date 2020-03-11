@@ -6,5 +6,6 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
     public interface ICustomerService
     {
         CustomerDTO CreateCustomer(CustomerInputModel customer);
+        CustomerDTO GetCustomer(long id);
     }
 }

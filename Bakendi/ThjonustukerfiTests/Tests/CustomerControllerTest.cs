@@ -22,30 +22,66 @@ namespace ThjonustukerfiTests.Tests
         {
             // Mocking CustomerService
             _customerServiceMock = new Mock<ICustomerService>();
-            _customerServiceMock.Setup(method => method.CreateCustomer(null)).Returns(new CustomerDTO 
-            {
-                Id = 1,
-                Name = "Siggi Viggi"
-            });
-
-            _customerController = new CustomerController(_customerServiceMock.Object);
         }
 
         [TestMethod]
         public void CreateNewCustomer_CheckingResponseIsCreatedAtRoute()
         {
             // Arrange
+            // Mock service
+            _customerServiceMock.Setup(method => method.CreateCustomer(null)).Returns(new CustomerDTO 
+            {
+                Id = 1,
+                Name = "Siggi Viggi"
+            });
+
+            // Create controller
+            _customerController = new CustomerController(_customerServiceMock.Object);
+
+            // Create input
             CustomerInputModel customer = new CustomerInputModel 
             {
                 Name = "Siggi Viggi"
             };
 
             // Act
-            var createdResponse = _customerController.CreateCustomer(customer);
-            var okResult = createdResponse as NoContentResult;
+            var response = _customerController.CreateCustomer(customer) as NoContentResult;
 
             // Assert
-            Assert.AreEqual(204, okResult.StatusCode);
+            Assert.IsNotNull(response);
+            Assert.AreEqual(204, response.StatusCode);
+        }
+
+        [TestMethod]
+        public void GetCustomer_response_should_return_200_and_a_customerdto()
+        {
+             // Arrange
+            long id = 10;
+
+            // Mock dto and service
+            CustomerDTO mockCustomerDTO = new CustomerDTO
+            {
+                Id = id,
+                Name = "Viggi Siggi"
+            };
+            _customerServiceMock.Setup(method => method.GetCustomer(id)).Returns(mockCustomerDTO);
+
+            // Create controller
+            _customerController = new CustomerController(_customerServiceMock.Object);
+
+            // Act
+            var response = _customerController.GetCustomer(id) as OkObjectResult;
+
+            //Assert
+            // Check if got response with correct status code
+            Assert.IsNotNull(response);
+            Assert.AreEqual(200, response.StatusCode);
+
+            // Check if response contains correct data
+            CustomerDTO customerDTO = response.Value as CustomerDTO;
+            Assert.IsNotNull(customerDTO);
+            Assert.AreEqual(mockCustomerDTO.Id, customerDTO.Id);
+            Assert.AreEqual(mockCustomerDTO.Name, customerDTO.Name);
         }
     }
 }

@@ -48,5 +48,31 @@ namespace ThjonustukerfiTests.Tests
             Assert.AreEqual(customerDTOReturn.Id, 10);
             Assert.AreEqual(customerDTOReturn.Name, "Viggi Siggi");
         }
+
+        [TestMethod]
+        public void GetCustomer_should_return_customer()
+        {
+            // Arrange
+            long id = 10;
+
+            // Mock dto and repo
+            CustomerDTO mockCustomerDTO = new CustomerDTO
+            {
+                Id = id,
+                Name = "Viggi Siggi"
+            };
+            _customerRepoMock.Setup(method => method.GetCustomer(id)).Returns(mockCustomerDTO);
+
+            // Create service
+            _customerService = new CustomerService(_customerRepoMock.Object);
+
+            // Act
+            var customerDTOReturn = _customerService.GetCustomer(id);
+
+            //Assert
+            Assert.IsNotNull(customerDTOReturn);
+            Assert.AreEqual(customerDTOReturn.Id, mockCustomerDTO.Id);
+            Assert.AreEqual(customerDTOReturn.Name, mockCustomerDTO.Name);
+        }
     }
 }
