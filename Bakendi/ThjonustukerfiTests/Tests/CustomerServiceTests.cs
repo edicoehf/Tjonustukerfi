@@ -44,6 +44,7 @@ namespace ThjonustukerfiTests.Tests
             var customerDTOReturn = _customerService.CreateCustomer(inp);
 
             // Assert
+            Assert.IsNotNull(customerDTOReturn);
             Assert.AreEqual(customerDTOReturn.Id, 10);
             Assert.AreEqual(customerDTOReturn.Name, "Viggi Siggi");
         }
