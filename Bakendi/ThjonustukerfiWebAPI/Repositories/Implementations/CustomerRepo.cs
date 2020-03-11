@@ -30,7 +30,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // Mapping from entity to DTO
             return _mapper.Map<CustomerDTO>(entity);
         }
-        public CustomerDTO GetCustomer(string id)
+        public CustomerDTO GetCustomer(long id)
         {
             // Get customer customer entity form database
             var entity = _dbContext.Customer.Find(id);

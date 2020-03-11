@@ -26,7 +26,7 @@ namespace ThjonustukerfiWebAPI.Controllers
 
         [Route("{id:int}")]
         [HttpGet]
-        public IActionResult GetCustomer(string id)
+        public IActionResult GetCustomer(long id)
         {
             var customer = _customerService.GetCustomer(id);
 
