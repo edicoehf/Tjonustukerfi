@@ -1,3 +1,4 @@
+using System.Linq;
 using AutoMapper;
 using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Models.DTOs;
@@ -20,6 +21,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
         }
         public CustomerDTO CreateCustomer(CustomerInputModel customer)
         {
+            var check = _dbContext.Customer.FirstOrDefault(p => p.Email == customer.Email);
+            if(check != null) { throw new InvalidIdException("This person already exists."); }
             // Mapping from input to entity and adding to database
             var entity = _dbContext.Customer.Add(_mapper.Map<Customer>(customer)).Entity;
             _dbContext.SaveChanges();
