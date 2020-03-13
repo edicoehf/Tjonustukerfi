@@ -38,14 +38,16 @@ namespace ThjonustukerfiTests.Tests
             // Build a list of size 20, make it queryable for the database mock
             var customers = Builder<Customer>.CreateListOfSize(20)
                 .TheFirst(1).With(x => x.Name = "Viggi Siggi").With(x => x.Id = 10).With(x => x.Email = "VS@vigsig.is")
-                .Build().AsQueryable();
-
+                .Build();
+            var customersQueryable = customers.AsQueryable();
+        
             // Setup the Mock for Customer DbSet
             var mockSet = new Mock<DbSet<Customer>>();
-            mockSet.As<IQueryable<Customer>>().Setup(m => m.Provider).Returns(customers.Provider);
-            mockSet.As<IQueryable<Customer>>().Setup(m => m.Expression).Returns(customers.Expression);
-            mockSet.As<IQueryable<Customer>>().Setup(m => m.ElementType).Returns(customers.ElementType);
-            mockSet.As<IQueryable<Customer>>().Setup(m => m.GetEnumerator()).Returns(customers.GetEnumerator());
+            mockSet.As<IQueryable<Customer>>().Setup(m => m.Provider).Returns(customersQueryable.Provider);
+            mockSet.As<IQueryable<Customer>>().Setup(m => m.Expression).Returns(customersQueryable.Expression);
+            mockSet.As<IQueryable<Customer>>().Setup(m => m.ElementType).Returns(customersQueryable.ElementType);
+            mockSet.As<IQueryable<Customer>>().Setup(m => m.GetEnumerator()).Returns(customersQueryable.GetEnumerator());
+            mockSet.Setup(m => m.Remove(It.IsAny<Customer>())).Callback((Customer c) => customers.Remove(c));
 
             // Create and setup a mock of our DataContext class that is injected to the customer repo constructor
             _mockContext = new Mock<DataContext>();
@@ -67,6 +69,19 @@ namespace ThjonustukerfiTests.Tests
             Assert.IsNotNull(result);
             Assert.AreEqual(result.Name, "Viggi Siggi");
             Assert.AreEqual(result.Id, 10);
+        }
+        [TestMethod]
+        public void DeleteCustomer_should_remove_customer_with_id_10()
+        {
+            // Arrange
+
+            // Act
+            _customerRepo.DeleteCustomerById(10);
+            var result = _mockContext.Object.Customer.FirstOrDefault(c => c.Id == 10);
+            Debug.WriteLine("check result");
+            Debug.WriteLine(result);
+            // Assert
+            Assert.IsNull(result);
         }
     }
 }

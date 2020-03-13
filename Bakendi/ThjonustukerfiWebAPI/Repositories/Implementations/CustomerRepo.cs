@@ -47,7 +47,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // Get customer entity from database
             var customer = _dbContext.Customer.FirstOrDefault(r => r.Id == id);
             // Check if customer exists throw exception if not
-            if(customer == null) { throw new NotFoundException($"Customer with id {id} was not found") }
+            if(customer == null) { throw new NotFoundException($"Customer with id {id} was not found"); }
             // Remove customer from database
             _dbContext.Customer.Remove(customer);
         }
