@@ -11,6 +11,7 @@ namespace ThjonustukerfiWebAPI.Models.InputModels
         public string Name { get; set; }
         [RegularExpression(@"^(0?[1-9]|[12][0-9]|3[01])(1[0-2]|0?[1-9])[0-9]{2}(-?)([0-9]{3})[890]$")]
         public string SSN { get; set; }
+        [Required]
         [EmailAddress]
         public string Email { get; set; }
         public string Phone { get; set; }

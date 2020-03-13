@@ -13,6 +13,7 @@ namespace ThjonustukerfiWebAPI.Controllers
         {
             _customerService = customerService;
         }
+
         [Route("")]
         [HttpPost]
         public IActionResult CreateCustomer([FromBody] CustomerInputModel customer)
@@ -20,7 +21,16 @@ namespace ThjonustukerfiWebAPI.Controllers
             if(!ModelState.IsValid) { return BadRequest("Input model is not valid"); }
             var entity = _customerService.CreateCustomer(customer);
             
-            return NoContent();
+            return CreatedAtRoute("GetCustomerById", new { id = entity.Id }, null);
+        }
+
+        [Route("{id:int}", Name="GetCustomerById")]
+        [HttpGet]
+        public IActionResult GetCustomerById(long id)
+        {
+            var customer = _customerService.GetCustomerById(id);
+
+            return Ok(customer);
         }
     }
 }
