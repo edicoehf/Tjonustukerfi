@@ -5,6 +5,7 @@ using Moq;
 using ThjonustukerfiWebAPI.Repositories.Implementations;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.Entities;
+using ThjonustukerfiWebAPI.Models.Exceptions;
 using ThjonustukerfiWebAPI.Repositories.Interfaces;
 using ThjonustukerfiWebAPI.Models;
 using FizzWare.NBuilder;
@@ -15,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using ThjonustukerfiWebAPI.Mappings;
 using System.Diagnostics;
+using System;
 
 namespace ThjonustukerfiTests.Tests
 {
@@ -39,7 +41,7 @@ namespace ThjonustukerfiTests.Tests
             var customers = Builder<Customer>.CreateListOfSize(20)
                 .TheFirst(1).With(x => x.Name = "Viggi Siggi").With(x => x.Id = 10).With(x => x.Email = "VS@vigsig.is")
                 .Build().AsQueryable();
-
+            Debug.WriteLine(customers);
             // Setup the Mock for Customer DbSet
             var mockSet = new Mock<DbSet<Customer>>();
             mockSet.As<IQueryable<Customer>>().Setup(m => m.Provider).Returns(customers.Provider);
@@ -58,8 +60,6 @@ namespace ThjonustukerfiTests.Tests
         [TestMethod]
         public void GetCustomer_should_return_customer_with_id_10()
         {
-            // Arrange
-            
             // Act
             var result = _customerRepo.GetCustomerById(10);
 
@@ -67,6 +67,12 @@ namespace ThjonustukerfiTests.Tests
             Assert.IsNotNull(result);
             Assert.AreEqual(result.Name, "Viggi Siggi");
             Assert.AreEqual(result.Id, 10);
+        }
+
+        [TestMethod]
+        public void GetCustomer_should_throw_NotFoundException()
+        {
+            Assert.ThrowsException<NotFoundException>(() => _customerRepo.GetCustomerById(-1));
         }
     }
 }
