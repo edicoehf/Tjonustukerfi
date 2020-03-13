@@ -83,5 +83,30 @@ namespace ThjonustukerfiTests.Tests
             Assert.AreEqual(mockCustomerDTO.Id, customerDTO.Id);
             Assert.AreEqual(mockCustomerDTO.Name, customerDTO.Name);
         }
+
+        [TestMethod]
+        public void DeleteCustomer_response_should_return_204_noContent()
+        {
+            // Arrange
+            long id = 7;
+            
+            // mock DTO and service
+            CustomerDTO mockCustomerDTO = new CustomerDTO
+            {
+                Id = id,
+                Name = "Siggi Biggi"
+            };
+            _customerServiceMock.Setup(method => method.DeleteCustomerById(id)).Returns(mockCustomerDTO);
+
+            // Creat contoller
+            _customerController = new CustomerController(_customerServiceMock.Object);
+
+            // Act
+            var response = _customerController.DeleteCustomerById(id) as NoContentResult;
+
+            // Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(204, response.StatusCode);
+        }
     }
 }
