@@ -31,12 +31,15 @@ namespace ThjonustukerfiTests.Tests
                 Email = "VS@vigsig.is"
             };
 
-            // Config returns values
-            _customerRepoMock.Setup(method => method.CreateCustomer(inp)).Returns(new CustomerDTO
+            // Mock dto and repo
+            CustomerDTO mockCustomerDTO = new CustomerDTO
             {
                 Id = 10,
                 Name = inp.Name
-            });
+            };
+
+            // Config returns values
+            _customerRepoMock.Setup(method => method.CreateCustomer(inp)).Returns(mockCustomerDTO);
 
             _customerService = new CustomerService(_customerRepoMock.Object);
 
@@ -44,8 +47,9 @@ namespace ThjonustukerfiTests.Tests
             var customerDTOReturn = _customerService.CreateCustomer(inp);
 
             // Assert
-            Assert.AreEqual(customerDTOReturn.Id, 10);
-            Assert.AreEqual(customerDTOReturn.Name, "Viggi Siggi");
+            Assert.IsNotNull(customerDTOReturn);
+            Assert.AreEqual(customerDTOReturn.Id, mockCustomerDTO.Id);
+            Assert.AreEqual(customerDTOReturn.Name, mockCustomerDTO.Name);
         }
 
         [TestMethod]

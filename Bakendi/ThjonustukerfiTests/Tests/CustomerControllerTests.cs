@@ -1,4 +1,3 @@
-using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -12,7 +11,7 @@ namespace ThjonustukerfiTests.Tests
     // TODO Test for service
     // TODO test for repo
     [TestClass]
-    public class CustomerControllerTest
+    public class CustomerControllerTests
     {
         private CustomerController _customerController;
         private Mock<ICustomerService> _customerServiceMock;
@@ -24,33 +23,35 @@ namespace ThjonustukerfiTests.Tests
             _customerServiceMock = new Mock<ICustomerService>();
         }
 
-        [TestMethod]
-        public void CreateNewCustomer_CheckingResponseIsCreatedAtRoute()
-        {
-            // Arrange
-            // Mock service
-            _customerServiceMock.Setup(method => method.CreateCustomer(null)).Returns(new CustomerDTO 
-            {
-                Id = 1,
-                Name = "Siggi Viggi"
-            });
+        // [TestMethod]
+        // public void CreateNewCustomer_CheckingResponseIsCreatedAtRoute()
+        // {
+        //     // Arrange
+        //     // Mock service
+        //     _customerServiceMock.Setup(method => method.CreateCustomer(null)).Returns(new CustomerDTO 
+        //     {
+        //         Id = 1,
+        //         Name = "Siggi Viggi"
+        //     });
 
-            // Create controller
-            _customerController = new CustomerController(_customerServiceMock.Object);
+        //     // Create controller
+        //     _customerController = new CustomerController(_customerServiceMock.Object);
 
-            // Create input
-            CustomerInputModel customer = new CustomerInputModel 
-            {
-                Name = "Siggi Viggi"
-            };
+        //     // Create input
+        //     CustomerInputModel customer = new CustomerInputModel 
+        //     {
+        //         Name = "Siggi Viggi"
+        //     };
 
-            // Act
-            var response = _customerController.CreateCustomer(customer) as NoContentResult;
+        //     // Act
+        //     var response = _customerController.CreateCustomer(customer) as CreatedAtRouteResult;
 
-            // Assert
-            Assert.IsNotNull(response);
-            Assert.AreEqual(204, response.StatusCode);
-        }
+        //     // Assert
+        //     Assert.IsNotNull(response);
+        //     Assert.AreEqual("GetCustomerById", response.RouteName);
+        //     Assert.AreEqual(1, response.RouteValues["id"]);
+        //     // Assert.AreEqual(201, response.StatusCode);
+        // }
 
         [TestMethod]
         public void GetCustomer_response_should_return_200_and_a_customerdto()
