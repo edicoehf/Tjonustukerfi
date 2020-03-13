@@ -14,7 +14,7 @@ using System.Collections.Generic;
 namespace ThjonustukerfiTests.Tests
 {
     [TestClass]
-    public class CustomerRepoTest
+    public class CustomerRepoTests
     {
         private DataContext _dbContextMock;
         private CustomerRepo _customerRepo;
