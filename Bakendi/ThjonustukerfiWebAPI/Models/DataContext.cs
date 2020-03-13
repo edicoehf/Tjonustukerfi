@@ -3,7 +3,7 @@ using ThjonustukerfiWebAPI.Models.Entities;
 
 namespace ThjonustukerfiWebAPI.Models
 {
-    public class DataContext : DbContext
+    public class DataContext : DbContext, IDataContext
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) {}
         public DbSet<Customer> Customer { get; set; }
