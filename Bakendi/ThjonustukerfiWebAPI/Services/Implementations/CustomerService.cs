@@ -22,7 +22,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         }
         public void DeleteCustomerById(long id)
         {
-            return _customerRepo.DeleteCustomerById(id);
+            _customerRepo.DeleteCustomerById(id);
         }
         
     }

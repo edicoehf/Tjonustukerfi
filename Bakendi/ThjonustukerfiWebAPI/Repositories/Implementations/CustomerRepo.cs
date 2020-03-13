@@ -41,7 +41,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
         }
         public void DeleteCustomerById(long id)
         {
-            var customer = _dbContext.Customer.FirstOrDefault(r => r.id == id);
+            var customer = _dbContext.Customer.FirstOrDefault(r => r.Id == id);
             if(customer == null) { return; }
             _dbContext.Customer.Remove(customer);
         }

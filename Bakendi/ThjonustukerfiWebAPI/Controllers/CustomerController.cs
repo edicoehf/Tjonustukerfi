@@ -37,7 +37,7 @@ namespace ThjonustukerfiWebAPI.Controllers
         [HttpDelete]
         public IActionResult DeleteCustomerById(long id)
         {
-            var result = _customerService.DeleteCustomerById(id);
+            _customerService.DeleteCustomerById(id);
 
             return NoContent();
         }
