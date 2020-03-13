@@ -5,36 +5,37 @@ using Moq;
 using ThjonustukerfiWebAPI.Repositories.Implementations;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.Entities;
-using ThjonustukerfiWebAPI.Services.Interfaces;
+using ThjonustukerfiWebAPI.Repositories.Interfaces;
 using ThjonustukerfiWebAPI.Models;
 using FizzWare.NBuilder;
 using NSubstitute;
 using System.Collections.Generic;
 
+
 namespace ThjonustukerfiTests.Tests
 {
     [TestClass]
-    public class CustomerRepoTest
+    public class CustomerRepoTests
     {
-        private DataContext _dbContextMock;
-        private CustomerRepo _customerRepo;
+        private IDataContext _dbContextMock;
+        private ICustomerRepo _customerRepo;
 
         [TestInitialize]
         public void Initialize()
         {
-            // Mock DataContext
-            _dbContextMock = Substitute.For<DataContext>();
+            
+            _dbContextMock = Substitute.For<IDataContext>();
         }
 
         [TestMethod]
         public void GetCustomer_should_()
         {
-            // Arrange
-            // Mock dbcontext and data
-            var customers = Builder<Customer>.CreateListOfSize(20).Build();
-            _dbContextMock.Customer.Returns(new List<Customer>(customers));
-            // Create repo
-            // _customerRepo = new CustomerRepo(_dbContextMock, ); Needs to mock or get the automapper
+            //Arrange
+            //Mock dbcontext and data
+            // var customers = Builder<Customer>.CreateListOfSize(20).Build();
+            // _dbContextMock.Customer.Returns(new List<Customer>(customers));
+            //Create repo
+            //_customerRepo = new CustomerRepo(_dbContextMock, ); Needs to mock or get the automapper
             
         }
     }

@@ -75,6 +75,9 @@ namespace ThjonustukerfiWebAPI
             // Adding for Log Repository
             services.AddTransient<ILogService, LogService>();
             services.AddTransient<ILogRepository, LogRepository>();
+
+            // Adding for DataContext
+            services.AddTransient<IDataContext, DataContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

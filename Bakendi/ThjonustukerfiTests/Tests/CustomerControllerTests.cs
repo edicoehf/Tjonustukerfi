@@ -12,7 +12,7 @@ namespace ThjonustukerfiTests.Tests
     // TODO Test for service
     // TODO test for repo
     [TestClass]
-    public class CustomerControllerTest
+    public class CustomerControllerTests
     {
         private CustomerController _customerController;
         private Mock<ICustomerService> _customerServiceMock;
