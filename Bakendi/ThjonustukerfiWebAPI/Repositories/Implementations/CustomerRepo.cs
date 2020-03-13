@@ -39,5 +39,11 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // Mapping from entity to DTO
             return _mapper.Map<CustomerDTO>(entity);
         }
+        public void DeleteCustomerById(long id)
+        {
+            var customer = _dbContext.Customer.FirstOrDefault(r => r.id == id);
+            if(customer == null) { return; }
+            _dbContext.Customer.Remove(customer);
+        }
     }
 }

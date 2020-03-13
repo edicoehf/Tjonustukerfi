@@ -32,5 +32,14 @@ namespace ThjonustukerfiWebAPI.Controllers
 
             return Ok(customer);
         }
+
+        [Route("{id:int}")]
+        [HttpDelete]
+        public IActionResult DeleteCustomerById(long id)
+        {
+            var result = _customerService.DeleteCustomerById(id);
+
+            return NoContent();
+        }
     }
 }
