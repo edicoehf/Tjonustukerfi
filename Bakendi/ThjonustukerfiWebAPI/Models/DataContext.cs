@@ -3,18 +3,19 @@ using ThjonustukerfiWebAPI.Models.Entities;
 
 namespace ThjonustukerfiWebAPI.Models
 {
-    public class DataContext : DbContext, IDataContext
+    public class DataContext : DbContext
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) {}
-        public DbSet<Customer> Customer { get; set; }
-        public DbSet<Item> Item { get; set; }
-        public DbSet<ItemOrderConnection> ItemOrderConnection { get; set; }
-        public DbSet<Order> Order { get; set; }
-        public DbSet<Service> Service { get; set; }
-        public DbSet<State> State { get; set; }
-        public DbSet<ServiceState> ServiceState { get; set; }
+        public DataContext() {} // used for tests
+        public virtual DbSet<Customer> Customer { get; set; }
+        public virtual DbSet<Item> Item { get; set; }
+        public virtual DbSet<ItemOrderConnection> ItemOrderConnection { get; set; }
+        public virtual DbSet<Order> Order { get; set; }
+        public virtual DbSet<Service> Service { get; set; }
+        public virtual DbSet<State> State { get; set; }
+        public virtual DbSet<ServiceState> ServiceState { get; set; }
 
         //* Error logs
-        public DbSet<Log> ExceptionLog { get; set; }
+        public virtual DbSet<Log> ExceptionLog { get; set; }
     }
 }
