@@ -23,35 +23,37 @@ namespace ThjonustukerfiTests.Tests
             _customerServiceMock = new Mock<ICustomerService>();
         }
 
-        // [TestMethod]
-        // public void CreateNewCustomer_CheckingResponseIsCreatedAtRoute()
-        // {
-        //     // Arrange
-        //     // Mock service
-        //     _customerServiceMock.Setup(method => method.CreateCustomer(null)).Returns(new CustomerDTO 
-        //     {
-        //         Id = 1,
-        //         Name = "Siggi Viggi"
-        //     });
+        [TestMethod]
+        public void CreateNewCustomer_CheckingResponseIsCreatedAtRoute()
+        {
+            // Arrange
+            // Mock service
+            CustomerInputModel customer = new CustomerInputModel 
+            {
+                Name = "Siggi Viggi"
+            };
 
-        //     // Create controller
-        //     _customerController = new CustomerController(_customerServiceMock.Object);
+            _customerServiceMock.Setup(method => method.CreateCustomer(customer)).Returns(new CustomerDTO 
+            {
+                Id = 1,
+                Name = "Siggi Viggi"
+            });
 
-        //     // Create input
-        //     CustomerInputModel customer = new CustomerInputModel 
-        //     {
-        //         Name = "Siggi Viggi"
-        //     };
+            // Create controller
+            _customerController = new CustomerController(_customerServiceMock.Object);
+            long expectedId = 1;
 
-        //     // Act
-        //     var response = _customerController.CreateCustomer(customer) as CreatedAtRouteResult;
+            // Create input
 
-        //     // Assert
-        //     Assert.IsNotNull(response);
-        //     Assert.AreEqual("GetCustomerById", response.RouteName);
-        //     Assert.AreEqual(1, response.RouteValues["id"]);
-        //     // Assert.AreEqual(201, response.StatusCode);
-        // }
+            // Act
+            var response = _customerController.CreateCustomer(customer) as CreatedAtRouteResult;
+
+            // Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual("GetCustomerById", response.RouteName);
+            Assert.AreEqual(expectedId, response.RouteValues["id"]);
+            Assert.AreEqual(201, response.StatusCode);
+        }
 
         [TestMethod]
         public void GetCustomer_response_should_return_200_and_a_customerdto()
