@@ -1,0 +1,8 @@
+.error {
+    color: var(--error-color);
+    font-weight: bold;
+}
+.label {
+    display: flex;
+    justify-content: space-between;
+}

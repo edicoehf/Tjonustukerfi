@@ -2,6 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ThjonustukerfiWebAPI.Repositories.Implementations;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.Entities;
+using ThjonustukerfiWebAPI.Models.Exceptions;
 using ThjonustukerfiWebAPI.Models;
 using FizzWare.NBuilder;
 using System.Linq;
@@ -94,6 +95,17 @@ namespace ThjonustukerfiTests.Tests
                 Assert.AreEqual(result.Name, inp.Name);
                 Assert.IsInstanceOfType(result.Id, typeof(long));
             };
+        }
+
+        [TestMethod]
+        public void GetCustomer_should_throw_NotFoundException()
+        {
+            using (var mockContext = new DataContext(_options))
+            {
+                var customerRepo = new CustomerRepo(mockContext, _mapper);
+
+                Assert.ThrowsException<NotFoundException>(() => customerRepo.GetCustomerById(-1));
+            }
         }
     }
 }
