@@ -161,5 +161,29 @@ namespace ThjonustukerfiTests.Tests
                 Assert.AreEqual(inp.PostalCode, data.PostalCode);
             }
         }
+
+        [TestMethod]
+        public void UpdateCustomerDetails_should_throw_NotFoundException()
+        {
+            // Arrange
+            var inp = new CustomerInputModel
+            {
+                Name = "Siggi Viggi",
+                Email = "Siggi@viggi.is",
+                Address = "Hvergigata 1898",
+                SSN = "121212-5119",
+                Phone = "555-1234",
+                PostalCode = "999"
+
+            };
+
+            using (var mockContext = new DataContext(_options))
+            {
+                var customerRepo = new CustomerRepo(mockContext, _mapper);
+
+                // Act then Assert
+                Assert.ThrowsException<NotFoundException>(() => customerRepo.UpdateCustomerDetails(inp, -1));
+            }
+        }
     }
 }
