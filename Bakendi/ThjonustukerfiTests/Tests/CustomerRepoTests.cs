@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using ThjonustukerfiWebAPI.Mappings;
 using System.Diagnostics;
+using ThjonustukerfiWebAPI.Models.InputModels;
 
 namespace ThjonustukerfiTests.Tests
 {
@@ -38,18 +39,22 @@ namespace ThjonustukerfiTests.Tests
             // Build a list of size 20, make it queryable for the database mock
             var customers = Builder<Customer>.CreateListOfSize(20)
                 .TheFirst(1).With(x => x.Name = "Viggi Siggi").With(x => x.Id = 10).With(x => x.Email = "VS@vigsig.is")
-                .Build().AsQueryable();
+                .Build();
+            var customerQueryable = customers.AsQueryable();
 
             // Setup the Mock for Customer DbSet
             var mockSet = new Mock<DbSet<Customer>>();
-            mockSet.As<IQueryable<Customer>>().Setup(m => m.Provider).Returns(customers.Provider);
-            mockSet.As<IQueryable<Customer>>().Setup(m => m.Expression).Returns(customers.Expression);
-            mockSet.As<IQueryable<Customer>>().Setup(m => m.ElementType).Returns(customers.ElementType);
-            mockSet.As<IQueryable<Customer>>().Setup(m => m.GetEnumerator()).Returns(customers.GetEnumerator());
+            mockSet.As<IQueryable<Customer>>().Setup(m => m.Provider).Returns(customerQueryable.Provider);
+            mockSet.As<IQueryable<Customer>>().Setup(m => m.Expression).Returns(customerQueryable.Expression);
+            mockSet.As<IQueryable<Customer>>().Setup(m => m.ElementType).Returns(customerQueryable.ElementType);
+            mockSet.As<IQueryable<Customer>>().Setup(m => m.GetEnumerator()).Returns(customerQueryable.GetEnumerator());
+            mockSet.Setup(x => x.Add(It.IsAny<Customer>())).Callback<Customer>((Customer c) => customers.Add(c));
 
+            // _mockContext.Setup(d => d.Add(It.IsAny<Customer>())).Callback<Customer>((s) => mockSet.Object.Add(s));
             // Create and setup a mock of our DataContext class that is injected to the customer repo constructor
             _mockContext = new Mock<DataContext>();
             _mockContext.Setup(c => c.Customer).Returns(mockSet.Object);
+            // _mockContext.Setup(x => x.Customer.Add(It.IsAny<Customer>())).Callback(customers.);
             
             // Create a new customer repository and inject the mock for our database and our mapper
             _customerRepo = new CustomerRepo(_mockContext.Object, mapper);
@@ -67,6 +72,28 @@ namespace ThjonustukerfiTests.Tests
             Assert.IsNotNull(result);
             Assert.AreEqual(result.Name, "Viggi Siggi");
             Assert.AreEqual(result.Id, 10);
+        }
+
+        [TestMethod]
+        public void CreateCustomer_should_create_and_return_customerDTO()
+        {
+            // Arrange
+            var inp = new CustomerInputModel
+            {
+                Name = "Kalli Valli",
+                Email = "KV@vigsig.is"
+            };
+            var dbSize = _mockContext.Object.Customer.ToList().Count;
+
+            // // Act
+            // var result = _customerRepo.CreateCustomer(inp);
+
+            // // Assert
+            // Assert.IsNotNull(result);
+            // Assert.IsInstanceOfType(result, typeof(CustomerDTO));
+            // Assert.AreEqual(_mockContext.Object.Customer.ToList().Count, dbSize + 1);
+            // Assert.AreEqual(result.Name, inp.Name);
+            // Assert.IsInstanceOfType(result.Id, typeof(long));
         }
     }
 }
