@@ -32,5 +32,13 @@ namespace ThjonustukerfiWebAPI.Controllers
 
             return Ok(customer);
         }
+
+        [Route("")]
+        [HttpPatch]
+        public IActionResult UpdateCustomerDetails([FromBody] CustomerInputModel customer)
+        {
+            // _customerService.UpdateCustomerDetails(customer);
+            return Ok();
+        }
     }
 }
