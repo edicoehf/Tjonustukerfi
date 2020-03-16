@@ -7,12 +7,12 @@ const Input = props => {
     return (
         <div className="form-group">
             {label ? (
-                <div className="label">
+                <div className="labels">
                     {" "}
                     <label htmlFor={htmlId} className="control-label">
                         {label}
                     </label>{" "}
-                    <span className="error">{errorMessage}</span>{" "}
+                    <span className="errors">{errorMessage}</span>{" "}
                 </div>
             ) : (
                 <></>
