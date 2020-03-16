@@ -36,8 +36,6 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // Get customer customer entity form database
             var entity = _dbContext.Customer.FirstOrDefault(c => c.Id == id);
             // Check if found
-            Debug.WriteLine("The entity");
-            Debug.WriteLine(entity);
             if(entity == null) { throw new NotFoundException($"Customer with id {id} was not found."); }
             // Mapping from entity to DTO
             return _mapper.Map<CustomerDTO>(entity);
