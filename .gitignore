@@ -565,7 +565,7 @@ MigrationBackup/
 **/Droid/**/[Rr]esource.[Dd]esigner.cs
 
 # Xamarin Components
-Components/
+HandtolvuApp/**/Components/
 
 # Build results
 [Dd]ebug/
