@@ -104,6 +104,8 @@ namespace ThjonustukerfiTests.Tests
             Assert.IsNotNull(response);
             Assert.AreEqual(200, response.StatusCode);
         }
+
+        [TestMethod]
         public void DeleteCustomer_response_should_return_204_noContent()
         {
             // Arrange

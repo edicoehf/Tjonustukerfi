@@ -57,7 +57,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             entity.PostalCode = customer.PostalCode;
             entity.DateModified = DateTime.Now;
 
-        
+            _dbContext.SaveChanges();
         }
         public void DeleteCustomerById(long id)
         {

@@ -16,6 +16,5 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         public CustomerDTO GetCustomerById(long id) => _customerRepo.GetCustomerById(id);
         public void UpdateCustomerDetails(CustomerInputModel customer, long id) => _customerRepo.UpdateCustomerDetails(customer, id);
         public void DeleteCustomerById(long id) => _customerRepo.DeleteCustomerById(id);
-        
     }
 }

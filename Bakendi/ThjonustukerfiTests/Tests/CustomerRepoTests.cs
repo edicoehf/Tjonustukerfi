@@ -198,6 +198,7 @@ namespace ThjonustukerfiTests.Tests
             }
         }
 
+        [TestMethod]
         public void DeleteCustomer_should_remove_customer_with_id_100()
         {
             // Arrange
