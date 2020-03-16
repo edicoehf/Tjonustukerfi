@@ -40,6 +40,15 @@ namespace ThjonustukerfiWebAPI.Controllers
             if(!ModelState.IsValid) { return BadRequest("Input model is not valid"); }
             _customerService.UpdateCustomerDetails(customer, id);
             return Ok();
+        
+        }
+        [Route("{id:int}")]
+        [HttpDelete]
+        public IActionResult DeleteCustomerById(long id)
+        {
+            _customerService.DeleteCustomerById(id);
+
+            return NoContent();
         }
     }
 }
