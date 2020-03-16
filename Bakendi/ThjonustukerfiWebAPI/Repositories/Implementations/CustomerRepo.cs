@@ -31,14 +31,14 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // Mapping from entity to DTO
             return _mapper.Map<CustomerDTO>(entity);
         }
-        public CustomerDTO GetCustomerById(long id)
+        public CustomerDetailsDTO GetCustomerById(long id)
         {
             // Get customer customer entity form database
             var entity = _dbContext.Customer.FirstOrDefault(c => c.Id == id);
             // Check if found
             if(entity == null) { throw new NotFoundException($"Customer with id {id} was not found."); }
             // Mapping from entity to DTO
-            return _mapper.Map<CustomerDTO>(entity);
+            return _mapper.Map<CustomerDetailsDTO>(entity);
         }
     }
 }

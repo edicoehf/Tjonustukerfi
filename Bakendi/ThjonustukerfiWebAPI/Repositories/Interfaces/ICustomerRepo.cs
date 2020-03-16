@@ -6,6 +6,6 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
     public interface ICustomerRepo
     {
         CustomerDTO CreateCustomer(CustomerInputModel customer);
-        CustomerDTO GetCustomerById(long id);
+        CustomerDetailsDTO GetCustomerById(long id);
     }
 }

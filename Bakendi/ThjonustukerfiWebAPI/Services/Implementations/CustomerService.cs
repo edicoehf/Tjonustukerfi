@@ -13,10 +13,6 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             _customerRepo = customerRepo;
         }
         public CustomerDTO CreateCustomer(CustomerInputModel customer) => _customerRepo.CreateCustomer(customer);
-        public CustomerDTO GetCustomerById(long id)
-        {
-            return _customerRepo.GetCustomerById(id);
-        }
-        
+        public CustomerDetailsDTO GetCustomerById(long id) => _customerRepo.GetCustomerById(id);
     }
 }

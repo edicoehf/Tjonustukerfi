@@ -43,16 +43,36 @@ namespace ThjonustukerfiTests.Tests
         }
 
         [TestMethod]
-        public void GetCustomer_should_return_customer_with_id_100()
+        public void GetCustomer_should_return_customerDetailsDTO_with_id_100()
         {
             // Arrange
             using (var mockContext = new DataContext(_options))
             {
+                long id = 100;
+                // Mock entity 
+                Customer mockCustomer = new Customer
+                {
+                    Id = id,
+                    Name = "Viggi Siggi",
+                    SSN = "1308943149",
+                    Email = "viggi@siggi.is",
+                    Phone = "5812345",
+                    Address = "Bakkabakki 1",
+                    PostalCode = "800"
+                };
+
                 //! Add only ONCE! Unless appending changes
                 // Build a list of size 20, make it queryable for the database mock
                 var customers = Builder<Customer>.CreateListOfSize(20)
-                .TheFirst(1).With(x => x.Name = "Viggi Siggi").With(x => x.Id = 100).With(x => x.Email = "VS@vigsig.is")
-                .Build();
+                    .TheFirst(1)
+                    .With(c => c.Id = mockCustomer.Id)
+                    .With(c => c.Name = mockCustomer.Name)
+                    .With(c => c.SSN = mockCustomer.SSN)
+                    .With(c => c.Email = mockCustomer.Email)
+                    .With(c => c.Phone = mockCustomer.Phone)
+                    .With(c => c.Address = mockCustomer.Address)
+                    .With(c => c.PostalCode = mockCustomer.PostalCode)
+                    .Build();
 
                 mockContext.Customer.AddRange(customers);
                 mockContext.SaveChanges();
@@ -60,12 +80,28 @@ namespace ThjonustukerfiTests.Tests
                 var customerRepo = new CustomerRepo(mockContext, _mapper);
 
                 // Act
-                var result = customerRepo.GetCustomerById(100);
+                CustomerDetailsDTO customerDetailsDTO = customerRepo.GetCustomerById(100);
 
                 // Assert
-                Assert.IsNotNull(result);
-                Assert.AreEqual(result.Name, "Viggi Siggi");
-                Assert.AreEqual(result.Id, 100);
+                Assert.IsNotNull(customerDetailsDTO);
+                Assert.AreEqual(mockCustomer.Id, customerDetailsDTO.Id);
+                Assert.AreEqual(mockCustomer.Name, customerDetailsDTO.Name);
+                Assert.AreEqual(mockCustomer.SSN, customerDetailsDTO.SSN);
+                Assert.AreEqual(mockCustomer.Email, customerDetailsDTO.Email);
+                Assert.AreEqual(mockCustomer.Phone, customerDetailsDTO.Phone);
+                Assert.AreEqual(mockCustomer.Address, customerDetailsDTO.Address);
+                Assert.AreEqual(mockCustomer.PostalCode, customerDetailsDTO.PostalCode);
+            }
+        }
+
+        [TestMethod]
+        public void GetCustomer_should_throw_NotFoundException()
+        {
+            using (var mockContext = new DataContext(_options))
+            {
+                var customerRepo = new CustomerRepo(mockContext, _mapper);
+
+                Assert.ThrowsException<NotFoundException>(() => customerRepo.GetCustomerById(-1));
             }
         }
 
@@ -115,15 +151,5 @@ namespace ThjonustukerfiTests.Tests
             }
         }
 
-        [TestMethod]
-        public void GetCustomer_should_throw_NotFoundException()
-        {
-            using (var mockContext = new DataContext(_options))
-            {
-                var customerRepo = new CustomerRepo(mockContext, _mapper);
-
-                Assert.ThrowsException<NotFoundException>(() => customerRepo.GetCustomerById(-1));
-            }
-        }
     }
 }
