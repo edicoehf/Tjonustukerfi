@@ -13,7 +13,7 @@ namespace ThjonustukerfiWebAPI.Models.Entities
         public string PostalCode { get; set; }
         public string JSON { get; set; }
         // Auto generated
-        public DateTime DateCreated { get; set; }
+        public DateTime? DateCreated { get; set; }
         public DateTime DateModified { get; set; }
     }
 }

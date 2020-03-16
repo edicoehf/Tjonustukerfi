@@ -33,11 +33,12 @@ namespace ThjonustukerfiWebAPI.Controllers
             return Ok(customer);
         }
 
-        [Route("")]
+        [Route("{id:int}/update")]
         [HttpPatch]
-        public IActionResult UpdateCustomerDetails([FromBody] CustomerInputModel customer)
+        public IActionResult UpdateCustomerDetails([FromBody] CustomerInputModel customer, long id)
         {
-            // _customerService.UpdateCustomerDetails(customer);
+            if(!ModelState.IsValid) { return BadRequest("Input model is not valid"); }
+            _customerService.UpdateCustomerDetails(customer, id);
             return Ok();
         }
     }
