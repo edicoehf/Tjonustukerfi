@@ -125,5 +125,41 @@ namespace ThjonustukerfiTests.Tests
                 Assert.ThrowsException<NotFoundException>(() => customerRepo.GetCustomerById(-1));
             }
         }
+
+        [TestMethod]
+        public void UpdateCustomerDetails_should_update_customer_in_database()
+        {
+            // Arrange
+            var inp = new CustomerInputModel
+            {
+                Name = "Siggi Viggi",
+                Email = "Siggi@viggi.is",
+                Address = "Hvergigata 1898",
+                SSN = "121212-5119",
+                Phone = "555-1234",
+                PostalCode = "999"
+
+            };
+
+            using (var mockContext = new DataContext(_options))
+            {
+                var customerRepo = new CustomerRepo(mockContext, _mapper);
+                long customerId = 100;
+
+                // Act
+                customerRepo.UpdateCustomerDetails(inp, customerId);
+                // Get data from the mock context to see if repo changed the values
+                var data = mockContext.Customer.FirstOrDefault(c => c.Id == customerId);
+
+                // Assert
+                Assert.IsNotNull(data); // make sure the comparison will work
+                Assert.AreEqual(inp.Name, data.Name);
+                Assert.AreEqual(inp.SSN, data.SSN);
+                Assert.AreEqual(inp.Email, data.Email);
+                Assert.AreEqual(inp.Phone, data.Phone);
+                Assert.AreEqual(inp.Address, data.Address);
+                Assert.AreEqual(inp.PostalCode, data.PostalCode);
+            }
+        }
     }
 }
