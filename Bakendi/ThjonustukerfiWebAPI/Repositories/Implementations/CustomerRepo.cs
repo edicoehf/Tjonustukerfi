@@ -48,6 +48,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             if(customer == null) { throw new NotFoundException($"Customer with id {id} was not found"); }
             // Remove customer from database
             _dbContext.Customer.Remove(customer);
+            _dbContext.SaveChanges();
         }
     }
 }
