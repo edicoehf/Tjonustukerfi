@@ -98,6 +98,24 @@ namespace ThjonustukerfiTests.Tests
         }
 
         [TestMethod]
+        public void CreateCustomer_should_throw_InvalidIdException()
+        {
+            // Arrange
+            var inp = new CustomerInputModel
+            {
+                Name = "Kalli Valli",
+                Email = "KV@vigsig.is"
+            };
+
+            using (var mockContext = new DataContext(_options))
+            {
+                var customerRepo = new CustomerRepo(mockContext, _mapper);
+
+                Assert.ThrowsException<InvalidIdException>(() => customerRepo.CreateCustomer(inp));
+            }
+        }
+
+        [TestMethod]
         public void GetCustomer_should_throw_NotFoundException()
         {
             using (var mockContext = new DataContext(_options))
