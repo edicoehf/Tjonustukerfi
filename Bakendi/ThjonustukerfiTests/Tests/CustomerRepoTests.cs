@@ -125,5 +125,35 @@ namespace ThjonustukerfiTests.Tests
                 Assert.ThrowsException<NotFoundException>(() => customerRepo.GetCustomerById(-1));
             }
         }
+
+        [TestMethod]
+        public void DeleteCustomer_should_remove_customer_with_id_100()
+        {
+            // Arrange
+            
+            using (var mockContext = new DataContext(_options))
+            {
+                var customerRepo = new CustomerRepo(mockContext, _mapper);
+
+                var dbSize = mockContext.Customer.Count();
+
+                // Act
+                customerRepo.DeleteCustomerById(100);
+
+                // Assert
+                Assert.AreEqual(mockContext.Customer.Count(), dbSize - 1);
+            };
+        }
+
+        [TestMethod]
+        public void DeleteCustomer_should_throw_NotFoundException()
+        {
+            using (var mockContext = new DataContext(_options))
+            {
+                var customerRepo = new CustomerRepo(mockContext, _mapper);
+
+                Assert.ThrowsException<NotFoundException>(() => customerRepo.DeleteCustomerById(-1));
+            }
+        }
     }
 }
