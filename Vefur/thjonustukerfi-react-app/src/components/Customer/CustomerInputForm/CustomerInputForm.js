@@ -2,7 +2,7 @@ import React from "react";
 import Form from "../../Form/Form";
 import Input from "../../Input/Input";
 import validateForm from "../CustomerValidate/CustomerValidate";
-import useForm from "../../../hooks/useForm/useForm";
+import useForm from "../../../hooks/useForm";
 import customerService from "../../../services/customerService";
 
 import "./CustomerInputForm.css";
