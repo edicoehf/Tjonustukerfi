@@ -84,5 +84,50 @@ namespace ThjonustukerfiTests.Tests
             Assert.AreEqual(mockCustomerDTO.Id, customerDTO.Id);
             Assert.AreEqual(mockCustomerDTO.Name, customerDTO.Name);
         }
+
+        [TestMethod]
+        public void UpdateCustomerDetails_should_return_200_ok()
+        {
+            var inp = new CustomerInputModel
+            {
+                Name = "Siggi Viggi",
+                Email = "Siggi@viggi.is",
+                Address = "Hvergigata 1898"
+            };
+
+            _customerServiceMock.Setup(method => method.UpdateCustomerDetails(It.IsAny<CustomerInputModel>(), It.IsAny<long>())).Verifiable();
+
+            _customerController = new CustomerController(_customerServiceMock.Object);
+
+            var response = _customerController.UpdateCustomerDetails(inp, 1) as OkResult;
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(200, response.StatusCode);
+        }
+
+        [TestMethod]
+        public void DeleteCustomer_response_should_return_204_noContent()
+        {
+            // Arrange
+            long id = 7;
+            
+            // mock DTO and service
+            CustomerDTO mockCustomerDTO = new CustomerDTO
+            {
+                Id = id,
+                Name = "Siggi Biggi"
+            };
+            _customerServiceMock.Setup(method => method.DeleteCustomerById(id));
+
+            // Creat contoller
+            _customerController = new CustomerController(_customerServiceMock.Object);
+
+            // Act
+            var response = _customerController.DeleteCustomerById(id) as NoContentResult;
+
+            // Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(204, response.StatusCode);
+        }
     }
 }

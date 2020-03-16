@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using System.Linq;
 using AutoMapper;
@@ -39,6 +40,34 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             if(entity == null) { throw new NotFoundException($"Customer with id {id} was not found."); }
             // Mapping from entity to DTO
             return _mapper.Map<CustomerDTO>(entity);
+        }
+
+        public void UpdateCustomerDetails(CustomerInputModel customer, long id)
+        {
+            // Find customer entity in database
+            var entity = _dbContext.Customer.FirstOrDefault(c => c.Id == id);
+            if(entity == null) { throw new NotFoundException($"Customer with id {id} was not found."); }
+
+            // Store original date created to fix autmappers overwriting datecreated
+            entity.Name = customer.Name;
+            entity.SSN = customer.SSN;
+            entity.Email = customer.Email;
+            entity.Phone = customer.Phone;
+            entity.Address = customer.Address;
+            entity.PostalCode = customer.PostalCode;
+            entity.DateModified = DateTime.Now;
+
+            _dbContext.SaveChanges();
+        }
+        public void DeleteCustomerById(long id)
+        {
+            // Get customer entity from database
+            var customer = _dbContext.Customer.FirstOrDefault(r => r.Id == id);
+            // Check if customer exists throw exception if not
+            if(customer == null) { throw new NotFoundException($"Customer with id {id} was not found"); }
+            // Remove customer from database
+            _dbContext.Customer.Remove(customer);
+            _dbContext.SaveChanges();
         }
     }
 }
