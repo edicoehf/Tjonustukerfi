@@ -1,5 +1,5 @@
 import React from 'react';
-import customerService from '../../services/customerService';
+import customerService from '../services/customerService';
 
 const emptyCustomer = {
     id: "",
@@ -22,7 +22,7 @@ const useCustomerService = id => {
                 setError(null);
             })
             .catch(error => setError(error))
-    }, []);
+    }, [id]);
 
     return { customer, error }
 };
