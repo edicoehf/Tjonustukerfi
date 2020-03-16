@@ -1,7 +1,8 @@
+import { handleErrors } from './serviceHandlers';
+
 const endpoint = "http://localhost:5000/api/customers/";
 
 const createCustomer = customer => {
-    console.log("POST");
     return fetch(endpoint, {
         method: "POST",
         body: JSON.stringify(customer),
@@ -12,4 +13,22 @@ const createCustomer = customer => {
     });
 };
 
-export default createCustomer;
+const getCustomerById = id => {
+    return fetch(endpoint + id, {
+        method: "GET",
+        headers: {
+            crossDomain: true
+        }
+    })
+    .then(handleErrors)
+    .then(data => {
+        if(!data) { return {}; }
+        return data;
+    })
+    .catch(error => Promise.reject(error));
+}
+
+export default {
+    createCustomer,
+    getCustomerById
+};

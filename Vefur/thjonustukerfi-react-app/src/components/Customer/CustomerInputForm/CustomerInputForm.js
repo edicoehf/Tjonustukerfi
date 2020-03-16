@@ -3,7 +3,7 @@ import Form from "../../Form/Form";
 import Input from "../../Input/Input";
 import validateForm from "../CustomerValidate/CustomerValidate";
 import useForm from "../../../hooks/useForm/useForm";
-import createCustomer from "../../../services/customerService";
+import {createCustomer} from "../../../services/customerService";
 
 import "./CustomerInputForm.css";
 
