@@ -5,6 +5,6 @@ const handleErrors = resp => {
   return resp;
 }
 
-export default {
+module.exports = {
   handleErrors
 };

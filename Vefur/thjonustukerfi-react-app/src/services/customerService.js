@@ -32,7 +32,7 @@ const getCustomerById = id => {
         return data;
     })
     .catch(error => Promise.reject(error));
-}
+};
 
 export default {
     createCustomer,
