@@ -10,7 +10,13 @@ const createCustomer = customer => {
             "Content-Type": "application/json",
             crossDomain: true
         }
-    });
+    })
+    .then(handleErrors)
+    .then(data => {
+        if(!data) { return {}; }
+        return data;
+    })
+    .catch(error => Promise.reject(error));;
 };
 
 const getCustomerById = id => {
