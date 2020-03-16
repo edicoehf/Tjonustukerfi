@@ -39,6 +39,12 @@ namespace ThjonustukerfiWebAPI.Extensions
 
                     return context.Response.WriteAsync(exception.Message);
                 }
+                if(exception is NotFoundException)
+                {
+                    context.Response.StatusCode = (int) HttpStatusCode.NotFound;
+
+                    return context.Response.WriteAsync(exception.Message);
+                }
             }
 
             logService.LogToDatabase(new ExceptionModel
