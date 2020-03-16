@@ -13,8 +13,13 @@ namespace ThjonustukerfiWebAPI.Mappings
             //* Customer Mappings
             // Automapper for CustomerInputModel to Customer entity
             CreateMap<CustomerInputModel, Customer>()
-                .ForMember(src => src.DateCreated, opt => opt.MapFrom(src => DateTime.Now))
-                .ForMember(src => src.DateModified, opt => opt.MapFrom(src => DateTime.Now));
+                .ForMember(src => src.DateModified, opt => opt.MapFrom(src => DateTime.Now))
+                .AfterMap((src, dst) => {
+                    if(dst.DateCreated == null)
+                    {
+                        dst.DateCreated = DateTime.Now;
+                    }
+                });
             
             // Automapper for Customer entity to Customer DTO
             CreateMap<Customer, CustomerDTO>();
