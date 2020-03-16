@@ -8,6 +8,7 @@ const NavigationBar = () => {
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Navbar.Brand href="/">
                 <img
+                    alt="logo"
                     src={Logo}
                     style={{ width: 50, marginLeft: 5, marginRight: 5 }}
                 />
