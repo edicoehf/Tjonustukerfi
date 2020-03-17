@@ -11,7 +11,6 @@ namespace ThjonustukerfiWebAPI
         {
             CreateHostBuilder(args)
                 .Build()
-                .MigrateDatabase<DataContext>()
                 .FillTables()
                 .Run();
         }
