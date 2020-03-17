@@ -26,6 +26,18 @@ namespace ThjonustukerfiWebAPI.Mappings
                 .ForMember(src => src.DateModified, opt => opt.MapFrom(src => DateTime.Now));
 
             CreateMap<Item, ItemDTO>();
+
+            //* Order Mappings
+            // Automapper for OrderInputModel to Order entity
+            CreateMap<OrderInputModel, Order>()
+                .ForMember(src => src.DateCreated, opt => opt.MapFrom(src => DateTime.Now))
+                .ForMember(src => src.DateModified, opt => opt.MapFrom(src => DateTime.Now));
+                
+            // Automapper for Order entity to Order DTO
+            CreateMap<Order, OrderDTO>();
+
+            //* ItemOrderConnection
+            CreateMap<ItemOrderConnectionInputModel, ItemOrderConnection>();
         }
     }
 }

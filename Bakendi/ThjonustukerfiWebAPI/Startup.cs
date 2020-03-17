@@ -75,6 +75,10 @@ namespace ThjonustukerfiWebAPI
             // Adding for Log Repository
             services.AddTransient<ILogService, LogService>();
             services.AddTransient<ILogRepository, LogRepository>();
+
+            // Adding for Order
+            services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IOrderRepo, OrderRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
