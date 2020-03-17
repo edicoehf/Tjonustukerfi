@@ -1,11 +1,15 @@
 import React from 'react';
 import PropTypes from "prop-types";
+import './CustomerProperty.css';
 
 const CustomerProperty = ({ title, value }) => {
   return (
     <>
       {value ? (
-        <p className="customer-property">{title}: {value}</p>  
+        <tr className="customer-property"> 
+          <td className="customer-property-title">{title}:</td>
+          <td className="customer-property-value">{value}</td>
+        </tr>  
       ) : (
         <></>
       )}

@@ -1,0 +1,9 @@
+.customer-details {
+  margin-top: 4em;
+  display: flex;
+  flex-direction: column;
+}
+
+.customer-properties {
+  margin: 4em auto 0 0;
+}
