@@ -12,12 +12,12 @@ const CustomerDetails = ({ id }) => {
       {!error ? ( 
         <table className="customer-properties">
           <tbody>
-            <CustomerProperty title='Nafn' value={customer.name} />
-            <CustomerProperty title='Kennitala' value={customer.ssn} />
-            <CustomerProperty title='Sími' value={customer.telephone} />
-            <CustomerProperty title='Netfang' value={customer.email} />
-            <CustomerProperty title='Heimilisfang' value={customer.address} />
-            <CustomerProperty title='Póstnúmer' value={customer.postalCode} />
+            <CustomerProperty title='Nafn' name="name" value={customer.name} />
+            <CustomerProperty title='Kennitala' name="ssn" value={customer.ssn} />
+            <CustomerProperty title='Sími' name="telephone" value={customer.telephone} />
+            <CustomerProperty title='Netfang' name="email" value={customer.email} />
+            <CustomerProperty title='Heimilisfang' name="address" value={customer.address} />
+            <CustomerProperty title='Póstnúmer' name="postalcode" value={customer.postalCode} />
           </tbody>
         </table>
       ) : (
