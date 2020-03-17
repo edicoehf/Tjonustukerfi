@@ -3,9 +3,11 @@ using Moq;
 using System.Collections.Generic;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.InputModels;
+using ThjonustukerfiWebAPI.Models.Exceptions;
 using ThjonustukerfiWebAPI.Repositories.Interfaces;
 using ThjonustukerfiWebAPI.Services.Implementations;
 using ThjonustukerfiWebAPI.Services.Interfaces;
+
 
 namespace ThjonustukerfiTests.Tests
 {
@@ -56,6 +58,30 @@ namespace ThjonustukerfiTests.Tests
             Assert.IsNotNull(orderDTOReturn);
             Assert.AreEqual(orderDTOReturn.Id, mockOrderDTO.Id);
             Assert.AreEqual(orderDTOReturn.Barcode, mockOrderDTO.Barcode);
+        }
+
+        [TestMethod]
+        public void CreateOrder_Should_throw_NotFoundException_OnCustomerId()
+        {
+             // Arrange
+            var order = new OrderInputModel
+            {
+                CustomerId = -1,
+                Items = new List<ItemInputModel>()
+                {
+                    new ItemInputModel {
+                        Type = "Ysa"
+                    }
+                }
+            };  
+
+            // _orderRepoMock.Setup(method => method.CreateOrder(order)).Returns(mockOrderDTO);
+            _customerRepoMock.Setup(method => method.CustomerExists(order.CustomerId)).Returns(false);
+
+            _orderService = new OrderService(_orderRepoMock.Object, _customerRepoMock.Object);
+
+            // Act
+            Assert.ThrowsException<NotFoundException>(() => _orderService.CreateOrder(order));
         }
 
     }
