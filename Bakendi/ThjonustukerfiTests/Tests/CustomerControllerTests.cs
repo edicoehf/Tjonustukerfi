@@ -56,18 +56,23 @@ namespace ThjonustukerfiTests.Tests
         }
 
         [TestMethod]
-        public void GetCustomer_response_should_return_200_and_a_customerdto()
+        public void GetCustomer_response_should_return_200_and_a_customerdetailsdto()
         {
              // Arrange
             long id = 10;
 
             // Mock dto and service
-            CustomerDTO mockCustomerDTO = new CustomerDTO
+            CustomerDetailsDTO mockCustomerDetailsDTO = new CustomerDetailsDTO
             {
                 Id = id,
-                Name = "Viggi Siggi"
+                Name = "Viggi Siggi",
+                SSN = "1308943149",
+                Email = "viggi@siggi.is",
+                Phone = "5812345",
+                Address = "Bakkabakki 1",
+                PostalCode = "800"
             };
-            _customerServiceMock.Setup(method => method.GetCustomerById(id)).Returns(mockCustomerDTO);
+            _customerServiceMock.Setup(method => method.GetCustomerById(id)).Returns(mockCustomerDetailsDTO);
 
             // Create controller
             _customerController = new CustomerController(_customerServiceMock.Object);
@@ -81,10 +86,15 @@ namespace ThjonustukerfiTests.Tests
             Assert.AreEqual(200, response.StatusCode);
 
             // Check if response contains correct data
-            CustomerDTO customerDTO = response.Value as CustomerDTO;
-            Assert.IsNotNull(customerDTO);
-            Assert.AreEqual(mockCustomerDTO.Id, customerDTO.Id);
-            Assert.AreEqual(mockCustomerDTO.Name, customerDTO.Name);
+            CustomerDetailsDTO customerDetailsDTO = response.Value as CustomerDetailsDTO;
+            Assert.IsNotNull(customerDetailsDTO);
+            Assert.AreEqual(mockCustomerDetailsDTO.Id, customerDetailsDTO.Id);
+            Assert.AreEqual(mockCustomerDetailsDTO.Name, customerDetailsDTO.Name);
+            Assert.AreEqual(mockCustomerDetailsDTO.SSN, customerDetailsDTO.SSN);
+            Assert.AreEqual(mockCustomerDetailsDTO.Email, customerDetailsDTO.Email);
+            Assert.AreEqual(mockCustomerDetailsDTO.Phone, customerDetailsDTO.Phone);
+            Assert.AreEqual(mockCustomerDetailsDTO.Address, customerDetailsDTO.Address);
+            Assert.AreEqual(mockCustomerDetailsDTO.PostalCode, customerDetailsDTO.PostalCode);
         }
 
         [TestMethod]
