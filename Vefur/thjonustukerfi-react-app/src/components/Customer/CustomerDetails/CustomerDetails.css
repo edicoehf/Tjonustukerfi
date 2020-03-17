@@ -1,9 +1,12 @@
 .customer-details {
   margin-top: 4em;
-  display: flex;
-  flex-direction: column;
 }
 
 .customer-properties {
-  margin: 4em auto 0 0;
+  margin: 0 auto 0 0;
+}
+
+.error {
+  color: var(--error-color);
+  font-weight: bold;
 }
