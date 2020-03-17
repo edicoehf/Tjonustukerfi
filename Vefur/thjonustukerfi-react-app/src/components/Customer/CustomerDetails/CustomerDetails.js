@@ -6,7 +6,6 @@ import './CustomerDetails.css';
 
 const CustomerDetails = ({ id }) => {
   const { customer, error } = useCustomerService(id);
-  console.log(customer);
   return (
     <div className='customer-details'>
       <h1>Upplýsingar um viðskiptavin</h1>
