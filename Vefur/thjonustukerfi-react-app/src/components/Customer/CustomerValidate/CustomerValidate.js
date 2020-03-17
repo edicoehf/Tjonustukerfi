@@ -1,4 +1,5 @@
 import validator from "validator";
+
 const validateForm = values => {
     //  name, ssn, email, telephone, postalCode, address
     const { name, email } = values;
