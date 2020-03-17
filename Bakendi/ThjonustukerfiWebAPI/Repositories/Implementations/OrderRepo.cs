@@ -37,24 +37,24 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 orderToAdd.Barcode = newBarcode.ToString();
             }
 
+            var itemIdCount = _dbContext.Item.Count() + 1;
+            var orderIdCount = _dbContext.Order.Count() + 1;
             var entity = _dbContext.Order.Add(orderToAdd).Entity;
-            _dbContext.SaveChanges();
 
             // Add items toDatabase
             foreach(ItemInputModel item in order.Items)
             {
-                var itemId = _dbContext.Item.Add(_mapper.Map<Item>(item)).Entity;
-                // Save changes so we get the correct id for item.id
-                _dbContext.SaveChanges();
+                _dbContext.Item.Add(_mapper.Map<Item>(item));
 
                 var itemOrderConnection = new ItemOrderConnectionInputModel {
-                    OrderId = entity.Id,
-                    ItemId = itemId.Id
+                    OrderId = orderIdCount,
+                    ItemId = itemIdCount
                 };
 
                 _dbContext.ItemOrderConnection.Add(_mapper.Map<ItemOrderConnection>(itemOrderConnection));
-                _dbContext.SaveChanges();
             }
+
+            _dbContext.SaveChanges();
 
             return _mapper.Map<OrderDTO>(entity);
         }
