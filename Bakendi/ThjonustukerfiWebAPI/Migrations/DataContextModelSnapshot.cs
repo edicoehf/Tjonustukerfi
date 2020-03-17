@@ -29,7 +29,7 @@ namespace ThjonustukerfiWebAPI.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("DateCreated")
+                    b.Property<DateTime?>("DateCreated")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("DateModified")
@@ -79,9 +79,6 @@ namespace ThjonustukerfiWebAPI.Migrations
 
                     b.Property<string>("JSON")
                         .HasColumnType("text");
-
-                    b.Property<long>("OrderId")
-                        .HasColumnType("bigint");
 
                     b.Property<long>("ServiceId")
                         .HasColumnType("bigint");
