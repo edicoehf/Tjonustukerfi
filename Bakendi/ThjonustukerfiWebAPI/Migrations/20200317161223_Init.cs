@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ThjonustukerfiWebAPI.Migrations
@@ -19,11 +20,29 @@ namespace ThjonustukerfiWebAPI.Migrations
                     Phone = table.Column<string>(nullable: true),
                     Address = table.Column<string>(nullable: true),
                     PostalCode = table.Column<string>(nullable: true),
-                    JSON = table.Column<string>(nullable: true)
+                    JSON = table.Column<string>(nullable: true),
+                    DateCreated = table.Column<DateTime>(nullable: true),
+                    DateModified = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Customer", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ExceptionLog",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    StatusCode = table.Column<int>(nullable: false),
+                    ExceptionMessage = table.Column<string>(nullable: true),
+                    StackTrace = table.Column<string>(nullable: true),
+                    DateOfError = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExceptionLog", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -32,11 +51,14 @@ namespace ThjonustukerfiWebAPI.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    OrderId = table.Column<long>(nullable: false),
+                    Type = table.Column<string>(nullable: true),
                     StateId = table.Column<long>(nullable: false),
                     ServiceId = table.Column<long>(nullable: false),
                     Barcode = table.Column<string>(nullable: true),
-                    JSON = table.Column<string>(nullable: true)
+                    JSON = table.Column<string>(nullable: true),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    DateModified = table.Column<DateTime>(nullable: false),
+                    DateCompleted = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -65,7 +87,10 @@ namespace ThjonustukerfiWebAPI.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CustomerId = table.Column<long>(nullable: false),
                     Barcode = table.Column<string>(nullable: true),
-                    JSON = table.Column<string>(nullable: true)
+                    JSON = table.Column<string>(nullable: true),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    DateModified = table.Column<DateTime>(nullable: false),
+                    DateCompleted = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -120,6 +145,9 @@ namespace ThjonustukerfiWebAPI.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Customer");
+
+            migrationBuilder.DropTable(
+                name: "ExceptionLog");
 
             migrationBuilder.DropTable(
                 name: "Item");

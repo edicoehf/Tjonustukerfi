@@ -33,7 +33,7 @@ const getCustomerById = id => {
             if (!data) {
                 return {};
             }
-            return data.JSON();
+            return data;
         })
         .catch(error => Promise.reject(error));
 };

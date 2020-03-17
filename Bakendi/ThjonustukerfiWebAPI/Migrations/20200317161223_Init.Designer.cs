@@ -10,8 +10,8 @@ using ThjonustukerfiWebAPI.Models;
 namespace ThjonustukerfiWebAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200311102907_AddedErroLogTable")]
-    partial class AddedErroLogTable
+    [Migration("20200317161223_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,7 +31,7 @@ namespace ThjonustukerfiWebAPI.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("DateCreated")
+                    b.Property<DateTime?>("DateCreated")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("DateModified")
@@ -81,9 +81,6 @@ namespace ThjonustukerfiWebAPI.Migrations
 
                     b.Property<string>("JSON")
                         .HasColumnType("text");
-
-                    b.Property<long>("OrderId")
-                        .HasColumnType("bigint");
 
                     b.Property<long>("ServiceId")
                         .HasColumnType("bigint");
@@ -138,7 +135,7 @@ namespace ThjonustukerfiWebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EceptionLog");
+                    b.ToTable("ExceptionLog");
                 });
 
             modelBuilder.Entity("ThjonustukerfiWebAPI.Models.Entities.Order", b =>
