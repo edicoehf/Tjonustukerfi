@@ -1,8 +1,9 @@
 const handleErrors = resp => {
+    console.log(resp);
     if (!resp.ok) {
-        throw Error(resp.statusText);
+        throw Error(resp);
     }
-    return resp.json();
+    return resp;
 };
 
 module.exports = {
