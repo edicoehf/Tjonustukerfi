@@ -5,7 +5,7 @@ import CustomerProperty from '../CustomerProperty/CustomerProperty';
 
 const CustomerDetails = ({ id }) => {
   const { customer, error } = useCustomerService(id);
-
+  console.log(customer);
   return (
     <div className='customer-details'>
       {error ? ( 
@@ -25,7 +25,7 @@ const CustomerDetails = ({ id }) => {
 };
 
 CustomerDetails.propTypes = {
-  id: PropTypes.number.isRequired
+  id: PropTypes.string.isRequired
 }
 
 export default CustomerDetails;
