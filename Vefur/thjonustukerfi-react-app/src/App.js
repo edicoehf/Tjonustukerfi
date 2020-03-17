@@ -5,6 +5,7 @@ import "./App.css";
 import NavigationBar from "./components/Header/NavigationBar/NavigationBar";
 import LandingPage from "./components/LandingPage/LandingPage";
 import CreateCustomer from "./components/Customer/CreateCustomer/CreateCustomer";
+import CustomerView from "./components/Customer/CustomerView/CustomerView";
 function App() {
     return (
         <div className="app">
@@ -18,6 +19,11 @@ function App() {
                         exact
                         path="/new-customer"
                         component={CreateCustomer}
+                    />
+                    <Route 
+                        exact
+                        path="/customer/:id"
+                        component={CustomerView}
                     />
                 </Switch>
             </div>
