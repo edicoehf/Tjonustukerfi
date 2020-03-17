@@ -1,3 +1,5 @@
+import validator from "validator";
+
 const validateForm = values => {
     //  name, ssn, email, telephone, postalCode, address
     const { name, email } = values;
@@ -5,8 +7,11 @@ const validateForm = values => {
     if (name === "") {
         errors.name = "Nafn vantar";
     }
-    if (name.length > 100) {
+    if (name.length >= 100) {
         errors.name = "Nafn verður að vera minna en 100 stafir";
+    }
+    if (!validator.isEmail(email)) {
+        errors.email = "Ógilt netfang";
     }
     if (email === "") {
         errors.email = "Netfang vantar";
