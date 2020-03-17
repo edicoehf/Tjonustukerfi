@@ -21,7 +21,7 @@ namespace ThjonustukerfiWebAPI.Controllers
             if(!ModelState.IsValid) { return BadRequest("Input model is not valid"); }
             var entity = _orderService.CreateOrder(order);
 
-            // Change to CreatedAtRoute when get by id is implemented
+            // TODO Change to CreatedAtRoute when get by id is implemented
             return NoContent();
         }
     }
