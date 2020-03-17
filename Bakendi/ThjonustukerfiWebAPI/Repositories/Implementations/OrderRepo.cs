@@ -38,20 +38,23 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             }
 
             var entity = _dbContext.Order.Add(orderToAdd).Entity;
+            _dbContext.SaveChanges();
 
             // Add items toDatabase
             foreach(ItemInputModel item in order.Items)
             {
-                var itemId = _dbContext.Item.Add(_mapper.Map<Item>(item)).Entity.Id;
+                var itemId = _dbContext.Item.Add(_mapper.Map<Item>(item)).Entity;
+                // Save changes so we get the correct id for item.id
+                _dbContext.SaveChanges();
+
                 var itemOrderConnection = new ItemOrderConnectionInputModel {
                     OrderId = entity.Id,
-                    ItemId = itemId
+                    ItemId = itemId.Id
                 };
 
                 _dbContext.ItemOrderConnection.Add(_mapper.Map<ItemOrderConnection>(itemOrderConnection));
-                // herna
+                _dbContext.SaveChanges();
             }
-            _dbContext.SaveChanges();
 
             return _mapper.Map<OrderDTO>(entity);
         }
