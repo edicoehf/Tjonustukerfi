@@ -1,4 +1,4 @@
-import { handleErrors } from './serviceHandlers';
+import { handleErrors } from "./serviceHandlers";
 
 const endpoint = "http://localhost:5000/api/customers/";
 
@@ -11,12 +11,33 @@ const createCustomer = customer => {
             crossDomain: true
         }
     })
-    .then(handleErrors)
-    .then(data => {
-        if(!data) { return {}; }
-        return data;
+        .then(handleErrors)
+        .then(data => {
+            if (!data) {
+                return {};
+            }
+            return data;
+        })
+        .catch(error => Promise.reject(error));
+};
+
+const updateCustomer = customer => {
+    return fetch(endpoint, {
+        method: "PATCH",
+        body: JSON.stringify(customer),
+        headers: {
+            "Content-Type": "application/json",
+            crossDomain: true
+        }
     })
-    .catch(error => Promise.reject(error));;
+        .then(handleErrors)
+        .then(data => {
+            if (!data) {
+                return {};
+            }
+            return data;
+        })
+        .catch(error => Promise.reject(error));
 };
 
 const getCustomerById = id => {
@@ -26,15 +47,18 @@ const getCustomerById = id => {
             crossDomain: true
         }
     })
-    .then(handleErrors)
-    .then(data => {
-        if(!data) { return {}; }
-        return data;
-    })
-    .catch(error => Promise.reject(error));
+        .then(handleErrors)
+        .then(data => {
+            if (!data) {
+                return {};
+            }
+            return data;
+        })
+        .catch(error => Promise.reject(error));
 };
 
 export default {
     createCustomer,
-    getCustomerById
+    getCustomerById,
+    updateCustomer
 };

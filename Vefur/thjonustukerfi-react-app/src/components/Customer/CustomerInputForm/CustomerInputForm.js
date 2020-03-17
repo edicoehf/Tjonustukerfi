@@ -4,8 +4,8 @@ import Input from "../../Input/Input";
 import validateForm from "../CustomerValidate/CustomerValidate";
 import useForm from "../../../hooks/useForm";
 import customerService from "../../../services/customerService";
-
 import "./CustomerInputForm.css";
+import useCustomerService from "../../../hooks/useCustomerService";
 
 const initialState = {
     name: "",
@@ -16,14 +16,23 @@ const initialState = {
     address: ""
 };
 
-const CustomerInputForm = () => {
+const CustomerInputForm = prevCustomer => {
+    const { customer, error } = useCustomerService(1);
+    const state = customer ? customer : initialState;
+    const [submitError, setSubmitError] = React.useState(null);
     const submitHandler = async values => {
-        customerService.createCustomer(values);
+        // if (customer) {
+        //     customerService.updateCustomer(values);
+        // } else {
+        customerService
+            .createCustomer(values)
+            .catch(error => setSubmitError(error));
+        // }
     };
 
     // isSubmitting, resetFields
     const { handleSubmit, handleChangeText, values, errors } = useForm(
-        initialState,
+        state,
         validateForm,
         submitHandler
     );

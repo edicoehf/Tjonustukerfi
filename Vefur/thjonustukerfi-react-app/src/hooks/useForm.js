@@ -1,6 +1,7 @@
 import React from "react";
 
 const useForm = (initialState, validate, submitHandler) => {
+    console.log(initialState);
     const [values, setValues] = React.useState(initialState);
     const [errors, setErrors] = React.useState({});
     const [isSubmitting, setSubmitting] = React.useState(false);
