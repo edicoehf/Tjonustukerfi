@@ -19,7 +19,7 @@ const CustomerDetails = ({ id }) => {
           <CustomerProperty title='Póstnúmer' value={customer.postalCode} />
         </table>
       ) : (
-        <p className="error">{error}</p>
+        <p className="error">Villa kom upp: Gat ekki sótt viðskiptavin</p>
       )}
     </div>
   )
