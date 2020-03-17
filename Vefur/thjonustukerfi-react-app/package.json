@@ -19,7 +19,8 @@
     "react-test-renderer": "^16.13.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "serve": "^11.3.0"
+    "serve": "^11.3.0",
+    "validator": "^12.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
