@@ -12,7 +12,7 @@ namespace ThjonustukerfiWebAPI.Models.Entities
         public long StateId { get; set; }   // tenging við state
         public int Step { get; set; }       // hvaða skref í ferlinu þetta er
 
-        // Overrides
+        // Overrides thermay be a warning that gethashcode is not implemented yet it is here:
         public override int GetHashCode()
         {
             return (int) Id;
