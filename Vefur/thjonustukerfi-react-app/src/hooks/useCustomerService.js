@@ -24,7 +24,6 @@ const useCustomerService = id => {
             })
             .catch(error => setError(error));
     }, [id]);
-
     return { customer, error };
 };
 

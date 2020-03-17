@@ -151,5 +151,95 @@ namespace ThjonustukerfiTests.Tests
             }
         }
 
+        [TestMethod]
+        public void UpdateCustomerDetails_should_update_customer_in_database()
+        {
+            // Arrange
+            var inp = new CustomerInputModel
+            {
+                Name = "Siggi Viggi",
+                Email = "Siggi@viggi.is",
+                Address = "Hvergigata 1898",
+                SSN = "121212-5119",
+                Phone = "555-1234",
+                PostalCode = "999"
+
+            };
+
+            using (var mockContext = new DataContext(_options))
+            {
+                var customerRepo = new CustomerRepo(mockContext, _mapper);
+                long customerId = 100;
+
+                // Act
+                customerRepo.UpdateCustomerDetails(inp, customerId);
+                // Get data from the mock context to see if repo changed the values
+                var data = mockContext.Customer.FirstOrDefault(c => c.Id == customerId);
+
+                // Assert
+                Assert.IsNotNull(data); // make sure the comparison will work
+                Assert.AreEqual(inp.Name, data.Name);
+                Assert.AreEqual(inp.SSN, data.SSN);
+                Assert.AreEqual(inp.Email, data.Email);
+                Assert.AreEqual(inp.Phone, data.Phone);
+                Assert.AreEqual(inp.Address, data.Address);
+                Assert.AreEqual(inp.PostalCode, data.PostalCode);
+            }
+        }
+
+        [TestMethod]
+        public void UpdateCustomerDetails_should_throw_NotFoundException()
+        {
+            // Arrange
+            var inp = new CustomerInputModel
+            {
+                Name = "Siggi Viggi",
+                Email = "Siggi@viggi.is",
+                Address = "Hvergigata 1898",
+                SSN = "121212-5119",
+                Phone = "555-1234",
+                PostalCode = "999"
+
+            };
+
+            using (var mockContext = new DataContext(_options))
+            {
+                var customerRepo = new CustomerRepo(mockContext, _mapper);
+
+                // Act then Assert
+                Assert.ThrowsException<NotFoundException>(() => customerRepo.UpdateCustomerDetails(inp, -1));
+            }
+                
+        }
+
+        [TestMethod]
+        public void DeleteCustomer_should_throw_NotFoundException()
+        {
+            using (var mockContext = new DataContext(_options))
+            {
+                var customerRepo = new CustomerRepo(mockContext, _mapper);
+
+                Assert.ThrowsException<NotFoundException>(() => customerRepo.DeleteCustomerById(-1));
+            }
+        }
+
+        [TestMethod]
+        public void DeleteCustomer_should_remove_customer_with_id_100()
+        {
+            // Arrange
+            
+            using (var mockContext = new DataContext(_options))
+            {
+                var customerRepo = new CustomerRepo(mockContext, _mapper);
+
+                var dbSize = mockContext.Customer.Count();
+
+                // Act
+                customerRepo.DeleteCustomerById(100);
+
+                // Assert
+                Assert.AreEqual(mockContext.Customer.Count(), dbSize - 1);
+            };
+        }
     }
 }

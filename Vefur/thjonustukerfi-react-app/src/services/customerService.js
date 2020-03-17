@@ -21,12 +21,10 @@ const createCustomer = customer => {
         .catch(error => Promise.reject(error));
 };
 
-const updateCustomer = customer => {
-    return fetch(endpoint, {
-        method: "PATCH",
-        body: JSON.stringify(customer),
+const getCustomerById = id => {
+    return fetch(endpoint + id, {
+        method: "GET",
         headers: {
-            "Content-Type": "application/json",
             crossDomain: true
         }
     })
@@ -35,15 +33,17 @@ const updateCustomer = customer => {
             if (!data) {
                 return {};
             }
-            return data;
+            return data.JSON();
         })
         .catch(error => Promise.reject(error));
 };
 
-const getCustomerById = id => {
-    return fetch(endpoint + id, {
-        method: "GET",
+const updateCustomer = customer => {
+    return fetch(endpoint, {
+        method: "PATCH",
+        body: JSON.stringify(customer),
         headers: {
+            "Content-Type": "application/json",
             crossDomain: true
         }
     })

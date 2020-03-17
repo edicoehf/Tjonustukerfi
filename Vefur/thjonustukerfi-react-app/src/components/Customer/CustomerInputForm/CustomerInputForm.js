@@ -18,6 +18,8 @@ const initialState = {
 
 const CustomerInputForm = prevCustomer => {
     const { customer, error } = useCustomerService(1);
+    console.log("Customer: ");
+    console.log(customer);
     const state = customer ? customer : initialState;
     const [submitError, setSubmitError] = React.useState(null);
     const submitHandler = async values => {
