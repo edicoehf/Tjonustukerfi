@@ -10,6 +10,7 @@ namespace ThjonustukerfiWebAPI.Extensions
 {
     public static class WebhostExtension
     {
+        // Maybe use later...
         public static IHost MigrateDatabase<T>(this IHost webHost) where T:DbContext
         {
             var serviceScopeFactory =   (IServiceScopeFactory)webHost
