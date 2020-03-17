@@ -21,6 +21,7 @@ namespace ThjonustukerfiWebAPI.Configurations
         }
 
         // setup Service
+        //TODO: Add remove?
         public void Run()
         {
             var DB_Services = _dbContext.Set<Service>().ToList();
@@ -31,7 +32,7 @@ namespace ThjonustukerfiWebAPI.Configurations
             bool change = false;
 
             // empty or not with all data
-            if(DB_Services == null || DB_Services.Count == 0 || DB_Services.Count < _services.Count)
+            if(DB_Services == null || DB_Services.Count == 0 || DB_Services.Count != _services.Count)
             {
                 _services.RemovExisting(DB_Services);
                 _dbContext.Service.AddRange(_services);
@@ -40,7 +41,7 @@ namespace ThjonustukerfiWebAPI.Configurations
             }
 
             // empty or not with all data
-            if(DB_ServiceStates == null || DB_ServiceStates.Count == 0 || DB_ServiceStates.Count < _serviceStates.Count)
+            if(DB_ServiceStates == null || DB_ServiceStates.Count == 0 || DB_ServiceStates.Count != _serviceStates.Count)
             {
                 _serviceStates.RemovExisting(DB_ServiceStates);
                 _dbContext.ServiceState.AddRange(_serviceStates);
@@ -49,7 +50,7 @@ namespace ThjonustukerfiWebAPI.Configurations
             }
             
             // empty or not with all data
-            if(DB_States == null || DB_States.Count == 0 || DB_States.Count < _states.Count)
+            if(DB_States == null || DB_States.Count == 0 || DB_States.Count != _states.Count)
             {
                 _states.RemovExisting(DB_States);
                 _dbContext.State.AddRange(_states);
