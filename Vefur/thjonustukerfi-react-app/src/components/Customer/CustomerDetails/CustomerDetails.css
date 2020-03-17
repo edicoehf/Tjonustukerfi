@@ -1,0 +1,12 @@
+.customer-details {
+  margin-top: 4em;
+}
+
+.customer-properties {
+  margin: 0 auto 0 0;
+}
+
+.error {
+  color: var(--error-color);
+  font-weight: bold;
+}

@@ -6,7 +6,7 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
     public interface ICustomerService
     {
         CustomerDTO CreateCustomer(CustomerInputModel customer);
-        CustomerDTO GetCustomerById(long id);
+        CustomerDetailsDTO GetCustomerById(long id);
         void UpdateCustomerDetails(CustomerInputModel customer, long id);
         void DeleteCustomerById(long id);
     }

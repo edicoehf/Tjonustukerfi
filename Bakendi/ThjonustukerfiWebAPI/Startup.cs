@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ThjonustukerfiWebAPI.Configurations;
 using ThjonustukerfiWebAPI.Extensions;
 using ThjonustukerfiWebAPI.Mappings;
 using ThjonustukerfiWebAPI.Models;
@@ -79,6 +80,8 @@ namespace ThjonustukerfiWebAPI
             // Adding for Order
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IOrderRepo, OrderRepo>();
+            // Adding foor SetupTables
+            services.AddTransient<ISetupTables, SetupTables>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
