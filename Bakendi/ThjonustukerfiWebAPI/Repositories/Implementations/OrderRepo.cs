@@ -37,8 +37,11 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 orderToAdd.Barcode = newBarcode.ToString();
             }
 
-            var itemIdCount = _dbContext.Item.Count() + 1;
-            var orderIdCount = _dbContext.Order.Count() + 1;
+            // Get next Id for order and item, make sure the new order has correct id
+            var newItemId = _dbContext.Item.Max(i => i.Id) + 1;
+            var newOrderId = _dbContext.Order.Max(o => o.Id) + 1;
+            orderToAdd.Id = newOrderId;
+
             var entity = _dbContext.Order.Add(orderToAdd).Entity;
 
             // Add items toDatabase
@@ -46,12 +49,14 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             {
                 _dbContext.Item.Add(_mapper.Map<Item>(item));
 
-                var itemOrderConnection = new ItemOrderConnectionInputModel {
-                    OrderId = orderIdCount,
-                    ItemId = itemIdCount
+                var itemOrderConnection = new ItemOrderConnection {
+                    OrderId = newOrderId,
+                    ItemId = newItemId
                 };
-
-                _dbContext.ItemOrderConnection.Add(_mapper.Map<ItemOrderConnection>(itemOrderConnection));
+                
+                // Increment itemId for next Item
+                newItemId++;
+                _dbContext.ItemOrderConnection.Add(itemOrderConnection);
             }
 
             _dbContext.SaveChanges();

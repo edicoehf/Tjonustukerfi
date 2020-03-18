@@ -37,8 +37,6 @@ namespace ThjonustukerfiWebAPI.Mappings
             // Automapper for Order entity to Order DTO
             CreateMap<Order, OrderDTO>();
 
-            //* ItemOrderConnection
-            CreateMap<ItemOrderConnectionInputModel, ItemOrderConnection>();
         }
     }
 }
