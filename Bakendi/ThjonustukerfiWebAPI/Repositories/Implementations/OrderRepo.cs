@@ -47,6 +47,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // Add items toDatabase
             foreach(ItemInputModel item in order.Items)
             {
+                // TODO: set item id? e.g: _dbContext.Item.Add(new Item {id = newItemId, ...}) or same way you did orderToAdd above
                 _dbContext.Item.Add(_mapper.Map<Item>(item));
 
                 var itemOrderConnection = new ItemOrderConnection {
