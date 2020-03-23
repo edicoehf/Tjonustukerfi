@@ -2,7 +2,7 @@ import React from "react";
 import useDeleteCustomerById from "../../../hooks/useDeleteCustomerById";
 import "./DeleteCustomer.css";
 
-const DeleteCustomer = id => {
+const DeleteCustomer = ({ id }) => {
     const { error, handleDelete, isDeleting } = useDeleteCustomerById(id);
     return (
         <div className="delete-customer">

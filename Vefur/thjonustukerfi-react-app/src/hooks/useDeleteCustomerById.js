@@ -4,18 +4,23 @@ import customerService from "../services/customerService";
 const useDeleteCustomerById = id => {
     const [error, setError] = React.useState(null);
     const [isDeleting, setDeleting] = React.useState(false);
+    const [isProcessing, setProcessing] = React.useState(false);
 
     React.useEffect(() => {
-        if (isDeleting) {
+        if (isDeleting && !isProcessing) {
+            setProcessing(true);
             customerService
                 .deleteCustomerById(id)
                 .then(() => {
                     setError(null);
                 })
                 .catch(error => setError(error))
-                .finally(() => setDeleting(false));
+                .finally(() => {
+                    setDeleting(false);
+                    setProcessing(false);
+                });
         }
-    }, [id, isDeleting]);
+    }, [id, isDeleting, isProcessing]);
 
     const handleDelete = () => {
         if (!isDeleting) {

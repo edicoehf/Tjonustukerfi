@@ -6,7 +6,6 @@ import "./CustomerDetails.css";
 
 const CustomerDetails = ({ id }) => {
     const { customer, error } = useGetCustomerById(id);
-    console.log(customer);
     return (
         <div className="customer-details">
             {!error ? (
