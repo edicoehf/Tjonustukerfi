@@ -2,10 +2,15 @@ import React from "react";
 import useDeleteCustomerById from "../../../hooks/useDeleteCustomerById";
 
 const DeleteCustomer = id => {
-    const { error, handleDelete } = useDeleteCustomerById(id);
+    const { error, handleDelete, isDeleting } = useDeleteCustomerById(id);
     return (
-        <div className="delete-customer" onClick={handleDelete}>
-            <button type="button" className="deletebtn">
+        <div className="delete-customer">
+            <button
+                type="button"
+                className="deletebtn"
+                disabled={isDeleting}
+                onClick={handleDelete}
+            >
                 Eyða viðskiptavin
             </button>
             {!error ? (

@@ -23,7 +23,7 @@ const useDeleteCustomerById = id => {
         }
     };
 
-    return { error, handleDelete };
+    return { error, handleDelete, isDeleting };
 };
 
 export default useDeleteCustomerById;
