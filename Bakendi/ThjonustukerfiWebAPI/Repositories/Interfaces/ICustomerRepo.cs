@@ -9,5 +9,6 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
         CustomerDetailsDTO GetCustomerById(long id);
         void UpdateCustomerDetails(CustomerInputModel customer, long id);
         void DeleteCustomerById(long id);
+        bool CustomerExists(long id);
     }
 }

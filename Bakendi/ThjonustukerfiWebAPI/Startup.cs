@@ -80,6 +80,9 @@ namespace ThjonustukerfiWebAPI
             services.AddTransient<ILogService, LogService>();
             services.AddTransient<ILogRepository, LogRepository>();
 
+            // Adding for Order
+            services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IOrderRepo, OrderRepo>();
             // Adding foor SetupTables
             services.AddTransient<ISetupTables, SetupTables>();
 
