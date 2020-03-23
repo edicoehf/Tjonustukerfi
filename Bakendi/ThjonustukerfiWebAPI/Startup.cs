@@ -20,6 +20,7 @@ using ThjonustukerfiWebAPI.Repositories.Implementations;
 using ThjonustukerfiWebAPI.Repositories.Interfaces;
 using ThjonustukerfiWebAPI.Services.Implementations;
 using ThjonustukerfiWebAPI.Services.Interfaces;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace ThjonustukerfiWebAPI
 {
@@ -79,6 +80,21 @@ namespace ThjonustukerfiWebAPI
 
             // Adding foor SetupTables
             services.AddTransient<ISetupTables, SetupTables>();
+
+            //* Swagger Documentation
+            services.AddSwaggerGen(opt =>
+            {
+                opt.SwaggerDoc("v1",
+                new Info
+                {
+                    Title = "Þjónustukerfi Edico Bakendi",
+                    Version = "v1"
+                });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = xmlPath.Combine(AppContext.BaseDirectory, xmlFile);
+                opt.IncludeXmlComments(xmlPath);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -104,6 +120,13 @@ namespace ThjonustukerfiWebAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            // Use swagger
+            app.UseSwagger();
+            app.UseSwaggerUI(opt =>
+            {
+                opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Þjónustukerfi Edico Bakendi");
             });
         }
     }
