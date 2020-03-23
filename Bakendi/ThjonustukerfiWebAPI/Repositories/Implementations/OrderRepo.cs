@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using AutoMapper;
@@ -21,16 +22,30 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             _mapper = mapper;
         }
 
-        // public OrderDTO GetOrderbyId(long id)
-        // {
-        //     // Get order
-        //     var entity = _dbContext.Order.FirstOrDefault(o => o.Id == id);
-        //     // Check if order exists
-        //     if(entity == null) { throw new NotFoundException($"Order with id {id} was not found."); }
+        public OrderDTO GetOrderbyId(long id)
+        {
+            // Get order
+            var entity = _dbContext.Order.FirstOrDefault(o => o.Id == id);
+            // Check if order exists
+            if(entity == null) { throw new NotFoundException($"Order with id {id} was not found."); }
 
+            //! many calls to DB :(, suggestion: add order ID in Item, then only need to search id DB once to get all items
+            var dto = _mapper.Map<OrderDTO>(entity);
+            dto.Customer = _dbContext.Customer.FirstOrDefault(c => c.Id == entity.CustomerId).Name; // get customer name
 
+            // Loop through a list of item order connections where all elements in list have this order ID
+            var itemList = _dbContext.ItemOrderConnection.Where(c => c.OrderId == id).ToList();
+            dto.Items = new List<ItemDTO>();
+            foreach (var item in itemList)
+            {
+                var itemEntity = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);                  // get item entity
+                var add = _mapper.Map<ItemDTO>(itemEntity);                                                 // map to DTO
+                add.Service = _dbContext.Service.FirstOrDefault(s => s.Id == itemEntity.ServiceId).Name;    // Find service name
+                dto.Items.Add(add);     // add item DTO to orderDTO item list
+            }
 
-        // }
+            return dto;
+        }
 
         public long CreateOrder(OrderInputModel order)
         {
@@ -49,8 +64,13 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             }
 
             // Get next Id for order and item, make sure the new order has correct id
-            var newItemId = _dbContext.Item.Max(i => i.Id) + 1;
-            var newOrderId = _dbContext.Order.Max(o => o.Id) + 1;
+            long newItemId = 1;
+            // throws error if list is empty
+            if(_dbContext.Item.Any()) { newItemId = _dbContext.Item.Max(i => i.Id) + 1; }
+            
+            long newOrderId = 1;
+            // throws error if list is empty
+            if(_dbContext.Order.Any()) { newOrderId = _dbContext.Order.Max(o => o.Id) + 1; }
             orderToAdd.Id = newOrderId;
 
             var entity = _dbContext.Order.Add(orderToAdd).Entity;

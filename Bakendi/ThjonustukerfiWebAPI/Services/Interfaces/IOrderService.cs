@@ -5,7 +5,7 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
 {
     public interface IOrderService
     {
-        // OrderDTO GetOrderbyId(long id);
+        OrderDTO GetOrderbyId(long id);
         long CreateOrder(OrderInputModel order);
     }
 }

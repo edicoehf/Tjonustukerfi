@@ -27,8 +27,7 @@ namespace ThjonustukerfiWebAPI.Controllers
         [HttpGet]
         public IActionResult GetOrderbyId(long id)
         {
-            // _orderService.GetOrderbyId(id)
-            return Ok();
+            return Ok(_orderService.GetOrderbyId(id));
         }
 
         /// <summary>Creates a new order</summary>

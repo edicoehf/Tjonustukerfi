@@ -17,7 +17,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             _customerRepo = customerRepo;
         }
 
-        // public OrderDTO GetOrderbyId(long id) => _orderRepo.GetOrderbyId(id);
+        public OrderDTO GetOrderbyId(long id) => _orderRepo.GetOrderbyId(id);
 
         public long CreateOrder(OrderInputModel order) 
         {
