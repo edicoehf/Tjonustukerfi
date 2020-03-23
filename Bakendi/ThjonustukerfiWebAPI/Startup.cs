@@ -20,7 +20,9 @@ using ThjonustukerfiWebAPI.Repositories.Implementations;
 using ThjonustukerfiWebAPI.Repositories.Interfaces;
 using ThjonustukerfiWebAPI.Services.Implementations;
 using ThjonustukerfiWebAPI.Services.Interfaces;
-using Swashbuckle.AspNetCore.Swagger;
+using System.Reflection;
+using System.IO;
+using Microsoft.OpenApi.Models;
 
 namespace ThjonustukerfiWebAPI
 {
@@ -85,14 +87,14 @@ namespace ThjonustukerfiWebAPI
             services.AddSwaggerGen(opt =>
             {
                 opt.SwaggerDoc("v1",
-                new Info
+                new OpenApiInfo
                 {
                     Title = "Þjónustukerfi Edico Bakendi",
                     Version = "v1"
                 });
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = xmlPath.Combine(AppContext.BaseDirectory, xmlFile);
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 opt.IncludeXmlComments(xmlPath);
             });
         }
@@ -112,6 +114,14 @@ namespace ThjonustukerfiWebAPI
             // Exception Middleware, new exceptions must be added to exception folder in models
             // and then implemented in the middleware extension
             app.UseMiddleware<ExceptionMiddlewareExtension>();
+            
+            //* Use swagger
+            app.UseSwagger();
+            app.UseSwaggerUI(opt =>
+            {
+                opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Þjónustukerfi Edico Bakendi");
+                // opt.RoutePrefix = string.Empty;
+            });
 
             app.UseRouting();
 
@@ -122,12 +132,6 @@ namespace ThjonustukerfiWebAPI
                 endpoints.MapControllers();
             });
 
-            // Use swagger
-            app.UseSwagger();
-            app.UseSwaggerUI(opt =>
-            {
-                opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Þjónustukerfi Edico Bakendi");
-            });
         }
     }
 }
