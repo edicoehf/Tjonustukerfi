@@ -14,7 +14,7 @@ const DeleteCustomer = id => {
             >
                 Eyða viðskiptavin
             </button>
-            {!error ? (
+            {error ? (
                 <p className="delete-error">Gat ekki eytt viðskiptavin</p>
             ) : (
                 <></>
