@@ -19,7 +19,7 @@ namespace ThjonustukerfiWebAPI.Controllers
         /// <summary>Adds a new customer to the database.</summary>
         /// <param name="customer"></param>
         /// <returns>A created at route</returns>
-        /// <response code="201">Returns created at route with the route to the resource.</response>
+        /// <response code="201">Returns the route to the resource.</response>
         /// <response code="400">Returns bad request if the model state is not valid.</response>
         /// <response code="409">Returns conflict if the identifier (e-mail) already exists.</response>
         [ProducesResponseType(StatusCodes.Status201Created)]
