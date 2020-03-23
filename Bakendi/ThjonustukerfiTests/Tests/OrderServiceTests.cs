@@ -40,11 +40,7 @@ namespace ThjonustukerfiTests.Tests
                 }
             };
 
-            OrderDTO mockOrderDTO = new OrderDTO
-            {
-                Id = 1,
-                Barcode = "20200001"
-            };
+            long mockOrderDTO = 1;
 
             _orderRepoMock.Setup(method => method.CreateOrder(order)).Returns(mockOrderDTO);
             _customerRepoMock.Setup(method => method.CustomerExists(order.CustomerId)).Returns(true);
@@ -56,8 +52,7 @@ namespace ThjonustukerfiTests.Tests
 
             // Assert
             Assert.IsNotNull(orderDTOReturn);
-            Assert.AreEqual(orderDTOReturn.Id, mockOrderDTO.Id);
-            Assert.AreEqual(orderDTOReturn.Barcode, mockOrderDTO.Barcode);
+            Assert.AreEqual(orderDTOReturn, mockOrderDTO);
         }
 
         [TestMethod]
