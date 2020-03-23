@@ -1,11 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
-import useCustomerService from "../../../hooks/useCustomerService";
+import useGetCustomerById from "../../../hooks/useGetCustomerById";
 import CustomerProperty from "../CustomerProperty/CustomerProperty";
 import "./CustomerDetails.css";
 
 const CustomerDetails = ({ id }) => {
-    const { customer, error } = useCustomerService(id);
+    const { customer, error } = useGetCustomerById(id);
     console.log(customer);
     return (
         <div className="customer-details">

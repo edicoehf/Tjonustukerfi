@@ -2,7 +2,7 @@ import { handleErrors, handleData } from "./serviceHandlers";
 
 const endpoint = "http://localhost:5000/api/customers/";
 
-const deleteCustomer = id => {
+const deleteCustomerById = id => {
     return fetch(endpoint + id, {
         method: "DELETE",
         headers: {
@@ -41,7 +41,7 @@ const getCustomerById = id => {
 };
 
 export default {
-    deleteCustomer,
+    deleteCustomerById,
     createCustomer,
     getCustomerById
 };

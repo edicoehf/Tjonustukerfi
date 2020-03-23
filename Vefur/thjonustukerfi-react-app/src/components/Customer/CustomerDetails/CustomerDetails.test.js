@@ -1,8 +1,8 @@
 import React from "react";
 import { shallow, mount } from "enzyme";
 import CustomerDetails from "./CustomerDetails";
-import useCustomerService from "../../../hooks/useCustomerService";
-jest.mock("../../../hooks/useCustomerService");
+import useGetCustomerById from "../../../hooks/useGetCustomerById";
+jest.mock("../../../hooks/useGetCustomerById");
 
 const findByName = (fields, name) => {
     for (var i = 0; i < fields.length; i++) {
@@ -39,7 +39,7 @@ describe("<CustomerDetails />", () => {
 
     describe("Displays rows", () => {
         it("Should not render any rows before fetch", () => {
-            useCustomerService.mockReturnValue({
+            useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: null
             });
@@ -51,7 +51,7 @@ describe("<CustomerDetails />", () => {
         it("Should render 2 rows after fetch with 2 set values", () => {
             testCustomer.name = "Siggi Viggi";
             testCustomer.email = "siggi@viggi.is";
-            useCustomerService.mockReturnValue({
+            useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: null
             });
@@ -64,7 +64,7 @@ describe("<CustomerDetails />", () => {
     describe("Display error", () => {
         it("Should not render error when fetch is successful", () => {
             testCustomer.name = "Siggi Viggi";
-            useCustomerService.mockReturnValue({
+            useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: null
             });
@@ -74,7 +74,7 @@ describe("<CustomerDetails />", () => {
         });
 
         it("Should  render error when fetch is unsuccessful", () => {
-            useCustomerService.mockReturnValue({
+            useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: "FAILED"
             });
@@ -86,7 +86,7 @@ describe("<CustomerDetails />", () => {
 
     describe("Name row", () => {
         it("Should not render before fetch", () => {
-            useCustomerService.mockReturnValue({
+            useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: null
             });
@@ -97,7 +97,7 @@ describe("<CustomerDetails />", () => {
 
         it("Should not render if it doesnt have value", () => {
             testCustomer.email = "email@email.com";
-            useCustomerService.mockReturnValue({
+            useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: null
             });
@@ -108,7 +108,7 @@ describe("<CustomerDetails />", () => {
 
         it("Should render correct value when it has value", () => {
             testCustomer.name = "Viggi Siggi";
-            useCustomerService.mockReturnValue({
+            useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: null
             });
@@ -120,7 +120,7 @@ describe("<CustomerDetails />", () => {
 
     describe("SSN row", () => {
         it("Should not render before fetch", () => {
-            useCustomerService.mockReturnValue({
+            useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: null
             });
@@ -131,7 +131,7 @@ describe("<CustomerDetails />", () => {
 
         it("Should not render if it doesnt have value", () => {
             testCustomer.email = "email@email.com";
-            useCustomerService.mockReturnValue({
+            useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: null
             });
@@ -142,7 +142,7 @@ describe("<CustomerDetails />", () => {
 
         it("Should render correct value when it has value", () => {
             testCustomer.ssn = "1304873579";
-            useCustomerService.mockReturnValue({
+            useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: null
             });
@@ -154,7 +154,7 @@ describe("<CustomerDetails />", () => {
 
     describe("Telephone row", () => {
         it("Should not render before fetch", () => {
-            useCustomerService.mockReturnValue({
+            useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: null
             });
@@ -165,7 +165,7 @@ describe("<CustomerDetails />", () => {
 
         it("Should not render if it doesnt have value", () => {
             testCustomer.email = "email@email.com";
-            useCustomerService.mockReturnValue({
+            useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: null
             });
@@ -176,7 +176,7 @@ describe("<CustomerDetails />", () => {
 
         it("Should render correct value when it has value", () => {
             testCustomer.telephone = "5812345";
-            useCustomerService.mockReturnValue({
+            useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: null
             });
@@ -188,7 +188,7 @@ describe("<CustomerDetails />", () => {
 
     describe("Email row", () => {
         it("Should not render before fetch", () => {
-            useCustomerService.mockReturnValue({
+            useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: null
             });
@@ -199,7 +199,7 @@ describe("<CustomerDetails />", () => {
 
         it("Should not render if it doesnt have value", () => {
             testCustomer.name = "Siggi Viggi";
-            useCustomerService.mockReturnValue({
+            useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: null
             });
@@ -210,7 +210,7 @@ describe("<CustomerDetails />", () => {
 
         it("Should render correct value when it has value", () => {
             testCustomer.email = "siggi@viggi.is";
-            useCustomerService.mockReturnValue({
+            useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: null
             });
@@ -222,7 +222,7 @@ describe("<CustomerDetails />", () => {
 
     describe("Address row", () => {
         it("Should not render before fetch", () => {
-            useCustomerService.mockReturnValue({
+            useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: null
             });
@@ -233,7 +233,7 @@ describe("<CustomerDetails />", () => {
 
         it("Should not render if it doesnt have value", () => {
             testCustomer.name = "Siggi Viggi";
-            useCustomerService.mockReturnValue({
+            useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: null
             });
@@ -244,7 +244,7 @@ describe("<CustomerDetails />", () => {
 
         it("Should render correct value when it has value", () => {
             testCustomer.address = "Bakkabakki 2";
-            useCustomerService.mockReturnValue({
+            useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: null
             });
@@ -256,7 +256,7 @@ describe("<CustomerDetails />", () => {
 
     describe("Postalcode row", () => {
         it("Should not render before fetch", () => {
-            useCustomerService.mockReturnValue({
+            useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: null
             });
@@ -267,7 +267,7 @@ describe("<CustomerDetails />", () => {
 
         it("Should not render if it doesnt have value", () => {
             testCustomer.name = "Siggi Viggi";
-            useCustomerService.mockReturnValue({
+            useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: null
             });
@@ -278,7 +278,7 @@ describe("<CustomerDetails />", () => {
 
         it("Should render correct value when it has value", () => {
             testCustomer.postalCode = "800";
-            useCustomerService.mockReturnValue({
+            useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: null
             });
