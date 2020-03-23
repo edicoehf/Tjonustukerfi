@@ -5,6 +5,14 @@ const handleErrors = resp => {
     return resp.json();
 };
 
+const handleData = data => {
+    if (!data) {
+        return {};
+    }
+    return data;
+};
+
 module.exports = {
-    handleErrors
+    handleErrors,
+    handleData
 };
