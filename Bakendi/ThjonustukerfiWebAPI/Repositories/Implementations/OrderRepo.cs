@@ -21,7 +21,18 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             _mapper = mapper;
         }
 
-        public OrderDTO CreateOrder(OrderInputModel order)
+        // public OrderDTO GetOrderbyId(long id)
+        // {
+        //     // Get order
+        //     var entity = _dbContext.Order.FirstOrDefault(o => o.Id == id);
+        //     // Check if order exists
+        //     if(entity == null) { throw new NotFoundException($"Order with id {id} was not found."); }
+
+
+
+        // }
+
+        public long CreateOrder(OrderInputModel order)
         {
             // TODO replace for actual barcode
             var orderToAdd = _mapper.Map<Order>(order);
@@ -47,8 +58,10 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // Add items toDatabase
             foreach(ItemInputModel item in order.Items)
             {
-                // TODO: set item id? e.g: _dbContext.Item.Add(new Item {id = newItemId, ...}) or same way you did orderToAdd above
-                _dbContext.Item.Add(_mapper.Map<Item>(item));
+                // Creates a custom ID to make sure everything is connected correctly
+                var itemToAdd = _mapper.Map<Item>(item);
+                itemToAdd.Id = newItemId;
+                _dbContext.Item.Add(itemToAdd);
 
                 var itemOrderConnection = new ItemOrderConnection {
                     OrderId = newOrderId,
@@ -62,7 +75,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
             _dbContext.SaveChanges();
 
-            return _mapper.Map<OrderDTO>(entity);
+            return entity.Id;
         }
     }
 }

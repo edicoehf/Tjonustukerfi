@@ -36,7 +36,7 @@ namespace ThjonustukerfiWebAPI.Controllers
         }
 
         /// <summary>Gets a customer by ID</summary>
-        /// <returns>A singke customer</returns>
+        /// <returns>A single customer</returns>
         /// <response code="200">Returns a single customer with given ID</response>
         /// <response code="404">Returns not found if the customer with the ID does not exist</response>
         [Produces("application/json")]
