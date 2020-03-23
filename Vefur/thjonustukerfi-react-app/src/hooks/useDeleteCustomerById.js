@@ -15,7 +15,7 @@ const useDeleteCustomerById = id => {
                 .catch(error => setError(error))
                 .finally(() => setDeleting(false));
         }
-    }, [id]);
+    }, [id, isDeleting]);
 
     const handleDelete = () => {
         if (!isDeleting) {
