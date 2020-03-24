@@ -276,7 +276,5 @@ namespace ThjonustukerfiTests.Tests
             };
         }
 
-        [TestMethod]
-        public void
     }
 }
