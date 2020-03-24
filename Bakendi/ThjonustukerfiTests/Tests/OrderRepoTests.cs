@@ -599,5 +599,15 @@ namespace ThjonustukerfiTests.Tests
             }
         }
 
+        [TestMethod]
+        public void DeleteORderById_should_throw_NotFoundException()
+        {
+            using (var mockContext = new DataContext(_options))
+            {
+                var orderRepo = new OrderRepo(mockContext, _mapper);
+
+                Assert.ThrowsException<NotFoundException>(() => orderRepo.DeleteByOrderId(-1));
+            }
+        }
     }
 }
