@@ -87,5 +87,50 @@ namespace ThjonustukerfiTests.Tests
             Assert.AreEqual(200, response.StatusCode);
             Assert.IsInstanceOfType(response.Value as OrderDTO, typeof(OrderDTO));
         }
+
+        [TestMethod]
+        public void UpdateOrder_should_return_200_status_ok()
+        {
+            //* Arrange
+            OrderInputModel order = new OrderInputModel
+            {
+                CustomerId = 1,
+                Items = new List<ItemInputModel>()
+                {
+                    new ItemInputModel {
+                        Type = "Ysa"
+                    }
+                }
+            };
+
+            // Setup and create controller
+            _orderServiceMock.Setup(method => method.UpdateOrder(It.IsAny<OrderInputModel>(), It.IsAny<long>())).Verifiable();
+            _orderController = new OrderController(_orderServiceMock.Object);
+
+            //* Act
+            var response = _orderController.UpdateOrder(order, 1) as OkResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(200, response.StatusCode);
+        }
+
+        [TestMethod]
+        public void DeleteOrderById_should_return_204_noContent()
+        {
+            //* Arrange
+            long id = 1;
+
+            // Setup and create controller
+            _orderServiceMock.Setup(method => method.DeleteByOrderId(id));
+            _orderController = new OrderController(_orderServiceMock.Object);
+
+            //* Act
+            var response = _orderController.DeleteByOrderId(id) as NoContentResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(204, response.StatusCode);
+        }
     }
 }

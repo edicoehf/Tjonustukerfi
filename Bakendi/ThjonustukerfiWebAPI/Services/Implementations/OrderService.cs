@@ -24,5 +24,8 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             if(!_customerRepo.CustomerExists(order.CustomerId)) { throw new NotFoundException($"Customer with id {order.CustomerId} was not found"); }
             return _orderRepo.CreateOrder(order);
         }
+
+        public void UpdateOrder(OrderInputModel order, long id) => _orderRepo.UpdateOrder(order, id);
+        public void DeleteByOrderId(long id) => _orderRepo.DeleteByOrderId(id);
     }
 }

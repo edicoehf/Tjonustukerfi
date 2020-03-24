@@ -48,5 +48,39 @@ namespace ThjonustukerfiWebAPI.Controllers
 
             return CreatedAtRoute("GetOrderbyId", new { id = entityId }, null);
         }
+
+        /// <summary>Updates Order data</summary>
+        /// <returns>OK 200 status</returns>
+        /// <response code="200">Order has been successfully created.</response>
+        /// <response code="400">Input not valid.</response>
+        /// <response code="409">The customer with the given ID was not found.</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [Route("{id:long}/update")]
+        [HttpPatch]
+        public IActionResult UpdateOrder([FromBody] OrderInputModel order, long id)
+        {
+            if(!ModelState.IsValid) { return BadRequest("Input model is not valid"); }
+            
+            _orderService.UpdateOrder(order, id);
+
+            return Ok();
+        }
+
+        /// <summary>Deletes an Order with the given ID</summary>
+        /// <returns>Returns no content</returns>
+        /// <response code="204">Order successfully deleted</response>
+        /// <response code="409">Order with the given ID was not found</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [Route("{id:long}")]
+        [HttpDelete]
+        public IActionResult DeleteByOrderId(long id)
+        {
+            _orderService.DeleteByOrderId(id);
+
+            return NoContent();
+        }
     }
 }
