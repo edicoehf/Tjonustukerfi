@@ -14,7 +14,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 {
     public class OrderRepo : IOrderRepo
     {
-        public DataContext _dbContext;
+        private DataContext _dbContext;
         private IMapper _mapper;
         public OrderRepo(DataContext context, IMapper mapper)
         {
