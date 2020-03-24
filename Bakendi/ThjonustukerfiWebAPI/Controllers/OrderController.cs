@@ -68,6 +68,12 @@ namespace ThjonustukerfiWebAPI.Controllers
             return Ok();
         }
 
+        /// <summary>Deletes an Order with the given ID</summary>
+        /// <returns>Returns no content</returns>
+        /// <response code="204">Order successfully deleted</response>
+        /// <response code="409">Order with the given ID was not found</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [Route("{id:long}")]
         [HttpDelete]
         public IActionResult DeleteByOrderId(long id)
