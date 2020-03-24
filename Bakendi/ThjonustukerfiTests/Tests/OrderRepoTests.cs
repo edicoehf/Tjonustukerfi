@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using FizzWare.NBuilder;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using ThjonustukerfiWebAPI.Mappings;
 using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.Entities;
+using ThjonustukerfiWebAPI.Models.InputModels;
 using ThjonustukerfiWebAPI.Models.Exceptions;
 using ThjonustukerfiWebAPI.Repositories.Implementations;
 
@@ -200,6 +202,65 @@ namespace ThjonustukerfiTests.Tests
 
                 Assert.ThrowsException<NotFoundException>(() => orderRepo.GetOrderbyId(-1));
             }
+        }
+
+        [TestMethod]
+        public void CreateOrder_should_create_and_return_OrderId()
+        {
+            // Arrange
+            var inp = new OrderInputModel
+            {
+                CustomerId = 1,
+                Items = new List<ItemInputModel>()
+                {
+                    new ItemInputModel 
+                    {
+                        Type = "Ysa"
+                    },
+                    new ItemInputModel 
+                    {
+                        Type = "Lax"
+                    }
+                }
+            };
+
+            using (var mockContext = new DataContext(_options))
+            {
+                var orderRepo = new OrderRepo(mockContext, _mapper);
+
+                var orderDbSize = mockContext.Order.Count();
+                var itemDbSize = mockContext.Item.Count();
+                var itemOrderDbSize = mockContext.ItemOrderConnection.Count();
+
+                // Act
+                var result = orderRepo.CreateOrder(inp);
+
+                var resultOrderDTO = mockContext.Order.OrderByDescending(o => o.Id).FirstOrDefault();
+
+                var itemOrderConnectionDTOList = mockContext.ItemOrderConnection.Where(i => i.OrderId == resultOrderDTO.Id);
+
+                var itemListDTO = new List<ItemDTO>();
+                foreach (var item in itemOrderConnectionDTOList)
+                {
+                    var add = _mapper.Map<ItemDTO>(mockContext.Item.Find(item.ItemId));
+                    itemListDTO.Add(add);
+                }
+
+                // Assert
+
+                // Assert Order
+                Assert.IsNotNull(result);
+                Assert.IsInstanceOfType(result, typeof(long));
+                Assert.AreEqual(resultOrderDTO.CustomerId, inp.CustomerId);
+                Assert.AreEqual(mockContext.Order.Count(), orderDbSize + 1);
+
+                // Assert Item
+
+
+                // Assert
+
+
+            };
         }
     }
 }
