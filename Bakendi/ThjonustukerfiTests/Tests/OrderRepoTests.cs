@@ -276,5 +276,281 @@ namespace ThjonustukerfiTests.Tests
             };
         }
 
+        [TestMethod]
+        public void UpdateOrder_should_update_order_correctly_and_itemlist_should_grow()
+        {
+            long orderID = 100;
+            long custId = 500;
+            //* Arrange
+            var orperInput = new OrderInputModel
+            {
+                CustomerId = custId,
+                Items = new List<ItemInputModel>()
+                {
+                    new ItemInputModel 
+                    {
+                        Type = "BREYTT",
+                        ServiceId = 2
+                    },
+                    new ItemInputModel 
+                    {
+                        Type = "BREYTT",
+                        ServiceId = 3
+                    },
+                    new ItemInputModel 
+                    {
+                        Type = "OGSTAEKKA",
+                        ServiceId = 4
+                    }
+                }
+            };
+
+            using (var mockContext = new DataContext(_options))
+            {
+                var orderRepo = new OrderRepo(mockContext, _mapper);
+
+                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
+                var oldConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
+                List<Item> oldItemList = new List<Item>();
+                foreach (var item in oldConnection)
+                {
+                    oldItemList.Add(mockContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
+                }
+
+                //* Act
+                orderRepo.UpdateOrder(orperInput, orderID);
+
+                //* Assert
+                orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
+                var newConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
+                List<Item> newItemList = new List<Item>();
+                foreach (var item in newConnection)
+                {
+                    newItemList.Add(mockContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
+                }
+
+                // assert order
+                Assert.IsNotNull(orderEntity);
+                Assert.AreEqual(orderEntity.CustomerId, custId);
+                // assert connections
+                Assert.IsNotNull(newConnection);
+                Assert.AreEqual(newConnection.Count, oldConnection.Count + 1);  // list is going from two to three
+                
+                // Assert items
+                Assert.IsNotNull(newItemList);
+                Assert.AreEqual(newItemList.Count, oldItemList.Count + 1);      // list is going from two to three
+                // check type
+                Assert.AreEqual(newItemList[0].Type, orperInput.Items[0].Type);
+                Assert.AreEqual(newItemList[1].Type, orperInput.Items[1].Type);
+                Assert.AreEqual(newItemList[2].Type, orperInput.Items[2].Type);
+                // check service ID
+                Assert.AreEqual(newItemList[0].ServiceId, orperInput.Items[0].ServiceId);
+                Assert.AreEqual(newItemList[1].ServiceId, orperInput.Items[1].ServiceId);
+                Assert.AreEqual(newItemList[2].ServiceId, orperInput.Items[2].ServiceId);
+            }
+        }
+
+        [TestMethod]
+        public void UpdateOrder_should_update_order_correctly_and_itemlist_should_shrink()
+        {
+            long orderID = 100;
+            long custId = 500;
+            //* Arrange
+            var orperInput = new OrderInputModel
+            {
+                CustomerId = custId,
+                Items = new List<ItemInputModel>()
+                {
+                    new ItemInputModel 
+                    {
+                        Type = "MINNKA",
+                        ServiceId = 2
+                    }
+                }
+            };
+
+            using (var mockContext = new DataContext(_options))
+            {
+                var orderRepo = new OrderRepo(mockContext, _mapper);
+
+                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
+                var oldConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
+                List<Item> oldItemList = new List<Item>();
+                foreach (var item in oldConnection)
+                {
+                    oldItemList.Add(mockContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
+                }
+
+                //* Act
+                orderRepo.UpdateOrder(orperInput, orderID);
+
+                //* Assert
+                orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
+                var newConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
+                List<Item> newItemList = new List<Item>();
+                foreach (var item in newConnection)
+                {
+                    newItemList.Add(mockContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
+                }
+
+                // assert order
+                Assert.IsNotNull(orderEntity);
+                Assert.AreEqual(orderEntity.CustomerId, custId);
+                // assert connections
+                Assert.IsNotNull(newConnection);
+                Assert.AreEqual(newConnection.Count, oldConnection.Count - 2);  // list is going from 3 to one
+                
+                // Assert items
+                Assert.IsNotNull(newItemList);
+                Assert.AreEqual(newItemList.Count, oldItemList.Count - 2);      // list is going from 3 to one
+                // check type
+                Assert.AreEqual(newItemList[0].Type, orperInput.Items[0].Type);
+                // check service ID
+                Assert.AreEqual(newItemList[0].ServiceId, orperInput.Items[0].ServiceId);
+            }
+        }
+
+        [TestMethod]
+        public void UpdateOrder_should_update_order_correctly_and_itemlist_should_be_empty()
+        {
+            long orderID = 100;
+            long custId = 500;
+            //* Arrange
+            var orperInput = new OrderInputModel
+            {
+                CustomerId = custId,
+                Items = new List<ItemInputModel>()
+            };
+
+            using (var mockContext = new DataContext(_options))
+            {
+                var orderRepo = new OrderRepo(mockContext, _mapper);
+
+                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
+                var oldConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
+                List<Item> oldItemList = new List<Item>();
+                foreach (var item in oldConnection)
+                {
+                    oldItemList.Add(mockContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
+                }
+
+                //* Act
+                orderRepo.UpdateOrder(orperInput, orderID);
+
+                //* Assert
+                orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
+                var newConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
+                List<Item> newItemList = new List<Item>();
+                foreach (var item in newConnection)
+                {
+                    newItemList.Add(mockContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
+                }
+
+                // assert order
+                Assert.IsNotNull(orderEntity);
+                Assert.AreEqual(orderEntity.CustomerId, custId);
+                // assert connections
+                Assert.IsNotNull(newConnection);
+                Assert.AreEqual(newConnection.Count, 0);    // list is going from one to zero
+                
+                // Assert items
+                Assert.IsNotNull(newItemList);
+                Assert.AreEqual(newItemList.Count,0);       // list is going from one to zero
+            }
+        }
+
+        [TestMethod]
+        public void UpdateOrder_should_update_order_correctly_and_itemlist_should_grow_to_five()
+        {
+            long orderID = 100;
+            long custId = 500;
+            //* Arrange
+            var clearItems = new OrderInputModel
+            {
+                CustomerId = custId,
+                Items = new List<ItemInputModel>()
+            };
+            var orperInput = new OrderInputModel
+            {
+                CustomerId = custId,
+                Items = new List<ItemInputModel>()
+                {
+                    new ItemInputModel 
+                    {
+                        Type = "STÆKKUN",
+                        ServiceId = 1
+                    },
+                    new ItemInputModel 
+                    {
+                        Type = "STÆKKUN",
+                        ServiceId = 1
+                    },
+                    new ItemInputModel 
+                    {
+                        Type = "STÆKKUN",
+                        ServiceId = 1
+                    },
+                    new ItemInputModel 
+                    {
+                        Type = "STÆKKUN",
+                        ServiceId = 1
+                    },
+                    new ItemInputModel 
+                    {
+                        Type = "STÆKKUN",
+                        ServiceId = 1
+                    }
+                }
+            };
+
+            using (var mockContext = new DataContext(_options))
+            {
+                var orderRepo = new OrderRepo(mockContext, _mapper);
+
+                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
+                var oldConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
+                List<Item> oldItemList = new List<Item>();
+                foreach (var item in oldConnection)
+                {
+                    oldItemList.Add(mockContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
+                }
+
+                //* Act
+                orderRepo.UpdateOrder(clearItems, orderID);
+                orderRepo.UpdateOrder(orperInput, orderID);
+
+                //* Assert
+                orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
+                var newConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
+                List<Item> newItemList = new List<Item>();
+                foreach (var item in newConnection)
+                {
+                    newItemList.Add(mockContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
+                }
+
+                // assert order
+                Assert.IsNotNull(orderEntity);
+                Assert.AreEqual(orderEntity.CustomerId, custId);
+                // assert connections
+                Assert.IsNotNull(newConnection);
+                Assert.AreEqual(newConnection.Count, oldConnection.Count + 5);  // list is going from zero to five
+                
+                // Assert items
+                Assert.IsNotNull(newItemList);
+                Assert.AreEqual(newItemList.Count, oldItemList.Count + 5);      // list is going from zero to five
+                // check type
+                Assert.AreEqual(newItemList[0].Type, "STÆKKUN");
+                Assert.AreEqual(newItemList[1].Type, "STÆKKUN");
+                Assert.AreEqual(newItemList[2].Type, "STÆKKUN");
+                Assert.AreEqual(newItemList[3].Type, "STÆKKUN");
+                Assert.AreEqual(newItemList[4].Type, "STÆKKUN");
+                // check service ID
+                Assert.AreEqual(newItemList[0].ServiceId, (long)1);
+                Assert.AreEqual(newItemList[1].ServiceId, (long)1);
+                Assert.AreEqual(newItemList[2].ServiceId, (long)1);
+                Assert.AreEqual(newItemList[3].ServiceId, (long)1);
+                Assert.AreEqual(newItemList[4].ServiceId, (long)1);
+            }
+        }
     }
 }
