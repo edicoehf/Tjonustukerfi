@@ -5,6 +5,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
 {
     public interface IOrderRepo
     {
-        OrderDTO CreateOrder(OrderInputModel order);
+        OrderDTO GetOrderbyId(long id);
+        long CreateOrder(OrderInputModel order);
     }
 }

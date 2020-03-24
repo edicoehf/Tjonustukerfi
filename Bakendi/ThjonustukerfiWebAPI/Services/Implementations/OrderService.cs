@@ -17,7 +17,9 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             _customerRepo = customerRepo;
         }
 
-        public OrderDTO CreateOrder(OrderInputModel order) 
+        public OrderDTO GetOrderbyId(long id) => _orderRepo.GetOrderbyId(id);
+
+        public long CreateOrder(OrderInputModel order) 
         {
             if(!_customerRepo.CustomerExists(order.CustomerId)) { throw new NotFoundException($"Customer with id {order.CustomerId} was not found"); }
             return _orderRepo.CreateOrder(order);

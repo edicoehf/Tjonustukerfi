@@ -24,7 +24,8 @@ namespace ThjonustukerfiWebAPI.Mappings
             // Automapper for ItemInputModel to Item entity
             CreateMap<ItemInputModel, Item>()
                 .ForMember(src => src.DateCreated, opt => opt.MapFrom(src => DateTime.Now))
-                .ForMember(src => src.DateModified, opt => opt.MapFrom(src => DateTime.Now));
+                .ForMember(src => src.DateModified, opt => opt.MapFrom(src => DateTime.Now))
+                .ForMember(src => src.StateId, opt => opt.MapFrom(src => 1));
 
             CreateMap<Item, ItemDTO>();
 

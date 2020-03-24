@@ -16,6 +16,20 @@ namespace ThjonustukerfiWebAPI.Controllers
             _orderService = orderService;
         }
 
+        /// <summary>Gets a order by ID</summary>
+        /// <returns>A Single order</returns>
+        /// <response code="200">Returns a single order with the given ID</response>
+        /// <response code="404">Returns not found if the order doesn't exist</response>
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("{id:long}", Name="GetOrderbyId")]
+        [HttpGet]
+        public IActionResult GetOrderbyId(long id)
+        {
+            return Ok(_orderService.GetOrderbyId(id));
+        }
+
         /// <summary>Creates a new order</summary>
         /// <param name="order"></param>
         /// <returns>Created at route</returns>
@@ -30,10 +44,9 @@ namespace ThjonustukerfiWebAPI.Controllers
         public IActionResult CreateOrder([FromBody] OrderInputModel order)
         {
             if(!ModelState.IsValid) { return BadRequest("Input model is not valid"); }
-            var entity = _orderService.CreateOrder(order);
+            var entityId = _orderService.CreateOrder(order);
 
-            // TODO Change to CreatedAtRoute when get by id is implemented
-            return NoContent();
+            return CreatedAtRoute("GetOrderbyId", new { id = entityId }, null);
         }
     }
 }

@@ -7,7 +7,7 @@ using ThjonustukerfiWebAPI.Models.Exceptions;
 using ThjonustukerfiWebAPI.Repositories.Interfaces;
 using ThjonustukerfiWebAPI.Services.Implementations;
 using ThjonustukerfiWebAPI.Services.Interfaces;
-
+using System;
 
 namespace ThjonustukerfiTests.Tests
 {
@@ -40,11 +40,7 @@ namespace ThjonustukerfiTests.Tests
                 }
             };
 
-            OrderDTO mockOrderDTO = new OrderDTO
-            {
-                Id = 1,
-                Barcode = "20200001"
-            };
+            long mockOrderDTO = 1;
 
             _orderRepoMock.Setup(method => method.CreateOrder(order)).Returns(mockOrderDTO);
             _customerRepoMock.Setup(method => method.CustomerExists(order.CustomerId)).Returns(true);
@@ -56,8 +52,7 @@ namespace ThjonustukerfiTests.Tests
 
             // Assert
             Assert.IsNotNull(orderDTOReturn);
-            Assert.AreEqual(orderDTOReturn.Id, mockOrderDTO.Id);
-            Assert.AreEqual(orderDTOReturn.Barcode, mockOrderDTO.Barcode);
+            Assert.AreEqual(orderDTOReturn, mockOrderDTO);
         }
 
         [TestMethod]
@@ -84,5 +79,41 @@ namespace ThjonustukerfiTests.Tests
             Assert.ThrowsException<NotFoundException>(() => _orderService.CreateOrder(order));
         }
 
+        [TestMethod]
+        public void GetOrderById_should_return_a_single_customerDetailsDTO()
+        {
+            //* Arrange
+            long id = 10;
+
+            // Mock dto and repo
+            OrderDTO mockOrderDTO = new OrderDTO
+            {
+                Customer = "Kalli Valli",
+                Barcode = "0100001111",
+                Items = new List<ItemDTO>()
+                    {
+                        new ItemDTO()
+                        {
+                            Id = 1,
+                            Type = "Ysa bitar",
+                            Service = "Birkireyk"
+                        }
+                    },
+                    DateCreated = DateTime.Now,
+                    DateModified = DateTime.MinValue,
+                    DateCompleted = DateTime.MaxValue
+            };
+            _orderRepoMock.Setup(method => method.GetOrderbyId(id)).Returns(mockOrderDTO);
+
+            // Create service
+            _orderService = new OrderService(_orderRepoMock.Object, _customerRepoMock.Object);
+
+            //* Act
+            var response = _orderService.GetOrderbyId(id);
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOfType(response, typeof(OrderDTO));
+        }
     }
 }
