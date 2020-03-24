@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using FizzWare.NBuilder;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using ThjonustukerfiWebAPI.Mappings;
 using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.Entities;
+using ThjonustukerfiWebAPI.Models.InputModels;
 using ThjonustukerfiWebAPI.Models.Exceptions;
 using ThjonustukerfiWebAPI.Repositories.Implementations;
 
@@ -136,6 +138,8 @@ namespace ThjonustukerfiTests.Tests
                     .With(o => o.DateCreated = mockOrder.DateCreated)
                     .With(o => o.DateModified = mockOrder.DateModified)
                     .With(o => o.DateCompleted = mockOrder.DateCompleted)
+                    .TheRest()
+                    .With(o => o.Barcode = "30200001")
                     .Build();
 
                 // Build a list of size 20, make it queryable for the database mock
@@ -201,5 +205,76 @@ namespace ThjonustukerfiTests.Tests
                 Assert.ThrowsException<NotFoundException>(() => orderRepo.GetOrderbyId(-1));
             }
         }
+
+        [TestMethod]
+        public void CreateOrder_should_create_and_return_OrderId()
+        {
+            // Arrange
+            var inp = new OrderInputModel
+            {
+                CustomerId = 1,
+                Items = new List<ItemInputModel>()
+                {
+                    new ItemInputModel 
+                    {
+                        Type = "Ysa",
+                        ServiceId = 1
+                    },
+                    new ItemInputModel 
+                    {
+                        Type = "Lax",
+                        ServiceId = 2
+                    }
+                }
+            };
+
+            using (var mockContext = new DataContext(_options))
+            {
+                var orderRepo = new OrderRepo(mockContext, _mapper);
+                
+                // Check length of all db's before test
+                var orderDbSize = mockContext.Order.Count();
+                var itemDbSize = mockContext.Item.Count();
+                var itemOrderDbSize = mockContext.ItemOrderConnection.Count();
+
+                // Act
+                var result = orderRepo.CreateOrder(inp);
+                // GetDTO to compare with input later
+                var resultOrderDTO = mockContext.Order.OrderByDescending(o => o.Id).FirstOrDefault();
+                // Get a list of all itemOrderConnections created
+                var itemOrderConnectionDTOList = mockContext.ItemOrderConnection.Where(i => i.OrderId == result).ToList();
+                // Get all items added to the database using ItemOrderConnection
+                var itemListDTO = new List<Item>();
+                foreach (var item in itemOrderConnectionDTOList)
+                {
+                    var add = _mapper.Map<Item>(mockContext.Item.Find(item.ItemId));
+                    itemListDTO.Add(add);
+                }
+
+                // Assert
+
+                // Assert Order
+                Assert.IsNotNull(result);
+                Assert.IsInstanceOfType(result, typeof(long));
+                Assert.AreEqual(resultOrderDTO.CustomerId, inp.CustomerId);
+                Assert.AreEqual(mockContext.Order.Count(), orderDbSize + 1);
+
+                // Assert Item
+                Assert.AreEqual(mockContext.Item.Count(), itemDbSize + inp.Items.Count());
+                Assert.AreEqual(itemListDTO[0].Type, inp.Items[0].Type);
+                Assert.AreEqual(itemListDTO[0].ServiceId, inp.Items[0].ServiceId);
+                Assert.AreEqual(itemListDTO[1].Type, inp.Items[1].Type);
+                Assert.AreEqual(itemListDTO[1].ServiceId, inp.Items[1].ServiceId);
+
+                // Assert ItemOrderConnection
+                Assert.AreEqual(mockContext.ItemOrderConnection.Count(), itemOrderDbSize + inp.Items.Count());
+                Assert.AreEqual(itemOrderConnectionDTOList[0].OrderId, resultOrderDTO.Id);
+                Assert.AreEqual(itemOrderConnectionDTOList[0].ItemId, itemListDTO[0].Id);
+                Assert.AreEqual(itemOrderConnectionDTOList[1].OrderId, resultOrderDTO.Id);
+                Assert.AreEqual(itemOrderConnectionDTOList[1].ItemId, itemListDTO[1].Id);
+
+            };
+        }
+
     }
 }
