@@ -97,5 +97,22 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
             return entity.Id;
         }
+
+        public void UpdateOrder(OrderInputModel order, long id)
+        {
+            // find order
+            var entity = _dbContext.Order.FirstOrDefault(o => o.Id == id);
+            if(entity == null) { throw new NotFoundException($"Customer with id {id} was not found."); }
+
+            // update the customer ID
+            entity.CustomerId = order.CustomerId;
+
+            var itemListConnections = _dbContext.ItemOrderConnection.Where(c => c.OrderId == entity.Id).ToList();
+            var items = new List<Item>();
+            foreach (var item in itemListConnections)
+            {
+                items.Add(_dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
+            }
+        }
     }
 }
