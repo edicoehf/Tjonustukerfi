@@ -552,5 +552,24 @@ namespace ThjonustukerfiTests.Tests
                 Assert.AreEqual(newItemList[4].ServiceId, (long)1);
             }
         }
+
+        [TestMethod]
+        public void UpdateOrder_should_throw_NotFoundException()
+        {
+            //* Arrange
+            var inp = new OrderInputModel
+            {
+                CustomerId = 1337,
+                Items = new List<ItemInputModel>()
+            };
+
+            using (var mockContext = new DataContext(_options))
+            {
+                var orderRepo = new OrderRepo(mockContext, _mapper);
+
+                //* Act then assert
+                Assert.ThrowsException<NotFoundException>(() => orderRepo.UpdateOrder(inp, -1));
+            }
+        }
     }
 }
