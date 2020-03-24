@@ -53,7 +53,7 @@ namespace ThjonustukerfiTests.Tests
         }
 
         [TestMethod]
-        public void GetCustomer_should_return_a_singe_customerDetailsDTO()
+        public void GetCustomer_should_return_a_single_customerDetailsDTO()
         {
             // Arrange
             long id = 10;
