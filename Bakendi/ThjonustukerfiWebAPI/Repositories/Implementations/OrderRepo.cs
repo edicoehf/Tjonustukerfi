@@ -50,6 +50,10 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
         public long CreateOrder(OrderInputModel order)
         {
             // TODO replace for actual barcode
+            foreach(ItemInputModel item in order.Items)
+            {
+                if(_dbContext.Service.FirstOrDefault(s => s.Id == item.ServiceId) == null) { throw new NotFoundException($"Service with id {item.ServiceId} was not found."); }
+            }
             var orderToAdd = _mapper.Map<Order>(order);
             var barcodeEntry = _dbContext.Order.OrderByDescending(o => o.Barcode).FirstOrDefault();
             if(barcodeEntry == null)

@@ -223,7 +223,7 @@ namespace ThjonustukerfiTests.Tests
                     new ItemInputModel 
                     {
                         Type = "Lax",
-                        ServiceId = 2
+                        ServiceId = 1
                     }
                 }
             };
@@ -274,6 +274,35 @@ namespace ThjonustukerfiTests.Tests
                 Assert.AreEqual(itemOrderConnectionDTOList[1].ItemId, itemListDTO[1].Id);
 
             };
+        }
+
+        [TestMethod]
+        public void CreateOrder_should_throw_NotFoundException()
+        {
+             var inp = new OrderInputModel
+            {
+                CustomerId = 1,
+                Items = new List<ItemInputModel>()
+                {
+                    new ItemInputModel 
+                    {
+                        Type = "Ysa",
+                        ServiceId = -1
+                    },
+                    new ItemInputModel 
+                    {
+                        Type = "Lax",
+                        ServiceId = 2
+                    }
+                }
+            };
+
+            using (var mockContext = new DataContext(_options))
+            {
+                var orderRepo = new OrderRepo(mockContext, _mapper);
+
+                Assert.ThrowsException<NotFoundException>(() => orderRepo.CreateOrder(inp));
+            }
         }
 
         [TestMethod]
