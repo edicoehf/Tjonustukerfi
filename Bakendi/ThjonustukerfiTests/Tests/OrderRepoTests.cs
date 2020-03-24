@@ -8,6 +8,7 @@ using ThjonustukerfiWebAPI.Mappings;
 using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.Entities;
+using ThjonustukerfiWebAPI.Models.Exceptions;
 using ThjonustukerfiWebAPI.Repositories.Implementations;
 
 namespace ThjonustukerfiTests.Tests
@@ -188,6 +189,17 @@ namespace ThjonustukerfiTests.Tests
                 Assert.AreEqual(orderDTO.Items[0], itemListDTO[0]);
                 Assert.AreEqual(orderDTO.Items[1], itemListDTO[1]);
             };
+        }
+
+        [TestMethod]
+        public void GetOrderbyId_should_throw_NotFoundException()
+        {
+            using (var mockContext = new DataContext(_options))
+            {
+                var orderRepo = new OrderRepo(mockContext, _mapper);
+
+                Assert.ThrowsException<NotFoundException>(() => orderRepo.GetOrderbyId(-1));
+            }
         }
     }
 }
