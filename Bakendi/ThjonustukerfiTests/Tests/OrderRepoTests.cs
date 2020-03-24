@@ -136,6 +136,8 @@ namespace ThjonustukerfiTests.Tests
                     .With(o => o.DateCreated = mockOrder.DateCreated)
                     .With(o => o.DateModified = mockOrder.DateModified)
                     .With(o => o.DateCompleted = mockOrder.DateCompleted)
+                    .TheRest()
+                    .With(o => o.Barcode = "30200001")
                     .Build();
 
                 // Build a list of size 20, make it queryable for the database mock
