@@ -65,7 +65,7 @@ namespace ThjonustukerfiWebAPI.Controllers
             
             _orderService.UpdateOrder(order, id);
 
-            return Ok(); // TODO: not done
+            return Ok();
         }
 
         [Route("{id:long}")]
