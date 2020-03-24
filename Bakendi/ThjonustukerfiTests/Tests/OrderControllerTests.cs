@@ -103,8 +103,8 @@ namespace ThjonustukerfiTests.Tests
                 }
             };
 
+            // Setup and create controller
             _orderServiceMock.Setup(method => method.UpdateOrder(It.IsAny<OrderInputModel>(), It.IsAny<long>())).Verifiable();
-
             _orderController = new OrderController(_orderServiceMock.Object);
 
             //* Act
@@ -113,6 +113,24 @@ namespace ThjonustukerfiTests.Tests
             //* Assert
             Assert.IsNotNull(response);
             Assert.AreEqual(200, response.StatusCode);
+        }
+
+        [TestMethod]
+        public void DeleteOrderById_should_return_204_noContent()
+        {
+            //* Arrange
+            long id = 1;
+
+            // Setup and create controller
+            _orderServiceMock.Setup(method => method.DeleteByOrderId(id));
+            _orderController = new OrderController(_orderServiceMock.Object);
+
+            //* Act
+            var response = _orderController.DeleteByOrderId(id) as NoContentResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(204, response.StatusCode);
         }
     }
 }
