@@ -217,11 +217,13 @@ namespace ThjonustukerfiTests.Tests
                 {
                     new ItemInputModel 
                     {
-                        Type = "Ysa"
+                        Type = "Ysa",
+                        ServiceId = 1
                     },
                     new ItemInputModel 
                     {
-                        Type = "Lax"
+                        Type = "Lax",
+                        ServiceId = 2
                     }
                 }
             };
@@ -229,22 +231,23 @@ namespace ThjonustukerfiTests.Tests
             using (var mockContext = new DataContext(_options))
             {
                 var orderRepo = new OrderRepo(mockContext, _mapper);
-
+                
+                // Check length of all db's before test
                 var orderDbSize = mockContext.Order.Count();
                 var itemDbSize = mockContext.Item.Count();
                 var itemOrderDbSize = mockContext.ItemOrderConnection.Count();
 
                 // Act
                 var result = orderRepo.CreateOrder(inp);
-
+                // GetDTO to compare with input later
                 var resultOrderDTO = mockContext.Order.OrderByDescending(o => o.Id).FirstOrDefault();
-
-                var itemOrderConnectionDTOList = mockContext.ItemOrderConnection.Where(i => i.OrderId == resultOrderDTO.Id);
-
-                var itemListDTO = new List<ItemDTO>();
+                // Get a list of all itemOrderConnections created
+                var itemOrderConnectionDTOList = mockContext.ItemOrderConnection.Where(i => i.OrderId == result).ToList();
+                // Get all items added to the database using ItemOrderConnection
+                var itemListDTO = new List<Item>();
                 foreach (var item in itemOrderConnectionDTOList)
                 {
-                    var add = _mapper.Map<ItemDTO>(mockContext.Item.Find(item.ItemId));
+                    var add = _mapper.Map<Item>(mockContext.Item.Find(item.ItemId));
                     itemListDTO.Add(add);
                 }
 
@@ -257,12 +260,23 @@ namespace ThjonustukerfiTests.Tests
                 Assert.AreEqual(mockContext.Order.Count(), orderDbSize + 1);
 
                 // Assert Item
+                Assert.AreEqual(mockContext.Item.Count(), itemDbSize + inp.Items.Count());
+                Assert.AreEqual(itemListDTO[0].Type, inp.Items[0].Type);
+                Assert.AreEqual(itemListDTO[0].ServiceId, inp.Items[0].ServiceId);
+                Assert.AreEqual(itemListDTO[1].Type, inp.Items[1].Type);
+                Assert.AreEqual(itemListDTO[1].ServiceId, inp.Items[1].ServiceId);
 
-
-                // Assert
-
+                // Assert ItemOrderConnection
+                Assert.AreEqual(mockContext.ItemOrderConnection.Count(), itemOrderDbSize + inp.Items.Count());
+                Assert.AreEqual(itemOrderConnectionDTOList[0].OrderId, resultOrderDTO.Id);
+                Assert.AreEqual(itemOrderConnectionDTOList[0].ItemId, itemListDTO[0].Id);
+                Assert.AreEqual(itemOrderConnectionDTOList[1].OrderId, resultOrderDTO.Id);
+                Assert.AreEqual(itemOrderConnectionDTOList[1].ItemId, itemListDTO[1].Id);
 
             };
         }
+
+        [TestMethod]
+        public void
     }
 }
