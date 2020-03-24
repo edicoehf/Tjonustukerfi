@@ -8,5 +8,6 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
         OrderDTO GetOrderbyId(long id);
         long CreateOrder(OrderInputModel order);
         void UpdateOrder(OrderInputModel order, long id);
+        void DeleteByOrderId(long id);
     }
 }

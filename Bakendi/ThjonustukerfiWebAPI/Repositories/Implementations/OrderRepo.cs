@@ -102,7 +102,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
         {
             // find order
             var entity = _dbContext.Order.FirstOrDefault(o => o.Id == id);
-            if(entity == null) { throw new NotFoundException($"Customer with id {id} was not found."); }
+            if(entity == null) { throw new NotFoundException($"Order with id {id} was not found."); }
 
             // update the customer ID
             entity.CustomerId = order.CustomerId;
@@ -113,6 +113,32 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             {
                 items.Add(_dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
             }
+        }
+
+        public void DeleteByOrderId(long id)
+        {
+            // find order
+            var entity = _dbContext.Order.FirstOrDefault(o => o.Id == id);
+            if(entity == null) { throw new NotFoundException($"Order with id {id} was not found"); }
+
+            // Get list connections
+            var itemListConnections = _dbContext.ItemOrderConnection.Where(c => c.OrderId == entity.Id).ToList();
+            
+            // Get all items in order
+            var itemList = new List<Item>();
+            foreach (var item in itemListConnections)
+            {
+                itemList.Add(_dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
+            }
+
+            // remove items
+            if(itemList.Count > 0) { _dbContext.Item.RemoveRange(itemList); }
+            // remove connections
+            if(itemListConnections.Count > 0) { _dbContext.ItemOrderConnection.RemoveRange(itemListConnections); }
+            // remove entity
+            _dbContext.Remove(entity);
+
+            _dbContext.SaveChanges();
         }
     }
 }

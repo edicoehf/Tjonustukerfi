@@ -26,5 +26,6 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         }
 
         public void UpdateOrder(OrderInputModel order, long id) => _orderRepo.UpdateOrder(order, id);
+        public void DeleteByOrderId(long id) => _orderRepo.DeleteByOrderId(id);
     }
 }

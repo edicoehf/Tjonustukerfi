@@ -68,6 +68,13 @@ namespace ThjonustukerfiWebAPI.Controllers
             return Ok(); // TODO: not done
         }
 
-        
+        [Route("{id:long}")]
+        [HttpDelete]
+        public IActionResult DeleteByOrderId(long id)
+        {
+            _orderService.DeleteByOrderId(id);
+
+            return NoContent();
+        }
     }
 }
