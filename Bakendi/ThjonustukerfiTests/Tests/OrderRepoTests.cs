@@ -571,5 +571,33 @@ namespace ThjonustukerfiTests.Tests
                 Assert.ThrowsException<NotFoundException>(() => orderRepo.UpdateOrder(inp, -1));
             }
         }
+
+        [TestMethod]
+        public void DeleteOrderById_should_remove_order_with_Id_100()
+        {
+            //* Arrange
+            long orderID = 100;
+
+            using (var mockContext = new DataContext(_options))
+            {
+                var orderRepo = new OrderRepo(mockContext, _mapper);
+
+                var orderTableSize = mockContext.Order.Count();
+                var itemTableSize = mockContext.Item.Count();
+                var itemOrderConnectionTableSize = mockContext.ItemOrderConnection.Count();
+
+                // size of item list
+                var newConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
+
+                //* Act
+                orderRepo.DeleteByOrderId(orderID);
+
+                //* Assert
+                Assert.AreEqual(orderTableSize - 1, mockContext.Order.Count());
+                Assert.AreEqual(itemTableSize - newConnection.Count, mockContext.Item.Count());
+                Assert.AreEqual(itemOrderConnectionTableSize - newConnection.Count, mockContext.ItemOrderConnection.Count());
+            }
+        }
+
     }
 }
