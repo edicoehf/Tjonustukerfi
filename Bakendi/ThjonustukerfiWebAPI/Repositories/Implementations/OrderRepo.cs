@@ -107,11 +107,100 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // update the customer ID
             entity.CustomerId = order.CustomerId;
 
+            // Get connections then Items
             var itemListConnections = _dbContext.ItemOrderConnection.Where(c => c.OrderId == entity.Id).ToList();
             var items = new List<Item>();
             foreach (var item in itemListConnections)
             {
                 items.Add(_dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
+            }
+
+            // Update to be the same as the input
+            if(items.Count != 0 && items.Count == order.Items.Count)    // if lists are of same size just update
+            {
+                for(var i = 0; i < items.Count; i++)
+                {
+                    items[i].Type = order.Items[i].Type;
+                    items[i].ServiceId = order.Items[i].ServiceId;
+                }
+            }
+            else if(items.Count == 0 && order.Items.Count > 0)      // if the list in the database is empty, just add the new ones
+            {
+                AddMultipleItems(order.Items, entity.Id);
+            }
+            else if(items.Count < order.Items.Count)    // if adding more items and/or updating to existing list
+            {
+                // update first items
+                var i = 0;
+                for( ; i < items.Count; i++)
+                {
+                    items[i].Type = order.Items[i].Type;
+                    items[i].ServiceId = order.Items[i].ServiceId;
+                }
+
+                // Build the rest of the list
+                var tmpList = new List<ItemInputModel>();
+                for( ; i < order.Items.Count; i++)
+                {
+                    tmpList.Add(order.Items[i]);
+                }
+
+                // Add the rest of the items
+                AddMultipleItems(tmpList, entity.Id);
+            }
+            else if(items.Count > order.Items.Count)    // if some items are removed from the list
+            {
+                // Update the list up to the same size
+                var i = 0;
+                for( ; i < order.Items.Count; i++)
+                {
+                    items[i].Type = order.Items[i].Type;
+                    items[i].ServiceId = order.Items[i].ServiceId;
+                }
+
+                // rest of the items to delete off the tail
+                var itemListToDelete = new List<Item>();
+                for( ; i < items.Count; i++)
+                {
+                    itemListToDelete.Add(items[i]);
+                }
+
+                // get the connection table variables that connect the order with the items about to be removed
+                var itemConnectionListToDelete = new List<ItemOrderConnection>();
+                foreach (var item in itemListToDelete)
+                {
+                    itemConnectionListToDelete.Add(_dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == item.Id));
+                }
+
+                // remove both items and their order connections
+                _dbContext.Item.RemoveRange(itemListToDelete);
+                _dbContext.ItemOrderConnection.RemoveRange(itemConnectionListToDelete);
+            }
+
+            // save the changes
+            _dbContext.SaveChanges();
+        }
+
+        //! Doesn't do SaveChanges(), rember to use save changes after calling this function
+        private void AddMultipleItems(List<ItemInputModel> inpItems, long orderId)
+        {
+            long newItemId = _dbContext.Item.Max(i => i.Id) + 1;
+            // Add items toDatabase
+            foreach(var item in inpItems)
+            {
+                // Creates a custom ID to make sure everything is connected correctly
+                var itemToAdd = _mapper.Map<Item>(item);
+                itemToAdd.Id = newItemId;
+                _dbContext.Item.Add(itemToAdd);
+
+                var itemOrderConnection = new ItemOrderConnection {
+                    OrderId = orderId,
+                    ItemId = newItemId
+                };
+                
+                // Increment itemId for next Item
+                newItemId++;
+                _dbContext.ItemOrderConnection.Add(itemOrderConnection);
             }
         }
 
