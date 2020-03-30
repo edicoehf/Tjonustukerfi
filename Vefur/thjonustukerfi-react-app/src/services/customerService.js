@@ -39,6 +39,7 @@ const getCustomerById = id => {
 };
 
 const updateCustomer = customer => {
+    console.log(customer);
     return fetch(endpoint, {
         method: "PATCH",
         body: JSON.stringify(customer),

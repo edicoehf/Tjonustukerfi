@@ -1,18 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import customerService from "../services/customerService";
-
-const emptyCustomer = {
-    id: "",
-    name: "",
-    ssn: "",
-    telephone: "",
-    email: "",
-    postalCode: "",
-    address: ""
-};
+import { CustomerContext } from "../context/customerContext";
 
 const useCustomerService = id => {
-    const [customer, setCustomer] = React.useState(emptyCustomer);
+    const { customer, setCustomer } = useContext(CustomerContext);
     const [error, setError] = React.useState(null);
 
     React.useEffect(() => {
@@ -23,7 +14,7 @@ const useCustomerService = id => {
                 setError(null);
             })
             .catch(error => setError(error));
-    }, [id]);
+    }, [id, setCustomer]);
     return { customer, error };
 };
 

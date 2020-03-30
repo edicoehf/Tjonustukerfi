@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import Form from "../../Form/Form";
 import Input from "../../Input/Input";
 import validateForm from "../CustomerValidate/CustomerValidate";
 import useForm from "../../../hooks/useForm";
 import customerService from "../../../services/customerService";
 import "./CustomerInputForm.css";
-import useCustomerService from "../../../hooks/useCustomerService";
-
+import { CustomerContext } from "../../../context/customerContext";
 const initialState = {
     name: "",
     ssn: "",
@@ -16,20 +15,24 @@ const initialState = {
     address: ""
 };
 
-const CustomerInputForm = prevCustomer => {
-    const { customer, error } = useCustomerService(1);
-    console.log("Customer: ");
-    console.log(customer);
-    const state = customer ? customer : initialState;
+const CustomerInputForm = () => {
+    const { customer } = useContext(CustomerContext);
+    const state = customer;
     const [submitError, setSubmitError] = React.useState(null);
+
     const submitHandler = async values => {
-        // if (customer) {
-        //     customerService.updateCustomer(values);
-        // } else {
-        customerService
-            .createCustomer(values)
-            .catch(error => setSubmitError(error));
-        // }
+        console.log(Object.keys(customer).length);
+        if (Object.keys(customer).length > 0) {
+            console.log("INSIDE UPDATE");
+            customerService
+                .updateCustomer(values)
+                .catch(error => setSubmitError(error));
+        } else {
+            console.log("INSIDE POST");
+            customerService
+                .createCustomer(values)
+                .catch(error => setSubmitError(error));
+        }
     };
 
     // isSubmitting, resetFields
