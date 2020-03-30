@@ -7,13 +7,21 @@ import customerService from "../../../services/customerService";
 import "./CustomerInputForm.css";
 import { CustomerContext } from "../../../context/customerContext";
 
+const initialState = {
+    name: "",
+    ssn: "",
+    telephone: "",
+    email: "",
+    postalCode: "",
+    address: ""
+};
+
 const CustomerInputForm = () => {
     const { customer } = useContext(CustomerContext);
-    const state = customer;
-    const [setSubmitError] = React.useState(null);
+    const state = customer ? customer : initialState;
+    const [submitError, setSubmitError] = React.useState(null);
 
     const submitHandler = async values => {
-        console.log(Object.keys(customer).length);
         if (Object.keys(customer).length > 0) {
             console.log("INSIDE UPDATE");
             customerService

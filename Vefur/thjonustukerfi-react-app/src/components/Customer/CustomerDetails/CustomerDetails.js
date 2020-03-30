@@ -8,8 +8,8 @@ import "./CustomerDetails.css";
 import { CustomerContext } from "../../../context/customerContext";
 
 const CustomerDetails = ({ id }) => {
-    const { customer, error } = useCustomerService(id);
     const { setCustomer } = useContext(CustomerContext);
+    const { customer, error } = useCustomerService(id);
 
     return (
         <div className="customer-details">
@@ -49,7 +49,7 @@ const CustomerDetails = ({ id }) => {
 
                         <Link
                             to="/new-customer"
-                            onClick={setCustomer(customer)}
+                            onClick={() => setCustomer(customer)}
                         >
                             <Button variant="warning">Edit</Button>
                         </Link>
