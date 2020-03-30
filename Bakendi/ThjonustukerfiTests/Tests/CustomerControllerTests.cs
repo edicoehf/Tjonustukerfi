@@ -8,8 +8,6 @@ using ThjonustukerfiWebAPI.Services.Interfaces;
 
 namespace ThjonustukerfiTests.Tests
 {
-    // TODO Test for service
-    // TODO test for repo
     [TestClass]
     public class CustomerControllerTests
     {

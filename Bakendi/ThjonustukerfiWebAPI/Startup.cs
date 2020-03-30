@@ -20,6 +20,9 @@ using ThjonustukerfiWebAPI.Repositories.Implementations;
 using ThjonustukerfiWebAPI.Repositories.Interfaces;
 using ThjonustukerfiWebAPI.Services.Implementations;
 using ThjonustukerfiWebAPI.Services.Interfaces;
+using System.Reflection;
+using System.IO;
+using Microsoft.OpenApi.Models;
 
 namespace ThjonustukerfiWebAPI
 {
@@ -77,8 +80,26 @@ namespace ThjonustukerfiWebAPI
             services.AddTransient<ILogService, LogService>();
             services.AddTransient<ILogRepository, LogRepository>();
 
+            // Adding for Order
+            services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IOrderRepo, OrderRepo>();
             // Adding foor SetupTables
             services.AddTransient<ISetupTables, SetupTables>();
+
+            //* Swagger Documentation
+            services.AddSwaggerGen(opt =>
+            {
+                opt.SwaggerDoc("v1",
+                new OpenApiInfo
+                {
+                    Title = "Þjónustukerfi Edico Bakendi",
+                    Version = "v1"
+                });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                opt.IncludeXmlComments(xmlPath);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -96,6 +117,14 @@ namespace ThjonustukerfiWebAPI
             // Exception Middleware, new exceptions must be added to exception folder in models
             // and then implemented in the middleware extension
             app.UseMiddleware<ExceptionMiddlewareExtension>();
+            
+            //* Use swagger
+            app.UseSwagger();
+            app.UseSwaggerUI(opt =>
+            {
+                opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Þjónustukerfi Edico Bakendi");
+                // opt.RoutePrefix = string.Empty;
+            });
 
             app.UseRouting();
 
@@ -105,6 +134,7 @@ namespace ThjonustukerfiWebAPI
             {
                 endpoints.MapControllers();
             });
+
         }
     }
 }

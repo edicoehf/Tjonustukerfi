@@ -69,5 +69,12 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             _dbContext.Customer.Remove(customer);
             _dbContext.SaveChanges();
         }
+        public bool CustomerExists(long id)
+        {
+             var entity = _dbContext.Customer.FirstOrDefault(c => c.Id == id);
+            // Check if found
+            if(entity == null) { return false; }
+            return true;
+        }
     }
 }

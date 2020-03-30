@@ -35,7 +35,7 @@ namespace ThjonustukerfiTests.Tests
             .Options;
         }
 
-        [TestCleanup()]
+        [TestCleanup]
         public void Cleanup()
         {
             _mapper = null;
