@@ -29,6 +29,7 @@ const CustomerInputForm = () => {
                 .catch(error => setSubmitError(error));
         } else {
             console.log("INSIDE POST");
+            console.log(submitError);
             customerService
                 .createCustomer(values)
                 .catch(error => setSubmitError(error));
