@@ -6,19 +6,11 @@ import useForm from "../../../hooks/useForm";
 import customerService from "../../../services/customerService";
 import "./CustomerInputForm.css";
 import { CustomerContext } from "../../../context/customerContext";
-const initialState = {
-    name: "",
-    ssn: "",
-    telephone: "",
-    email: "",
-    postalCode: "",
-    address: ""
-};
 
 const CustomerInputForm = () => {
     const { customer } = useContext(CustomerContext);
     const state = customer;
-    const [submitError, setSubmitError] = React.useState(null);
+    const [setSubmitError] = React.useState(null);
 
     const submitHandler = async values => {
         console.log(Object.keys(customer).length);
