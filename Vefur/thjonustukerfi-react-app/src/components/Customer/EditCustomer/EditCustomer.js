@@ -1,9 +1,11 @@
 import React from "react";
 import "./EditCustomer.css";
 import CustomerInputForm from "../../Customer/CustomerInputForm/CustomerInputForm";
+import useUpdateCustomer from "../../../hooks/useUpdateCustomer";
 
-const EditCustomer = ({ id }) => {
+const EditCustomer = () => {
     const { customer } = useContext(CustomerContext);
+    const { error, handleUpdate, isUpdating } = useUpdateCustomer();
 
     return (
         <div className="body">
@@ -11,8 +13,13 @@ const EditCustomer = ({ id }) => {
                 <h1>Breyta viðskiptavin</h1>
             </div>
             <div className="body">
-                <CustomerInputForm />
+                <CustomerInputForm
+                    processing={isUpdating}
+                    existingCustomer={customer}
+                    submitHandler={handleUpdate}
+                />
             </div>
+            {error && <div>Gat ekki breytt viðskiptavin</div>}
         </div>
     );
 };
