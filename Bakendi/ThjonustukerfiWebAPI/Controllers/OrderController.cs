@@ -16,6 +16,18 @@ namespace ThjonustukerfiWebAPI.Controllers
             _orderService = orderService;
         }
 
+        /// <summary>Gets all orders</summary>
+        /// <returns>A list of all orders</returns>
+        /// <response code="200">List of all orders, empty if no order exists</response>
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Route("")]
+        [HttpGet]
+        public IActionResult GetAllOrders()
+        {
+            return Ok(_orderService.GetAllOrders());
+        }
+
         /// <summary>Gets a order by ID</summary>
         /// <returns>A Single order</returns>
         /// <response code="200">Returns a single order with the given ID</response>

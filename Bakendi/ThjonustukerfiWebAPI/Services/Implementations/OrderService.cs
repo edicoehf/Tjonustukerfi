@@ -3,7 +3,7 @@ using ThjonustukerfiWebAPI.Models.InputModels;
 using ThjonustukerfiWebAPI.Repositories.Interfaces;
 using ThjonustukerfiWebAPI.Services.Interfaces;
 using ThjonustukerfiWebAPI.Models.Exceptions;
-
+using System.Collections;
 
 namespace ThjonustukerfiWebAPI.Services.Implementations
 {
@@ -27,5 +27,6 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
 
         public void UpdateOrder(OrderInputModel order, long id) => _orderRepo.UpdateOrder(order, id);
         public void DeleteByOrderId(long id) => _orderRepo.DeleteByOrderId(id);
+        public IEnumerable GetAllOrders() => _orderRepo.GetAllOrders();
     }
 }
