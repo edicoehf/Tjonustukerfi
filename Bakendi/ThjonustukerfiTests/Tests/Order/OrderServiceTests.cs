@@ -115,5 +115,64 @@ namespace ThjonustukerfiTests.Tests
             Assert.IsNotNull(response);
             Assert.IsInstanceOfType(response, typeof(OrderDTO));
         }
+
+        [TestMethod]
+        public void GetAllOrders_should_return_a_list_of_OrderDTO()
+        {
+            //* Arrange
+            var retDTO = CreateOrderDTOList();
+            _orderRepoMock.Setup(method => method.GetAllOrders()).Returns(retDTO);
+
+            // Create service
+            _orderService = new OrderService(_orderRepoMock.Object, _customerRepoMock.Object);
+           
+            //* Act
+            var returnValue = _orderService.GetAllOrders();
+
+            //* Assert
+            Assert.IsNotNull(returnValue);
+            Assert.AreEqual(returnValue, retDTO);
+        }
+
+        private List<OrderDTO> CreateOrderDTOList()
+        {
+            return new List<OrderDTO>()
+            {
+                new OrderDTO
+                {
+                Customer = "Kalli Valli",
+                Barcode = "0100001111",
+                Items = new List<ItemDTO>()
+                    {
+                        new ItemDTO()
+                        {
+                            Id = 1,
+                            Type = "Ysa bitar",
+                            Service = "Birkireyk"
+                        }
+                    },
+                    DateCreated = DateTime.Now,
+                    DateModified = DateTime.MinValue,
+                    DateCompleted = DateTime.MaxValue
+                },
+                new OrderDTO
+                {
+                Customer = "Harpa Varta",
+                Barcode = "0100001111",
+                Items = new List<ItemDTO>()
+                    {
+                        new ItemDTO()
+                        {
+                            Id = 1,
+                            Type = "Lax bitar",
+                            Service = "Birkireyk"
+                        }
+                    },
+                    DateCreated = DateTime.Now,
+                    DateModified = DateTime.MinValue,
+                    DateCompleted = DateTime.MaxValue
+                }
+            };
+        }
     }
 }
