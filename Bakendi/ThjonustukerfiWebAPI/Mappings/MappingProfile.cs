@@ -38,6 +38,10 @@ namespace ThjonustukerfiWebAPI.Mappings
             // Automapper for Order entity to Order DTO
             CreateMap<Order, OrderDTO>();
 
+            //* Service Mappings
+            // Automapper for Service to ServiceDTO
+            CreateMap<Service, ServiceDTO>();
+
         }
     }
 }
