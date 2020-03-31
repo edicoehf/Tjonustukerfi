@@ -15,7 +15,10 @@ const initialState = {
 };
 
 const CustomerInputForm = ({ existingCustomer, submitHandler, processing }) => {
-    const state = existingCustomer ? existingCustomer : initialState;
+    const state =
+        Object.keys(existingCustomer).length > 0
+            ? existingCustomer
+            : initialState;
 
     // isSubmitting, resetFields
     const { handleSubmit, handleChangeText, values, errors } = useForm(
