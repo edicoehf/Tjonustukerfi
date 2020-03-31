@@ -260,7 +260,7 @@ namespace ThjonustukerfiTests.Tests
         }
 
         [TestMethod]
-        public void GetAllCustomers_should_return_list_of_size_SOMETHING()
+        public void GetAllCustomers_should_return_list_of_correct_size()
         {
             //* Arrange
             using(var mockContext = new DataContext(_options))
