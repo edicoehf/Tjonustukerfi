@@ -38,7 +38,28 @@ const getCustomerById = id => {
         .catch(error => Promise.reject(error));
 };
 
+const updateCustomer = customer => {
+    console.log(customer);
+    return fetch(endpoint, {
+        method: "PATCH",
+        body: JSON.stringify(customer),
+        headers: {
+            "Content-Type": "application/json",
+            crossDomain: true
+        }
+    })
+        .then(handleErrors)
+        .then(data => {
+            if (!data) {
+                return {};
+            }
+            return data;
+        })
+        .catch(error => Promise.reject(error));
+};
+
 export default {
     createCustomer,
-    getCustomerById
+    getCustomerById,
+    updateCustomer
 };
