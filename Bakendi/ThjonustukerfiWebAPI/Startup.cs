@@ -86,6 +86,10 @@ namespace ThjonustukerfiWebAPI
             // Adding foor SetupTables
             services.AddTransient<ISetupTables, SetupTables>();
 
+            // Adding for Information
+            services.AddTransient<IInfoService, InfoService>();
+            services.AddTransient<IInfoRepo, InfoRepo>();
+
             //* Swagger Documentation
             services.AddSwaggerGen(opt =>
             {
