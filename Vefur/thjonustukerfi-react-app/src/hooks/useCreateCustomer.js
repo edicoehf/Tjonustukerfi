@@ -10,7 +10,7 @@ const useCreateCustomer = () => {
         if (customer && !isProcessing) {
             setProcessing(true);
             customerService
-                .CreateCustomer(customer)
+                .createCustomer(customer)
                 .then(() => {
                     setError(null);
                 })
