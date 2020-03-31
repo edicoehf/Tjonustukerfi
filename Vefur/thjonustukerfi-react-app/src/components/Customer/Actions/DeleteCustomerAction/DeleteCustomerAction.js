@@ -1,9 +1,8 @@
 import React from "react";
-import useDeleteCustomerById from "../../../hooks/useDeleteCustomerById";
+import useDeleteCustomerById from "../../../../hooks/useDeleteCustomerById";
 import { Button } from "react-bootstrap";
-import "./DeleteCustomer.css";
 
-const DeleteCustomer = ({ id }) => {
+const DeleteCustomerAction = ({ id }) => {
     const { error, handleDelete, isDeleting } = useDeleteCustomerById(id);
 
     return (
@@ -24,4 +23,4 @@ const DeleteCustomer = ({ id }) => {
     );
 };
 
-export default DeleteCustomer;
+export default DeleteCustomerAction;

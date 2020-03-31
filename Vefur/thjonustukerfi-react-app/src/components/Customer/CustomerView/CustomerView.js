@@ -1,7 +1,7 @@
 import React from "react";
 import CustomerDetails from "../CustomerDetails/CustomerDetails";
 import "./CustomerView.css";
-import CustomerActions from "../CustomerActions/CustomerActions";
+import CustomerActions from "../Actions/CustomerActions/CustomerActions";
 
 const CustomerView = ({ match }) => {
     const id = match.params.id;

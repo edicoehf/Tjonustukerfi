@@ -1,10 +1,10 @@
 import React from "react";
-import DeleteCustomer from "../DeleteCustomer/DeleteCustomer";
+import DeleteCustomerAction from "../DeleteCustomerAction/DeleteCustomerAction";
 
 const CustomerActions = ({ id }) => {
     return (
         <div className="customer-actions">
-            <DeleteCustomer id={id} />
+            <DeleteCustomerAction id={id} />
             {/* <ModifyCustomer customer={customer} /> */}
         </div>
     );
