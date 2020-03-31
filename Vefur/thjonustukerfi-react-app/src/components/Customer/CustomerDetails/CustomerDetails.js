@@ -1,11 +1,8 @@
-import React, { useContext } from "react";
-import { Link } from "react-router-dom";
-import { Button } from "react-bootstrap";
+import React from "react";
 import PropTypes from "prop-types";
 import useGetCustomerById from "../../../hooks/useGetCustomerById";
 import CustomerProperty from "../CustomerProperty/CustomerProperty";
 import "./CustomerDetails.css";
-import { CustomerContext } from "../../../context/customerContext";
 
 const CustomerDetails = ({ id }) => {
     const { customer, error } = useGetCustomerById(id);

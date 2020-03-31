@@ -1,11 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 import Form from "../../Form/Form";
 import Input from "../../Input/Input";
 import validateForm from "../CustomerValidate/CustomerValidate";
 import useForm from "../../../hooks/useForm";
-import customerService from "../../../services/customerService";
 import "./CustomerInputForm.css";
-import { CustomerContext } from "../../../context/customerContext";
 
 const initialState = {
     name: "",
