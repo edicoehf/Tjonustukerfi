@@ -16,9 +16,9 @@ const initialState = {
     address: ""
 };
 
-const CustomerInputForm = () => {
-    const { customer } = useContext(CustomerContext);
-    const state = customer ? customer : initialState;
+const CustomerInputForm = ({ existingCustomer }) => {
+    const state = existingCustomer ? existingCustomer : initialState;
+
     const [submitError, setSubmitError] = React.useState(null);
 
     const submitHandler = async values => {

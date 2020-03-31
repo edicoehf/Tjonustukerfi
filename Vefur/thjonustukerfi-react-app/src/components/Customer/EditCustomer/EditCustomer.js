@@ -3,6 +3,8 @@ import "./EditCustomer.css";
 import CustomerInputForm from "../../Customer/CustomerInputForm/CustomerInputForm";
 
 const EditCustomer = ({ id }) => {
+    const { customer } = useContext(CustomerContext);
+
     return (
         <div className="body">
             <div className="header">
