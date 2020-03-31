@@ -8,7 +8,6 @@ import "./CustomerDetails.css";
 import { CustomerContext } from "../../../context/customerContext";
 
 const CustomerDetails = ({ id }) => {
-    const { setCustomer } = useContext(CustomerContext);
     const { customer, error } = useGetCustomerById(id);
 
     return (
@@ -46,12 +45,6 @@ const CustomerDetails = ({ id }) => {
                             name="postalcode"
                             value={customer.postalCode}
                         />
-                        <Link
-                            to="/new-customer"
-                            onClick={() => setCustomer(customer)}
-                        >
-                            <Button variant="warning">Edit</Button>
-                        </Link>
                     </tbody>
                 </table>
             ) : (
