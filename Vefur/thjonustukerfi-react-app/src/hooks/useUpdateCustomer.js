@@ -2,33 +2,33 @@ import React from "react";
 import customerService from "../services/customerService";
 
 const useUpdateCustomer = () => {
-    const [error, setError] = React.useState(null);
+    const [updateError, setError] = React.useState(null);
     const [isProcessing, setProcessing] = React.useState(false);
-    const [customer, setCustomer] = React.useState(null);
+    const [values, setValues] = React.useState(null);
 
     React.useEffect(() => {
-        if (customer && !isProcessing) {
+        if (values && !isProcessing) {
             setProcessing(true);
             customerService
-                .updateCustomer(customer)
+                .updateCustomer(values)
                 .then(() => {
                     setError(null);
                 })
                 .catch(error => setError(error))
                 .finally(() => {
-                    setCustomer(null);
+                    setValues(null);
                     setProcessing(false);
                 });
         }
-    }, [isProcessing, customer]);
+    }, [isProcessing, values]);
 
-    const handleUpdate = customer => {
+    const handleUpdate = values => {
         if (!isProcessing) {
-            setCustomer(customer);
+            setValues(values);
         }
     };
 
-    return { error, handleUpdate, isProcessing };
+    return { updateError, handleUpdate, isProcessing };
 };
 
 export default useUpdateCustomer;
