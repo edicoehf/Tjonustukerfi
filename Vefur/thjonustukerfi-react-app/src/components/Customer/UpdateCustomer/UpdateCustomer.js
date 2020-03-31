@@ -1,9 +1,9 @@
 import React from "react";
-import "./EditCustomer.css";
-import CustomerInputForm from "../../Customer/CustomerInputForm/CustomerInputForm";
+import "./UpdateCustomer.css";
+import CustomerInputForm from "../CustomerInputForm/CustomerInputForm";
 import useUpdateCustomer from "../../../hooks/useUpdateCustomer";
 
-const EditCustomer = () => {
+const UpdateCustomer = () => {
     const { customer } = useContext(CustomerContext);
     const { error, handleUpdate, isProcessing } = useUpdateCustomer();
 
@@ -24,4 +24,4 @@ const EditCustomer = () => {
     );
 };
 
-export default EditCustomer;
+export default UpdateCustomer;
