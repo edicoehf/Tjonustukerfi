@@ -5,7 +5,7 @@ import useUpdateCustomer from "../../../hooks/useUpdateCustomer";
 
 const EditCustomer = () => {
     const { customer } = useContext(CustomerContext);
-    const { error, handleUpdate, isUpdating } = useUpdateCustomer();
+    const { error, handleUpdate, isProcessing } = useUpdateCustomer();
 
     return (
         <div className="body">
@@ -14,7 +14,7 @@ const EditCustomer = () => {
             </div>
             <div className="body">
                 <CustomerInputForm
-                    processing={isUpdating}
+                    processing={isProcessing}
                     existingCustomer={customer}
                     submitHandler={handleUpdate}
                 />
