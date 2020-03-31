@@ -1,7 +1,7 @@
 import React from "react";
 import customerService from "../services/customerService";
 
-const useUpdateCustomer = () => {
+const useCreateCustomer = () => {
     const [error, setError] = React.useState(null);
     const [isProcessing, setProcessing] = React.useState(false);
     const [customer, setCustomer] = React.useState(null);
@@ -10,7 +10,7 @@ const useUpdateCustomer = () => {
         if (customer && !isProcessing) {
             setProcessing(true);
             customerService
-                .updateCustomer(customer)
+                .CreateCustomer(customer)
                 .then(() => {
                     setError(null);
                 })
@@ -22,13 +22,13 @@ const useUpdateCustomer = () => {
         }
     }, [id, isProcessing]);
 
-    const handleUpdate = customer => {
+    const handleCreate = customer => {
         if (!isProcessing) {
             setCustomer(customer);
         }
     };
 
-    return { error, handleUpdate, isProcessing };
+    return { error, handleCreate, isCreating };
 };
 
-export default useUpdateCustomer;
+export default useCreateCustomer;
