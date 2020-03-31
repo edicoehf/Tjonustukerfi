@@ -1,9 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
 import customerService from "../services/customerService";
-import { CustomerContext } from "../context/customerContext";
+import {
+    CustomerContext,
+    CustomerErrorContext
+} from "../context/customerContext";
 
 const useGetCustomerById = id => {
-    const { customer, setCustomer } = useContext(CustomerContext);
+    const [customer, setCustomer] = React.useState({});
     const [error, setError] = React.useState(null);
 
     React.useEffect(() => {
@@ -14,7 +17,7 @@ const useGetCustomerById = id => {
                 setError(null);
             })
             .catch(error => setError(error));
-    }, [id, setCustomer]);
+    }, [id]);
     return { customer, error };
 };
 

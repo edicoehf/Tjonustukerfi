@@ -5,14 +5,13 @@ import NavigationBar from "./components/Header/NavigationBar/NavigationBar";
 import LandingPage from "./components/LandingPage/LandingPage";
 import CreateCustomer from "./components/Customer/CreateCustomer/CreateCustomer";
 import CustomerView from "./components/Customer/CustomerView/CustomerView";
-import { CustomerContext } from "./context/customerContext";
+import {
+    CustomerContext,
+    CustomerErrorContext
+} from "./context/customerContext";
+import UpdateCustomer from "./components/Customer/UpdateCustomer/UpdateCustomer";
 
 function App() {
-    const [customer, setCustomer] = useState({});
-    const providerValue = useMemo(() => ({ customer, setCustomer }), [
-        customer,
-        setCustomer
-    ]);
     return (
         <div className="app">
             <div className="navbar-container">
@@ -21,19 +20,21 @@ function App() {
             <div className="container">
                 <Switch>
                     <Route exact path="/" component={LandingPage} />
-                    <CustomerContext.Provider value={providerValue}>
-                        <Route
-                            path="/new-customer"
-                            render={({ customer }) => (
-                                <CreateCustomer customer={customer} />
-                            )}
-                        />
-                        <Route
-                            exact
-                            path="/customer/:id"
-                            component={CustomerView}
-                        />
-                    </CustomerContext.Provider>
+                    <Route
+                        exact
+                        path="/new-customer"
+                        component={CreateCustomer}
+                    />
+                    <Route
+                        exact
+                        path="/update-customer/:id"
+                        component={UpdateCustomer}
+                    />
+                    <Route
+                        exact
+                        path="/customer/:id"
+                        component={CustomerView}
+                    />
                 </Switch>
             </div>
         </div>

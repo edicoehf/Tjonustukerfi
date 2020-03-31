@@ -1,7 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
-import useGetCustomerById from "../../../hooks/useGetCustomerById";
+import React, { useContext } from "react";
 import CustomerProperty from "../CustomerProperty/CustomerProperty";
+import useGetCustomerById from "../../../hooks/useGetCustomerById";
 import "./CustomerDetails.css";
 
 const CustomerDetails = ({ id }) => {
@@ -51,10 +50,6 @@ const CustomerDetails = ({ id }) => {
             )}
         </div>
     );
-};
-
-CustomerDetails.propTypes = {
-    id: PropTypes.string.isRequired
 };
 
 export default CustomerDetails;

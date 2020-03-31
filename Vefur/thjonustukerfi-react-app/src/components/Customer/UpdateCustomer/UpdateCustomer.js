@@ -1,25 +1,37 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./UpdateCustomer.css";
 import CustomerInputForm from "../CustomerInputForm/CustomerInputForm";
 import useUpdateCustomer from "../../../hooks/useUpdateCustomer";
+import useGetCustomerById from "../../../hooks/useGetCustomerById";
 
-const UpdateCustomer = () => {
-    const { customer } = useContext(CustomerContext);
-    const { error, handleUpdate, isProcessing } = useUpdateCustomer();
+const UpdateCustomer = ({ match }) => {
+    const id = match.params.id;
+    const { customer, error } = useGetCustomerById(id);
+    const { updateError, handleUpdate, isProcessing } = useUpdateCustomer();
 
     return (
         <div className="body">
             <div className="header">
                 <h1>Breyta viðskiptavin</h1>
             </div>
-            <div className="body">
-                <CustomerInputForm
-                    processing={isProcessing}
-                    existingCustomer={customer}
-                    submitHandler={handleUpdate}
-                />
-            </div>
-            {error && <div>Gat ekki breytt viðskiptavin</div>}
+            {!error && Object.keys(customer).length > 0 ? (
+                <>
+                    <div className="body">
+                        <CustomerInputForm
+                            processing={isProcessing}
+                            existingCustomer={customer}
+                            submitHandler={handleUpdate}
+                        />
+                    </div>
+                    {updateError && (
+                        <div className="error">
+                            Gat ekki breytt viðskiptavin
+                        </div>
+                    )}
+                </>
+            ) : (
+                <div className="error">Viðskiptavinur fannst ekki</div>
+            )}
         </div>
     );
 };
