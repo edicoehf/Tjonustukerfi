@@ -1,13 +1,13 @@
 import React from "react";
 import customerService from "../services/customerService";
 
-const useUpdateCustomer = customer => {
+const useUpdateCustomer = () => {
     const [error, setError] = React.useState(null);
     const [isProcessing, setProcessing] = React.useState(false);
-    const [isUpdating, setUpdating] = React.useState(false);
+    const [customer, setCustomer] = React.useState(null);
 
     React.useEffect(() => {
-        if (isUpdating && !isProcessing) {
+        if (customer && !isProcessing) {
             setProcessing(true);
             customerService
                 .updateCustomer(customer)
@@ -16,15 +16,15 @@ const useUpdateCustomer = customer => {
                 })
                 .catch(error => setError(error))
                 .finally(() => {
-                    setUpdating(false);
+                    setUpdating(null);
                     setProcessing(false);
                 });
         }
     }, [id, isUpdating, isProcessing]);
 
-    const handleUpdate = () => {
+    const handleUpdate = customer => {
         if (!isUpdating) {
-            setUpdating(true);
+            setCustomer(customer);
         }
     };
 
