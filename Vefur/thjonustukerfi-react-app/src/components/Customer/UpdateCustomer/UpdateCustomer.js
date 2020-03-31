@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import "./UpdateCustomer.css";
 import CustomerInputForm from "../CustomerInputForm/CustomerInputForm";
 import useUpdateCustomer from "../../../hooks/useUpdateCustomer";

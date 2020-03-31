@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import CustomerProperty from "../CustomerProperty/CustomerProperty";
 import useGetCustomerById from "../../../hooks/useGetCustomerById";
 import "./CustomerDetails.css";

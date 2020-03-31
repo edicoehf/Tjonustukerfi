@@ -1,9 +1,5 @@
 import React from "react";
 import customerService from "../services/customerService";
-import {
-    CustomerContext,
-    CustomerErrorContext
-} from "../context/customerContext";
 
 const useGetCustomerById = id => {
     const [customer, setCustomer] = React.useState({});
