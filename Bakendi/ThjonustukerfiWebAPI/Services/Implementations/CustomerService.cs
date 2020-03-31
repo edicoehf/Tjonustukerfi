@@ -1,3 +1,4 @@
+using System.Collections;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.InputModels;
 using ThjonustukerfiWebAPI.Repositories.Interfaces;
@@ -16,5 +17,6 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         public CustomerDetailsDTO GetCustomerById(long id) => _customerRepo.GetCustomerById(id);
         public void UpdateCustomerDetails(CustomerInputModel customer, long id) => _customerRepo.UpdateCustomerDetails(customer, id);
         public void DeleteCustomerById(long id) => _customerRepo.DeleteCustomerById(id);
+        public IEnumerable GetAllCustomers() => _customerRepo.GetAllCustomers();
     }
 }
