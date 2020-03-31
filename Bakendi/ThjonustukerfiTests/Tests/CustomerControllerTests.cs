@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -138,6 +139,39 @@ namespace ThjonustukerfiTests.Tests
             // Assert
             Assert.IsNotNull(response);
             Assert.AreEqual(204, response.StatusCode);
+        }
+
+        [TestMethod]
+        public void GetCustomers_should_return_200OK_and_a_list_of_CustomerDetailsDto()
+        {
+            //* Arrange
+            var retDTO = new List<CustomerDTO>()
+            {
+                new CustomerDTO
+                {
+                    Id = 1,
+                    Name = "Siggi Viggi"
+                },
+                new CustomerDTO
+                {
+                    Id = 2,
+                    Name = "Kalli Valli"
+                }
+            };
+            // Mock method
+            _customerServiceMock.Setup(method => method.GetAllCustomers()).Returns(retDTO);
+
+            // Create Controller
+            _customerController = new CustomerController(_customerServiceMock.Object);
+            
+            //* Act
+            var response = _customerController.GetAllCustomers() as OkObjectResult;
+            List<CustomerDTO> responseValue = response.Value as List<CustomerDTO>;
+
+            // Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(200, response.StatusCode);
+            Assert.AreEqual(responseValue.Count, retDTO.Count);
         }
     }
 }

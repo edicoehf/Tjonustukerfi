@@ -16,6 +16,18 @@ namespace ThjonustukerfiWebAPI.Controllers
             _customerService = customerService;
         }
 
+        /// <summary>Gets all customers</summary>
+        /// <returns>A list of all customers</returns>
+        /// <response code="200">List of all customers, empty list if none exist</response>
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Route("")]
+        [HttpGet]
+        public IActionResult GetAllCustomers()
+        {
+            return Ok(_customerService.GetAllCustomers());
+        }
+
         /// <summary>Adds a new customer to the database.</summary>
         /// <param name="customer"></param>
         /// <returns>A created at route</returns>

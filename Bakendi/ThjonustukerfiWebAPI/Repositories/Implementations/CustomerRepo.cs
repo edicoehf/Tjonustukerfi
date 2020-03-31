@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using AutoMapper;
@@ -20,6 +21,10 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
         {
             _dbContext = context;
             _mapper = mapper;
+        }
+        public IEnumerable<CustomerDTO> GetAllCustomers()
+        {
+            return _mapper.Map<IEnumerable<CustomerDTO>>(_dbContext.Customer.ToList());
         }
         public CustomerDTO CreateCustomer(CustomerInputModel customer)
         {

@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import Form from "../../Form/Form";
 import Input from "../../Input/Input";
 import validateForm from "../CustomerValidate/CustomerValidate";
 import useForm from "../../../hooks/useForm";
 import customerService from "../../../services/customerService";
-
 import "./CustomerInputForm.css";
+import { CustomerContext } from "../../../context/customerContext";
 
 const initialState = {
     name: "",
@@ -17,13 +17,28 @@ const initialState = {
 };
 
 const CustomerInputForm = () => {
+    const { customer } = useContext(CustomerContext);
+    const state = customer ? customer : initialState;
+    const [submitError, setSubmitError] = React.useState(null);
+
     const submitHandler = async values => {
-        customerService.createCustomer(values);
+        if (Object.keys(customer).length > 0) {
+            console.log("INSIDE UPDATE");
+            customerService
+                .updateCustomer(values)
+                .catch(error => setSubmitError(error));
+        } else {
+            console.log("INSIDE POST");
+            console.log(submitError);
+            customerService
+                .createCustomer(values)
+                .catch(error => setSubmitError(error));
+        }
     };
 
     // isSubmitting, resetFields
     const { handleSubmit, handleChangeText, values, errors } = useForm(
-        initialState,
+        state,
         validateForm,
         submitHandler
     );

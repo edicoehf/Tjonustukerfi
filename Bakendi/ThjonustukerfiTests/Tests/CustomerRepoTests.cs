@@ -43,6 +43,23 @@ namespace ThjonustukerfiTests.Tests
         }
 
         [TestMethod]
+        public void GetAllCustomers_should_return_an_empty_list()
+        {
+            //* Arrange
+            using (var mockContext = new DataContext(_options))
+            {
+                var customerRepo = new CustomerRepo(mockContext, _mapper);
+
+                //* Act
+                var result = customerRepo.GetAllCustomers();
+
+                //* Assert
+                Assert.IsNotNull(result);
+                Assert.AreEqual(0, result.Count());
+            }
+        }
+
+        [TestMethod]
         public void GetCustomer_should_return_customerDetailsDTO_with_id_100()
         {
             // Arrange
@@ -240,6 +257,24 @@ namespace ThjonustukerfiTests.Tests
                 // Assert
                 Assert.AreEqual(mockContext.Customer.Count(), dbSize - 1);
             };
+        }
+
+        [TestMethod]
+        public void GetAllCustomers_should_return_list_of_size_SOMETHING()
+        {
+            //* Arrange
+            using(var mockContext = new DataContext(_options))
+            {
+                var customerRepo = new CustomerRepo(mockContext, _mapper);
+                var DBSize = mockContext.Customer.Count();
+
+                //* Act
+                var result = customerRepo.GetAllCustomers();
+                
+                //* Assert
+                Assert.IsNotNull(result);
+                Assert.AreEqual(DBSize, result.Count());
+            }
         }
     }
 }
