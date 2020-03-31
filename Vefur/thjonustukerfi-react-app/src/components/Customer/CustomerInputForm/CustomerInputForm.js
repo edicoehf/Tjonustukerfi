@@ -16,25 +16,8 @@ const initialState = {
     address: ""
 };
 
-const CustomerInputForm = ({ existingCustomer }) => {
+const CustomerInputForm = ({ existingCustomer, submitHandler, processing }) => {
     const state = existingCustomer ? existingCustomer : initialState;
-
-    const [submitError, setSubmitError] = React.useState(null);
-
-    const submitHandler = async values => {
-        if (Object.keys(customer).length > 0) {
-            console.log("INSIDE UPDATE");
-            customerService
-                .updateCustomer(values)
-                .catch(error => setSubmitError(error));
-        } else {
-            console.log("INSIDE POST");
-            console.log(submitError);
-            customerService
-                .createCustomer(values)
-                .catch(error => setSubmitError(error));
-        }
-    };
 
     // isSubmitting, resetFields
     const { handleSubmit, handleChangeText, values, errors } = useForm(
@@ -101,6 +84,7 @@ const CustomerInputForm = ({ existingCustomer }) => {
                     onInput={handleChangeText}
                 />
                 <input
+                    disabled={processing}
                     type="submit"
                     value="Skrá nýjan viðskiptavin"
                     className="btn btn-dark"
