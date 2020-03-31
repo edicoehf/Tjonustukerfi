@@ -142,7 +142,7 @@ namespace ThjonustukerfiTests.Tests
         }
 
         [TestMethod]
-        public void GetCustomers_should_return_200OK_and_a_list_of_CustomerDetailsDto()
+        public void GetCustomers_should_return_200OK_and_a_list_of_CustomerDto()
         {
             //* Arrange
             var retDTO = new List<CustomerDTO>()
