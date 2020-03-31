@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ThjonustukerfiWebAPI.Models.DTOs;
@@ -53,7 +54,7 @@ namespace ThjonustukerfiTests.Tests
         }
 
         [TestMethod]
-        public void GetCustomer_should_return_a_singe_customerDetailsDTO()
+        public void GetCustomer_should_return_a_single_customerDetailsDTO()
         {
             // Arrange
             long id = 10;
@@ -86,6 +87,36 @@ namespace ThjonustukerfiTests.Tests
             Assert.AreEqual(mockCustomerDetailsDTO.Phone, customerDetailsDTO.Phone);
             Assert.AreEqual(mockCustomerDetailsDTO.Address, customerDetailsDTO.Address);
             Assert.AreEqual(mockCustomerDetailsDTO.PostalCode, customerDetailsDTO.PostalCode);
+        }
+
+        [TestMethod]
+        public void GetAllCustomers_should_return_a_list_of_CustomerDTO()
+        {
+            //* Arrange
+            var retDTO = new List<CustomerDTO>()
+            {
+                new CustomerDTO
+                {
+                    Id = 1,
+                    Name = "Siggi Viggi"
+                },
+                new CustomerDTO
+                {
+                    Id = 2,
+                    Name = "Kalli Valli"
+                }
+            };
+            _customerRepoMock.Setup(method => method.GetAllCustomers()).Returns(retDTO);
+
+            // Create service
+            _customerService = new CustomerService(_customerRepoMock.Object);
+
+            //* Act
+            var returnvalue = _customerService.GetAllCustomers();
+
+            //* Assert
+            Assert.IsNotNull(returnvalue);
+            Assert.AreEqual(returnvalue, retDTO);
         }
     }
 }

@@ -3,6 +3,7 @@ import { shallow, mount } from "enzyme";
 import CustomerDetails from "./CustomerDetails";
 import useGetCustomerById from "../../../hooks/useGetCustomerById";
 jest.mock("../../../hooks/useGetCustomerById");
+jest.mock("react-router-dom");
 
 const findByName = (fields, name) => {
     for (var i = 0; i < fields.length; i++) {
