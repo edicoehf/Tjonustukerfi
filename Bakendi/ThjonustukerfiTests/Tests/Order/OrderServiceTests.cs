@@ -132,6 +132,12 @@ namespace ThjonustukerfiTests.Tests
             //* Assert
             Assert.IsNotNull(returnValue);
             Assert.AreEqual(returnValue, retDTO);
+
+            foreach (var val in returnValue)
+            {
+                Assert.IsNotNull(val);
+                Assert.IsInstanceOfType(val, typeof(OrderDTO));
+            }
         }
 
         private List<OrderDTO> CreateOrderDTOList()
