@@ -1,18 +1,12 @@
 import React from "react";
 import DeleteCustomer from "../DeleteCustomer/DeleteCustomer";
 
-const CustomerActions = ({ customer }) => {
+const CustomerActions = ({ id }) => {
     return (
-        <>
-            {customer ? (
-                <div className="customer-actions">
-                    <DeleteCustomer id={customer.id} />
-                    {/* <ModifyCustomer customer={customer} /> */}
-                </div>
-            ) : (
-                <></>
-            )}
-        </>
+        <div className="customer-actions">
+            <DeleteCustomer id={id} />
+            {/* <ModifyCustomer customer={customer} /> */}
+        </div>
     );
 };
 

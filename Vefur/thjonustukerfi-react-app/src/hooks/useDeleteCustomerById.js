@@ -3,8 +3,8 @@ import customerService from "../services/customerService";
 
 const useDeleteCustomerById = id => {
     const [error, setError] = React.useState(null);
-    const [isDeleting, setDeleting] = React.useState(false);
     const [isProcessing, setProcessing] = React.useState(false);
+    const [isDeleting, setDeleting] = React.useState(false);
 
     React.useEffect(() => {
         if (isDeleting && !isProcessing) {
