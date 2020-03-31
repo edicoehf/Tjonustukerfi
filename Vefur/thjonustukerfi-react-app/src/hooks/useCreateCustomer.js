@@ -20,7 +20,7 @@ const useCreateCustomer = () => {
                     setProcessing(false);
                 });
         }
-    }, [id, isProcessing]);
+    }, [isProcessing, customer]);
 
     const handleCreate = customer => {
         if (!isProcessing) {
@@ -28,7 +28,7 @@ const useCreateCustomer = () => {
         }
     };
 
-    return { error, handleCreate, isCreating };
+    return { error, handleCreate, isProcessing };
 };
 
 export default useCreateCustomer;

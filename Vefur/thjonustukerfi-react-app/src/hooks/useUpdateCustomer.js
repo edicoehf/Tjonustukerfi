@@ -20,7 +20,7 @@ const useUpdateCustomer = () => {
                     setProcessing(false);
                 });
         }
-    }, [id, isProcessing]);
+    }, [isProcessing, customer]);
 
     const handleUpdate = customer => {
         if (!isProcessing) {
