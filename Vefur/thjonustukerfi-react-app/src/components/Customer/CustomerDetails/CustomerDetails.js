@@ -2,14 +2,14 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import PropTypes from "prop-types";
-import useCustomerService from "../../../hooks/useCustomerService";
+import useGetCustomerById from "../../../hooks/useGetCustomerById";
 import CustomerProperty from "../CustomerProperty/CustomerProperty";
 import "./CustomerDetails.css";
 import { CustomerContext } from "../../../context/customerContext";
 
 const CustomerDetails = ({ id }) => {
     const { setCustomer } = useContext(CustomerContext);
-    const { customer, error } = useCustomerService(id);
+    const { customer, error } = useGetCustomerById(id);
 
     return (
         <div className="customer-details">
@@ -46,7 +46,6 @@ const CustomerDetails = ({ id }) => {
                             name="postalcode"
                             value={customer.postalCode}
                         />
-
                         <Link
                             to="/new-customer"
                             onClick={() => setCustomer(customer)}
