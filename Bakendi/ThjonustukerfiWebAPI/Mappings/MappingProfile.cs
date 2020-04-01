@@ -28,6 +28,7 @@ namespace ThjonustukerfiWebAPI.Mappings
                 .ForMember(src => src.StateId, opt => opt.MapFrom(src => 1));
 
             CreateMap<Item, ItemDTO>();
+            CreateMap<Item, ItemStateDTO>();
 
             //* Order Mappings
             // Automapper for OrderInputModel to Order entity

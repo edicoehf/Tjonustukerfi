@@ -94,5 +94,16 @@ namespace ThjonustukerfiWebAPI.Controllers
 
             return NoContent();
         }
+
+        /// <summary>Searches for the Item with the barcode given in a search query</summary>
+        /// <returns>Returns the Item and its status</returns>
+        /// <response code="200">Successfully found the item and returns the item</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Route("item")]
+        [HttpGet]
+        public IActionResult SearchItem([FromQuery(Name = "search")] string search)
+        {
+            return Ok(_orderService.SearchItem(search));
+        }
     }
 }
