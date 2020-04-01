@@ -43,6 +43,23 @@ namespace ThjonustukerfiTests.Tests
         }
 
         [TestMethod]
+        public void GetAllOrders_should_return_an_empty_list()
+        {
+            //* Arrange
+            using (var mockContext = new DataContext(_options))
+            {
+                var orderRepo = new OrderRepo(mockContext, _mapper);
+
+                //* Act
+                var result = orderRepo.GetAllOrders();
+
+                //*
+                Assert.IsNotNull(result);
+                Assert.AreEqual(0, result.Count());
+            }
+        }
+
+        [TestMethod]
         public void GetOrderById_should_return_orderDTO()
         {
             //! Note this test method is creating the in memory database,
@@ -140,6 +157,7 @@ namespace ThjonustukerfiTests.Tests
                     .With(o => o.DateCompleted = mockOrder.DateCompleted)
                     .TheRest()
                     .With(o => o.Barcode = "30200001")
+                    .With(o => o.CustomerId = 2)
                     .Build();
 
                 // Build a list of size 20, make it queryable for the database mock
@@ -212,7 +230,7 @@ namespace ThjonustukerfiTests.Tests
             // Arrange
             var inp = new OrderInputModel
             {
-                CustomerId = 1,
+                CustomerId = 2,
                 Items = new List<ItemInputModel>()
                 {
                     new ItemInputModel 
@@ -281,7 +299,7 @@ namespace ThjonustukerfiTests.Tests
         {
              var inp = new OrderInputModel
             {
-                CustomerId = 1,
+                CustomerId = 2,
                 Items = new List<ItemInputModel>()
                 {
                     new ItemInputModel 
@@ -636,6 +654,24 @@ namespace ThjonustukerfiTests.Tests
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
                 Assert.ThrowsException<NotFoundException>(() => orderRepo.DeleteByOrderId(-1));
+            }
+        }
+
+        [TestMethod]
+        public void GetAllOrders_should_return_list_of_correct_size()
+        {
+            //* Arrange
+            using (var mockContext = new DataContext(_options))
+            {
+                var orderRepo = new OrderRepo(mockContext, _mapper);
+                var DbSize = mockContext.Order.Count();
+
+                //* Act
+                var result = orderRepo.GetAllOrders();
+
+                //* Assert
+                Assert.IsNotNull(result);
+                Assert.AreEqual(DbSize, result.Count());
             }
         }
     }

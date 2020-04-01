@@ -7,6 +7,7 @@ using ThjonustukerfiWebAPI.Controllers;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.InputModels;
 using ThjonustukerfiWebAPI.Services.Interfaces;
+using System.Linq;
 
 namespace ThjonustukerfiTests.Tests
 {
@@ -131,6 +132,68 @@ namespace ThjonustukerfiTests.Tests
             //* Assert
             Assert.IsNotNull(response);
             Assert.AreEqual(204, response.StatusCode);
+        }
+
+        [TestMethod]
+        public void GetAllOrders_should_return_200OK_and_a_list_of_OrderDTO()
+        {
+            //* Arrange
+            var retDTO = CreateOrderDTOList();
+            // Mock Method
+            _orderServiceMock.Setup(method => method.GetAllOrders()).Returns(retDTO);
+
+            // Create Controller
+            _orderController = new OrderController(_orderServiceMock.Object);
+
+            //* Act
+            var response = _orderController.GetAllOrders() as OkObjectResult;
+            List<OrderDTO> responseValues = response.Value as List<OrderDTO>;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(200, response.StatusCode);
+            Assert.AreEqual(responseValues.Count, retDTO.Count);
+        }
+
+        private List<OrderDTO> CreateOrderDTOList()
+        {
+            return new List<OrderDTO>()
+            {
+                new OrderDTO
+                {
+                Customer = "Kalli Valli",
+                Barcode = "0100001111",
+                Items = new List<ItemDTO>()
+                    {
+                        new ItemDTO()
+                        {
+                            Id = 1,
+                            Type = "Ysa bitar",
+                            Service = "Birkireyk"
+                        }
+                    },
+                    DateCreated = DateTime.Now,
+                    DateModified = DateTime.MinValue,
+                    DateCompleted = DateTime.MaxValue
+                },
+                new OrderDTO
+                {
+                Customer = "Harpa Varta",
+                Barcode = "0100001111",
+                Items = new List<ItemDTO>()
+                    {
+                        new ItemDTO()
+                        {
+                            Id = 1,
+                            Type = "Lax bitar",
+                            Service = "Birkireyk"
+                        }
+                    },
+                    DateCreated = DateTime.Now,
+                    DateModified = DateTime.MinValue,
+                    DateCompleted = DateTime.MaxValue
+                }
+            };
         }
     }
 }

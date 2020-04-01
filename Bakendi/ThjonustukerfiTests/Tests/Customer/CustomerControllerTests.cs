@@ -168,7 +168,7 @@ namespace ThjonustukerfiTests.Tests
             var response = _customerController.GetAllCustomers() as OkObjectResult;
             List<CustomerDTO> responseValue = response.Value as List<CustomerDTO>;
 
-            // Assert
+            //* Assert
             Assert.IsNotNull(response);
             Assert.AreEqual(200, response.StatusCode);
             Assert.AreEqual(responseValue.Count, retDTO.Count);
