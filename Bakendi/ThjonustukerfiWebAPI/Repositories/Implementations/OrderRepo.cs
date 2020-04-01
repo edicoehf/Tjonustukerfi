@@ -168,7 +168,14 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
         {
             string code = "";
             
-            code = _dbContext.Item.Max(i => i.Barcode);
+            // This try-catch block is only used for the tests since in memory Db does not work the same
+            // way as a regular Db connection when searching for max value of string
+            try { code = _dbContext.Item.Max(i => i.Barcode); }
+            catch (System.Exception)
+            {
+                var maxItem = _dbContext.Item.OrderByDescending(i => i.Barcode).FirstOrDefault();
+                code = maxItem.Barcode;
+            }
 
             if(code == null) { code = "50500000"; }
 

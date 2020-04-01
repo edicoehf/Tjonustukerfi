@@ -123,6 +123,7 @@ namespace ThjonustukerfiTests.Tests
                         Type = "Ysa bitar",
                         StateId = 1,
                         ServiceId = 1,
+                        Barcode = "50500001",
                         DateCreated = DateTime.MinValue,
                         DateModified = DateTime.Now,
                         DateCompleted = DateTime.MaxValue
@@ -133,6 +134,7 @@ namespace ThjonustukerfiTests.Tests
                         Type = "Lax heil flok",
                         StateId = 1,
                         ServiceId = 1,
+                        Barcode = "50500002",
                         DateCreated = DateTime.MinValue,
                         DateModified = DateTime.Now,
                         DateCompleted = DateTime.MaxValue
