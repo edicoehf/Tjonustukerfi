@@ -123,6 +123,7 @@ namespace ThjonustukerfiTests.Tests
                         Type = "Ysa bitar",
                         StateId = 1,
                         ServiceId = 1,
+                        Barcode = "50500001",
                         DateCreated = DateTime.MinValue,
                         DateModified = DateTime.Now,
                         DateCompleted = DateTime.MaxValue
@@ -133,6 +134,7 @@ namespace ThjonustukerfiTests.Tests
                         Type = "Lax heil flok",
                         StateId = 1,
                         ServiceId = 1,
+                        Barcode = "50500002",
                         DateCreated = DateTime.MinValue,
                         DateModified = DateTime.Now,
                         DateCompleted = DateTime.MaxValue
@@ -172,12 +174,24 @@ namespace ThjonustukerfiTests.Tests
                     .With(c => c.PostalCode = mockCustomer.PostalCode)
                     .Build();
 
+                // Adding states for lookup
+                var states = new List<State>()
+                {
+                    // states fyrir Reykofninn
+                    new State() {Name = "Í vinnslu", Id = 1},
+                    new State() {Name = "Kælir 1", Id = 2},
+                    new State() {Name = "Kælir 2", Id = 3},
+                    new State() {Name = "Frystir", Id = 4},
+                    new State() {Name = "Sótt", Id = 5}
+                };
+
                 // Adding all entities to the in memory database
                 mockContext.Order.AddRange(orders);
                 mockContext.Customer.AddRange(customers);
                 mockContext.ItemOrderConnection.AddRange(mockIOConnect);
                 mockContext.Item.AddRange(mockItems);
                 mockContext.Service.Add(mockService);
+                mockContext.State.AddRange(states);
                 mockContext.SaveChanges();
                 //! Building DB done
 
@@ -647,7 +661,7 @@ namespace ThjonustukerfiTests.Tests
         }
 
         [TestMethod]
-        public void DeleteORderById_should_throw_NotFoundException()
+        public void DeleteOrderById_should_throw_NotFoundException()
         {
             using (var mockContext = new DataContext(_options))
             {
@@ -672,6 +686,46 @@ namespace ThjonustukerfiTests.Tests
                 //* Assert
                 Assert.IsNotNull(result);
                 Assert.AreEqual(DbSize, result.Count());
+            }
+        }
+
+        [TestMethod]
+        public void SearchItems_should_return_the_correct_ItemStateDTO()
+        {
+            //* Arrange
+            string barcodeToSearch = "50500003";
+            using(var mockContext = new DataContext(_options))
+            {
+                // Create repo
+                var orderRepo = new OrderRepo(mockContext, _mapper);
+                // Get correct entity
+                var correctEntity = mockContext.Item.FirstOrDefault(i => i.Barcode == barcodeToSearch);
+                // Map to DTO
+                var correctDTO = _mapper.Map<ItemStateDTO>(correctEntity);
+                // Get correct values for the rest of the DTO
+                correctDTO.OrderId = mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == correctDTO.Id).OrderId;
+                correctDTO.State = mockContext.State.FirstOrDefault(s => s.Id == correctEntity.StateId).Name;
+
+                //* Act
+                var returnValue = orderRepo.SearchItem(barcodeToSearch);
+
+                //* Assert
+                Assert.IsNotNull(returnValue);
+                Assert.IsInstanceOfType(returnValue, typeof(ItemStateDTO));
+                Assert.AreEqual(correctDTO, returnValue);
+            }
+        }
+
+        [TestMethod]
+        public void SearchItems_should_throw_NotFoundException()
+        {
+            using(var mockContext = new DataContext(_options))
+            {
+                var orderRepo = new OrderRepo(mockContext, _mapper);
+
+                string inp = "This should never work as a barcode I would think...";
+
+                Assert.ThrowsException<NotFoundException>(() => orderRepo.SearchItem(inp));
             }
         }
     }
