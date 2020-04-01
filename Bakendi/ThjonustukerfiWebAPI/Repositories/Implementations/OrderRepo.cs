@@ -233,5 +233,36 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
             _dbContext.SaveChanges();
         }
+
+        public IEnumerable<OrderDTO> GetAllOrders()
+        {
+            var ordersEntity = _dbContext.Order.ToList();
+            var orders = new List<OrderDTO>();
+
+            // If the list is empty, just return it
+            if(!ordersEntity.Any()) { return orders; }
+
+            // Loop through all orders
+            foreach (var order in ordersEntity)
+            {
+                var dto = _mapper.Map<OrderDTO>(order);
+                dto.Customer = _dbContext.Customer.FirstOrDefault(c => c.Id == order.CustomerId).Name; // get customer name
+                
+                // Loop through all items in the order and add them to the DTO
+                var itemList = _dbContext.ItemOrderConnection.Where(c => c.OrderId == order.Id).ToList();
+                dto.Items = new List<ItemDTO>();
+                foreach (var item in itemList)
+                {
+                    var itemEntity = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);                      // get item entity
+                    var add = _mapper.Map<ItemDTO>(itemEntity);                                                 // map to DTO
+                    add.Service = _dbContext.Service.FirstOrDefault(s => s.Id == itemEntity.ServiceId).Name;    // Find Service name
+                    dto.Items.Add(add);     // Add the itemDTO to the orderDTO
+                }
+
+                orders.Add(dto);
+            }
+            
+            return orders;
+        }
     }
 }

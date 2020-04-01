@@ -1,3 +1,4 @@
+using System.Collections;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.InputModels;
 
@@ -9,5 +10,6 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
         long CreateOrder(OrderInputModel order);
         void UpdateOrder(OrderInputModel order, long id);
         void DeleteByOrderId(long id);
+        IEnumerable GetAllOrders();
     }
 }
