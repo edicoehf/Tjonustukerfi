@@ -29,6 +29,10 @@ namespace ThjonustukerfiWebAPI.Mappings
 
             CreateMap<Item, ItemDTO>();
             CreateMap<Item, ItemStateDTO>();
+            // .ForMember(src => src.OrderId, opt => 
+                //     opt.MapFrom((src, dst) => dst.OrderId = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == src.Id).OrderId))
+                // .ForMember(src => src.State, opt =>
+                //     opt.MapFrom((src, dst) => dst.State = _dbContext.State.FirstOrDefault(s => s.Id == src.StateId).Name));
 
             //* Order Mappings
             // Automapper for OrderInputModel to Order entity
