@@ -66,38 +66,16 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 newBarcode++;
                 orderToAdd.Barcode = newBarcode.ToString();
             }
-
-            // Get next Id for order and item, make sure the new order has correct id
-            long newItemId = 1;
-            // throws error if list is empty
-            if(_dbContext.Item.Any()) { newItemId = _dbContext.Item.Max(i => i.Id) + 1; }
             
             long newOrderId = 1;
-            // throws error if list is empty
+            // New ID will be 1 if no orders exist
             if(_dbContext.Order.Any()) { newOrderId = _dbContext.Order.Max(o => o.Id) + 1; }
             orderToAdd.Id = newOrderId;
 
             var entity = _dbContext.Order.Add(orderToAdd).Entity;
 
-            //TODO: Implement add mutliple here
             // Add items toDatabase
-            foreach(ItemInputModel item in order.Items)
-            {
-                // Creates a custom ID to make sure everything is connected correctly
-                var itemToAdd = _mapper.Map<Item>(item);
-                itemToAdd.Id = newItemId;
-                itemToAdd.Barcode = GetItemBarcode();
-                _dbContext.Item.Add(itemToAdd);
-
-                var itemOrderConnection = new ItemOrderConnection {
-                    OrderId = newOrderId,
-                    ItemId = newItemId
-                };
-                
-                // Increment itemId for next Item
-                newItemId++;
-                _dbContext.ItemOrderConnection.Add(itemOrderConnection);
-            }
+            AddMultipleItems(order.Items, newOrderId);
 
             _dbContext.SaveChanges();
 
@@ -193,7 +171,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             
             code = _dbContext.Item.Max(i => i.Barcode);
 
-            if(code == null) { code = "50500001"; }
+            if(code == null) { code = "50500000"; }
 
             var barcode = int.Parse(code);
             barcode++;
@@ -205,14 +183,18 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
         //! Doesn't do SaveChanges(), rember to use save changes after calling this function
         private void AddMultipleItems(List<ItemInputModel> inpItems, long orderId)
         {
-            long newItemId = _dbContext.Item.Max(i => i.Id) + 1;
+            // Sets the ID
+            long newItemId = 1;
+            if(_dbContext.Item.Any()) { newItemId = _dbContext.Item.Max(i => i.Id) + 1; }
+            int newItemBarcode = int.Parse(GetItemBarcode());
+
             // Add items toDatabase
             foreach(var item in inpItems)
             {
                 // Creates a custom ID to make sure everything is connected correctly
                 var itemToAdd = _mapper.Map<Item>(item);
                 itemToAdd.Id = newItemId;
-                itemToAdd.Barcode = GetItemBarcode();
+                itemToAdd.Barcode = newItemBarcode.ToString();
                 _dbContext.Item.Add(itemToAdd);
 
                 var itemOrderConnection = new ItemOrderConnection {
@@ -222,6 +204,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 
                 // Increment itemId for next Item
                 newItemId++;
+                newItemBarcode++;
                 _dbContext.ItemOrderConnection.Add(itemOrderConnection);
             }
         }
