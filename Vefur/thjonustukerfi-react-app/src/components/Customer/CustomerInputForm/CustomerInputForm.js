@@ -16,7 +16,7 @@ const initialState = {
 
 const CustomerInputForm = ({ existingCustomer, submitHandler, processing }) => {
     const state =
-        Object.keys(existingCustomer).length > 0
+        existingCustomer && Object.keys(existingCustomer).length > 0
             ? existingCustomer
             : initialState;
 
