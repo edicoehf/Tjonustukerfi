@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import customerService from "../services/customerService";
 import { CustomerContext } from "../context/customerContext";
 
-const useCustomerService = id => {
+const useGetCustomerById = id => {
     const { customer, setCustomer } = useContext(CustomerContext);
     const [error, setError] = React.useState(null);
 
@@ -18,4 +18,4 @@ const useCustomerService = id => {
     return { customer, error };
 };
 
-export default useCustomerService;
+export default useGetCustomerById;
