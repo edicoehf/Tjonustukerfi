@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using AutoMapper;
 using ThjonustukerfiWebAPI.Models;
@@ -165,6 +163,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             _dbContext.SaveChanges();
         }
 
+        /// <summary>Gets the next barcode number</summary>
         private string GetItemBarcode()
         {
             string code = "";
@@ -181,6 +180,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
         }
 
         //! Doesn't do SaveChanges(), rember to use save changes after calling this function
+        /// <summary>Used to add multiple items in order input</summary>
         private void AddMultipleItems(List<ItemInputModel> inpItems, long orderId)
         {
             // Sets the ID
