@@ -1,14 +1,9 @@
-import React, { useContext } from "react";
-import { Link } from "react-router-dom";
-import { Button } from "react-bootstrap";
-import PropTypes from "prop-types";
-import useGetCustomerById from "../../../hooks/useGetCustomerById";
+import React from "react";
 import CustomerProperty from "../CustomerProperty/CustomerProperty";
+import useGetCustomerById from "../../../hooks/useGetCustomerById";
 import "./CustomerDetails.css";
-import { CustomerContext } from "../../../context/customerContext";
 
 const CustomerDetails = ({ id }) => {
-    const { setCustomer } = useContext(CustomerContext);
     const { customer, error } = useGetCustomerById(id);
 
     return (
@@ -46,12 +41,6 @@ const CustomerDetails = ({ id }) => {
                             name="postalcode"
                             value={customer.postalCode}
                         />
-                        <Link
-                            to="/new-customer"
-                            onClick={() => setCustomer(customer)}
-                        >
-                            <Button variant="warning">Edit</Button>
-                        </Link>
                     </tbody>
                 </table>
             ) : (
@@ -61,10 +50,6 @@ const CustomerDetails = ({ id }) => {
             )}
         </div>
     );
-};
-
-CustomerDetails.propTypes = {
-    id: PropTypes.string.isRequired
 };
 
 export default CustomerDetails;
