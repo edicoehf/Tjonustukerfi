@@ -1,11 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 import Form from "../../Form/Form";
 import Input from "../../Input/Input";
 import validateForm from "../CustomerValidate/CustomerValidate";
 import useForm from "../../../hooks/useForm";
-import customerService from "../../../services/customerService";
 import "./CustomerInputForm.css";
-import { CustomerContext } from "../../../context/customerContext";
 
 const initialState = {
     name: "",
@@ -16,25 +14,11 @@ const initialState = {
     address: ""
 };
 
-const CustomerInputForm = () => {
-    const { customer } = useContext(CustomerContext);
-    const state = customer ? customer : initialState;
-    const [submitError, setSubmitError] = React.useState(null);
-
-    const submitHandler = async values => {
-        if (Object.keys(customer).length > 0) {
-            console.log("INSIDE UPDATE");
-            customerService
-                .updateCustomer(values)
-                .catch(error => setSubmitError(error));
-        } else {
-            console.log("INSIDE POST");
-            console.log(submitError);
-            customerService
-                .createCustomer(values)
-                .catch(error => setSubmitError(error));
-        }
-    };
+const CustomerInputForm = ({ existingCustomer, submitHandler, processing }) => {
+    const state =
+        existingCustomer && Object.keys(existingCustomer).length > 0
+            ? existingCustomer
+            : initialState;
 
     // isSubmitting, resetFields
     const { handleSubmit, handleChangeText, values, errors } = useForm(
@@ -101,6 +85,7 @@ const CustomerInputForm = () => {
                     onInput={handleChangeText}
                 />
                 <input
+                    disabled={processing}
                     type="submit"
                     value="Skrá nýjan viðskiptavin"
                     className="btn btn-dark"

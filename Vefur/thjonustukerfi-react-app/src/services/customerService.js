@@ -41,7 +41,6 @@ const getCustomerById = id => {
 };
 
 const updateCustomer = customer => {
-    console.log(customer);
     return fetch(endpoint, {
         method: "PATCH",
         body: JSON.stringify(customer),
@@ -51,12 +50,6 @@ const updateCustomer = customer => {
         }
     })
         .then(handleErrors)
-        .then(data => {
-            if (!data) {
-                return {};
-            }
-            return data;
-        })
         .catch(error => Promise.reject(error));
 };
 
