@@ -11,6 +11,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
         void UpdateOrder(OrderInputModel order, long id);
         void DeleteByOrderId(long id);
         IEnumerable<OrderDTO> GetAllOrders();
+        
+        /// <summary>Searches for the given barcode</summary>
         ItemStateDTO SearchItem(string search);
     }
 }
