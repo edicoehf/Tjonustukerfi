@@ -661,7 +661,7 @@ namespace ThjonustukerfiTests.Tests
         }
 
         [TestMethod]
-        public void DeleteORderById_should_throw_NotFoundException()
+        public void DeleteOrderById_should_throw_NotFoundException()
         {
             using (var mockContext = new DataContext(_options))
             {
@@ -713,6 +713,19 @@ namespace ThjonustukerfiTests.Tests
                 Assert.IsNotNull(returnValue);
                 Assert.IsInstanceOfType(returnValue, typeof(ItemStateDTO));
                 Assert.AreEqual(correctDTO, returnValue);
+            }
+        }
+
+        [TestMethod]
+        public void SearchItems_should_throw_NotFoundException()
+        {
+            using(var mockContext = new DataContext(_options))
+            {
+                var orderRepo = new OrderRepo(mockContext, _mapper);
+
+                string inp = "This should never work as a barcode I would think...";
+
+                Assert.ThrowsException<NotFoundException>(() => orderRepo.SearchItem(inp));
             }
         }
     }
