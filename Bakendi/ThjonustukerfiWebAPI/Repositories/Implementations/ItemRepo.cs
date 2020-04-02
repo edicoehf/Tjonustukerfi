@@ -27,11 +27,11 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             return _mapper.Map<ItemDTO>(entity);
         }
 
-        public void EditItem(EditItemInput input, long Id)
+        public void EditItem(EditItemInput input, long itemId)
         {
             // search for entity, handle if not found
-            var entity = _dbContext.Item.FirstOrDefault(i => i.Id == Id);
-            if(entity == null) { throw new NotFoundException($"Item with ID {Id} was not found."); }
+            var entity = _dbContext.Item.FirstOrDefault(i => i.Id == itemId);
+            if(entity == null) { throw new NotFoundException($"Item with ID {itemId} was not found."); }
 
             bool editState, editService, editOrder;
             editState = editService = editOrder = false;
@@ -60,7 +60,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             if(editService) { entity.ServiceId = (long)input.ServiceID; }
             if(editOrder)
             {
-                var connection = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == Id);
+                var connection = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemId);
                 connection.OrderId = (long)input.OrderId;
             }
 
