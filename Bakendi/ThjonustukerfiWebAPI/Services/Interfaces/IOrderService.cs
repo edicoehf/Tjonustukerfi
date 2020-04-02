@@ -11,8 +11,5 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
         void UpdateOrder(OrderInputModel order, long id);
         void DeleteByOrderId(long id);
         IEnumerable GetAllOrders();
-
-        /// <summary>Searches for the given barcode</summary>
-        ItemStateDTO SearchItem(string search);
     }
 }

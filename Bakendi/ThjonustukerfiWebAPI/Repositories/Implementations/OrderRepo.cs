@@ -272,23 +272,5 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             
             return orders;
         }
-
-        public ItemStateDTO SearchItem(string search)
-        {
-            // Get entity
-            var entity = _dbContext.Item.FirstOrDefault(i => i.Barcode == search);
-
-            // Entity not found
-            if(entity == null) { throw new NotFoundException($"Item with barcode {search} was not found."); }
-
-            // Map the DTO
-            var stateDTO = _mapper.Map<ItemStateDTO>(entity);
-
-            // Get the connections for the DTO, order id it belongs to and in what state it is
-            stateDTO.OrderId = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == entity.Id).OrderId;
-            stateDTO.State = _dbContext.State.FirstOrDefault(s => s.Id == entity.StateId).Name;
-
-            return stateDTO;
-        }
     }
 }

@@ -14,15 +14,6 @@ namespace ThjonustukerfiWebAPI.Controllers
         {
             _itemService = itemService;
         }
-        [Route("")]
-        [HttpPost]
-        public IActionResult CreateItem([FromBody] ItemInputModel item)
-        {
-            if(!ModelState.IsValid) { return BadRequest("Input model is not valid"); }
-            var entity = _itemService.CreateItem(item);
-            
-            return NoContent();
-        }
 
         /// <summary>Changes information of an item with the given input. Empty fields will not be edited.</summary>
         /// <response code="200">Item has been edited successfully.</response>
@@ -38,6 +29,19 @@ namespace ThjonustukerfiWebAPI.Controllers
             _itemService.EditItem(input, Id);
 
             return Ok();
+        }
+
+        /// <summary>Searches for the Item with the barcode given in a search query.</summary>
+        /// <returns>Returns the Item and its status.</returns>
+        /// <response code="200">Successfully found the item and returns the item.</response>
+        /// <response code="404">The Item with the given barcode was not found.</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("item")]
+        [HttpGet]
+        public IActionResult SearchItem([FromQuery(Name = "search")] string search)
+        {
+            return Ok(_itemService.SearchItem(search));
         }
     }
 }
