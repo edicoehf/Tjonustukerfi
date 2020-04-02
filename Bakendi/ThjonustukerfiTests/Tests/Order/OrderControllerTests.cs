@@ -197,32 +197,5 @@ namespace ThjonustukerfiTests.Tests
                 }
             };
         }
-
-        [TestMethod]
-        public void SearchItem_should_return_200OK_and_a_ItemStateDTO()
-        {
-            //* Arrange
-            var retDTO = new ItemStateDTO
-            {
-                Id = 1,
-                OrderId = 1,
-                Type = "Test",
-                State = "Í vinnslu",
-                DateModified = DateTime.Now
-            };
-            // Mock the method
-            _orderServiceMock.Setup(method => method.SearchItem("someString")).Returns(retDTO);
-
-            // Create controller
-            _orderController = new OrderController(_orderServiceMock.Object);
-
-            //* Act
-            var response = _orderController.SearchItem("someString") as OkObjectResult;
-
-            //* Assert
-            Assert.IsNotNull(response);
-            Assert.AreEqual(200, response.StatusCode);
-            Assert.IsInstanceOfType(response.Value as ItemStateDTO, typeof(ItemStateDTO));
-        }
     }
 }
