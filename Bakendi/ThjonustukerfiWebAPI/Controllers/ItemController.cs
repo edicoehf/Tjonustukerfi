@@ -37,7 +37,7 @@ namespace ThjonustukerfiWebAPI.Controllers
         /// <response code="404">The Item with the given barcode was not found.</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Route("item")]
+        [Route("")]
         [HttpGet]
         public IActionResult SearchItem([FromQuery(Name = "search")] string search)
         {
