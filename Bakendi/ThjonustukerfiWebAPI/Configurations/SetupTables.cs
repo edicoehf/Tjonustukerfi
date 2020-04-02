@@ -67,7 +67,8 @@ namespace ThjonustukerfiWebAPI.Configurations
             _services = new List<Service>()
             {
                 // Birkireyking
-                new Service() {Name = "Birkireyking", Id = 1}
+                new Service() {Name = "Birkireyking", Id = 1},
+                new Service() {Name = "Taðreyking", Id = 2}
             };
 
             //* Add Service states here
