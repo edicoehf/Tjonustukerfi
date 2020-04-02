@@ -185,6 +185,30 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             }
         }
 
+        [TestMethod]
+        public void EditItem_should_throw_correct_exceptions()
+        {
+            //* Arrange
+            var input1 = new EditItemInput { OrderId = null };
+            var input2 = new EditItemInput { StateId = -1 };
+            var input3 = new EditItemInput { ServiceID = -1 };
+            var input4 = new EditItemInput { OrderId = -1 };
+
+            long itemID = 2;
+
+            using(var mockContext = new DataContext(_options))
+            {
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                //* Act and Assert
+                Assert.ThrowsException<BadRequestException>(() => itemRepo.EditItem(input1, itemID));
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.EditItem(input2, itemID));
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.EditItem(input3, itemID));
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.EditItem(input4, itemID));
+            }
+
+        }
+
         //*     Helper functions     *//
         private void FillDatabase(DataContext mockContext)
         {
