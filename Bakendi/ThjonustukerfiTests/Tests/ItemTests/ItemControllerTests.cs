@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ThjonustukerfiWebAPI.Controllers;
 using ThjonustukerfiWebAPI.Models.DTOs;
+using ThjonustukerfiWebAPI.Models.InputModels;
 using ThjonustukerfiWebAPI.Services.Interfaces;
 
 namespace ThjonustukerfiTests.Tests.ItemTests
@@ -45,6 +46,26 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             Assert.IsNotNull(response);
             Assert.AreEqual(200, response.StatusCode);
             Assert.IsInstanceOfType(response.Value as ItemStateDTO, typeof(ItemStateDTO));
+        }
+
+        [TestMethod]
+        public void EditItem_should_return_200_status_ok()
+        {
+            var item = new EditItemInput
+            {
+                Type = "Hello"
+            };
+
+            // setup and create controller
+            _itemServiceMock.Setup(method => method.EditItem(It.IsAny<EditItemInput>(), It.IsAny<long>())).Verifiable();
+            _itemController = new ItemController(_itemServiceMock.Object);
+
+            //* Act
+            var response = _itemController.EditItem(item, 1) as OkResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(200, response.StatusCode);
         }
     }
 }
