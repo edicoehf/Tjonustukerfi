@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using AutoMapper;
 using ThjonustukerfiWebAPI.Models;
@@ -49,7 +47,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
         public long CreateOrder(OrderInputModel order)
         {
-            // TODO replace for actual barcode
+            // TODO replace for actual barcode in both order and Item
             foreach(ItemInputModel item in order.Items)
             {
                 if(_dbContext.Service.FirstOrDefault(s => s.Id == item.ServiceId) == null) { throw new NotFoundException($"Service with id {item.ServiceId} was not found."); }
@@ -66,36 +64,16 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 newBarcode++;
                 orderToAdd.Barcode = newBarcode.ToString();
             }
-
-            // Get next Id for order and item, make sure the new order has correct id
-            long newItemId = 1;
-            // throws error if list is empty
-            if(_dbContext.Item.Any()) { newItemId = _dbContext.Item.Max(i => i.Id) + 1; }
             
             long newOrderId = 1;
-            // throws error if list is empty
+            // New ID will be 1 if no orders exist
             if(_dbContext.Order.Any()) { newOrderId = _dbContext.Order.Max(o => o.Id) + 1; }
             orderToAdd.Id = newOrderId;
 
             var entity = _dbContext.Order.Add(orderToAdd).Entity;
 
             // Add items toDatabase
-            foreach(ItemInputModel item in order.Items)
-            {
-                // Creates a custom ID to make sure everything is connected correctly
-                var itemToAdd = _mapper.Map<Item>(item);
-                itemToAdd.Id = newItemId;
-                _dbContext.Item.Add(itemToAdd);
-
-                var itemOrderConnection = new ItemOrderConnection {
-                    OrderId = newOrderId,
-                    ItemId = newItemId
-                };
-                
-                // Increment itemId for next Item
-                newItemId++;
-                _dbContext.ItemOrderConnection.Add(itemOrderConnection);
-            }
+            AddMultipleItems(order.Items, newOrderId);
 
             _dbContext.SaveChanges();
 
@@ -185,16 +163,45 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             _dbContext.SaveChanges();
         }
 
+        /// <summary>Gets the next barcode number</summary>
+        private string GetItemBarcode()
+        {
+            string code = "";
+            
+            // This try-catch block is only used for the tests since in memory Db does not work the same
+            // way as a regular Db connection when searching for max value of string
+            try { code = _dbContext.Item.Max(i => i.Barcode); }
+            catch (System.Exception)
+            {
+                var maxItem = _dbContext.Item.OrderByDescending(i => i.Barcode).FirstOrDefault();
+                code = maxItem.Barcode;
+            }
+
+            if(code == null) { code = "50500000"; }
+
+            var barcode = int.Parse(code);
+            barcode++;
+
+            return barcode.ToString();
+
+        }
+
         //! Doesn't do SaveChanges(), rember to use save changes after calling this function
+        /// <summary>Used to add multiple items in order input</summary>
         private void AddMultipleItems(List<ItemInputModel> inpItems, long orderId)
         {
-            long newItemId = _dbContext.Item.Max(i => i.Id) + 1;
+            // Sets the ID
+            long newItemId = 1;
+            if(_dbContext.Item.Any()) { newItemId = _dbContext.Item.Max(i => i.Id) + 1; }
+            int newItemBarcode = int.Parse(GetItemBarcode());
+
             // Add items toDatabase
             foreach(var item in inpItems)
             {
                 // Creates a custom ID to make sure everything is connected correctly
                 var itemToAdd = _mapper.Map<Item>(item);
                 itemToAdd.Id = newItemId;
+                itemToAdd.Barcode = newItemBarcode.ToString();
                 _dbContext.Item.Add(itemToAdd);
 
                 var itemOrderConnection = new ItemOrderConnection {
@@ -204,6 +211,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 
                 // Increment itemId for next Item
                 newItemId++;
+                newItemBarcode++;
                 _dbContext.ItemOrderConnection.Add(itemOrderConnection);
             }
         }
@@ -263,6 +271,24 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             }
             
             return orders;
+        }
+
+        public ItemStateDTO SearchItem(string search)
+        {
+            // Get entity
+            var entity = _dbContext.Item.FirstOrDefault(i => i.Barcode == search);
+
+            // Entity not found
+            if(entity == null) { throw new NotFoundException($"Item with barcode {search} was not found."); }
+
+            // Map the DTO
+            var stateDTO = _mapper.Map<ItemStateDTO>(entity);
+
+            // Get the connections for the DTO, order id it belongs to and in what state it is
+            stateDTO.OrderId = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == entity.Id).OrderId;
+            stateDTO.State = _dbContext.State.FirstOrDefault(s => s.Id == entity.StateId).Name;
+
+            return stateDTO;
         }
     }
 }
