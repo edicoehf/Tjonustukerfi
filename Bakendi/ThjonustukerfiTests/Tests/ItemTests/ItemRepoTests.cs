@@ -9,6 +9,7 @@ using ThjonustukerfiWebAPI.Mappings;
 using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.Entities;
+using ThjonustukerfiWebAPI.Models.Exceptions;
 using ThjonustukerfiWebAPI.Repositories.Implementations;
 
 namespace ThjonustukerfiTests.Tests.ItemTests
@@ -91,18 +92,18 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             }
         }
 
-        // [TestMethod]
-        // public void SearchItems_should_throw_NotFoundException()
-        // {
-        //     using(var mockContext = new DataContext(_options))
-        //     {
-        //         var orderRepo = new OrderRepo(mockContext, _mapper);
+        [TestMethod]
+        public void SearchItems_should_throw_NotFoundException()
+        {
+            using(var mockContext = new DataContext(_options))
+            {
+                var itemRepo = new ItemRepo(mockContext, _mapper);
 
-        //         string inp = "This should never work as a barcode I would think...";
+                string inp = "This should never work as a barcode I would think...";
 
-        //         Assert.ThrowsException<NotFoundException>(() => orderRepo.SearchItem(inp));
-        //     }
-        // }
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.SearchItem(inp));
+            }
+        }
 
         //*     Helper functions     *//
         private void FillDatabase(DataContext mockContext)
