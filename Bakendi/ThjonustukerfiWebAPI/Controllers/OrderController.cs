@@ -80,10 +80,10 @@ namespace ThjonustukerfiWebAPI.Controllers
             return Ok();
         }
 
-        /// <summary>Deletes an Order with the given ID</summary>
-        /// <returns>Returns no content</returns>
-        /// <response code="204">Order successfully deleted</response>
-        /// <response code="409">Order with the given ID was not found</response>
+        /// <summary>Deletes an Order with the given ID.</summary>
+        /// <returns>Returns no content.</returns>
+        /// <response code="204">Order successfully deleted.</response>
+        /// <response code="409">Order with the given ID was not found.</response>
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [Route("{id:long}")]
@@ -95,10 +95,10 @@ namespace ThjonustukerfiWebAPI.Controllers
             return NoContent();
         }
 
-        /// <summary>Searches for the Item with the barcode given in a search query</summary>
-        /// <returns>Returns the Item and its status</returns>
-        /// <response code="200">Successfully found the item and returns the item</response>
-        /// <response code="404">The Item with the given barcode was not found</response>
+        /// <summary>Searches for the Item with the barcode given in a search query.</summary>
+        /// <returns>Returns the Item and its status.</returns>
+        /// <response code="200">Successfully found the item and returns the item.</response>
+        /// <response code="404">The Item with the given barcode was not found.</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("item")]
