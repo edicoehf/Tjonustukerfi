@@ -7,7 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ThjonustukerfiWebAPI.Mappings;
 using ThjonustukerfiWebAPI.Models;
+using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.Entities;
+using ThjonustukerfiWebAPI.Repositories.Implementations;
 
 namespace ThjonustukerfiTests.Tests.ItemTests
 {
@@ -62,32 +64,32 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             }
         }
 
-        // [TestMethod]
-        // public void SearchItems_should_return_the_correct_ItemStateDTO()
-        // {
-        //     //* Arrange
-        //     string barcodeToSearch = "50500003";
-        //     using(var mockContext = new DataContext(_options))
-        //     {
-        //         // Create repo
-        //         var orderRepo = new OrderRepo(mockContext, _mapper);
-        //         // Get correct entity
-        //         var correctEntity = mockContext.Item.FirstOrDefault(i => i.Barcode == barcodeToSearch);
-        //         // Map to DTO
-        //         var correctDTO = _mapper.Map<ItemStateDTO>(correctEntity);
-        //         // Get correct values for the rest of the DTO
-        //         correctDTO.OrderId = mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == correctDTO.Id).OrderId;
-        //         correctDTO.State = mockContext.State.FirstOrDefault(s => s.Id == correctEntity.StateId).Name;
+        [TestMethod]
+        public void SearchItems_should_return_the_correct_ItemStateDTO()
+        {
+            //* Arrange
+            string barcodeToSearch = "50500002";
+            using(var mockContext = new DataContext(_options))
+            {
+                // Create repo
+                var itemRepo = new ItemRepo(mockContext, _mapper);
+                // Get correct entity
+                var correctEntity = mockContext.Item.FirstOrDefault(i => i.Barcode == barcodeToSearch);
+                // Map to DTO
+                var correctDTO = _mapper.Map<ItemStateDTO>(correctEntity);
+                // Get correct values for the rest of the DTO
+                correctDTO.OrderId = mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == correctDTO.Id).OrderId;
+                correctDTO.State = mockContext.State.FirstOrDefault(s => s.Id == correctEntity.StateId).Name;
 
-        //         //* Act
-        //         var returnValue = orderRepo.SearchItem(barcodeToSearch);
+                //* Act
+                var returnValue = itemRepo.SearchItem(barcodeToSearch);
 
-        //         //* Assert
-        //         Assert.IsNotNull(returnValue);
-        //         Assert.IsInstanceOfType(returnValue, typeof(ItemStateDTO));
-        //         Assert.AreEqual(correctDTO, returnValue);
-        //     }
-        // }
+                //* Assert
+                Assert.IsNotNull(returnValue);
+                Assert.IsInstanceOfType(returnValue, typeof(ItemStateDTO));
+                Assert.AreEqual(correctDTO, returnValue);
+            }
+        }
 
         // [TestMethod]
         // public void SearchItems_should_throw_NotFoundException()
