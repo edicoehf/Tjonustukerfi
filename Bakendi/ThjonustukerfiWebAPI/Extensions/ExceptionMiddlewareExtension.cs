@@ -45,6 +45,12 @@ namespace ThjonustukerfiWebAPI.Extensions
 
                     return context.Response.WriteAsync(exception.Message);
                 }
+                if(exception is BadRequestException)
+                {
+                    context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+
+                    return context.Response.WriteAsync(exception.Message);
+                }
             }
 
             logService.LogToDatabase(new ExceptionModel

@@ -5,6 +5,10 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
 {
     public interface IItemService
     {
-        ItemDTO CreateItem(ItemInputModel item);
+        /// <summary>Updates an item with the EditItemInput model, will not edit empty fields.</summary>
+        void EditItem(EditItemInput input, long itemId);
+
+        /// <summary>Searches for the given barcode</summary>
+        ItemStateDTO SearchItem(string search);
     }
 }

@@ -12,7 +12,7 @@ namespace ThjonustukerfiWebAPI.Models.Entities
         [ForeignKey("Service")]
         public long ServiceId { get; set; }
         public string Barcode { get; set; }
-        public string JSON { get; set; }    // t.d. bitar, heil flök o.s.frv.
+        public string JSON { get; set; }    // extra information
         // Auto generated
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
