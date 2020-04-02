@@ -9,11 +9,11 @@ const useGetServices = () => {
         serviceService
             .getServices()
             .then(services => {
-                setOrder(services);
+                setServices(services);
                 setError(null);
             })
             .catch(error => setError(error));
-    }, [id]);
+    }, []);
     return { services, error };
 };
 
