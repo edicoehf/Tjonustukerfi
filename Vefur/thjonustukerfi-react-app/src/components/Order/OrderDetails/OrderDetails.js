@@ -5,6 +5,8 @@ import useGetOrderById from "../../../hooks/useGetOrderById";
 const OrderDetails = ({ match }) => {
     const id = match.params.id;
     const { order, error } = useGetOrderById(id);
-
-    return order;
+    console.log(order);
+    return <div></div>;
 };
+
+export default OrderDetails;
