@@ -66,6 +66,7 @@ namespace ThjonustukerfiTests.Tests.Info
 
                 Assert.IsNotNull(mockContext);
                 Assert.IsTrue(mockContext.Service.Any());
+                Assert.IsTrue(mockContext.State.Any());
             }
         }
 
@@ -92,15 +93,25 @@ namespace ThjonustukerfiTests.Tests.Info
         private void FillDatabase(DataContext mockContext)
         {
             var services = new List<Service>()
-                {
-                    new Service { Id = 1, Name = "Birkireyking" },
-                    new Service { Id = 2, Name = "Taðreyking" },
-                    new Service { Id = 3, Name = "Grafið" }
-                };
+            {
+                new Service { Id = 1, Name = "Birkireyking" },
+                new Service { Id = 2, Name = "Taðreyking" },
+                new Service { Id = 3, Name = "Grafið" }
+            };
 
-                // Adding services to the in memory database and saving it
-                mockContext.Service.AddRange(services);
-                mockContext.SaveChanges();
+            var states = new List<State>()
+            {
+                new State() {Name = "Í vinnslu", Id = 1},
+                new State() {Name = "Kælir 1", Id = 2},
+                new State() {Name = "Kælir 2", Id = 3},
+                new State() {Name = "Frystir", Id = 4},
+                new State() {Name = "Sótt", Id = 5}
+            };
+
+            // Adding services to the in memory database and saving it
+            mockContext.Service.AddRange(services);
+            mockContext.State.AddRange(states);
+            mockContext.SaveChanges();
         }
     }
 }
