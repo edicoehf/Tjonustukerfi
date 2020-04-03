@@ -35,8 +35,7 @@ namespace ThjonustukerfiWebAPI.Controllers
         [HttpGet]
         public IActionResult GetStates()
         {
-
-            return Ok();
+            return Ok(_infoService.GetStates());
         }
     }
 }
