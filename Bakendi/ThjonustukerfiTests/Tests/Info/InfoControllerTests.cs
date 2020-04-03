@@ -54,5 +54,40 @@ namespace ThjonustukerfiTests.Tests.Info
             Assert.AreEqual(200, response.StatusCode);
             Assert.AreEqual(retDTO, responseValue);
         }
+
+        [TestMethod]
+        public void GetStates_should_return_200OK_and_a_list_of_states()
+        {
+            //* Arrange
+            var retDTO = new List<StateDTO>
+            {
+                new StateDTO
+                {
+                    Id = 1,
+                    Name = "Í vinnslu"
+                },
+                new StateDTO
+                {
+                    Id = 2,
+                    Name = "Kælir 1"
+                }
+            };
+
+            // Mock method
+            _infoServiceMock.Setup(method => method.GetStates()).Returns(retDTO);
+
+            // Create controller
+            _infoController = new InfoController(_infoServiceMock.Object);
+
+            //* Act
+            var response = _infoController.GetStates() as OkObjectResult;
+            List<StateDTO> responseValue = response.Value as List<StateDTO>;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.IsNotNull(responseValue);
+            Assert.AreEqual(200, response.StatusCode);
+            Assert.AreEqual(retDTO, responseValue);
+        }
     }
 }

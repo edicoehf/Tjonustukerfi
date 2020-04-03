@@ -47,6 +47,9 @@ namespace ThjonustukerfiWebAPI.Mappings
             // Automapper for Service to ServiceDTO
             CreateMap<Service, ServiceDTO>();
 
+            //* State Mappings
+            // Automapper for State to StateDTO
+            CreateMap<State, StateDTO>();
         }
     }
 }

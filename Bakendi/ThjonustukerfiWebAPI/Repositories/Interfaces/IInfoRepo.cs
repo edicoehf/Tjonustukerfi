@@ -5,6 +5,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
 {
     public interface IInfoRepo
     {
-         IEnumerable<ServiceDTO> GetServices();
+        IEnumerable<ServiceDTO> GetServices();
+
+        /// <summary>Gets all states available for the product/service</summary>
+        IEnumerable<StateDTO> GetStates();
     }
 }

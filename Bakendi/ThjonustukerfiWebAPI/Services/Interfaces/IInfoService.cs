@@ -4,6 +4,9 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
 {
     public interface IInfoService 
     {
-         IEnumerable GetServices();
+        IEnumerable GetServices();
+
+        /// <summary>Gets all states available for the product/service</summary>
+        IEnumerable GetStates();
     }
 }
