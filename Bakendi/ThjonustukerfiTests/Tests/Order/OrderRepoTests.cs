@@ -65,11 +65,13 @@ namespace ThjonustukerfiTests.Tests
             //* Arrange
             using(var mockContext = new DataContext(_options))
             {
+                //* Act
                 //! Note this test method is creating the in memory database,
                 //! so this arrange when build DB should only be run once, unless adding more info to it.
                 //! This Database will live through all the tests in this class
                 FillDatabase(mockContext);
 
+                //* Assert
                 // Checks if all added entities are actually there
                 Assert.IsNotNull(mockContext);
                 Assert.IsTrue(mockContext.Order.Any());
@@ -129,10 +131,12 @@ namespace ThjonustukerfiTests.Tests
         [TestMethod]
         public void GetOrderbyId_should_throw_NotFoundException()
         {
+            //* Arrange
             using (var mockContext = new DataContext(_options))
             {
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
+                //* Act and Assert
                 Assert.ThrowsException<NotFoundException>(() => orderRepo.GetOrderbyId(-1));
             }
         }
@@ -140,7 +144,7 @@ namespace ThjonustukerfiTests.Tests
         [TestMethod]
         public void CreateOrder_should_create_and_return_OrderId()
         {
-            // Arrange
+            //* Arrange
             var inp = new OrderInputModel
             {
                 CustomerId = 2,
@@ -168,7 +172,7 @@ namespace ThjonustukerfiTests.Tests
                 var itemDbSize = mockContext.Item.Count();
                 var itemOrderDbSize = mockContext.ItemOrderConnection.Count();
 
-                // Act
+                //* Act
                 var result = orderRepo.CreateOrder(inp);
                 // GetDTO to compare with input later
                 var resultOrderDTO = mockContext.Order.OrderByDescending(o => o.Id).FirstOrDefault();
@@ -182,8 +186,7 @@ namespace ThjonustukerfiTests.Tests
                     itemListDTO.Add(add);
                 }
 
-                // Assert
-
+                //* Assert
                 // Assert Order
                 Assert.IsNotNull(result);
                 Assert.IsInstanceOfType(result, typeof(long));
@@ -210,7 +213,8 @@ namespace ThjonustukerfiTests.Tests
         [TestMethod]
         public void CreateOrder_should_throw_NotFoundException()
         {
-             var inp = new OrderInputModel
+            //* Arrange
+            var inp = new OrderInputModel
             {
                 CustomerId = 2,
                 Items = new List<ItemInputModel>()
@@ -232,6 +236,7 @@ namespace ThjonustukerfiTests.Tests
             {
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
+                //* Act and Assert
                 Assert.ThrowsException<NotFoundException>(() => orderRepo.CreateOrder(inp));
             }
         }
@@ -269,7 +274,7 @@ namespace ThjonustukerfiTests.Tests
             {
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
-                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
+                // Get old item order connection to get the old list of items.
                 var oldConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
                 List<Item> oldItemList = new List<Item>();
                 foreach (var item in oldConnection)
@@ -281,8 +286,8 @@ namespace ThjonustukerfiTests.Tests
                 orderRepo.UpdateOrder(orperInput, orderID);
 
                 //* Assert
-                orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
-                var newConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
+                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);   // get order entity to check
+                var newConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();  // new connections to get the new list
                 List<Item> newItemList = new List<Item>();
                 foreach (var item in newConnection)
                 {
@@ -333,7 +338,7 @@ namespace ThjonustukerfiTests.Tests
             {
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
-                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
+                // Get old item order connection to get the old list of items.
                 var oldConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
                 List<Item> oldItemList = new List<Item>();
                 foreach (var item in oldConnection)
@@ -345,8 +350,8 @@ namespace ThjonustukerfiTests.Tests
                 orderRepo.UpdateOrder(orperInput, orderID);
 
                 //* Assert
-                orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
-                var newConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
+                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);   // get order entity to check
+                var newConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();  // new connections to get the new list
                 List<Item> newItemList = new List<Item>();
                 foreach (var item in newConnection)
                 {
@@ -386,7 +391,7 @@ namespace ThjonustukerfiTests.Tests
             {
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
-                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
+                // Get old item order connection to get the old list of items.
                 var oldConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
                 List<Item> oldItemList = new List<Item>();
                 foreach (var item in oldConnection)
@@ -398,8 +403,8 @@ namespace ThjonustukerfiTests.Tests
                 orderRepo.UpdateOrder(orperInput, orderID);
 
                 //* Assert
-                orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
-                var newConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
+                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);   // get order entity to check
+                var newConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();  // new connections to get the new list
                 List<Item> newItemList = new List<Item>();
                 foreach (var item in newConnection)
                 {
@@ -467,7 +472,7 @@ namespace ThjonustukerfiTests.Tests
             {
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
-                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
+                // Get old item order connection to get the old list of items.
                 var oldConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
                 List<Item> oldItemList = new List<Item>();
                 foreach (var item in oldConnection)
@@ -480,8 +485,8 @@ namespace ThjonustukerfiTests.Tests
                 orderRepo.UpdateOrder(orperInput, orderID);
 
                 //* Assert
-                orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
-                var newConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
+                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);   // get order entity to check
+                var newConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();  // new connections to get the new list
                 List<Item> newItemList = new List<Item>();
                 foreach (var item in newConnection)
                 {
@@ -588,7 +593,7 @@ namespace ThjonustukerfiTests.Tests
             }
         }
 
-        //*     Helper functions     *//
+        //**********     Helper functions     **********//
         private void FillDatabase(DataContext mockContext)
         {
             //! Note this test method is creating the in memory database,
