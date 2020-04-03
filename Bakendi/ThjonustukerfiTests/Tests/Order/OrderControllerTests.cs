@@ -26,7 +26,7 @@ namespace ThjonustukerfiTests.Tests
         [TestMethod]
         public void CreateNewOrder_CheckingResponseNoContent()
         {
-            // Arrange
+            //* Arrange
             OrderInputModel order = new OrderInputModel
             {
                 CustomerId = 1,
@@ -43,10 +43,10 @@ namespace ThjonustukerfiTests.Tests
 
             _orderController = new OrderController(_orderServiceMock.Object);
 
-            // Act (needs to change to created at route)
+            //* Act
             var response = _orderController.CreateOrder(order) as CreatedAtRouteResult;
 
-            // Assert
+            //* Assert
             Assert.IsNotNull(response);
             Assert.AreEqual("GetOrderbyId", response.RouteName);
             Assert.AreEqual(expectedID, response.RouteValues["id"]);
@@ -157,6 +157,8 @@ namespace ThjonustukerfiTests.Tests
             Assert.AreEqual(responseValues.Count, retDTO.Count);
         }
 
+        //*     Helper functions     *//
+        
         /// <summary>Creates List with OrderDTO</summary>
         /// <returns>A list of Order DTO</returns>
         private List<OrderDTO> CreateOrderDTOList()
