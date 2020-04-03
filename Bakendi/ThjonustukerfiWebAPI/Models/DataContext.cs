@@ -3,6 +3,7 @@ using ThjonustukerfiWebAPI.Models.Entities;
 
 namespace ThjonustukerfiWebAPI.Models
 {
+    /// <summary>Sets up the entities that should be tracked for the database</summary>
     public class DataContext : DbContext
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) {}
