@@ -56,23 +56,25 @@ namespace ThjonustukerfiTests.Tests.Info
         }
 
         [TestMethod]
+        public void Fill_database_should_have_an_inMemory_database_ready()
+        {
+            //* Arrange
+            using(var mockContext = new DataContext(_options))
+            {
+                //! Add only once, unless appending changes. This database will live throughout this test class
+                FillDatabase(mockContext);
+
+                Assert.IsNotNull(mockContext);
+                Assert.IsTrue(mockContext.Service.Any());
+            }
+        }
+
+        [TestMethod]
         public void GetServices_should_return_a_list_of_services_with_the_correct_size()
         {
             //* Arrange
             using (var mockContext = new DataContext(_options))
             {
-                var services = new List<Service>()
-                {
-                    new Service { Id = 1, Name = "Birkireyking" },
-                    new Service { Id = 2, Name = "Taðreyking" },
-                    new Service { Id = 3, Name = "Grafið" }
-                };
-
-                //! Add only once, unless appending changes. This database will live throughout this test class
-                // Adding services to the in memory database and saving it
-                mockContext.Service.AddRange(services);
-                mockContext.SaveChanges();
-
                 // Setup the repo
                 var infoRepo = new InfoRepo(mockContext, _mapper);
                 var DbSize = mockContext.Service.Count();
@@ -84,6 +86,21 @@ namespace ThjonustukerfiTests.Tests.Info
                 Assert.IsNotNull(result);
                 Assert.AreEqual(DbSize, result.Count());
             }
+        }
+
+        //*     Helper functions     *//
+        private void FillDatabase(DataContext mockContext)
+        {
+            var services = new List<Service>()
+                {
+                    new Service { Id = 1, Name = "Birkireyking" },
+                    new Service { Id = 2, Name = "Taðreyking" },
+                    new Service { Id = 3, Name = "Grafið" }
+                };
+
+                // Adding services to the in memory database and saving it
+                mockContext.Service.AddRange(services);
+                mockContext.SaveChanges();
         }
     }
 }
