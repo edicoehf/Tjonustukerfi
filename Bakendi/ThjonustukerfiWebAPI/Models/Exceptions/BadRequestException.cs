@@ -1,5 +1,6 @@
 namespace ThjonustukerfiWebAPI.Models.Exceptions
 {
+    /// <summary>Exception created to handle bad requests from client.</summary>
     [System.Serializable]
     public class BadRequestException : System.Exception
     {
