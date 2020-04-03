@@ -20,7 +20,7 @@ namespace ThjonustukerfiWebAPI.Controllers
         /// <response code="400">Input model is not valid.</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Route("{id:long}/update")]
+        [Route("{id:long}")]
         [HttpPatch]
         public IActionResult EditItem([FromBody] EditItemInput input, long Id)
         {
