@@ -271,7 +271,7 @@ namespace ThjonustukerfiTests.Tests
             }
         }
 
-         //*     Helper functions     *//
+        //**********     Helper functions     **********//
         private void FillDatabase(DataContext mockContext)
         {
             long id = 100;

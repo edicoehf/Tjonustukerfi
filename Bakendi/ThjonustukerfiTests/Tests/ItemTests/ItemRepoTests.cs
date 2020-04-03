@@ -212,7 +212,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
         }
 
-        //*     Helper functions     *//
+        //**********     Helper functions     **********//
         private void FillDatabase(DataContext mockContext)
         {
             //! Building Db

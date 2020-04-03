@@ -127,7 +127,7 @@ namespace ThjonustukerfiTests.Tests.Info
             }
         }
 
-        //*     Helper functions     *//
+        //**********     Helper functions     **********//
         private void FillDatabase(DataContext mockContext)
         {
             var services = new List<Service>()
