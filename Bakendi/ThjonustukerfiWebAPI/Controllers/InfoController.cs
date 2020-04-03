@@ -20,11 +20,23 @@ namespace ThjonustukerfiWebAPI.Controllers
         /// <returns>OK 200 status</returns>
         /// <response code="200">Returns a list of services, empty list if there are none</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [Route("")]
+        [Route("services")]
         [HttpGet]
         public IActionResult GetServices()
         {
             return Ok(_infoService.GetServices());
+        }
+
+        /// <summary>Gets all available states</summary>
+        /// <returns>OK 200 status</returns>
+        /// <response code="200">Returns a list of states, empty list if there are none</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Route("states")]
+        [HttpGet]
+        public IActionResult GetStates()
+        {
+
+            return Ok();
         }
     }
 }
