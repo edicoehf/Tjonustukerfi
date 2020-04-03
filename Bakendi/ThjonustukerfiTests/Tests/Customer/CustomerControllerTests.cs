@@ -25,7 +25,7 @@ namespace ThjonustukerfiTests.Tests
         [TestMethod]
         public void CreateNewCustomer_CheckingResponseIsCreatedAtRoute()
         {
-            // Arrange
+            //* Arrange
             // Mock service
             CustomerInputModel customer = new CustomerInputModel 
             {
@@ -44,10 +44,10 @@ namespace ThjonustukerfiTests.Tests
 
             // Create input
 
-            // Act
+            //* Act
             var response = _customerController.CreateCustomer(customer) as CreatedAtRouteResult;
 
-            // Assert
+            //* Assert
             Assert.IsNotNull(response);
             Assert.AreEqual("GetCustomerById", response.RouteName);
             Assert.AreEqual(expectedId, response.RouteValues["id"]);
@@ -57,7 +57,7 @@ namespace ThjonustukerfiTests.Tests
         [TestMethod]
         public void GetCustomer_response_should_return_200_and_a_customerdetailsdto()
         {
-             // Arrange
+             //* Arrange
             long id = 10;
 
             // Mock dto and service
@@ -76,10 +76,10 @@ namespace ThjonustukerfiTests.Tests
             // Create controller
             _customerController = new CustomerController(_customerServiceMock.Object);
 
-            // Act
+            //* Act
             var response = _customerController.GetCustomerById(id) as OkObjectResult;
 
-            //Assert
+            //* Assert
             // Check if got response with correct status code
             Assert.IsNotNull(response);
             Assert.AreEqual(200, response.StatusCode);
@@ -99,19 +99,23 @@ namespace ThjonustukerfiTests.Tests
         [TestMethod]
         public void UpdateCustomerDetails_should_return_200_ok()
         {
+            //* Arrange
             var inp = new CustomerInputModel
             {
                 Name = "Siggi Viggi",
                 Email = "Siggi@viggi.is",
                 Address = "Hvergigata 1898"
             };
-
+            // setup method
             _customerServiceMock.Setup(method => method.UpdateCustomerDetails(It.IsAny<CustomerInputModel>(), It.IsAny<long>())).Verifiable();
 
+            // Create controller
             _customerController = new CustomerController(_customerServiceMock.Object);
 
+            //* Act
             var response = _customerController.UpdateCustomerDetails(inp, 1) as OkResult;
 
+            //* Assert
             Assert.IsNotNull(response);
             Assert.AreEqual(200, response.StatusCode);
         }
@@ -119,7 +123,7 @@ namespace ThjonustukerfiTests.Tests
         [TestMethod]
         public void DeleteCustomer_response_should_return_204_noContent()
         {
-            // Arrange
+            //* Arrange
             long id = 7;
             
             // mock DTO and service
@@ -133,10 +137,10 @@ namespace ThjonustukerfiTests.Tests
             // Creat contoller
             _customerController = new CustomerController(_customerServiceMock.Object);
 
-            // Act
+            //* Act
             var response = _customerController.DeleteCustomerById(id) as NoContentResult;
 
-            // Assert
+            //* Assert
             Assert.IsNotNull(response);
             Assert.AreEqual(204, response.StatusCode);
         }
