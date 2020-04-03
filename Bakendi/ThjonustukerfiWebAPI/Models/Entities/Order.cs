@@ -13,7 +13,7 @@ namespace ThjonustukerfiWebAPI.Models.Entities
         // Auto generated
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
-        public DateTime DateCompleted { get; set; }
+        public DateTime? DateCompleted { get; set; }
 
     }
 }
