@@ -22,7 +22,7 @@ namespace ThjonustukerfiTests.Tests
         {
             _orderServiceMock = new Mock<IOrderService>();
         }
-        // TODO change to CreatedAtRoute
+
         [TestMethod]
         public void CreateNewOrder_CheckingResponseNoContent()
         {
@@ -38,17 +38,19 @@ namespace ThjonustukerfiTests.Tests
                 }
             };
 
-            _orderServiceMock.Setup(method => method.CreateOrder(order)).Returns((long)1);
+            long expectedID = 1;
+            _orderServiceMock.Setup(method => method.CreateOrder(order)).Returns(expectedID);
 
             _orderController = new OrderController(_orderServiceMock.Object);
 
             // Act (needs to change to created at route)
-            var response = _orderController.CreateOrder(order) as NoContentResult;
+            var response = _orderController.CreateOrder(order) as CreatedAtRouteResult;
 
             // Assert
-            Assert.AreEqual(1, 1);  // temporary for tests to run
-            // Assert.IsNotNull(response);
-            // Assert.AreEqual(204, response.StatusCode);
+            Assert.IsNotNull(response);
+            Assert.AreEqual("GetOrderbyId", response.RouteName);
+            Assert.AreEqual(expectedID, response.RouteValues["id"]);
+            Assert.AreEqual(201, response.StatusCode);
         }
 
         [TestMethod]
