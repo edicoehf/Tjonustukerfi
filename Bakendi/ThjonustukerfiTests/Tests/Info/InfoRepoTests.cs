@@ -47,7 +47,24 @@ namespace ThjonustukerfiTests.Tests.Info
                 var infoRepo = new InfoRepo(mockContext, _mapper);
 
                 //* Act
-                List<ServiceDTO> result = infoRepo.GetServices() as List<ServiceDTO>;
+                List<ServiceDTO> result = infoRepo.GetServices() as List<ServiceDTO>;   // convert IEnumberable to List
+
+                //* Assert
+                Assert.IsNotNull(result);
+                Assert.AreEqual(0, result.Count);
+            }
+        }
+
+        [TestMethod]
+        public void GetStates_should_return_an_empty_list()
+        {
+            //* Arrange
+            using (var mockContext = new DataContext(_options))
+            {
+                var infoRepo = new InfoRepo(mockContext, _mapper);
+
+                //* Act
+                List<StateDTO> result = infoRepo.GetStates() as List<StateDTO>; // convert IEnumberable to List
 
                 //* Assert
                 Assert.IsNotNull(result);
@@ -83,8 +100,29 @@ namespace ThjonustukerfiTests.Tests.Info
                 //* Act
                 var result = infoRepo.GetServices();
 
-                //*
+                //* Assert
                 Assert.IsNotNull(result);
+                Assert.IsInstanceOfType(result, typeof(IEnumerable<ServiceDTO>));
+                Assert.AreEqual(DbSize, result.Count());
+            }
+        }
+
+        [TestMethod]
+        public void GetStates_should_return_a_list_of_statesDTO_with_the_correct_size()
+        {
+            //* Arrange
+            using (var mockContext = new DataContext(_options))
+            {
+                // setup the repo
+                var infoRepo = new InfoRepo(mockContext, _mapper);
+                var DbSize = mockContext.State.Count();
+
+                //* Act
+                var result = infoRepo.GetStates();
+
+                //* Assert
+                Assert.IsNotNull(result);
+                Assert.IsInstanceOfType(result, typeof(IEnumerable<StateDTO>));
                 Assert.AreEqual(DbSize, result.Count());
             }
         }
