@@ -97,12 +97,14 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         [TestMethod]
         public void SearchItems_should_throw_NotFoundException()
         {
+            //* Arrange
             using(var mockContext = new DataContext(_options))
             {
                 var itemRepo = new ItemRepo(mockContext, _mapper);
 
                 string inp = "This should never work as a barcode I would think...";
 
+                //* Act and Assert
                 Assert.ThrowsException<NotFoundException>(() => itemRepo.SearchItem(inp));
             }
         }
@@ -189,6 +191,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         public void EditItem_should_throw_correct_exceptions()
         {
             //* Arrange
+            // All these inputs should throw exceptions, but for different reasons
             var input1 = new EditItemInput { OrderId = null };
             var input2 = new EditItemInput { StateId = -1 };
             var input3 = new EditItemInput { ServiceID = -1 };
@@ -212,6 +215,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         //*     Helper functions     *//
         private void FillDatabase(DataContext mockContext)
         {
+            //! Building Db
             // variables used
             DateTime modifiedDate = DateTime.Now;
             string serviceName = "Birkireyking";
