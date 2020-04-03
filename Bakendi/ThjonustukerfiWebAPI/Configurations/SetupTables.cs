@@ -61,6 +61,7 @@ namespace ThjonustukerfiWebAPI.Configurations
             if(change) { _dbContext.SaveChanges(); }
         }
 
+        /// <summary>Fills the list to add to database, extra services, states and service States should be added here</summary>
         private void fillLists()
         {
             //* Add services here
