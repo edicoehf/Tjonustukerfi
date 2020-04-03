@@ -25,7 +25,11 @@ namespace ThjonustukerfiWebAPI.Extensions
             return webHost;
         }
 
-        /// <summary>Filles the tables required for the companies service</summary>
+        /// <summary>
+        ///     Fills the tables required for the companies service.
+        ///     
+        ///     If there is no change, this will do nothing.
+        /// </summary>
         public static IHost FillTables(this IHost webHost)
         {
             var serviceScopeFactory =   (IServiceScopeFactory)webHost

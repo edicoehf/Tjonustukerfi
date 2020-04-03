@@ -10,7 +10,7 @@ namespace ThjonustukerfiWebAPI
         {
             CreateHostBuilder(args)
                 .Build()
-                .FillTables()
+                .FillTables()   // custom function
                 .Run();
         }
 
