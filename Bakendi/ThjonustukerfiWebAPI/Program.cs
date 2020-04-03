@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Extensions;
 
 namespace ThjonustukerfiWebAPI
