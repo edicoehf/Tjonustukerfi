@@ -2,7 +2,7 @@ using System;
 
 namespace ThjonustukerfiWebAPI.Models.DTOs
 {
-    /// <summary>Data transfer object that shows the state of the item</summary>
+    /// <summary>Data transfer object for Item entity, shows the state information of the item.</summary>
     public class ItemStateDTO
     {
         public long Id { get; set; }
