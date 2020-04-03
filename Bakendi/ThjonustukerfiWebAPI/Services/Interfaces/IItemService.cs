@@ -8,7 +8,8 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
         /// <summary>Updates an item with the EditItemInput model, will not edit empty fields.</summary>
         void EditItem(EditItemInput input, long itemId);
 
-        /// <summary>Searches for the given barcode</summary>
+        /// <summary>Searches for the given barcode.</summary>
+        /// <returns>An item state DTO.</returns>
         ItemStateDTO SearchItem(string search);
     }
 }
