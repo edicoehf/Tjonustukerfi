@@ -7,7 +7,7 @@ namespace ThjonustukerfiWebAPI.Models.DTOs
     {
         public long Id { get; set; }
         public string Customer { get; set; }
-        public string CustomerId { get; set; }
+        public long CustomerId { get; set; }
         public string Barcode { get; set; }
         public List<ItemDTO> Items { get; set; }
         public DateTime DateCreated { get; set; }
