@@ -6,6 +6,7 @@ using ThjonustukerfiWebAPI.Models.InputModels;
 
 namespace ThjonustukerfiWebAPI.Mappings
 {
+    /// <summary>Provides a profile to use with AutoMapper</summary>
     public class MappingProfile : Profile
     {
         public MappingProfile()
