@@ -8,6 +8,7 @@ namespace ThjonustukerfiWebAPI.Mappings
 {
     public class MappingProfile : Profile
     {
+        /// <summary>Provides a profile to use with AutoMapper</summary>
         public MappingProfile()
         {
             //* Customer Mappings
@@ -28,6 +29,11 @@ namespace ThjonustukerfiWebAPI.Mappings
                 .ForMember(src => src.StateId, opt => opt.MapFrom(src => 1));
 
             CreateMap<Item, ItemDTO>();
+            CreateMap<Item, ItemStateDTO>();
+            // .ForMember(src => src.OrderId, opt => 
+                //     opt.MapFrom((src, dst) => dst.OrderId = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == src.Id).OrderId))
+                // .ForMember(src => src.State, opt =>
+                //     opt.MapFrom((src, dst) => dst.State = _dbContext.State.FirstOrDefault(s => s.Id == src.StateId).Name));
 
             //* Order Mappings
             // Automapper for OrderInputModel to Order entity
@@ -42,6 +48,9 @@ namespace ThjonustukerfiWebAPI.Mappings
             // Automapper for Service to ServiceDTO
             CreateMap<Service, ServiceDTO>();
 
+            //* State Mappings
+            // Automapper for State to StateDTO
+            CreateMap<State, StateDTO>();
         }
     }
 }

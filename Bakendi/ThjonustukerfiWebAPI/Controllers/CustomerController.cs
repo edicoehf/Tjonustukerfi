@@ -71,7 +71,7 @@ namespace ThjonustukerfiWebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        [Route("{id:int}/update")]
+        [Route("{id:int}")]
         [HttpPatch]
         public IActionResult UpdateCustomerDetails([FromBody] CustomerInputModel customer, long id)
         {

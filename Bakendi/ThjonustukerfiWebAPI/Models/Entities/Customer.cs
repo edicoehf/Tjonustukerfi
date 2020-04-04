@@ -2,6 +2,7 @@ using System;
 
 namespace ThjonustukerfiWebAPI.Models.Entities
 {
+    /// <summary>Representation of the Customer entity stored in the database.</summary>
     public class Customer
     {
         public long Id { get; set; }

@@ -1,5 +1,3 @@
-using System.Diagnostics;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,6 +25,11 @@ namespace ThjonustukerfiWebAPI.Extensions
             return webHost;
         }
 
+        /// <summary>
+        ///     Fills the tables required for the companies service.
+        ///     
+        ///     If there is no change, this will do nothing.
+        /// </summary>
         public static IHost FillTables(this IHost webHost)
         {
             var serviceScopeFactory =   (IServiceScopeFactory)webHost

@@ -6,6 +6,7 @@ import LandingPage from "./components/LandingPage/LandingPage";
 import CreateCustomer from "./components/Customer/CreateCustomer/CreateCustomer";
 import CustomerView from "./components/Customer/CustomerView/CustomerView";
 import UpdateCustomer from "./components/Customer/UpdateCustomer/UpdateCustomer";
+import OrderDetails from "./components/Order/OrderDetails/OrderDetails";
 import CustomerMain from "./components/Customer/CustomerMain/CustomerMain";
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
                         path="/customer/:id"
                         component={CustomerView}
                     />
+                    <Route exact path="/order/:id" component={OrderDetails} />
                 </Switch>
             </div>
         </div>

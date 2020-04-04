@@ -7,6 +7,12 @@ using ThjonustukerfiWebAPI.Services.Interfaces;
 
 namespace ThjonustukerfiWebAPI.Extensions
 {
+    /// <summary>
+    ///     Middleware that handles exceptions globally for the webhost application. Certain exceptions are logged to the database.
+    ///     When exceptions are logged, the exception itself is logged as well as the stack trace.
+    ///     
+    ///     This method creates a new thread or threadpool to handle the exceptions.
+    /// </summary>
     public class ExceptionMiddlewareExtension
     {
         private readonly RequestDelegate _next;
@@ -26,6 +32,9 @@ namespace ThjonustukerfiWebAPI.Extensions
             }
         }
 
+        /// <summary>
+        ///     Handles all exceptions thrown, returns the correct status code given the exception, if the exception is unknown it will log the stacktrace to the database.
+        /// </summary>
         private Task HandleExceptionAsync(HttpContext context, Exception exception, ILogService logService)
         {
             context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
@@ -42,6 +51,12 @@ namespace ThjonustukerfiWebAPI.Extensions
                 if(exception is NotFoundException)
                 {
                     context.Response.StatusCode = (int) HttpStatusCode.NotFound;
+
+                    return context.Response.WriteAsync(exception.Message);
+                }
+                if(exception is BadRequestException)
+                {
+                    context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
 
                     return context.Response.WriteAsync(exception.Message);
                 }
