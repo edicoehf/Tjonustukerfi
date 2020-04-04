@@ -1,6 +1,7 @@
 import React from "react";
-import useDeleteCustomerById from "../../../../hooks/useDeleteCustomerById";
 import { Button } from "react-bootstrap";
+import useDeleteCustomerById from "../../../../hooks/useDeleteCustomerById";
+import "./DeleteCustomerAction.css";
 
 const DeleteCustomerAction = ({ id }) => {
     const { error, handleDelete, isDeleting } = useDeleteCustomerById(id);
@@ -12,7 +13,7 @@ const DeleteCustomerAction = ({ id }) => {
                 disabled={isDeleting}
                 onClick={handleDelete}
             >
-                Eyða viðskiptavin
+                Eyða
             </Button>
             {error ? (
                 <p className="delete-error">Gat ekki eytt viðskiptavin</p>

@@ -7,6 +7,7 @@ import CreateCustomer from "./components/Customer/CreateCustomer/CreateCustomer"
 import CustomerView from "./components/Customer/CustomerView/CustomerView";
 import UpdateCustomer from "./components/Customer/UpdateCustomer/UpdateCustomer";
 import OrderDetails from "./components/Order/OrderDetails/OrderDetails";
+import CustomerMain from "./components/Customer/CustomerMain/CustomerMain";
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                         path="/new-customer"
                         component={CreateCustomer}
                     />
+                    <Route exact path="/customers" component={CustomerMain} />
                     <Route
                         exact
                         path="/update-customer/:id"
