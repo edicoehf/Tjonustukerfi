@@ -1,13 +1,9 @@
 import React from "react";
-import useGetAllCustomers from "../../../hooks/useGetAllCustomers";
 import CustomerListItem from "../CustomerListItem/CustomerListItem";
 import { ListGroup } from "react-bootstrap";
 import "./CustomerList.css";
 
-const CustomerList = () => {
-    const { customers, error, isLoading } = useGetAllCustomers();
-
-    console.log(customers);
+const CustomerList = ({ customers, error, isLoading }) => {
     return (
         <div>
             {!error ? (

@@ -3,8 +3,16 @@ import { Link } from "react-router-dom";
 
 import CustomerList from "../CustomerList/CustomerList";
 import "./CustomerMain.css";
+import SearchBar from "../../SearchBar/SearchBar";
+import useGetAllCustomers from "../../../hooks/useGetAllCustomers";
+import useSearchBar from "../../../hooks/useSearchBar";
 
 const CustomerMain = () => {
+    const { customers, error, isLoading } = useGetAllCustomers();
+    customers.sort((a, b) => a.name.localeCompare(b.name));
+    const { searchResults, handleChange, searchTerm } = useSearchBar(customers);
+    const searchBarPlaceHolder = "Má bjóða þér að leita eftir nafni?";
+
     return (
         <div className="main">
             <div className="main-item header">
@@ -15,8 +23,19 @@ const CustomerMain = () => {
                     Bæta við viðskiptavin
                 </Link>
             </div>
+            <div className="main-item search-bar">
+                <SearchBar
+                    searchTerm={searchTerm}
+                    handleChange={handleChange}
+                    placeHolder={searchBarPlaceHolder}
+                />
+            </div>
             <div className="main-item">
-                <CustomerList />
+                <CustomerList
+                    customers={searchResults}
+                    error={error}
+                    isLoading={isLoading}
+                />
             </div>
         </div>
     );
