@@ -8,6 +8,7 @@ namespace ThjonustukerfiWebAPI.Mappings
 {
     public class MappingProfile : Profile
     {
+        /// <summary>Provides a profile to use with AutoMapper</summary>
         public MappingProfile()
         {
             //* Customer Mappings

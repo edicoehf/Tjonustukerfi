@@ -121,7 +121,6 @@ namespace ThjonustukerfiWebAPI
             app.UseSwaggerUI(opt =>
             {
                 opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Þjónustukerfi Edico Bakendi");
-                // opt.RoutePrefix = string.Empty;
             });
 
             app.UseRouting();

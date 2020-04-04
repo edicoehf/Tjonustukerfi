@@ -60,145 +60,46 @@ namespace ThjonustukerfiTests.Tests
         }
 
         [TestMethod]
+        public void Fill_database_should_have_an_inMemory_database_ready()
+        {
+            //* Arrange
+            using(var mockContext = new DataContext(_options))
+            {
+                //* Act
+                //! Note this test method is creating the in memory database,
+                //! so this arrange when build DB should only be run once, unless adding more info to it.
+                //! This Database will live through all the tests in this class
+                FillDatabase(mockContext);
+
+                //* Assert
+                // Checks if all added entities are actually there
+                Assert.IsNotNull(mockContext);
+                Assert.IsTrue(mockContext.Order.Any());
+                Assert.IsTrue(mockContext.Customer.Any());
+                Assert.IsTrue(mockContext.ItemOrderConnection.Any());
+                Assert.IsTrue(mockContext.Item.Any());
+                Assert.IsTrue(mockContext.Service.Any());
+                Assert.IsTrue(mockContext.State.Any());
+            }
+        }
+
+        [TestMethod]
         public void GetOrderById_should_return_orderDTO()
         {
-            //! Note this test method is creating the in memory database,
-            //! so this arrange when build DB should only be run once, unless adding more info to it.
-            //! This Database will live through all the tests in this class
-            //* Arrange
             using (var mockContext = new DataContext(_options))
             {
-                // variables evaluating
+                //* Arrange
+                string serviceName = "Birkireyking";
                 long orderId = 100;
-                long customerId = 50;
                 string customerName = "Viggi Siggi";
                 string OrderBarCode = "20200001";
-                DateTime modifiedDate = DateTime.Now;
-                string serviceName = "Birkireyking";
-                // Mock entity
-                Order mockOrder = new Order
-                {
-                    Id = orderId,
-                    CustomerId = customerId,
-                    Barcode = OrderBarCode,
-                    DateCreated = DateTime.MinValue,
-                    DateModified = modifiedDate,
-                    DateCompleted = DateTime.MaxValue
-                };
-
-                Customer mockCustomer = new Customer
-                {
-                    Id = customerId,
-                    Name = customerName,
-                    SSN = "1308943149",
-                    Email = "viggi@siggi.is",
-                    Phone = "5812345",
-                    Address = "Bakkabakki 1",
-                    PostalCode = "800"
-                };
-
-                // just for this order
-                List<ItemOrderConnection> mockIOConnect = new List<ItemOrderConnection>()
-                {
-                    new ItemOrderConnection
-                    {
-                        Id = 1,
-                        ItemId = 1,
-                        OrderId = orderId
-                    },
-                    new ItemOrderConnection
-                    {
-                        Id = 2,
-                        ItemId = 2,
-                        OrderId = orderId
-                    }
-                };
-
-                // adding items
-                List<Item> mockItems = new List<Item>()
-                {
-                    new Item
-                    {
-                        Id = 1,
-                        Type = "Ysa bitar",
-                        StateId = 1,
-                        ServiceId = 1,
-                        Barcode = "50500001",
-                        DateCreated = DateTime.MinValue,
-                        DateModified = DateTime.Now,
-                        DateCompleted = DateTime.MaxValue
-                    },
-                    new Item
-                    {
-                        Id = 2,
-                        Type = "Lax heil flok",
-                        StateId = 1,
-                        ServiceId = 1,
-                        Barcode = "50500002",
-                        DateCreated = DateTime.MinValue,
-                        DateModified = DateTime.Now,
-                        DateCompleted = DateTime.MaxValue
-                    }
-                };
-
-                // Adding service
-                Service mockService = new Service()
-                {
-                    Name = serviceName,
-                    Id = 1
-                };
-
-                // Build a list of size 20, make it queryable for the database mock
-                var orders = Builder<Order>.CreateListOfSize(20)
-                    .TheFirst(1)
-                    .With(o => o.Id = mockOrder.Id)
-                    .With(o => o.CustomerId = mockOrder.CustomerId)
-                    .With(o => o.Barcode = mockOrder.Barcode)
-                    .With(o => o.DateCreated = mockOrder.DateCreated)
-                    .With(o => o.DateModified = mockOrder.DateModified)
-                    .With(o => o.DateCompleted = mockOrder.DateCompleted)
-                    .TheRest()
-                    .With(o => o.Barcode = "30200001")
-                    .With(o => o.CustomerId = 2)
-                    .Build();
-
-                // Build a list of size 20, make it queryable for the database mock
-                var customers = Builder<Customer>.CreateListOfSize(20)
-                    .TheFirst(1)
-                    .With(c => c.Id = mockCustomer.Id)
-                    .With(c => c.Name = mockCustomer.Name)
-                    .With(c => c.SSN = mockCustomer.SSN)
-                    .With(c => c.Email = mockCustomer.Email)
-                    .With(c => c.Phone = mockCustomer.Phone)
-                    .With(c => c.Address = mockCustomer.Address)
-                    .With(c => c.PostalCode = mockCustomer.PostalCode)
-                    .Build();
-
-                // Adding states for lookup
-                var states = new List<State>()
-                {
-                    // states fyrir Reykofninn
-                    new State() {Name = "Í vinnslu", Id = 1},
-                    new State() {Name = "Kælir 1", Id = 2},
-                    new State() {Name = "Kælir 2", Id = 3},
-                    new State() {Name = "Frystir", Id = 4},
-                    new State() {Name = "Sótt", Id = 5}
-                };
-
-                // Adding all entities to the in memory database
-                mockContext.Order.AddRange(orders);
-                mockContext.Customer.AddRange(customers);
-                mockContext.ItemOrderConnection.AddRange(mockIOConnect);
-                mockContext.Item.AddRange(mockItems);
-                mockContext.Service.Add(mockService);
-                mockContext.State.AddRange(states);
-                mockContext.SaveChanges();
-                //! Building DB done
+                DateTime modifiedDate = mockContext.Order.FirstOrDefault(o => o.Id == orderId).DateModified;
 
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
                 // Create a list that should be the same as the list returned in OrderDTO
                 var itemListDTO = new List<ItemDTO>();
+                var mockItems = mockContext.Item.ToList();
                 foreach (var item in mockItems)
                 {
                     var add = _mapper.Map<ItemDTO>(item);
@@ -230,10 +131,12 @@ namespace ThjonustukerfiTests.Tests
         [TestMethod]
         public void GetOrderbyId_should_throw_NotFoundException()
         {
+            //* Arrange
             using (var mockContext = new DataContext(_options))
             {
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
+                //* Act and Assert
                 Assert.ThrowsException<NotFoundException>(() => orderRepo.GetOrderbyId(-1));
             }
         }
@@ -241,7 +144,7 @@ namespace ThjonustukerfiTests.Tests
         [TestMethod]
         public void CreateOrder_should_create_and_return_OrderId()
         {
-            // Arrange
+            //* Arrange
             var inp = new OrderInputModel
             {
                 CustomerId = 2,
@@ -269,7 +172,7 @@ namespace ThjonustukerfiTests.Tests
                 var itemDbSize = mockContext.Item.Count();
                 var itemOrderDbSize = mockContext.ItemOrderConnection.Count();
 
-                // Act
+                //* Act
                 var result = orderRepo.CreateOrder(inp);
                 // GetDTO to compare with input later
                 var resultOrderDTO = mockContext.Order.OrderByDescending(o => o.Id).FirstOrDefault();
@@ -283,8 +186,7 @@ namespace ThjonustukerfiTests.Tests
                     itemListDTO.Add(add);
                 }
 
-                // Assert
-
+                //* Assert
                 // Assert Order
                 Assert.IsNotNull(result);
                 Assert.IsInstanceOfType(result, typeof(long));
@@ -311,7 +213,8 @@ namespace ThjonustukerfiTests.Tests
         [TestMethod]
         public void CreateOrder_should_throw_NotFoundException()
         {
-             var inp = new OrderInputModel
+            //* Arrange
+            var inp = new OrderInputModel
             {
                 CustomerId = 2,
                 Items = new List<ItemInputModel>()
@@ -333,6 +236,7 @@ namespace ThjonustukerfiTests.Tests
             {
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
+                //* Act and Assert
                 Assert.ThrowsException<NotFoundException>(() => orderRepo.CreateOrder(inp));
             }
         }
@@ -370,7 +274,7 @@ namespace ThjonustukerfiTests.Tests
             {
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
-                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
+                // Get old item order connection to get the old list of items.
                 var oldConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
                 List<Item> oldItemList = new List<Item>();
                 foreach (var item in oldConnection)
@@ -382,8 +286,8 @@ namespace ThjonustukerfiTests.Tests
                 orderRepo.UpdateOrder(orperInput, orderID);
 
                 //* Assert
-                orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
-                var newConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
+                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);   // get order entity to check
+                var newConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();  // new connections to get the new list
                 List<Item> newItemList = new List<Item>();
                 foreach (var item in newConnection)
                 {
@@ -434,7 +338,7 @@ namespace ThjonustukerfiTests.Tests
             {
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
-                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
+                // Get old item order connection to get the old list of items.
                 var oldConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
                 List<Item> oldItemList = new List<Item>();
                 foreach (var item in oldConnection)
@@ -446,8 +350,8 @@ namespace ThjonustukerfiTests.Tests
                 orderRepo.UpdateOrder(orperInput, orderID);
 
                 //* Assert
-                orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
-                var newConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
+                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);   // get order entity to check
+                var newConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();  // new connections to get the new list
                 List<Item> newItemList = new List<Item>();
                 foreach (var item in newConnection)
                 {
@@ -487,7 +391,7 @@ namespace ThjonustukerfiTests.Tests
             {
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
-                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
+                // Get old item order connection to get the old list of items.
                 var oldConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
                 List<Item> oldItemList = new List<Item>();
                 foreach (var item in oldConnection)
@@ -499,8 +403,8 @@ namespace ThjonustukerfiTests.Tests
                 orderRepo.UpdateOrder(orperInput, orderID);
 
                 //* Assert
-                orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
-                var newConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
+                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);   // get order entity to check
+                var newConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();  // new connections to get the new list
                 List<Item> newItemList = new List<Item>();
                 foreach (var item in newConnection)
                 {
@@ -568,7 +472,7 @@ namespace ThjonustukerfiTests.Tests
             {
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
-                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
+                // Get old item order connection to get the old list of items.
                 var oldConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
                 List<Item> oldItemList = new List<Item>();
                 foreach (var item in oldConnection)
@@ -581,8 +485,8 @@ namespace ThjonustukerfiTests.Tests
                 orderRepo.UpdateOrder(orperInput, orderID);
 
                 //* Assert
-                orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
-                var newConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
+                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);   // get order entity to check
+                var newConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();  // new connections to get the new list
                 List<Item> newItemList = new List<Item>();
                 foreach (var item in newConnection)
                 {
@@ -687,6 +591,141 @@ namespace ThjonustukerfiTests.Tests
                 Assert.IsNotNull(result);
                 Assert.AreEqual(DbSize, result.Count());
             }
+        }
+
+        //**********     Helper functions     **********//
+        private void FillDatabase(DataContext mockContext)
+        {
+            //! Note this test method is creating the in memory database,
+            //! so this arrange when build DB should only be run once, unless adding more info to it.
+            //! This Database will live through all the tests in this class
+            //* Arrange
+            // variables evaluating
+            long orderId = 100;
+            long customerId = 50;
+            string customerName = "Viggi Siggi";
+            string OrderBarCode = "20200001";
+            DateTime modifiedDate = DateTime.Now;
+            string serviceName = "Birkireyking";
+            // Mock entity
+            Order mockOrder = new Order
+            {
+                Id = orderId,
+                CustomerId = customerId,
+                Barcode = OrderBarCode,
+                DateCreated = DateTime.MinValue,
+                DateModified = modifiedDate,
+                DateCompleted = DateTime.MaxValue
+            };
+
+            Customer mockCustomer = new Customer
+            {
+                Id = customerId,
+                Name = customerName,
+                SSN = "1308943149",
+                Email = "viggi@siggi.is",
+                Phone = "5812345",
+                Address = "Bakkabakki 1",
+                PostalCode = "800"
+            };
+
+            // just for this order
+            List<ItemOrderConnection> mockIOConnect = new List<ItemOrderConnection>()
+            {
+                new ItemOrderConnection
+                {
+                    Id = 1,
+                    ItemId = 1,
+                    OrderId = orderId
+                },
+                new ItemOrderConnection
+                {
+                    Id = 2,
+                    ItemId = 2,
+                    OrderId = orderId
+                }
+            };
+
+            // adding items
+            List<Item> mockItems = new List<Item>()
+            {
+                new Item
+                {
+                    Id = 1,
+                    Type = "Ysa bitar",
+                    StateId = 1,
+                    ServiceId = 1,
+                    Barcode = "50500001",
+                    DateCreated = DateTime.MinValue,
+                    DateModified = DateTime.Now,
+                    DateCompleted = DateTime.MaxValue
+                },
+                new Item
+                {
+                    Id = 2,
+                    Type = "Lax heil flok",
+                    StateId = 1,
+                    ServiceId = 1,
+                    Barcode = "50500002",
+                    DateCreated = DateTime.MinValue,
+                    DateModified = DateTime.Now,
+                    DateCompleted = DateTime.MaxValue
+                }
+            };
+
+            // Adding service
+            Service mockService = new Service()
+            {
+                Name = serviceName,
+                Id = 1
+            };
+
+            // Build a list of size 20, make it queryable for the database mock
+            var orders = Builder<Order>.CreateListOfSize(20)
+                .TheFirst(1)
+                .With(o => o.Id = mockOrder.Id)
+                .With(o => o.CustomerId = mockOrder.CustomerId)
+                .With(o => o.Barcode = mockOrder.Barcode)
+                .With(o => o.DateCreated = mockOrder.DateCreated)
+                .With(o => o.DateModified = mockOrder.DateModified)
+                .With(o => o.DateCompleted = mockOrder.DateCompleted)
+                .TheRest()
+                .With(o => o.Barcode = "30200001")
+                .With(o => o.CustomerId = 2)
+                .Build();
+
+            // Build a list of size 20, make it queryable for the database mock
+            var customers = Builder<Customer>.CreateListOfSize(20)
+                .TheFirst(1)
+                .With(c => c.Id = mockCustomer.Id)
+                .With(c => c.Name = mockCustomer.Name)
+                .With(c => c.SSN = mockCustomer.SSN)
+                .With(c => c.Email = mockCustomer.Email)
+                .With(c => c.Phone = mockCustomer.Phone)
+                .With(c => c.Address = mockCustomer.Address)
+                .With(c => c.PostalCode = mockCustomer.PostalCode)
+                .Build();
+
+            // Adding states for lookup
+            var states = new List<State>()
+            {
+                // states fyrir Reykofninn
+                new State() {Name = "Í vinnslu", Id = 1},
+                new State() {Name = "Kælir 1", Id = 2},
+                new State() {Name = "Kælir 2", Id = 3},
+                new State() {Name = "Frystir", Id = 4},
+                new State() {Name = "Sótt", Id = 5}
+            };
+
+            // Adding all entities to the in memory database
+            mockContext.Order.AddRange(orders);
+            mockContext.Customer.AddRange(customers);
+            mockContext.ItemOrderConnection.AddRange(mockIOConnect);
+            mockContext.Item.AddRange(mockItems);
+            mockContext.Service.Add(mockService);
+            mockContext.State.AddRange(states);
+            mockContext.SaveChanges();
+            //! Building DB done
         }
     }
 }

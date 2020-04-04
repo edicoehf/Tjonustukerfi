@@ -2,10 +2,11 @@ using System;
 
 namespace ThjonustukerfiWebAPI.Models.Entities
 {
+    /// <summary>Representation of the Service entity stored in the database.</summary>
     public class Service : IEquatable<Service>
     {
         public long Id { get; set; }
-        public string Name { get; set; }    // Birkireyking
+        public string Name { get; set; }    // E.g. Birkireyking
         public string JSON { get; set; }
 
         // Overrides

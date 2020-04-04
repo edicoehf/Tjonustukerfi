@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Extensions;
 
 namespace ThjonustukerfiWebAPI
@@ -11,7 +10,7 @@ namespace ThjonustukerfiWebAPI
         {
             CreateHostBuilder(args)
                 .Build()
-                .FillTables()
+                .FillTables()   // custom function
                 .Run();
         }
 

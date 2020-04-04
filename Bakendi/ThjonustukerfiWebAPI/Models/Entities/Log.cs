@@ -2,6 +2,7 @@ using System;
 
 namespace ThjonustukerfiWebAPI.Models.Entities
 {
+    /// <summary>Representation of the Log entity stored in the database, this is used to store unforseen errors thrown by the system.</summary>
     public class Log
     {
         public long Id { get; set; }

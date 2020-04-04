@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ThjonustukerfiWebAPI.Models.Entities
 {
+    /// <summary>Representation of the Order entity stored in the database.</summary>
     public class Order
     {
         public long Id { get; set; }
@@ -13,7 +14,7 @@ namespace ThjonustukerfiWebAPI.Models.Entities
         // Auto generated
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
-        public DateTime DateCompleted { get; set; }
+        public DateTime? DateCompleted { get; set; }
 
     }
 }

@@ -48,7 +48,7 @@ namespace ThjonustukerfiTests.Tests.Info
             var response = _infoController.GetServices() as OkObjectResult;
             List<ServiceDTO> responseValue = response.Value as List<ServiceDTO>;
 
-            // Assert
+            //* Assert
             Assert.IsNotNull(response);
             Assert.IsNotNull(responseValue);
             Assert.AreEqual(200, response.StatusCode);

@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ThjonustukerfiWebAPI.Models.Entities
 {
+    /// <summary>Representation of the Item entity stored in the database.</summary>
     public class Item
     {
         public long Id { get; set; }

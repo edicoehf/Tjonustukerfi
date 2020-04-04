@@ -69,7 +69,7 @@ namespace ThjonustukerfiWebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        [Route("{id:long}/update")]
+        [Route("{id:long}")]
         [HttpPatch]
         public IActionResult UpdateOrder([FromBody] OrderInputModel order, long id)
         {

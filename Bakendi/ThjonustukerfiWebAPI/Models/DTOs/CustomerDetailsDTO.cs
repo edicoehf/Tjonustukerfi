@@ -1,5 +1,6 @@
 namespace ThjonustukerfiWebAPI.Models.DTOs
 {
+    /// <summary>Data transfer object for customer entity, provides detailed information of customer.</summary>
     public class CustomerDetailsDTO
     {
         public long Id { get; set; }
