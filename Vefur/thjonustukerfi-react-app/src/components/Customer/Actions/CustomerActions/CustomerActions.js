@@ -1,6 +1,7 @@
 import React from "react";
 import DeleteCustomerAction from "../DeleteCustomerAction/DeleteCustomerAction";
 import UpdateCustomerAction from "../UpdateCustomerAction/UpdateCustomerAction";
+import "./CustomerActions.css";
 
 const CustomerActions = ({ id }) => {
     return (

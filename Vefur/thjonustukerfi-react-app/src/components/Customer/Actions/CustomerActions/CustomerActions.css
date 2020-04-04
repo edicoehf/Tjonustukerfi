@@ -1,0 +1,4 @@
+.customer-actions {
+    display: flex;
+    flex-direction: row;
+}
