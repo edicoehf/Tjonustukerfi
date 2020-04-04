@@ -2,6 +2,18 @@ import { handleErrors, handleData } from "./serviceHandlers";
 
 const endpoint = "http://localhost:5000/api/customers/";
 
+const getAllCustomers = () => {
+    return fetch(endpoint, {
+        method: "GET",
+        headers: {
+            crossDomain: true
+        }
+    })
+        .then(handleErrors)
+        .then(handleData)
+        .catch(error => Promise.reject(error));
+};
+
 const deleteCustomerById = id => {
     console.log(id);
 
@@ -54,6 +66,7 @@ const updateCustomer = customer => {
 };
 
 export default {
+    getAllCustomers,
     deleteCustomerById,
     createCustomer,
     getCustomerById,
