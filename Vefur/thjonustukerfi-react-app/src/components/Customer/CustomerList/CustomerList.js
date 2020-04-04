@@ -1,6 +1,6 @@
 import React from "react";
 import useGetAllCustomers from "../../../hooks/useGetAllCustomers";
-import CustomerListItem from "../CustomersListItem/CustomerListItem";
+import CustomerListItem from "../CustomerListItem/CustomerListItem";
 import { ListGroup } from "react-bootstrap";
 import "./CustomerList.css";
 
