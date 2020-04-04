@@ -13,6 +13,11 @@ const CustomerList = ({ customers, error, isLoading }) => {
                     <ListGroup className="list">
                         <ListGroup.Item className="item" variant="dark">
                             <h5>Nafn</h5>
+                        </ListGroup.Item>
+                        <ListGroup.Item
+                            className="item actions-item"
+                            variant="dark"
+                        >
                             <h5 className="actions">Aðgerðir</h5>
                         </ListGroup.Item>
                         {customers.map(item => (
