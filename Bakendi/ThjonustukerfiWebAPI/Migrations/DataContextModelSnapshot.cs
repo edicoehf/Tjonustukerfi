@@ -149,7 +149,7 @@ namespace ThjonustukerfiWebAPI.Migrations
                     b.Property<long>("CustomerId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("DateCompleted")
+                    b.Property<DateTime?>("DateCompleted")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("DateCreated")

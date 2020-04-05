@@ -15,10 +15,9 @@ const initialState = {
 };
 
 const CustomerInputForm = ({ existingCustomer, submitHandler, processing }) => {
-    const state =
-        existingCustomer && Object.keys(existingCustomer).length > 0
-            ? existingCustomer
-            : initialState;
+    const isExistingCustomer =
+        existingCustomer && Object.keys(existingCustomer).length > 0;
+    const state = isExistingCustomer ? existingCustomer : initialState;
 
     // isSubmitting, resetFields
     const { handleSubmit, handleChangeText, values, errors } = useForm(
@@ -87,7 +86,11 @@ const CustomerInputForm = ({ existingCustomer, submitHandler, processing }) => {
                 <input
                     disabled={processing}
                     type="submit"
-                    value="Skrá nýjan viðskiptavin"
+                    value={
+                        isExistingCustomer
+                            ? "Uppfæra viðskiptavin"
+                            : "Skrá nýjan viðskiptavin"
+                    }
                     className="btn btn-dark"
                 />
             </Form>

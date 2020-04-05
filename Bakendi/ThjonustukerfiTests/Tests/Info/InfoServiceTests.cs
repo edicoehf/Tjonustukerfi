@@ -48,7 +48,38 @@ namespace ThjonustukerfiTests.Tests.Info
 
             //* Assert
             Assert.IsNotNull(returnValue);
-            Assert.AreEqual(returnValue, retDTO);
+            Assert.AreEqual(retDTO, returnValue);
+        }
+
+        [TestMethod]
+        public void GetStates_should_return_a_list_of_service_DTO()
+        {
+            //* Arrange
+            var retDTO = new List<StateDTO>
+            {
+                new StateDTO
+                {
+                    Id = 1,
+                    Name = "Í vinnslu"
+                },
+                new StateDTO
+                {
+                    Id = 2,
+                    Name = "Kælir 1"
+                }
+            };
+            // method setup
+            _infoRepoMock.Setup(method => method.GetStates()).Returns(retDTO);
+
+            // Create service
+            _infoService = new InfoService(_infoRepoMock.Object);
+
+            //* Act
+            var returnValue = _infoService.GetStates();
+
+            //* Assert
+            Assert.IsNotNull(returnValue);
+            Assert.AreEqual(retDTO, returnValue);
         }
     }
 }

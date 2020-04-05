@@ -28,7 +28,7 @@ namespace ThjonustukerfiTests.Tests
         [TestMethod]
         public void CreateOrder_Should_return_a_single_customerDTO()
         {
-            // Arrange
+            //* Arrange
             var order = new OrderInputModel
             {
                 CustomerId = 1,
@@ -47,10 +47,10 @@ namespace ThjonustukerfiTests.Tests
 
             _orderService = new OrderService(_orderRepoMock.Object, _customerRepoMock.Object);
 
-            // Act
+            //* Act
             var orderDTOReturn = _orderService.CreateOrder(order);
 
-            // Assert
+            //* Assert
             Assert.IsNotNull(orderDTOReturn);
             Assert.AreEqual(orderDTOReturn, mockOrderDTO);
         }
@@ -58,7 +58,7 @@ namespace ThjonustukerfiTests.Tests
         [TestMethod]
         public void CreateOrder_Should_throw_NotFoundException_OnCustomerId()
         {
-             // Arrange
+            //* Arrange
             var order = new OrderInputModel
             {
                 CustomerId = -1,
@@ -70,12 +70,11 @@ namespace ThjonustukerfiTests.Tests
                 }
             };  
 
-            // _orderRepoMock.Setup(method => method.CreateOrder(order)).Returns(mockOrderDTO);
             _customerRepoMock.Setup(method => method.CustomerExists(order.CustomerId)).Returns(false);
 
             _orderService = new OrderService(_orderRepoMock.Object, _customerRepoMock.Object);
 
-            // Act
+            //* Act and Assert
             Assert.ThrowsException<NotFoundException>(() => _orderService.CreateOrder(order));
         }
 

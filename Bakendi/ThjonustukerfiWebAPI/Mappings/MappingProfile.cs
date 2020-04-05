@@ -8,6 +8,7 @@ namespace ThjonustukerfiWebAPI.Mappings
 {
     public class MappingProfile : Profile
     {
+        /// <summary>Provides a profile to use with AutoMapper</summary>
         public MappingProfile()
         {
             //* Customer Mappings
@@ -47,6 +48,9 @@ namespace ThjonustukerfiWebAPI.Mappings
             // Automapper for Service to ServiceDTO
             CreateMap<Service, ServiceDTO>();
 
+            //* State Mappings
+            // Automapper for State to StateDTO
+            CreateMap<State, StateDTO>();
         }
     }
 }

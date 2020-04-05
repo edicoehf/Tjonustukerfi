@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace ThjonustukerfiWebAPI.Models.DTOs
 {
+    /// <summary>Data transfer object for Order entity, provides detailed information of Order.</summary>
     public class OrderDTO
     {
         public long Id { get; set; }

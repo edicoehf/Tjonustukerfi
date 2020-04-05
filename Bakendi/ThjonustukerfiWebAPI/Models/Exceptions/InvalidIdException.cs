@@ -1,5 +1,6 @@
 namespace ThjonustukerfiWebAPI.Models.Exceptions
 {
+    /// <summary>Exception created to handle invalid ID lookup.</summary>
     [System.Serializable]
     public class InvalidIdException : System.Exception
     {

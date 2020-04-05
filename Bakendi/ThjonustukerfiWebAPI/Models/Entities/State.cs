@@ -2,6 +2,7 @@ using System;
 
 namespace ThjonustukerfiWebAPI.Models.Entities
 {
+    /// <summary>Representation of the State entity stored in the database.</summary>
     public class State : IEquatable<State>
     {
         public long Id { get; set; }

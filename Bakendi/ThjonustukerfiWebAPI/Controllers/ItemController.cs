@@ -5,6 +5,7 @@ using ThjonustukerfiWebAPI.Services.Interfaces;
 
 namespace ThjonustukerfiWebAPI.Controllers
 {
+    /// <summary>Provides an endpoint for all Item actions</summary>
     [Route("api/items")]
     [ApiController]
     public class ItemController : ControllerBase
@@ -20,7 +21,7 @@ namespace ThjonustukerfiWebAPI.Controllers
         /// <response code="400">Input model is not valid.</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Route("{id:long}/update")]
+        [Route("{id:long}")]
         [HttpPatch]
         public IActionResult EditItem([FromBody] EditItemInput input, long Id)
         {

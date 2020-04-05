@@ -1,6 +1,6 @@
 namespace ThjonustukerfiWebAPI.Models.InputModels
 {
-    /// <summary>Input for editing items</summary>
+    /// <summary>Input model to edit Item in the database.</summary>
     public class EditItemInput
     {
         public string Type { get; set; }    //  type not right
