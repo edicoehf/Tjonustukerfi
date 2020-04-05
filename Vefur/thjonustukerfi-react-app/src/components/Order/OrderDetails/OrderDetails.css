@@ -1,0 +1,26 @@
+.order-details {
+    margin-top: 4em;
+}
+
+.order-title {
+    font-size: 2em;
+}
+
+.order-customer a {
+    color: #212529;
+    text-decoration: underline;
+}
+
+.order-items {
+    margin-top: 1em;
+}
+
+.order-items-title {
+    font-size: 1.25em;
+    margin-bottom: 0.5em;
+}
+
+.error {
+    color: var(--error-color);
+    font-weight: bold;
+}

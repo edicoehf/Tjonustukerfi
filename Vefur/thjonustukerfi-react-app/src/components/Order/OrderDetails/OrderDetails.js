@@ -5,6 +5,7 @@ import OrderItemList from "../OrderItemList/OrderItemList";
 import useGetOrderById from "../../../hooks/useGetOrderById";
 import moment from "moment";
 import "moment/locale/is";
+import "./OrderDetails.css";
 
 const OrderDetails = ({ id }) => {
     const { order, error } = useGetOrderById(id);
@@ -18,7 +19,7 @@ const OrderDetails = ({ id }) => {
         <div className="order-details">
             {!error ? (
                 <>
-                    <div className="order-title">Pöntun: {order.id}</div>
+                    <div className="order-title">Pöntun {order.id}</div>
                     <div className="order-barcode">
                         Strikamerki: {order.barcode}
                     </div>
@@ -31,7 +32,7 @@ const OrderDetails = ({ id }) => {
                         </div>
                     )}
                     <div className="order-customer">
-                        Viðskiptavinur:
+                        Viðskiptavinur:{" "}
                         <Link to={`/customer/${order.customerId}`}>
                             {order.customer}
                         </Link>
