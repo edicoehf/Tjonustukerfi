@@ -4,6 +4,7 @@ namespace ThjonustukerfiWebAPI.Models.InputModels
 {
     // TODO regex for phone
     // TODO regex for postalcode
+    /// <summary>Input model to add new Customer to the database.</summary>
     public class CustomerInputModel
     {
         [Required]

@@ -25,7 +25,7 @@ namespace ThjonustukerfiTests.Tests
         [TestMethod]
         public void CreateCustomer_should_return_a_single_customerDTO()
         {
-            // Arrange
+            //* Arrange
             var inp = new CustomerInputModel
             {
                 Name = "Viggi Siggi",
@@ -42,12 +42,13 @@ namespace ThjonustukerfiTests.Tests
             // Config returns values
             _customerRepoMock.Setup(method => method.CreateCustomer(inp)).Returns(mockCustomerDTO);
 
+            // Craete service
             _customerService = new CustomerService(_customerRepoMock.Object);
 
-            // Act
+            //* Act
             var customerDTOReturn = _customerService.CreateCustomer(inp);
 
-            // Assert
+            //* Assert
             Assert.IsNotNull(customerDTOReturn);
             Assert.AreEqual(customerDTOReturn.Id, mockCustomerDTO.Id);
             Assert.AreEqual(customerDTOReturn.Name, mockCustomerDTO.Name);
@@ -56,7 +57,7 @@ namespace ThjonustukerfiTests.Tests
         [TestMethod]
         public void GetCustomer_should_return_a_single_customerDetailsDTO()
         {
-            // Arrange
+            //* Arrange
             long id = 10;
 
             // Mock dto and repo
@@ -70,15 +71,16 @@ namespace ThjonustukerfiTests.Tests
                 Address = "Bakkabakki 1",
                 PostalCode = "800"
             };
+            // setup mocked method
             _customerRepoMock.Setup(method => method.GetCustomerById(id)).Returns(mockCustomerDetailsDTO);
 
             // Create service
             _customerService = new CustomerService(_customerRepoMock.Object);
 
-            // Act
+            //* Act
             var customerDetailsDTO = _customerService.GetCustomerById(id);
 
-            //Assert
+            //* Assert
             Assert.IsNotNull(customerDetailsDTO);
             Assert.AreEqual(mockCustomerDetailsDTO.Id, customerDetailsDTO.Id);
             Assert.AreEqual(mockCustomerDetailsDTO.Name, customerDetailsDTO.Name);
@@ -106,6 +108,7 @@ namespace ThjonustukerfiTests.Tests
                     Name = "Kalli Valli"
                 }
             };
+            // setup mocked method
             _customerRepoMock.Setup(method => method.GetAllCustomers()).Returns(retDTO);
 
             // Create service

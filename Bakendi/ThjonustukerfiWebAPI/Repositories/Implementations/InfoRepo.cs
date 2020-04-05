@@ -18,7 +18,12 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
         }
         public IEnumerable<ServiceDTO> GetServices()
         {
-            return _mapper.Map<IEnumerable<ServiceDTO>>(_dbContext.Service.ToList());
+            return _mapper.Map<IEnumerable<ServiceDTO>>(_dbContext.Service.ToList());   // Get list and map to DTO list
+        }
+
+        public IEnumerable<StateDTO> GetStates()
+        {
+            return _mapper.Map<IEnumerable<StateDTO>>(_dbContext.State.ToList());   // Get list and map to DTO list
         }
     }
 }

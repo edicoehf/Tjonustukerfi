@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ThjonustukerfiWebAPI.Models.Entities
 {
+    /// <summary>Representation of the Service State entity stored in the database.</summary>
     public class ServiceState  : IEquatable<ServiceState>
     {
         public long Id { get; set; }

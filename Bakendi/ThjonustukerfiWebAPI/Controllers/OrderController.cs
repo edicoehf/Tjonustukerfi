@@ -69,7 +69,7 @@ namespace ThjonustukerfiWebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        [Route("{id:long}/update")]
+        [Route("{id:long}")]
         [HttpPatch]
         public IActionResult UpdateOrder([FromBody] OrderInputModel order, long id)
         {
@@ -80,10 +80,10 @@ namespace ThjonustukerfiWebAPI.Controllers
             return Ok();
         }
 
-        /// <summary>Deletes an Order with the given ID</summary>
-        /// <returns>Returns no content</returns>
-        /// <response code="204">Order successfully deleted</response>
-        /// <response code="409">Order with the given ID was not found</response>
+        /// <summary>Deletes an Order with the given ID.</summary>
+        /// <returns>Returns no content.</returns>
+        /// <response code="204">Order successfully deleted.</response>
+        /// <response code="409">Order with the given ID was not found.</response>
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [Route("{id:long}")]

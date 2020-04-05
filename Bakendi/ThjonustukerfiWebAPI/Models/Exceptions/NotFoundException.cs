@@ -1,5 +1,6 @@
 namespace ThjonustukerfiWebAPI.Models.Exceptions
 {
+    /// <summary>Exception created to handle when objects are not found.</summary>
     [System.Serializable]
     public class NotFoundException : System.Exception
     {

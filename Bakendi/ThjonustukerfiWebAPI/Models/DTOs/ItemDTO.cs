@@ -1,10 +1,12 @@
 namespace ThjonustukerfiWebAPI.Models.DTOs
 {
+    /// <summary>Data transfer object for Item entity, provides basic information of Item.</summary>
     public class ItemDTO
     {
         public long Id { get; set; }
         public string Type { get; set; }
         public string Service { get; set; }
+        public string Barcode { get; set; }
 
         //*     Overrides     *//
         public static bool operator ==(ItemDTO i1, ItemDTO i2)
@@ -18,7 +20,7 @@ namespace ThjonustukerfiWebAPI.Models.DTOs
                 return false;
             }
 
-            return i1.Id == i2.Id && i1.Type == i2.Type && i1.Service == i2.Service;
+            return i1.Id == i2.Id && i1.Type == i2.Type && i1.Service == i2.Service && i1.Barcode == i2.Barcode;
         }
 
         public static bool operator !=(ItemDTO i1, ItemDTO i2)

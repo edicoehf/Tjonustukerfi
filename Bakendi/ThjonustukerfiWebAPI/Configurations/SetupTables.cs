@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using ThjonustukerfiWebAPI.Configurations;
 using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Models.Entities;
 using ThjonustukerfiWebAPI.Extensions;
@@ -34,7 +32,7 @@ namespace ThjonustukerfiWebAPI.Configurations
             // empty or not with all data
             if(DB_Services == null || DB_Services.Count == 0 || DB_Services.Count != _services.Count)
             {
-                _services.RemovExisting(DB_Services);
+                _services.RemoveExisting(DB_Services);
                 _dbContext.Service.AddRange(_services);
 
                 change = true;
@@ -43,7 +41,7 @@ namespace ThjonustukerfiWebAPI.Configurations
             // empty or not with all data
             if(DB_ServiceStates == null || DB_ServiceStates.Count == 0 || DB_ServiceStates.Count != _serviceStates.Count)
             {
-                _serviceStates.RemovExisting(DB_ServiceStates);
+                _serviceStates.RemoveExisting(DB_ServiceStates);
                 _dbContext.ServiceState.AddRange(_serviceStates);
 
                 change = true;
@@ -52,7 +50,7 @@ namespace ThjonustukerfiWebAPI.Configurations
             // empty or not with all data
             if(DB_States == null || DB_States.Count == 0 || DB_States.Count != _states.Count)
             {
-                _states.RemovExisting(DB_States);
+                _states.RemoveExisting(DB_States);
                 _dbContext.State.AddRange(_states);
 
                 change = true;
@@ -61,13 +59,15 @@ namespace ThjonustukerfiWebAPI.Configurations
             if(change) { _dbContext.SaveChanges(); }
         }
 
+        /// <summary>Fills the list to add to database, extra services, states and service States should be added here</summary>
         private void fillLists()
         {
             //* Add services here
             _services = new List<Service>()
             {
                 // Birkireyking
-                new Service() {Name = "Birkireyking", Id = 1}
+                new Service() {Name = "Birkireyking", Id = 1},
+                new Service() {Name = "Taðreyking", Id = 2}
             };
 
             //* Add Service states here
