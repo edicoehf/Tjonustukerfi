@@ -6,7 +6,7 @@ jest.mock("react-router-dom");
 describe("<CustomerList />", () => {
     describe("CustomerList renders properly", () => {
         let wrapper;
-        let testCustomer = { id: "1", name: "arni", ssn: "123412341" };
+        const testCustomer = { id: "1", name: "arni" };
         beforeEach(() => {
             wrapper = mount(
                 shallow(
@@ -114,9 +114,9 @@ describe("<CustomerList />", () => {
     describe("CustomerList props", () => {
         let wrapper;
         let customerList;
-        const testCustomer1 = { id: "1", name: "arni", ssn: "123412341" };
-        const testCustomer2 = { id: "2", name: "halli", ssn: "123412342" };
-        const testCustomer3 = { id: "3", name: "balli", ssn: "123412343" };
+        const testCustomer1 = { id: "1", name: "arni" };
+        const testCustomer2 = { id: "2", name: "halli" };
+        const testCustomer3 = { id: "3", name: "balli" };
         const CustomerListComponent = (
             <CustomerList
                 customers={[testCustomer1, testCustomer2, testCustomer3]}
@@ -155,12 +155,8 @@ describe("<CustomerList />", () => {
                 expect(customerList[0].name).toEqual("arni");
             });
 
-            it("should not have second customer with ssn 432143212", () => {
-                expect(customerList[1].ssn).not.toEqual("432143212");
-            });
-
-            it("should contain third customer with ssn 123412343", () => {
-                expect(customerList[2].ssn).toEqual("123412343");
+            it("should not have second customer named balli", () => {
+                expect(customerList[1].name).not.toEqual("balli");
             });
         });
     });
