@@ -4,16 +4,16 @@ import PropTypes from "prop-types";
 import OrderItemList from "../OrderItemList/OrderItemList";
 import useGetOrderById from "../../../hooks/useGetOrderById";
 import moment from "moment";
-import Moment from "react-moment";
+import "moment/locale/is";
 
 const OrderDetails = ({ id }) => {
     const { order, error } = useGetOrderById(id);
 
     // Icelandic human readable format, e.g. 4. sep, 2020 08:
-    Moment.globalMoment = moment;
-    Moment.globalLocale = "is";
-    Moment.globalFormat = "lll";
-
+    const dateFormat = (date) => {
+        moment.locale("is");
+        return moment(date).format("lll");
+    };
     return (
         <div className="order-details">
             {!error ? (
@@ -23,15 +23,15 @@ const OrderDetails = ({ id }) => {
                         Strikamerki: {order.barcode}
                     </div>
                     <div className="order-date">
-                        Dagsetning: <Moment>{order.dateCreated}</Moment>
+                        Dagsetning: {dateFormat(order.dateCreated)}
                     </div>
                     {order.dateCompleted && (
                         <div className="order-completed">
-                            Sótt: <Moment>{order.dateCompleted}</Moment>
+                            Sótt: {dateFormat(order.dateCompleted)}
                         </div>
                     )}
                     <div className="order-customer">
-                        Viðskiptavinur:{" "}
+                        Viðskiptavinur:
                         <Link to={`/customer/${order.customerId}`}>
                             {order.customer}
                         </Link>
