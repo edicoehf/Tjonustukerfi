@@ -20,6 +20,15 @@
     margin-bottom: 0.5em;
 }
 
+.table td {
+    border-top: 1px solid gray;
+}
+
+.table thead th {
+    border-bottom: 2px solid gray;
+    border-top: none;
+}
+
 .error {
     color: var(--error-color);
     font-weight: bold;
