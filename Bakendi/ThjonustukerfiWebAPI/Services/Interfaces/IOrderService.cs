@@ -23,5 +23,8 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
         /// <summary>Gets all orders.</summary>
         /// <returns>A list of all orders.</returns>
         IEnumerable GetAllOrders();
+
+        /// <summary>Sets all items to complete in order</summary>
+        void CompleteOrder(long orderId);
     }
 }

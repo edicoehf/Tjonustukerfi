@@ -94,5 +94,14 @@ namespace ThjonustukerfiWebAPI.Controllers
 
             return NoContent();
         }
+
+        [Route("{id:long}/complete")]
+        [HttpPatch]
+        public IActionResult CompleteOrder(long id)
+        {
+            _orderService.CompleteOrder(id);
+
+            return Ok();
+        }
     }
 }
