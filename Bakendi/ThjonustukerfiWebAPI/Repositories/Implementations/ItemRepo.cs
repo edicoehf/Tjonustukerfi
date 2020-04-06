@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using AutoMapper;
 using ThjonustukerfiWebAPI.Models;
@@ -66,6 +67,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
             // If no changes are made, send a bad request response
             if(input.Type == null && !editState && !editService && !editOrder) {throw new BadRequestException($"The input had no valid values. No changes made."); }
+            else { entity.DateModified = DateTime.Now; }    // item modified on this date
 
             _dbContext.SaveChanges();
         }
@@ -94,6 +96,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             if(entity == null) { throw new NotFoundException($"Item with id {id} was not found."); }
 
             entity.StateId = 5; //TODO: Prety hardcoded, when config for company ready then maybe make this more general
+            entity.DateModified = DateTime.Now;
+            entity.DateCompleted = DateTime.Now;
 
             _dbContext.SaveChanges();
         }
