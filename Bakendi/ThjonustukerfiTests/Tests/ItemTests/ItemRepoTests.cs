@@ -250,6 +250,32 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             }
         }
 
+        [TestMethod]
+        public void GetItemById_should_return_itemStateDTO()
+        {
+            //* Arrange
+            long itemID = 1;
+            using(var mockContext = new DataContext(_options))
+            {
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                var itemEntity = mockContext.Item.FirstOrDefault(i => i.Id == itemID);
+                
+                // Same item the function should find
+                var itemDTO = _mapper.Map<ItemStateDTO>(itemEntity);
+                itemDTO.OrderId = mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemEntity.Id).OrderId;
+                itemDTO.State = mockContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;
+
+                //* Act
+                var retVal = itemRepo.GetItemById(itemID);
+
+                //* Assert
+                Assert.IsNotNull(retVal);
+                Assert.IsInstanceOfType(retVal, typeof(ItemStateDTO));
+                Assert.AreEqual(itemDTO, retVal);
+            }
+        }
+
         //**********     Helper functions     **********//
         private void FillDatabase(DataContext mockContext)
         {
