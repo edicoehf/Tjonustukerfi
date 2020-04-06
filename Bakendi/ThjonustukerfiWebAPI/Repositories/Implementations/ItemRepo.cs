@@ -19,6 +19,22 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             _dbContext = context;
             _mapper = mapper;
         }
+
+        public ItemStateDTO GetItemById(long itemId)
+        {
+            var entity = _dbContext.Item.FirstOrDefault(i => i.Id == itemId);   // get entity
+            if(entity == null) {throw new NotFoundException($"Item with ID {itemId} was not found."); } // entity not found
+
+            // Map the DTO
+            var stateDTO = _mapper.Map<ItemStateDTO>(entity);
+
+            // Get the connections for the DTO, order id it belongs to and in what state it is
+            stateDTO.OrderId = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == entity.Id).OrderId;
+            stateDTO.State = _dbContext.State.FirstOrDefault(s => s.Id == entity.StateId).Name;
+
+            return stateDTO;
+        }
+
         public ItemDTO CreateItem(ItemInputModel item)
         {
             // Mapping from input to entity and adding to database

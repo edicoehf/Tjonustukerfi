@@ -12,6 +12,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         {
             _itemRepo = itemRepo;
         }
+        public ItemStateDTO GetItemById(long itemId) => _itemRepo.GetItemById(itemId);
         public ItemDTO CreateItem(ItemInputModel item)
         {
             return _itemRepo.CreateItem(item);

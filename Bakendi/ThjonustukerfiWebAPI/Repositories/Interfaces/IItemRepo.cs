@@ -5,6 +5,10 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
 {
     public interface IItemRepo
     {
+        /// <summary>Searches for the given barcode.</summary>
+        /// <returns>An item state DTO.</returns>
+        ItemStateDTO GetItemById(long itemId);
+
         ItemDTO CreateItem(ItemInputModel item);
 
         /// <summary>Updates an item with the EditItemInput model, will not edit empty fields.</summary>
