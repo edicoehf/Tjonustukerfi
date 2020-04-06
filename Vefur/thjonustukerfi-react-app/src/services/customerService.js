@@ -6,64 +6,62 @@ const getAllCustomers = () => {
     return fetch(endpoint, {
         method: "GET",
         headers: {
-            crossDomain: true
-        }
+            crossDomain: true,
+        },
     })
         .then(handleErrors)
         .then(handleData)
-        .catch(error => Promise.reject(error));
+        .catch((error) => Promise.reject(error));
 };
 
-const deleteCustomerById = id => {
-    console.log(id);
-
+const deleteCustomerById = (id) => {
     return fetch(endpoint + id, {
         method: "DELETE",
         headers: {
-            crossDomain: true
-        }
+            crossDomain: true,
+        },
     })
         .then(handleErrors)
-        .catch(error => Promise.reject(error));
+        .catch((error) => Promise.reject(error));
 };
 
-const createCustomer = customer => {
+const createCustomer = (customer) => {
     return fetch(endpoint, {
         method: "POST",
         body: JSON.stringify(customer),
         headers: {
             "Content-Type": "application/json",
-            crossDomain: true
-        }
+            crossDomain: true,
+        },
     })
         .then(handleErrors)
-        .catch(error => Promise.reject(error));
+        .catch((error) => Promise.reject(error));
 };
 
-const getCustomerById = id => {
+const getCustomerById = (id) => {
     return fetch(endpoint + id, {
         method: "GET",
         headers: {
-            crossDomain: true
-        }
+            crossDomain: true,
+        },
     })
         .then(handleErrors)
         .then(handleData)
-        .catch(error => Promise.reject(error));
+        .catch((error) => Promise.reject(error));
 };
 
-const updateCustomer = customer => {
+const updateCustomer = (customer) => {
     console.log(customer);
     return fetch(endpoint + customer.id + "/update", {
         method: "PATCH",
         body: JSON.stringify(customer),
         headers: {
             "Content-Type": "application/json",
-            crossDomain: true
-        }
+            crossDomain: true,
+        },
     })
         .then(handleErrors)
-        .catch(error => Promise.reject(error));
+        .catch((error) => Promise.reject(error));
 };
 
 export default {
@@ -71,5 +69,5 @@ export default {
     deleteCustomerById,
     createCustomer,
     getCustomerById,
-    updateCustomer
+    updateCustomer,
 };
