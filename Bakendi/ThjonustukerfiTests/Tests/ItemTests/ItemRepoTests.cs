@@ -224,7 +224,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 var oldStateId = mockContext.Item.FirstOrDefault(i => i.Id == itemID).StateId;
 
                 //* Act
-                itemRepo.FinishItem(itemID);
+                itemRepo.CompleteItem(itemID);
 
                 //* Assert
                 var itemEntity = mockContext.Item.FirstOrDefault(i => i.Id == itemID);

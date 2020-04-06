@@ -75,11 +75,11 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             long itemID = 1;
 
             // setup and create controller
-            _itemServiceMock.Setup(method => method.FinishItem(It.IsAny<long>())).Verifiable();
+            _itemServiceMock.Setup(method => method.CompleteItem(It.IsAny<long>())).Verifiable();
             _itemController = new ItemController(_itemServiceMock.Object);
 
             //* Act
-            var response = _itemController.FinishItem(itemID) as OkResult;
+            var response = _itemController.CompleteItem(itemID) as OkResult;
             
             //* Assert
             Assert.IsNotNull(response);
