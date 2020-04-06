@@ -11,5 +11,8 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
         /// <summary>Searches for the given barcode.</summary>
         /// <returns>An item state DTO.</returns>
         ItemStateDTO SearchItem(string search);
+
+        /// <summary>Sets an item to complete state</summary>
+        void CompleteItem(long id);
     }
 }

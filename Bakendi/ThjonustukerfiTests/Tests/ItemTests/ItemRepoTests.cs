@@ -144,7 +144,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
                 // item:
                 var trackedEntity = oldItemList1.FirstOrDefault(i => i.Id == itemID);
-                var oldItemEntity = new Item()
+                var oldItemEntity = new Item()  // Copying item values (not the reference to the object)
                 {
                     Id = trackedEntity.Id,
                     Type = trackedEntity.Type,
@@ -209,7 +209,45 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 Assert.ThrowsException<NotFoundException>(() => itemRepo.EditItem(input3, itemID));
                 Assert.ThrowsException<NotFoundException>(() => itemRepo.EditItem(input4, itemID));
             }
+        }
 
+        [TestMethod]
+        public void CompleteItem_should_update_entity_to_done_state()
+        {
+            //* Arrange
+            long itemID = 1;
+
+            using(var mockContext = new DataContext(_options))
+            {
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                var oldStateId = mockContext.Item.FirstOrDefault(i => i.Id == itemID).StateId;
+
+                //* Act
+                itemRepo.CompleteItem(itemID);
+
+                //* Assert
+                var itemEntity = mockContext.Item.FirstOrDefault(i => i.Id == itemID);
+
+                Assert.IsNotNull(itemEntity);
+                Assert.AreNotEqual(oldStateId, itemEntity.StateId);
+                Assert.AreEqual(5, itemEntity.StateId); //TODO: same as in the method in repo, too hardcoded state as five. Change later
+            }
+        }
+
+        [TestMethod]
+        public void CompleteItem_should_throw_NotFoundException()
+        {
+            //* Arrange
+            long itemID = -1;
+
+            using(var mockContext = new DataContext(_options))
+            {
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                //* Act and assert
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.CompleteItem(itemID));
+            }
         }
 
         //**********     Helper functions     **********//

@@ -67,10 +67,10 @@ namespace ThjonustukerfiWebAPI.Controllers
         /// <returns>OK 200 status</returns>
         /// <response code="200">Customer has been successfully updated.</response>
         /// <response code="400">The input model was not valid.</response>
-        /// <response code="409">The customer with the given ID was not found</response>
+        /// <response code="404">The customer with the given ID was not found</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("{id:int}")]
         [HttpPatch]
         public IActionResult UpdateCustomerDetails([FromBody] CustomerInputModel customer, long id)
@@ -84,9 +84,9 @@ namespace ThjonustukerfiWebAPI.Controllers
         /// <summary>Deletes a customer with the given ID</summary>
         /// <returns>Returns no content</returns>
         /// <response code="204">Customer successfully deleted</response>
-        /// <response code="409">Customer with the given ID was not found</response>
+        /// <response code="404">Customer with the given ID was not found</response>
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("{id:int}")]
         [HttpDelete]
         public IActionResult DeleteCustomerById(long id)

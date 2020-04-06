@@ -157,6 +157,24 @@ namespace ThjonustukerfiTests.Tests
             Assert.AreEqual(responseValues.Count, retDTO.Count);
         }
 
+        [TestMethod]
+        public void CompleteOrder_should_return_200OK()
+        {
+            //* Arrange
+            long orderID = 1;
+
+            //Mock method and create controller
+            _orderServiceMock.Setup(method => method.CompleteOrder(It.IsAny<long>())).Verifiable();
+            _orderController = new OrderController(_orderServiceMock.Object);
+
+            //* Act
+            var response = _orderController.CompleteOrder(orderID) as OkResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(200, response.StatusCode);
+        }
+
         //*     Helper functions     *//
         
         /// <summary>Creates List with OrderDTO</summary>

@@ -23,11 +23,11 @@ namespace ThjonustukerfiWebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("{id:long}")]
         [HttpPatch]
-        public IActionResult EditItem([FromBody] EditItemInput input, long Id)
+        public IActionResult EditItem([FromBody] EditItemInput input, long id)
         {
             if(!ModelState.IsValid) { return BadRequest("Input model is not valid"); }
 
-            _itemService.EditItem(input, Id);
+            _itemService.EditItem(input, id);
 
             return Ok();
         }
@@ -43,6 +43,20 @@ namespace ThjonustukerfiWebAPI.Controllers
         public IActionResult SearchItem([FromQuery(Name = "search")] string search)
         {
             return Ok(_itemService.SearchItem(search));
+        }
+
+        /// <summary>Sets the item with the given ID to the complete state</summary>
+        /// <response code="200">Item is set to complete (sótt)</response>
+        /// <response code="404">Item with the given ID was not found</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("{id:long}/complete")]
+        [HttpPatch]
+        public IActionResult CompleteItem(long id)
+        {
+            _itemService.CompleteItem(id);
+
+            return Ok();
         }
     }
 }

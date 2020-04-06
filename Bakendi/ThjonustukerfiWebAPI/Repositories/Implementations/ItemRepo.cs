@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using AutoMapper;
 using ThjonustukerfiWebAPI.Models;
@@ -66,6 +67,15 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
             // If no changes are made, send a bad request response
             if(input.Type == null && !editState && !editService && !editOrder) {throw new BadRequestException($"The input had no valid values. No changes made."); }
+            else 
+            {
+                // item and the order connected to it modified on this date
+                entity.DateModified = DateTime.Now;
+
+                _dbContext.Order.FirstOrDefault(o =>
+                    o.Id == _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == entity.Id).OrderId)  // find order connected to this item
+                        .DateModified = DateTime.Now;
+            }
 
             _dbContext.SaveChanges();
         }
@@ -86,6 +96,23 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             stateDTO.State = _dbContext.State.FirstOrDefault(s => s.Id == entity.StateId).Name;
 
             return stateDTO;
+        }
+
+        public void CompleteItem(long id)
+        {
+            var entity = _dbContext.Item.FirstOrDefault(i => i.Id == id);
+            if(entity == null) { throw new NotFoundException($"Item with id {id} was not found."); }
+
+            entity.StateId = 5; //TODO: Prety hardcoded, when config for company ready then maybe make this more general
+            entity.DateModified = DateTime.Now;
+            entity.DateCompleted = DateTime.Now;
+
+            // Update date modified of order connected to this
+            _dbContext.Order.FirstOrDefault(o =>
+                    o.Id == _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == entity.Id).OrderId)  // find order connected to this item
+                        .DateModified = DateTime.Now;
+
+            _dbContext.SaveChanges();
         }
     }
 }

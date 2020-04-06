@@ -118,7 +118,7 @@ namespace ThjonustukerfiTests.Tests
                 Assert.AreEqual(orderDTO.Barcode, OrderBarCode);
                 Assert.AreEqual(orderDTO.DateCreated, DateTime.MinValue);
                 Assert.AreEqual(orderDTO.DateModified, modifiedDate);
-                Assert.AreEqual(orderDTO.DateCompleted, DateTime.MaxValue);
+                Assert.IsNull(orderDTO.DateCompleted);
 
                 // Asserting items in order
                 Assert.IsNotNull(orderDTO.Items);
@@ -538,6 +538,88 @@ namespace ThjonustukerfiTests.Tests
         }
 
         [TestMethod]
+        public void CompleteOrder_should_set_all_itemstates_in_order_to_complete()
+        {
+            //* Arrange
+            long orderID = 100;
+
+            using(var mockContext = new DataContext(_options))
+            {
+                var orderRepo = new OrderRepo(mockContext, _mapper);
+
+                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
+                var oldOrder = new Order()  // copy the order, not the reference
+                {
+                    CustomerId = orderEntity.CustomerId,
+                    Barcode = orderEntity.Barcode,
+                    JSON = orderEntity.JSON,
+                    DateCreated = orderEntity.DateCreated,
+                    DateModified = orderEntity.DateModified,
+                    DateCompleted = orderEntity.DateCompleted
+                };
+                var itemOrderConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
+                var oldItemsStates = new List<Item>();
+                foreach (var item in itemOrderConnection)
+                {
+                    var entity = mockContext.Item.FirstOrDefault(i => i.Id == item.ItemId);
+                    oldItemsStates.Add(new Item()   // copying each variable rather than the reference of the objects
+                    {
+                        Id = entity.Id,
+                        Type = entity.Type,
+                        StateId = entity.StateId,
+                        ServiceId = entity.ServiceId,
+                        Barcode = entity.Barcode,
+                        JSON = entity.JSON,
+                        DateCreated = entity.DateCreated,
+                        DateModified = entity.DateModified,
+                        DateCompleted = entity.DateCompleted
+                    });
+                }
+
+                //* Act
+                orderRepo.CompleteOrder(orderID);
+
+                orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
+                var newItemStates = new List<Item>();
+                foreach (var item in itemOrderConnection)
+                {
+                    newItemStates.Add(mockContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
+                }
+                //* Assert
+                // Order
+                Assert.IsNotNull(orderEntity);
+                Assert.AreNotEqual(oldOrder, orderEntity);      // old and new entity not the same
+                Assert.IsNull(oldOrder.DateCompleted);          // make sure the old datecomplete is null
+                Assert.IsNotNull(orderEntity.DateCompleted);    // datecompleted should be updated
+
+                Assert.AreEqual(oldItemsStates.Count, newItemStates.Count); // lists should be of the same size
+                for (var i = 0; i < newItemStates.Count; i++)
+                {
+                    Assert.IsNotNull(newItemStates[i]);
+                    Assert.IsNull(oldItemsStates[i].DateCompleted);     // old date completed should be null
+                    Assert.IsNotNull(newItemStates[i].DateCompleted);   // date completed should be updated
+                    Assert.AreNotEqual(oldItemsStates[i], newItemStates[i]);
+                    Assert.AreEqual(5, newItemStates[i].StateId);   //TODO more general that 5, same as before
+                }
+            }
+        }
+
+        [TestMethod]
+        public void CompleteOrder_should_throw_NotFoundException()
+        {
+            //* Arrange
+            long orderId = -1;
+
+            using(var mockContext = new DataContext(_options))
+            {
+                var orderRepo = new OrderRepo(mockContext, _mapper);
+
+                //* Act and Assert
+                Assert.ThrowsException<NotFoundException>(() => orderRepo.CompleteOrder(orderId));
+            }
+        }
+
+        [TestMethod]
         public void DeleteOrderById_should_remove_order_with_Id_100()
         {
             //* Arrange
@@ -615,7 +697,6 @@ namespace ThjonustukerfiTests.Tests
                 Barcode = OrderBarCode,
                 DateCreated = DateTime.MinValue,
                 DateModified = modifiedDate,
-                DateCompleted = DateTime.MaxValue
             };
 
             Customer mockCustomer = new Customer
@@ -658,7 +739,6 @@ namespace ThjonustukerfiTests.Tests
                     Barcode = "50500001",
                     DateCreated = DateTime.MinValue,
                     DateModified = DateTime.Now,
-                    DateCompleted = DateTime.MaxValue
                 },
                 new Item
                 {
@@ -669,7 +749,6 @@ namespace ThjonustukerfiTests.Tests
                     Barcode = "50500002",
                     DateCreated = DateTime.MinValue,
                     DateModified = DateTime.Now,
-                    DateCompleted = DateTime.MaxValue
                 }
             };
 

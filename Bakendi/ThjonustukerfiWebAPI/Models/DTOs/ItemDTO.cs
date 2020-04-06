@@ -6,6 +6,7 @@ namespace ThjonustukerfiWebAPI.Models.DTOs
         public long Id { get; set; }
         public string Type { get; set; }
         public string Service { get; set; }
+        public string State { get; set; }
         public string Barcode { get; set; }
 
         //*     Overrides     *//
