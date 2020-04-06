@@ -2,18 +2,30 @@ import { handleErrors, handleData } from "./serviceHandlers";
 
 const endpoint = "http://localhost:5000/api/orders/";
 
-const getOrderById = id => {
+const getOrderById = (id) => {
     return fetch(endpoint + id, {
         method: "GET",
         headers: {
-            crossDomain: true
-        }
+            crossDomain: true,
+        },
     })
         .then(handleErrors)
         .then(handleData)
-        .catch(error => Promise.reject(error));
+        .catch((error) => Promise.reject(error));
+};
+
+const deleteOrderById = (id) => {
+    return fetch(endpoint + id, {
+        method: "DELETE",
+        headers: {
+            crossDomain: true,
+        },
+    })
+        .then(handleErrors)
+        .catch((error) => Promise.reject(error));
 };
 
 export default {
-    getOrderById
+    getOrderById,
+    deleteOrderById,
 };
