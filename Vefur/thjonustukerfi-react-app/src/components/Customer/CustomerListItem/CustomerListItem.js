@@ -13,7 +13,7 @@ const CustomerListItem = props => {
                 action
                 href={"/customer/" + customer.id}
             >
-                {customer.name}
+                {customer.name} - {customer.email}
             </ListGroup.Item>
             <ListGroup.Item className="item buttons">
                 <CustomerActions id={customer.id} />
