@@ -15,8 +15,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
         void EditItem(EditItemInput input, long itemId);
         
         /// <summary>Searches for the given barcode.</summary>
-        /// <returns>An Item State DTO.</returns>
-        ItemStateDTO SearchItem(string search);
+        /// <returns>Order ID</returns>
+        long SearchItem(string search);
 
         /// <summary>Sets an item to complete state</summary>
         void CompleteItem(long id);
