@@ -45,5 +45,33 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             Assert.IsNotNull(response);
             Assert.IsInstanceOfType(response, typeof(ItemStateDTO));
         }
+
+        [TestMethod]
+        public void GetItemById_should_return_a_single_itemstateDTO()
+        {
+            //* Arrange
+            long itemID = 1;
+
+            // Mock dto and repo
+            ItemStateDTO itemstate = new ItemStateDTO
+            {
+                Id = itemID,
+                OrderId = 2,
+                Type = "bitar",
+                State = "Í vinnslu",
+                DateModified = DateTime.Now
+            };
+            _itemRepoMock.Setup(method => method.GetItemById(itemID)).Returns(itemstate);
+
+            // Create service
+            _itemService = new ItemService(_itemRepoMock.Object);
+
+            //* Act
+            var retVal = _itemService.GetItemById(itemID);
+
+            //* Assert
+            Assert.IsNotNull(retVal);
+            Assert.IsInstanceOfType(retVal, typeof(ItemStateDTO));
+        }
     }
 }
