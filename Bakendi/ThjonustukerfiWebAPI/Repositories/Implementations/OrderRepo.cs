@@ -280,10 +280,10 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
         public void CompleteOrder(long orderId)
         {
-            var orderEntity = _dbContext.Order.FirstOrDefault(o => o.Id == orderId);
+            var orderEntity = _dbContext.Order.FirstOrDefault(o => o.Id == orderId);    // find entity
             if(orderEntity == null) { throw new NotFoundException($"Order with ID {orderId} was not found."); }
             
-            var currentDate = DateTime.Now;
+            var currentDate = DateTime.Now; // get current date once to use when updating item and order
             orderEntity.DateCompleted = currentDate;
             orderEntity.DateModified = currentDate;
 
