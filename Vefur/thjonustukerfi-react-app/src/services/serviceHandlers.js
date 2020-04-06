@@ -1,12 +1,11 @@
-const handleErrors = resp => {
-    console.log(resp);
+const handleErrors = (resp) => {
     if (!resp.ok) {
         throw Error(resp);
     }
     return resp;
 };
 
-const handleData = data => {
+const handleData = (data) => {
     if (!data) {
         return {};
     }
@@ -15,5 +14,5 @@ const handleData = data => {
 
 module.exports = {
     handleErrors,
-    handleData
+    handleData,
 };
