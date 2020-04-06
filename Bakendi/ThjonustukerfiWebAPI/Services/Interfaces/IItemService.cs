@@ -13,6 +13,6 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
         ItemStateDTO SearchItem(string search);
 
         /// <summary>Sets an item to complete state</summary>
-        void FinishItem(long id);
+        void CompleteItem(long id);
     }
 }

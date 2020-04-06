@@ -18,6 +18,6 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         }
         public void EditItem(EditItemInput input, long itemId) => _itemRepo.EditItem(input, itemId);
         public ItemStateDTO SearchItem(string search) => _itemRepo.SearchItem(search);
-        public void FinishItem(long id) => _itemRepo.FinishItem(id);
+        public void CompleteItem(long id) => _itemRepo.CompleteItem(id);
     }
 }

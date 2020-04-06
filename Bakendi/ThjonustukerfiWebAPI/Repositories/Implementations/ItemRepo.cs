@@ -88,7 +88,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             return stateDTO;
         }
 
-        public void FinishItem(long id)
+        public void CompleteItem(long id)
         {
             var entity = _dbContext.Item.FirstOrDefault(i => i.Id == id);
             if(entity == null) { throw new NotFoundException($"Item with id {id} was not found."); }
