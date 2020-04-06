@@ -271,6 +271,20 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             }
         }
 
+        [TestMethod]
+        public void GetItemById_should_throw_NotFoundException()
+        {
+            //* Arrange
+            long itemID = -1;
+            using(var mockContext = new DataContext(_options))
+            {
+                var itemRepo = new ItemRepo(mockContext, _mapper);
+
+                //* Act and Assert
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.GetItemById(itemID));
+            }
+        }
+
         //**********     Helper functions     **********//
         private void FillDatabase(DataContext mockContext)
         {
