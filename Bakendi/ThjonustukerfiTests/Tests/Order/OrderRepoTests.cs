@@ -620,6 +620,43 @@ namespace ThjonustukerfiTests.Tests
         }
 
         [TestMethod]
+        public void SearchOrder_should_return_the_correct_ID()
+        {
+            //* Arrange
+            string barcodeToSearch = "20200001";
+            using(var mockContext = new DataContext(_options))
+            {
+                // Create repo
+                var orderRepo = new OrderRepo(mockContext, _mapper);
+                // Get correct entity
+                var correctEntity = mockContext.Order.FirstOrDefault(o => o.Barcode == barcodeToSearch);
+
+                //* Act
+                var returnValue = orderRepo.SearchOrder(barcodeToSearch);
+
+                //* Assert
+                Assert.IsNotNull(returnValue);
+                Assert.IsInstanceOfType(returnValue, typeof(long));
+                Assert.AreEqual(correctEntity.Id, returnValue);
+            }
+        }
+
+        [TestMethod]
+        public void SearchOrder_should_throw_NotFoundException()
+        {
+            //* Arrange
+            using(var mockContext = new DataContext(_options))
+            {
+                var orderRepo = new OrderRepo(mockContext, _mapper);
+
+                string inp = "This barcode should never exist, I mean this is no barcode.";
+
+                //* Act and Assert
+                Assert.ThrowsException<NotFoundException>(() => orderRepo.SearchOrder(inp));
+            }
+        }
+
+        [TestMethod]
         public void DeleteOrderById_should_remove_order_with_Id_100()
         {
             //* Arrange

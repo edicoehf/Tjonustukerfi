@@ -40,6 +40,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 var itemEntity = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);                  // get item entity
                 var add = _mapper.Map<ItemDTO>(itemEntity);                                                 // map to DTO
                 add.Service = _dbContext.Service.FirstOrDefault(s => s.Id == itemEntity.ServiceId).Name;    // Find service name
+                add.State = _dbContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;
                 dto.Items.Add(add);     // add item DTO to orderDTO item list
             }
 
@@ -299,6 +300,14 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             }
 
             _dbContext.SaveChanges();
+        }
+
+        public long SearchOrder(string barcode)
+        {
+            var entity = _dbContext.Order.FirstOrDefault(o => o.Barcode == barcode);
+            if(entity == null) { throw new NotFoundException($"Order with barcode {barcode} was not found."); }
+
+            return entity.Id;
         }
     }
 }

@@ -26,5 +26,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
 
         /// <summary>Sets all items to complete in order</summary>
         void CompleteOrder(long orderId);
+
+        /// <summary>Finds ID of order with the given barcode.</summary>
+        /// <returns>The orders ID</returns>
+        long SearchOrder(string barcode);
     }
 }

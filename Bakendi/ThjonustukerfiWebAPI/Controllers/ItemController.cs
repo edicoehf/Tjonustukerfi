@@ -16,6 +16,19 @@ namespace ThjonustukerfiWebAPI.Controllers
             _itemService = itemService;
         }
 
+        /// <summary>Gets item by given ID</summary>
+        /// <returns>Item and its status</returns>
+        /// <response code="200">Item was successfully retrieved</response>
+        /// <response code="404">Item with given ID was not found</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("{id:long}")]
+        [HttpGet]
+        public IActionResult GetItemById(long id)
+        {
+            return Ok(_itemService.GetItemById(id));
+        }
+
         /// <summary>Changes information of an item with the given input. Empty fields will not be edited.</summary>
         /// <response code="200">Item has been edited successfully.</response>
         /// <response code="400">Input model is not valid.</response>
@@ -38,9 +51,9 @@ namespace ThjonustukerfiWebAPI.Controllers
         /// <response code="404">The Item with the given barcode was not found.</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Route("")]
+        [Route("search")]
         [HttpGet]
-        public IActionResult SearchItem([FromQuery(Name = "search")] string search)
+        public IActionResult SearchItem([FromQuery(Name = "barcode")] string search)
         {
             return Ok(_itemService.SearchItem(search));
         }
