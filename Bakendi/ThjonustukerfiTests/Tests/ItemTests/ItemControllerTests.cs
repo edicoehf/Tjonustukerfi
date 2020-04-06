@@ -34,7 +34,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 DateModified = DateTime.Now
             };
             // Mock the method
-            _itemServiceMock.Setup(method => method.SearchItem("someString")).Returns(retDTO);
+            _itemServiceMock.Setup(method => method.SearchItem("someString")).Returns(retDTO).Verifiable();
 
             // Create controller
             _itemController = new ItemController(_itemServiceMock.Object);
@@ -63,6 +63,24 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             //* Act
             var response = _itemController.EditItem(item, 1) as OkResult;
 
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(200, response.StatusCode);
+        }
+
+        [TestMethod]
+        public void FinishItem_should_return_200_status_ok()
+        {
+            //* Arrange
+            long itemID = 1;
+
+            // setup and create controller
+            _itemServiceMock.Setup(method => method.FinishItem(It.IsAny<long>())).Verifiable();
+            _itemController = new ItemController(_itemServiceMock.Object);
+
+            //* Act
+            var response = _itemController.FinishItem(itemID) as OkResult;
+            
             //* Assert
             Assert.IsNotNull(response);
             Assert.AreEqual(200, response.StatusCode);
