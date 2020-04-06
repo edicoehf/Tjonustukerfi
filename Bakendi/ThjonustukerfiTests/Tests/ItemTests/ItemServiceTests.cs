@@ -24,16 +24,18 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         public void SearchItem_should_return_a_ItemStateDTO()
         {
             //* Arrange
+            long itemID = 1;
             var retDTO = new ItemStateDTO
             {
-                Id = 1,
+                Id = itemID,
                 OrderId = 1,
                 Type = "Test",
                 State = "Í vinnslu",
                 DateModified = DateTime.Now
             };
             // Mock the method
-            _itemRepoMock.Setup(method => method.SearchItem("someString")).Returns(retDTO);
+            _itemRepoMock.Setup(method => method.SearchItem("someString")).Returns(itemID);
+            _itemRepoMock.Setup(method => method.GetItemById(itemID)).Returns(retDTO);
 
             // Create controller
             _itemService = new ItemService(_itemRepoMock.Object);

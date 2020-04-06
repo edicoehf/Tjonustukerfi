@@ -68,7 +68,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void SearchItems_should_return_the_correct_ItemStateDTO()
+        public void SearchItems_should_return_the_correct_ID()
         {
             //* Arrange
             string barcodeToSearch = "50500002";
@@ -78,19 +78,14 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 var itemRepo = new ItemRepo(mockContext, _mapper);
                 // Get correct entity
                 var correctEntity = mockContext.Item.FirstOrDefault(i => i.Barcode == barcodeToSearch);
-                // Map to DTO
-                var correctDTO = _mapper.Map<ItemStateDTO>(correctEntity);
-                // Get correct values for the rest of the DTO
-                correctDTO.OrderId = mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == correctDTO.Id).OrderId;
-                correctDTO.State = mockContext.State.FirstOrDefault(s => s.Id == correctEntity.StateId).Name;
 
                 //* Act
                 var returnValue = itemRepo.SearchItem(barcodeToSearch);
 
                 //* Assert
                 Assert.IsNotNull(returnValue);
-                Assert.IsInstanceOfType(returnValue, typeof(ItemStateDTO));
-                Assert.AreEqual(correctDTO, returnValue);
+                Assert.IsInstanceOfType(returnValue, typeof(long));
+                Assert.AreEqual(correctEntity.Id, returnValue);
             }
         }
 
