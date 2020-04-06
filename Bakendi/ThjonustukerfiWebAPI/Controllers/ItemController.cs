@@ -44,5 +44,19 @@ namespace ThjonustukerfiWebAPI.Controllers
         {
             return Ok(_itemService.SearchItem(search));
         }
+
+        /// <summary>Sets the item with the given ID to the complete state</summary>
+        /// <response code="200">Item is set to complete (sótt)</response>
+        /// <response code="404">Item with the given ID was not found</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("{id:long}/complete")]
+        [HttpPatch]
+        public IActionResult FinishItem(long Id)
+        {
+            _itemService.FinishItem(Id);
+
+            return Ok();
+        }
     }
 }
