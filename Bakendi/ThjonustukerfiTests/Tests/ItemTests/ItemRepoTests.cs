@@ -212,7 +212,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void FinishItem_should_update_entity_to_done_state()
+        public void CompleteItem_should_update_entity_to_done_state()
         {
             //* Arrange
             long itemID = 1;
@@ -232,6 +232,21 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 Assert.IsNotNull(itemEntity);
                 Assert.AreNotEqual(oldStateId, itemEntity.StateId);
                 Assert.AreEqual(5, itemEntity.StateId); //TODO: same as in the method in repo, too hardcoded state as five. Change later
+            }
+        }
+
+        [TestMethod]
+        public void CompleteItem_should_throw_NotFoundException()
+        {
+            //* Arrange
+            long itemID = -1;
+
+            using(var mockContext = new DataContext(_options))
+            {
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                //* Act and assert
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.CompleteItem(itemID));
             }
         }
 
