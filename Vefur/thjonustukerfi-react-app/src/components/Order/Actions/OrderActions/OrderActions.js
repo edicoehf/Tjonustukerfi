@@ -1,4 +1,5 @@
 import React from "react";
+import DeleteOrderAction from "../DeleteOrderAction/DeleteOrderAction";
 
 const OrderActions = ({ id }) => {
     return (
