@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
@@ -104,6 +105,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 {
                     items[i].Type = order.Items[i].Type;
                     items[i].ServiceId = order.Items[i].ServiceId;
+                    items[i].DateModified = DateTime.Now;
                 }
             }
             else if(items.Count == 0 && order.Items.Count > 0)      // if the list in the database is empty, just add the new ones
@@ -118,6 +120,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 {
                     items[i].Type = order.Items[i].Type;
                     items[i].ServiceId = order.Items[i].ServiceId;
+                    items[i].DateModified = DateTime.Now;
                 }
 
                 // Build the rest of the list
@@ -138,6 +141,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 {
                     items[i].Type = order.Items[i].Type;
                     items[i].ServiceId = order.Items[i].ServiceId;
+                    items[i].DateModified = DateTime.Now;
                 }
 
                 // rest of the items to delete off the tail
@@ -278,14 +282,20 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
         {
             var orderEntity = _dbContext.Order.FirstOrDefault(o => o.Id == orderId);
             if(orderEntity == null) { throw new NotFoundException($"Order with ID {orderId} was not found."); }
+            
+            var currentDate = DateTime.Now;
+            orderEntity.DateCompleted = currentDate;
+            orderEntity.DateModified = currentDate;
 
             var orderItemConnection = _dbContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderId).ToList();
             foreach (var item in orderItemConnection)
             {
-                var ItemToAdd = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);
-                if(ItemToAdd == null) { throw new NotFoundException($"Item with ID {item.ItemId} was not found in order with order ID {orderId}."); }
+                var itemToChange = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);
+                if(itemToChange == null) { throw new NotFoundException($"Item with ID {item.ItemId} was not found in order with order ID {orderId}."); }
                 
-                ItemToAdd.StateId = 5;  //TODO: Same as in complete Item, update id to be more general (e.g. some global enunm or somthing)
+                itemToChange.StateId = 5;  //TODO: Same as in complete Item, update id to be more general (e.g. some global enunm or somthing)
+                itemToChange.DateCompleted = currentDate;
+                itemToChange.DateModified = currentDate;
             }
 
             _dbContext.SaveChanges();
