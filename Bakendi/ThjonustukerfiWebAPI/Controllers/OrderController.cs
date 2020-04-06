@@ -108,5 +108,12 @@ namespace ThjonustukerfiWebAPI.Controllers
 
             return Ok();
         }
+
+        [Route("search")]
+        [HttpGet]
+        public IActionResult SearchOrder([FromQuery(Name = "barcode")] string search)
+        {
+            return Ok(_orderService.SearchOrder(search));
+        }
     }
 }

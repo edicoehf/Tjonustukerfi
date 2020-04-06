@@ -30,5 +30,12 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         public IEnumerable GetAllOrders() => _orderRepo.GetAllOrders();
 
         public void CompleteOrder(long orderId) => _orderRepo.CompleteOrder(orderId);
+
+        public OrderDTO SearchOrder(string barcode)
+        {
+            var orderID = _orderRepo.SearchOrder(barcode);  // Throws not found exception if no order has this barcode
+
+            return _orderRepo.GetOrderbyId(orderID);
+        }
     }
 }
