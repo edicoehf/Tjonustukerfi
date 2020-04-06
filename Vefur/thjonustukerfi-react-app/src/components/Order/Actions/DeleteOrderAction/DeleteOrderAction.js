@@ -14,11 +14,7 @@ const DeleteOrderAction = ({ id }) => {
             >
                 Eyða
             </Button>
-            {error ? (
-                <p className="delete-error">Gat ekki eytt pöntun</p>
-            ) : (
-                <></>
-            )}
+            {error && <p className="delete-error">Gat ekki eytt pöntun</p>}
         </div>
     );
 };
