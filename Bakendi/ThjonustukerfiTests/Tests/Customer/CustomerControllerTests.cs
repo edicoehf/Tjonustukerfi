@@ -145,7 +145,7 @@ namespace ThjonustukerfiTests.Tests
 
             //* Assert
             Assert.IsNotNull(response);
-            Assert.AreEqual(204, response.StatusCode);
+            Assert.AreEqual(StatusCodes.Status204NoContent, response.StatusCode);
         }
 
         [TestMethod]
@@ -166,8 +166,6 @@ namespace ThjonustukerfiTests.Tests
             Assert.IsInstanceOfType(response.Value as List<OrderDTO>, typeof(List<OrderDTO>));
             Assert.IsTrue((response.Value as List<OrderDTO>).Any());
         }
-
-        
 
         [TestMethod]
         public void GetCustomers_should_return_200OK_and_a_list_of_CustomerDto()
@@ -200,6 +198,24 @@ namespace ThjonustukerfiTests.Tests
             Assert.IsNotNull(response);
             Assert.AreEqual(200, response.StatusCode);
             Assert.AreEqual(responseValue.Count, retDTO.Count);
+        }
+
+        [TestMethod]
+        public void DeleteCustomerByIdAndOrders_should_respond_with_NoContent()
+        {
+            //* Arrange
+            // mock
+            _customerServiceMock.Setup(method => method.DeleteCustomerByIdAndOrders(It.IsAny<long>())).Verifiable();
+
+            // create controller
+            _customerController = new CustomerController(_customerServiceMock.Object);
+
+            //* Act
+            var response = _customerController.DeleteCustomerByIdAndOrders(1) as NoContentResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(StatusCodes.Status204NoContent, response.StatusCode);
         }
 
         //*         Helper functions         *//
