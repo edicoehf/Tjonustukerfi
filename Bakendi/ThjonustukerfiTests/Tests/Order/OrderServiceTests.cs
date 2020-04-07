@@ -8,6 +8,7 @@ using ThjonustukerfiWebAPI.Repositories.Interfaces;
 using ThjonustukerfiWebAPI.Services.Implementations;
 using ThjonustukerfiWebAPI.Services.Interfaces;
 using System;
+using System.Linq;
 
 namespace ThjonustukerfiTests.Tests
 {
@@ -137,6 +138,29 @@ namespace ThjonustukerfiTests.Tests
                 Assert.IsNotNull(val);
                 Assert.IsInstanceOfType(val, typeof(OrderDTO));
             }
+        }
+
+        [TestMethod]
+        public void SearchOrder_should_return_a_OrderDTO()
+        {
+            //* Arrange
+            long orderID = 1;
+            string barcode = "0100001111";
+            var retDTO = CreateOrderDTOList().First();
+
+            // mock
+            _orderRepoMock.Setup(method => method.SearchOrder(barcode)).Returns(orderID);
+            _orderRepoMock.Setup(method => method.GetOrderbyId(orderID)).Returns(retDTO);
+
+            // Create controller
+            _orderService = new OrderService(_orderRepoMock.Object, _customerRepoMock.Object);
+
+            //* Act
+            var retVal = _orderService.SearchOrder(barcode);
+
+            //* Assert
+            Assert.IsNotNull(retVal);
+            Assert.IsInstanceOfType(retVal, typeof(OrderDTO));
         }
 
         private List<OrderDTO> CreateOrderDTOList()

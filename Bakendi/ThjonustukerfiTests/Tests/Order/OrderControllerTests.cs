@@ -175,6 +175,46 @@ namespace ThjonustukerfiTests.Tests
             Assert.AreEqual(200, response.StatusCode);
         }
 
+        [TestMethod]
+        public void SearchOrder_should_return_200OK_and_a_OrderDTO()
+        {
+            string barcode = "0100001111";
+            //* Arrange
+            var orderDTO = CreateOrderDTOList().First();
+            
+            // Mocking the method
+            _orderServiceMock.Setup(method => method.SearchOrder(barcode)).Returns(orderDTO).Verifiable();
+
+            // Create controller
+            _orderController = new OrderController(_orderServiceMock.Object);
+
+            //* Act
+            var response = _orderController.SearchOrder(barcode) as OkObjectResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(200, response.StatusCode);
+            Assert.IsInstanceOfType(response.Value as OrderDTO, typeof(OrderDTO));
+        }
+
+        [TestMethod]
+        public void RemoveOrderQuery_should_respond_with_a_NoContentResult()
+        {
+            //* Arrange
+            // Mock method
+            _orderServiceMock.Setup(method => method.RemoveOrderQuery(It.IsAny<string>())).Verifiable();
+
+            // Create controller
+            _orderController = new OrderController(_orderServiceMock.Object);
+
+            //* Act
+            var response = _orderController.RemoveOrderQuery("some string") as NoContentResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(204, response.StatusCode);
+        }
+
         //*     Helper functions     *//
         
         /// <summary>Creates List with OrderDTO</summary>

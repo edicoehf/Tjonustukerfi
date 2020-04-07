@@ -68,7 +68,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void SearchItems_should_return_the_correct_ItemStateDTO()
+        public void SearchItems_should_return_the_correct_ID()
         {
             //* Arrange
             string barcodeToSearch = "50500002";
@@ -78,19 +78,14 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 var itemRepo = new ItemRepo(mockContext, _mapper);
                 // Get correct entity
                 var correctEntity = mockContext.Item.FirstOrDefault(i => i.Barcode == barcodeToSearch);
-                // Map to DTO
-                var correctDTO = _mapper.Map<ItemStateDTO>(correctEntity);
-                // Get correct values for the rest of the DTO
-                correctDTO.OrderId = mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == correctDTO.Id).OrderId;
-                correctDTO.State = mockContext.State.FirstOrDefault(s => s.Id == correctEntity.StateId).Name;
 
                 //* Act
                 var returnValue = itemRepo.SearchItem(barcodeToSearch);
 
                 //* Assert
                 Assert.IsNotNull(returnValue);
-                Assert.IsInstanceOfType(returnValue, typeof(ItemStateDTO));
-                Assert.AreEqual(correctDTO, returnValue);
+                Assert.IsInstanceOfType(returnValue, typeof(long));
+                Assert.AreEqual(correctEntity.Id, returnValue);
             }
         }
 
@@ -247,6 +242,105 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
                 //* Act and assert
                 Assert.ThrowsException<NotFoundException>(() => itemRepo.CompleteItem(itemID));
+            }
+        }
+
+        [TestMethod]
+        public void GetItemById_should_return_itemStateDTO()
+        {
+            //* Arrange
+            long itemID = 1;
+            using(var mockContext = new DataContext(_options))
+            {
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                var itemEntity = mockContext.Item.FirstOrDefault(i => i.Id == itemID);
+                
+                // Same item the function should find
+                var itemDTO = _mapper.Map<ItemStateDTO>(itemEntity);
+                itemDTO.OrderId = mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemEntity.Id).OrderId;
+                itemDTO.State = mockContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;
+
+                //* Act
+                var retVal = itemRepo.GetItemById(itemID);
+
+                //* Assert
+                Assert.IsNotNull(retVal);
+                Assert.IsInstanceOfType(retVal, typeof(ItemStateDTO));
+                Assert.AreEqual(itemDTO, retVal);
+            }
+        }
+
+        [TestMethod]
+        public void GetItemById_should_throw_NotFoundException()
+        {
+            //* Arrange
+            long itemID = -1;
+            using(var mockContext = new DataContext(_options))
+            {
+                var itemRepo = new ItemRepo(mockContext, _mapper);
+
+                //* Act and Assert
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.GetItemById(itemID));
+            }
+        }
+
+        [TestMethod]
+        public void RemoveItem_should_remove_a_single_item()
+        {
+            //* Arrange
+            long orderID = 101;
+            long itemID = 1;
+
+            // Note: Order with ID 101 started empty then an item from order 100 was moved to this one, that item has ID 1.
+            //       Therefor, before removing, this order has one item and should be empty after removing.
+            using(var mockContext = new DataContext(_options))
+            {
+                // Create repo
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                var itemOrderConnections = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
+                var oldItemOrderSize = itemOrderConnections.Count;    // Item order connection size before remove
+                
+                var oldItemList = new List<Item>();
+                foreach (var item in itemOrderConnections)  // get the list of items
+                {
+                    oldItemList.Add(mockContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
+                }
+                var oldItemListCount = oldItemList.Count;   // size of the list before remove
+
+                //* Act
+                itemRepo.RemoveItem(itemID);
+
+                itemOrderConnections = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
+                var newItemOrderSize = itemOrderConnections.Count;  // Item order connection size after remove
+
+                var newItemList = new List<Item>();
+                foreach (var item in itemOrderConnections)
+                {
+                    newItemList.Add(mockContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
+                }
+                var newItemListCount = newItemList.Count;           // Item list size after remove
+
+                //* Assert
+                Assert.AreEqual(oldItemOrderSize - 1, newItemOrderSize);    // check the item order connections list
+                Assert.AreEqual(oldItemListCount - 1, newItemListCount);    // check the size of the item list itself
+            }
+        }
+
+        [TestMethod]
+        public void RemoveItem_should_throw_NotFoundException()
+        {
+            //* Arrange
+            long itemID = 1;
+
+            using(var mockContext = new DataContext(_options))
+            {
+                // try removing the item we already removed in the test before this one
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                //* Act and Assert
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.RemoveItem(itemID));
             }
         }
 

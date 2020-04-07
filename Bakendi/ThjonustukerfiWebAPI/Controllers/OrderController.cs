@@ -108,5 +108,32 @@ namespace ThjonustukerfiWebAPI.Controllers
 
             return Ok();
         }
+
+        /// <summary>Searches for the order with the given barcode (as a query).</summary>
+        /// <returns>Order data transfer object</returns>
+        /// <response code="200">Successfully found the order and returns it.</response>
+        /// <response code="404">The order with the given barcode was not found</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("search")]
+        [HttpGet]
+        public IActionResult SearchOrder([FromQuery(Name = "barcode")] string search)
+        {
+            return Ok(_orderService.SearchOrder(search));
+        }
+
+        /// <summary>Removes order by barcode</summary>
+        /// <response code="204">Order was successfully removed.</response>
+        /// <response code="404">Order with the given ID was not found</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("remove")]
+        [HttpDelete]
+        public IActionResult RemoveOrderQuery([FromQuery(Name = "barcode")] string barcode)
+        {
+            _orderService.RemoveOrderQuery(barcode);
+
+            return NoContent();
+        }
     }
 }
