@@ -29,5 +29,8 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
 
         /// <summary>Gets the order with the given barcode</summary>
         OrderDTO SearchOrder(string barcode);
+
+        /// <summary>Removes the order with the given barcode</summary>
+        void RemoveOrderQuery(string barcode);
     }
 }

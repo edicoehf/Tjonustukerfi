@@ -121,5 +121,19 @@ namespace ThjonustukerfiWebAPI.Controllers
         {
             return Ok(_orderService.SearchOrder(search));
         }
+
+        /// <summary>Removes order by barcode</summary>
+        /// <response code="204">Order was successfully removed.</response>
+        /// <response code="404">Order with the given ID was not found</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("remove")]
+        [HttpDelete]
+        public IActionResult RemoveOrderQuery([FromQuery(Name = "barcode")] string barcode)
+        {
+            _orderService.RemoveOrderQuery(barcode);
+
+            return NoContent();
+        }
     }
 }

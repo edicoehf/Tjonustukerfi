@@ -20,5 +20,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
 
         /// <summary>Sets an item to complete state</summary>
         void CompleteItem(long id);
+
+         /// <summary>Removes Item with the given ID</summary>
+        void RemoveItem(long itemId);
     }
 }

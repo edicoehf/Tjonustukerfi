@@ -37,5 +37,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
 
             return _orderRepo.GetOrderbyId(orderID);
         }
+
+        public void RemoveOrderQuery(string barcode) => _orderRepo.DeleteByOrderId(_orderRepo.SearchOrder(barcode));
     }
 }

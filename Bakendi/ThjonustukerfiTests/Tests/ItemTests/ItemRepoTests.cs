@@ -285,6 +285,65 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             }
         }
 
+        [TestMethod]
+        public void RemoveItem_should_remove_a_single_item()
+        {
+            //* Arrange
+            long orderID = 101;
+            long itemID = 1;
+
+            // Note: Order with ID 101 started empty then an item from order 100 was moved to this one, that item has ID 1.
+            //       Therefor, before removing, this order has one item and should be empty after removing.
+            using(var mockContext = new DataContext(_options))
+            {
+                // Create repo
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                var itemOrderConnections = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
+                var oldItemOrderSize = itemOrderConnections.Count;    // Item order connection size before remove
+                
+                var oldItemList = new List<Item>();
+                foreach (var item in itemOrderConnections)  // get the list of items
+                {
+                    oldItemList.Add(mockContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
+                }
+                var oldItemListCount = oldItemList.Count;   // size of the list before remove
+
+                //* Act
+                itemRepo.RemoveItem(itemID);
+
+                itemOrderConnections = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
+                var newItemOrderSize = itemOrderConnections.Count;  // Item order connection size after remove
+
+                var newItemList = new List<Item>();
+                foreach (var item in itemOrderConnections)
+                {
+                    newItemList.Add(mockContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
+                }
+                var newItemListCount = newItemList.Count;           // Item list size after remove
+
+                //* Assert
+                Assert.AreEqual(oldItemOrderSize - 1, newItemOrderSize);    // check the item order connections list
+                Assert.AreEqual(oldItemListCount - 1, newItemListCount);    // check the size of the item list itself
+            }
+        }
+
+        [TestMethod]
+        public void RemoveItem_should_throw_NotFoundException()
+        {
+            //* Arrange
+            long itemID = 1;
+
+            using(var mockContext = new DataContext(_options))
+            {
+                // try removing the item we already removed in the test before this one
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                //* Act and Assert
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.RemoveItem(itemID));
+            }
+        }
+
         //**********     Helper functions     **********//
         private void FillDatabase(DataContext mockContext)
         {

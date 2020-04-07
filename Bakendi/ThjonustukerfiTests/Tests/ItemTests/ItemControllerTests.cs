@@ -114,5 +114,41 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             Assert.AreEqual(200, response.StatusCode);
             Assert.IsInstanceOfType(response.Value as ItemStateDTO, typeof(ItemStateDTO));
         }
+
+        [TestMethod]
+        public void RemoveItem_should_return_no_content_response()
+        {
+            //* Arrange
+            // Mock service
+            _itemServiceMock.Setup(method => method.RemoveItem(It.IsAny<long>())).Verifiable();
+
+            // Create controller
+            _itemController = new ItemController(_itemServiceMock.Object);
+
+            //* Act
+            var response = _itemController.RemoveItem(1) as NoContentResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(204, response.StatusCode);
+        }
+
+        [TestMethod]
+        public void RemoveItemQuery_should_return_NoContent_response()
+        {
+            //* Arrange
+            // Mock service
+            _itemServiceMock.Setup(method => method.RemoveItemQuery(It.IsAny<string>())).Verifiable();
+
+            // Create controller
+            _itemController = new ItemController(_itemServiceMock.Object);
+
+            //* Act
+            var response = _itemController.RemoveItemQuery("some random string") as NoContentResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(204, response.StatusCode);
+        }
     }
 }

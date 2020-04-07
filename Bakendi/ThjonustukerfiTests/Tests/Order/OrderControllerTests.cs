@@ -197,6 +197,24 @@ namespace ThjonustukerfiTests.Tests
             Assert.IsInstanceOfType(response.Value as OrderDTO, typeof(OrderDTO));
         }
 
+        [TestMethod]
+        public void RemoveOrderQuery_should_respond_with_a_NoContentResult()
+        {
+            //* Arrange
+            // Mock method
+            _orderServiceMock.Setup(method => method.RemoveOrderQuery(It.IsAny<string>())).Verifiable();
+
+            // Create controller
+            _orderController = new OrderController(_orderServiceMock.Object);
+
+            //* Act
+            var response = _orderController.RemoveOrderQuery("some string") as NoContentResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(204, response.StatusCode);
+        }
+
         //*     Helper functions     *//
         
         /// <summary>Creates List with OrderDTO</summary>
