@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ThjonustukerfiWebAPI.Models.DTOs;
+using ThjonustukerfiWebAPI.Models.Exceptions;
 using ThjonustukerfiWebAPI.Models.InputModels;
 using ThjonustukerfiWebAPI.Repositories.Interfaces;
 using ThjonustukerfiWebAPI.Services.Implementations;
@@ -163,6 +164,20 @@ namespace ThjonustukerfiTests.Tests
             Assert.IsNotNull(returnValue);
             Assert.IsInstanceOfType(returnValue, typeof(List<OrderDTO>));
             Assert.IsFalse(returnValue.Any());
+        }
+
+        [TestMethod]
+        public void DeleteCustomerByIdAndOrders_should_throw_NotFoundException()
+        {
+            //* Arrange
+            // mock
+            _customerRepoMock.Setup(method => method.CustomerExists(It.IsAny<long>())).Returns(false);
+
+            // Create service
+            _customerService = new CustomerService(_customerRepoMock.Object, _orderRepoMock.Object);
+
+            //* Act and Assert
+            Assert.ThrowsException<NotFoundException>(() => _customerService.DeleteCustomerByIdAndOrders(1));
         }
 
         //*         Helper functions         *//
