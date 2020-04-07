@@ -12,6 +12,7 @@ using ThjonustukerfiWebAPI.Models.InputModels;
 using ThjonustukerfiWebAPI.Models.Exceptions;
 using ThjonustukerfiWebAPI.Repositories.Implementations;
 using ThjonustukerfiWebAPI.Models.Entities;
+using ThjonustukerfiWebAPI.Repositories.Interfaces;
 
 namespace ThjonustukerfiTests.Tests
 {
@@ -238,6 +239,27 @@ namespace ThjonustukerfiTests.Tests
 
                 //* Act and Assert
                 Assert.ThrowsException<NotFoundException>(() => orderRepo.CreateOrder(inp));
+            }
+        }
+
+        [TestMethod]
+        public void GetActiveOrdersByCustomerId_should_retrieve_correct_order()
+        {
+            //* Arrange
+            long customerId = 50;
+            long orderIdExpected = 100;
+            
+            // This order was created in the build database test. This person should only have this one order
+            using(var mockContext = new DataContext(_options))
+            {
+                IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
+
+                //* Act
+                var activeList = orderRepo.GetActiveOrdersByCustomerId(customerId);
+
+                Assert.IsNotNull(activeList);
+                Assert.AreEqual(1, activeList.Count);
+                Assert.AreEqual(orderIdExpected, activeList[0].Id);
             }
         }
 

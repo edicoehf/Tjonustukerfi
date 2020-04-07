@@ -163,6 +163,7 @@ namespace ThjonustukerfiTests.Tests
             Assert.IsInstanceOfType(retVal, typeof(OrderDTO));
         }
 
+        /// <summary>Creates a list of order DTO for testing</summary>
         private List<OrderDTO> CreateOrderDTOList()
         {
             return new List<OrderDTO>()

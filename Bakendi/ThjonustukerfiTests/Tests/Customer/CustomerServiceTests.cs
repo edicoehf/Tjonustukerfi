@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ThjonustukerfiWebAPI.Models.DTOs;
+using ThjonustukerfiWebAPI.Models.Exceptions;
 using ThjonustukerfiWebAPI.Models.InputModels;
 using ThjonustukerfiWebAPI.Repositories.Interfaces;
 using ThjonustukerfiWebAPI.Services.Implementations;
@@ -14,12 +17,14 @@ namespace ThjonustukerfiTests.Tests
     {
         private ICustomerService _customerService;
         private Mock<ICustomerRepo> _customerRepoMock;
+        private Mock<IOrderRepo> _orderRepoMock;
 
         // This method is excecuted before each test
         [TestInitialize]
         public void Initialize()
         {
             _customerRepoMock = new Mock<ICustomerRepo>();
+            _orderRepoMock = new Mock<IOrderRepo>();
         }
 
         [TestMethod]
@@ -43,7 +48,7 @@ namespace ThjonustukerfiTests.Tests
             _customerRepoMock.Setup(method => method.CreateCustomer(inp)).Returns(mockCustomerDTO);
 
             // Craete service
-            _customerService = new CustomerService(_customerRepoMock.Object);
+            _customerService = new CustomerService(_customerRepoMock.Object, _orderRepoMock.Object);
 
             //* Act
             var customerDTOReturn = _customerService.CreateCustomer(inp);
@@ -75,7 +80,7 @@ namespace ThjonustukerfiTests.Tests
             _customerRepoMock.Setup(method => method.GetCustomerById(id)).Returns(mockCustomerDetailsDTO);
 
             // Create service
-            _customerService = new CustomerService(_customerRepoMock.Object);
+            _customerService = new CustomerService(_customerRepoMock.Object, _orderRepoMock.Object);
 
             //* Act
             var customerDetailsDTO = _customerService.GetCustomerById(id);
@@ -112,7 +117,7 @@ namespace ThjonustukerfiTests.Tests
             _customerRepoMock.Setup(method => method.GetAllCustomers()).Returns(retDTO);
 
             // Create service
-            _customerService = new CustomerService(_customerRepoMock.Object);
+            _customerService = new CustomerService(_customerRepoMock.Object, _orderRepoMock.Object);
 
             //* Act
             var returnvalue = _customerService.GetAllCustomers();
@@ -120,6 +125,102 @@ namespace ThjonustukerfiTests.Tests
             //* Assert
             Assert.IsNotNull(returnvalue);
             Assert.AreEqual(returnvalue, retDTO);
+        }
+
+        [TestMethod]
+        public void DeleteCustomerById_should_return_a_OrderDTO_list_of_active_orders()
+        {
+            //* Arrange
+            // mock (do not need to mock customer repo here, since it should not call it)
+            _orderRepoMock.Setup(method => method.GetActiveOrdersByCustomerId(It.IsAny<long>())).Returns(CreateOrderDTOList());
+
+            // Create service
+            _customerService = new CustomerService(_customerRepoMock.Object, _orderRepoMock.Object);
+
+            //* Act
+            var returnValue = _customerService.DeleteCustomerById(1);
+
+            //* Assert
+            Assert.IsNotNull(returnValue);
+            Assert.IsInstanceOfType(returnValue, typeof(List<OrderDTO>));
+            Assert.IsTrue(returnValue.Any());
+        }
+
+        [TestMethod]
+        public void DeleteCustomerById_should_return_an_empty_OrderDTO_list_of_active_orders()
+        {
+            //* Arrange
+            // mock
+            _orderRepoMock.Setup(method => method.GetActiveOrdersByCustomerId(It.IsAny<long>())).Returns(new List<OrderDTO>());
+            _customerRepoMock.Setup(method => method.DeleteCustomerById(It.IsAny<long>())).Verifiable();
+
+            // Create service
+            _customerService = new CustomerService(_customerRepoMock.Object, _orderRepoMock.Object);
+
+            //* Act
+            var returnValue = _customerService.DeleteCustomerById(1);
+
+            //* Assert
+            Assert.IsNotNull(returnValue);
+            Assert.IsInstanceOfType(returnValue, typeof(List<OrderDTO>));
+            Assert.IsFalse(returnValue.Any());
+        }
+
+        [TestMethod]
+        public void DeleteCustomerByIdAndOrders_should_throw_NotFoundException()
+        {
+            //* Arrange
+            // mock
+            _customerRepoMock.Setup(method => method.CustomerExists(It.IsAny<long>())).Returns(false);
+
+            // Create service
+            _customerService = new CustomerService(_customerRepoMock.Object, _orderRepoMock.Object);
+
+            //* Act and Assert
+            Assert.ThrowsException<NotFoundException>(() => _customerService.DeleteCustomerByIdAndOrders(1));
+        }
+
+        //*         Helper functions         *//
+        /// <summary>Creates a list of order DTO for testing</summary>
+        private List<OrderDTO> CreateOrderDTOList()
+        {
+            return new List<OrderDTO>()
+            {
+                new OrderDTO
+                {
+                Customer = "Kalli Valli",
+                Barcode = "0100001111",
+                Items = new List<ItemDTO>()
+                    {
+                        new ItemDTO()
+                        {
+                            Id = 1,
+                            Type = "Ysa bitar",
+                            Service = "Birkireyk"
+                        }
+                    },
+                    DateCreated = DateTime.Now,
+                    DateModified = DateTime.MinValue,
+                    DateCompleted = DateTime.MaxValue
+                },
+                new OrderDTO
+                {
+                Customer = "Harpa Varta",
+                Barcode = "0100001111",
+                Items = new List<ItemDTO>()
+                    {
+                        new ItemDTO()
+                        {
+                            Id = 1,
+                            Type = "Lax bitar",
+                            Service = "Birkireyk"
+                        }
+                    },
+                    DateCreated = DateTime.Now,
+                    DateModified = DateTime.MinValue,
+                    DateCompleted = DateTime.MaxValue
+                }
+            };
         }
     }
 }

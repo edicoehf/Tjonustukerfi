@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ThjonustukerfiWebAPI.Models.InputModels;
@@ -85,13 +86,33 @@ namespace ThjonustukerfiWebAPI.Controllers
         /// <returns>Returns no content</returns>
         /// <response code="204">Customer successfully deleted</response>
         /// <response code="404">Customer with the given ID was not found</response>
+        /// <response code="409">Customer has active orders, no changes done and active orders are returned</response>
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [Route("{id:int}")]
         [HttpDelete]
         public IActionResult DeleteCustomerById(long id)
         {
-            _customerService.DeleteCustomerById(id);
+            // Checks if the customer has any active oders, only deletes if no orders are active
+            var activeOrders = _customerService.DeleteCustomerById(id);
+
+            if(activeOrders.Any()) { return Conflict(activeOrders); }
+
+            return NoContent();
+        }
+
+        /// <summary>Deletes a customer and removes all orders that are active with that customer as well</summary>
+        /// <returns>No Content</returns>
+        /// <response code="204">Customer successfully deleted</response>
+        /// <response code="404">Customer with the given ID was not found</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("{id:int}/confirm")]
+        [HttpDelete]
+        public IActionResult DeleteCustomerByIdAndOrders(long id)
+        {
+            _customerService.DeleteCustomerByIdAndOrders(id);
 
             return NoContent();
         }

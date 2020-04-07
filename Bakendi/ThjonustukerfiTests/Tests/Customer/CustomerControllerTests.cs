@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -121,7 +124,7 @@ namespace ThjonustukerfiTests.Tests
         }
 
         [TestMethod]
-        public void DeleteCustomer_response_should_return_204_noContent()
+        public void DeleteCustomerById_response_should_return_204_noContent()
         {
             //* Arrange
             long id = 7;
@@ -132,7 +135,7 @@ namespace ThjonustukerfiTests.Tests
                 Id = id,
                 Name = "Siggi Biggi"
             };
-            _customerServiceMock.Setup(method => method.DeleteCustomerById(id));
+            _customerServiceMock.Setup(method => method.DeleteCustomerById(id)).Returns(new List<OrderDTO>());
 
             // Creat contoller
             _customerController = new CustomerController(_customerServiceMock.Object);
@@ -142,7 +145,26 @@ namespace ThjonustukerfiTests.Tests
 
             //* Assert
             Assert.IsNotNull(response);
-            Assert.AreEqual(204, response.StatusCode);
+            Assert.AreEqual(StatusCodes.Status204NoContent, response.StatusCode);
+        }
+
+        [TestMethod]
+        public void DeleteCustomerById_response_should_return_Conflict_with_activeOrders()
+        {
+            //* Arrange
+            _customerServiceMock.Setup(method => method.DeleteCustomerById(It.IsAny<long>())).Returns(CreateOrderDTOList());
+
+            // Create controller
+            _customerController = new CustomerController(_customerServiceMock.Object);
+
+            //* Act
+            var response = _customerController.DeleteCustomerById(1) as ConflictObjectResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(StatusCodes.Status409Conflict, response.StatusCode);
+            Assert.IsInstanceOfType(response.Value as List<OrderDTO>, typeof(List<OrderDTO>));
+            Assert.IsTrue((response.Value as List<OrderDTO>).Any());
         }
 
         [TestMethod]
@@ -176,6 +198,67 @@ namespace ThjonustukerfiTests.Tests
             Assert.IsNotNull(response);
             Assert.AreEqual(200, response.StatusCode);
             Assert.AreEqual(responseValue.Count, retDTO.Count);
+        }
+
+        [TestMethod]
+        public void DeleteCustomerByIdAndOrders_should_respond_with_NoContent()
+        {
+            //* Arrange
+            // mock
+            _customerServiceMock.Setup(method => method.DeleteCustomerByIdAndOrders(It.IsAny<long>())).Verifiable();
+
+            // create controller
+            _customerController = new CustomerController(_customerServiceMock.Object);
+
+            //* Act
+            var response = _customerController.DeleteCustomerByIdAndOrders(1) as NoContentResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(StatusCodes.Status204NoContent, response.StatusCode);
+        }
+
+        //*         Helper functions         *//
+        /// <summary>Creates a list of order DTO for testing</summary>
+        private List<OrderDTO> CreateOrderDTOList()
+        {
+            return new List<OrderDTO>()
+            {
+                new OrderDTO
+                {
+                Customer = "Kalli Valli",
+                Barcode = "0100001111",
+                Items = new List<ItemDTO>()
+                    {
+                        new ItemDTO()
+                        {
+                            Id = 1,
+                            Type = "Ysa bitar",
+                            Service = "Birkireyk"
+                        }
+                    },
+                    DateCreated = DateTime.Now,
+                    DateModified = DateTime.MinValue,
+                    DateCompleted = DateTime.MaxValue
+                },
+                new OrderDTO
+                {
+                Customer = "Harpa Varta",
+                Barcode = "0100001111",
+                Items = new List<ItemDTO>()
+                    {
+                        new ItemDTO()
+                        {
+                            Id = 1,
+                            Type = "Lax bitar",
+                            Service = "Birkireyk"
+                        }
+                    },
+                    DateCreated = DateTime.Now,
+                    DateModified = DateTime.MinValue,
+                    DateCompleted = DateTime.MaxValue
+                }
+            };
         }
     }
 }
