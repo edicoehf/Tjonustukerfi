@@ -25,5 +25,8 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
         /// <summary>Gets all customers.</summary>
         /// <returns>A list of all customers.</returns>
         IEnumerable GetAllCustomers();
+
+        /// <summary>Deletes customer and all of their active orders</summary>
+        void DeleteCustomerByIdAndOrders(long customerId);
     }
 }

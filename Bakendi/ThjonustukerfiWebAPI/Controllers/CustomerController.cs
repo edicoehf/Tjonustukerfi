@@ -101,5 +101,20 @@ namespace ThjonustukerfiWebAPI.Controllers
 
             return NoContent();
         }
+
+        /// <summary>Deletes a customer and removes all orders that are active with that customer as well</summary>
+        /// <returns>No Content</returns>
+        /// <response code="204">Customer successfully deleted</response>
+        /// <response code="404">Customer with the given ID was not found</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("{id:int}/confirm")]
+        [HttpDelete]
+        public IActionResult DeleteCustomerByIdAndOrders(long id)
+        {
+            _customerService.DeleteCustomerByIdAndOrders(id);
+
+            return NoContent();
+        }
     }
 }
