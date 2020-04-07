@@ -86,8 +86,10 @@ namespace ThjonustukerfiWebAPI.Controllers
         /// <returns>Returns no content</returns>
         /// <response code="204">Customer successfully deleted</response>
         /// <response code="404">Customer with the given ID was not found</response>
+        /// <response code="409">Customer has active orders, no changes done and active orders are returned</response>
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [Route("{id:int}")]
         [HttpDelete]
         public IActionResult DeleteCustomerById(long id)
@@ -97,7 +99,7 @@ namespace ThjonustukerfiWebAPI.Controllers
 
             if(activeOrders.Any()) { return Conflict(activeOrders); }
 
-            return NoContent(); // not done
+            return NoContent();
         }
     }
 }
