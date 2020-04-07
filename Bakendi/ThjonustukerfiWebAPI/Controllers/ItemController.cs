@@ -58,9 +58,9 @@ namespace ThjonustukerfiWebAPI.Controllers
             return Ok(_itemService.SearchItem(search));
         }
 
-        /// <summary>Sets the item with the given ID to the complete state</summary>
-        /// <response code="200">Item is set to complete (sótt)</response>
-        /// <response code="404">Item with the given ID was not found</response>
+        /// <summary>Sets the item with the given ID to the complete state.</summary>
+        /// <response code="200">Item is set to complete (sótt).</response>
+        /// <response code="404">Item with the given ID was not found.</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("{id:long}/complete")]
@@ -70,6 +70,33 @@ namespace ThjonustukerfiWebAPI.Controllers
             _itemService.CompleteItem(id);
 
             return Ok();
+        }
+
+        /// <summary>Removes Item with the given ID.</summary>
+        /// <response code="204">Item was successfully removed.</response>
+        /// <response code="404">Item with the given ID was not found.</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("{id:long}")]
+        [HttpDelete]
+        public IActionResult RemoveItem(long id)
+        {
+            _itemService.RemoveItem(id);
+            return NoContent();
+        }
+
+        /// <summary>Removes item by barcode</summary>
+        /// <response code="204">Item was successfully removed.</response>
+        /// <response code="404">Item with the given ID was not found</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("remove")]
+        [HttpDelete]
+        public IActionResult RemoveItemQuery([FromQuery(Name = "barcode")] string barcode)
+        {
+            _itemService.RemoveItemQuery(barcode);
+
+            return NoContent();
         }
     }
 }

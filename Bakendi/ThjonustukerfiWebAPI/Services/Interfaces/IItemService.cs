@@ -18,5 +18,11 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
 
         /// <summary>Sets an item to complete state</summary>
         void CompleteItem(long id);
+
+        /// <summary>Removes Item with the given ID</summary>
+        void RemoveItem(long itemId);
+
+        /// <summary>Removes item with the given barcode</summary>
+        void RemoveItemQuery(string barcode);
     }
 }

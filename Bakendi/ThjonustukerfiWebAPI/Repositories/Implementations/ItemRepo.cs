@@ -123,5 +123,18 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
             _dbContext.SaveChanges();
         }
+
+        public void RemoveItem(long itemId)
+        {
+            var entity = _dbContext.Item.FirstOrDefault(i => i.Id == itemId);
+            if(entity == null) { throw new NotFoundException($"Item with ID {itemId} was not found. "); }
+
+            var itemOrderConnection = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == entity.Id);
+            if(itemOrderConnection != null) { _dbContext.ItemOrderConnection.Remove(itemOrderConnection); }
+
+            _dbContext.Remove(entity);
+
+            _dbContext.SaveChanges();
+        }
     }
 }
