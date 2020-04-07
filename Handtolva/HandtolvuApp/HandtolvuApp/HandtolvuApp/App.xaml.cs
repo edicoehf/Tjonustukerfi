@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HandtolvuApp.Data;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -6,10 +7,11 @@ namespace HandtolvuApp
 {
     public partial class App : Application
     {
+        public static ItemManager ItemManager { get; private set; }
         public App()
         {
             InitializeComponent();
-
+            ItemManager = new ItemManager(new RestService());
             MainPage = new NavigationPage(new MainPage());
         }
 
