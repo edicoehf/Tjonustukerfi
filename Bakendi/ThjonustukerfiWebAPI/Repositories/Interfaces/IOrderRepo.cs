@@ -30,5 +30,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
         /// <summary>Finds ID of order with the given barcode.</summary>
         /// <returns>The orders ID</returns>
         long SearchOrder(string barcode);
+
+        /// <summary>Gets a list of all active orders with the customer</summary>
+        /// <returns>A list of active orders, empty if no orders exist that are active</returns>
+        List<OrderDTO> GetActiveOrdersByCustomerId(long customerID);
     }
 }

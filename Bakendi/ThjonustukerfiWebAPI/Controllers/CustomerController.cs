@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ThjonustukerfiWebAPI.Models.InputModels;
@@ -91,9 +92,12 @@ namespace ThjonustukerfiWebAPI.Controllers
         [HttpDelete]
         public IActionResult DeleteCustomerById(long id)
         {
-            _customerService.DeleteCustomerById(id);
+            // Checks if the customer has any active oders, only deletes if no orders are active
+            var activeOrders = _customerService.DeleteCustomerById(id);
 
-            return NoContent();
+            if(activeOrders.Any()) { return Conflict(activeOrders); }
+
+            return NoContent(); // not done
         }
     }
 }
