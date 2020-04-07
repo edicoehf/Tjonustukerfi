@@ -20,12 +20,13 @@
         </Grid.ColumnDefinitions>
 
         <Editor Grid.Column="0" Grid.ColumnSpan="3"
-                Placeholder="Sláðu inn vörunúmer" Margin="10,0"
+                Placeholder="{Binding Placeholder}" Margin="10,0"
                 AutomationId="inputEntry"
                 Text="{Binding InputVariable}"/>
 
         <Button Grid.Column="3" Text="Ok"
                 Margin="0, 5, 10, 5"
-                BackgroundColor="Green" TextColor="White" />
+                BackgroundColor="Green" TextColor="White"
+                Command="{Binding ClickCommand}"/>
     </Grid>
 </ContentView>
