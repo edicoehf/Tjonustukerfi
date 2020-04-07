@@ -14,12 +14,14 @@ namespace ThjonustukerfiTests.Tests
     {
         private ICustomerService _customerService;
         private Mock<ICustomerRepo> _customerRepoMock;
+        private Mock<IOrderRepo> _orderRepoMock;
 
         // This method is excecuted before each test
         [TestInitialize]
         public void Initialize()
         {
             _customerRepoMock = new Mock<ICustomerRepo>();
+            _orderRepoMock = new Mock<IOrderRepo>();
         }
 
         [TestMethod]
@@ -43,7 +45,7 @@ namespace ThjonustukerfiTests.Tests
             _customerRepoMock.Setup(method => method.CreateCustomer(inp)).Returns(mockCustomerDTO);
 
             // Craete service
-            _customerService = new CustomerService(_customerRepoMock.Object);
+            _customerService = new CustomerService(_customerRepoMock.Object, _orderRepoMock.Object);
 
             //* Act
             var customerDTOReturn = _customerService.CreateCustomer(inp);
@@ -75,7 +77,7 @@ namespace ThjonustukerfiTests.Tests
             _customerRepoMock.Setup(method => method.GetCustomerById(id)).Returns(mockCustomerDetailsDTO);
 
             // Create service
-            _customerService = new CustomerService(_customerRepoMock.Object);
+            _customerService = new CustomerService(_customerRepoMock.Object, _orderRepoMock.Object);
 
             //* Act
             var customerDetailsDTO = _customerService.GetCustomerById(id);
@@ -112,7 +114,7 @@ namespace ThjonustukerfiTests.Tests
             _customerRepoMock.Setup(method => method.GetAllCustomers()).Returns(retDTO);
 
             // Create service
-            _customerService = new CustomerService(_customerRepoMock.Object);
+            _customerService = new CustomerService(_customerRepoMock.Object, _orderRepoMock.Object);
 
             //* Act
             var returnvalue = _customerService.GetAllCustomers();

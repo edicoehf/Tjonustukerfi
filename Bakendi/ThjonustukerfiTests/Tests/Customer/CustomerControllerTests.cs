@@ -132,7 +132,7 @@ namespace ThjonustukerfiTests.Tests
                 Id = id,
                 Name = "Siggi Biggi"
             };
-            _customerServiceMock.Setup(method => method.DeleteCustomerById(id));
+            _customerServiceMock.Setup(method => method.DeleteCustomerById(id)).Returns(new List<OrderDTO>());
 
             // Creat contoller
             _customerController = new CustomerController(_customerServiceMock.Object);
