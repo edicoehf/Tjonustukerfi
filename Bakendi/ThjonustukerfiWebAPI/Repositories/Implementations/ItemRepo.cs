@@ -28,9 +28,10 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // Map the DTO
             var stateDTO = _mapper.Map<ItemStateDTO>(entity);
 
-            // Get the connections for the DTO, order id it belongs to and in what state it is
-            stateDTO.OrderId = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == entity.Id).OrderId;
-            stateDTO.State = _dbContext.State.FirstOrDefault(s => s.Id == entity.StateId).Name;
+            // Get the connections for the DTO
+            stateDTO.OrderId = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == entity.Id).OrderId;   // get order ID
+            stateDTO.State = _dbContext.State.FirstOrDefault(s => s.Id == entity.StateId).Name;                         // get state name
+            stateDTO.Category = _dbContext.Category.FirstOrDefault(c => c.Id == entity.CategoryId).Name;                // get category name
 
             return stateDTO;
         }
@@ -50,8 +51,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             var entity = _dbContext.Item.FirstOrDefault(i => i.Id == itemId);
             if(entity == null) { throw new NotFoundException($"Item with ID {itemId} was not found."); }
 
-            bool editState, editService, editOrder;
-            editState = editService = editOrder = false;
+            bool editState, editService, editOrder, editCategory;
+            editState = editService = editOrder = editCategory = false;
 
             // finish all checks before editing anything, unfilled inputs will not be edited
             if(input.StateId != null)
@@ -71,18 +72,23 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 if(_dbContext.Order.FirstOrDefault(o => o.Id == input.OrderId) == null) { throw new NotFoundException($"Order with ID {input.OrderId} was not found."); }
                 editOrder = true;
             }
+            if(input.CategoryId != null)
+            {
+                if(_dbContext.Category.FirstOrDefault(t => t.Id == input.CategoryId) == null) { throw new NotFoundException($"Category with ID {input.CategoryId} was not found."); }
+                editCategory = true;
+            }
 
-            if(input.Type != null) { entity.Type = input.Type; }  // just edit if not empty
+            if(editCategory) { entity.CategoryId = (long)input.CategoryId; }
             if(editState) { entity.StateId = (long)input.StateId; }
             if(editService) { entity.ServiceId = (long)input.ServiceID; }
             if(editOrder)
             {
-                var connection = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemId);
-                connection.OrderId = (long)input.OrderId;
+                var connection = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemId);    // get the item order connection
+                connection.OrderId = (long)input.OrderId;   // update the connection to the order
             }
 
             // If no changes are made, send a bad request response
-            if(input.Type == null && !editState && !editService && !editOrder) {throw new BadRequestException($"The input had no valid values. No changes made."); }
+            if(!editCategory && !editState && !editService && !editOrder) {throw new BadRequestException($"The input had no valid values. No changes made."); }
             else 
             {
                 // item and the order connected to it modified on this date
@@ -90,7 +96,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
                 _dbContext.Order.FirstOrDefault(o =>
                     o.Id == _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == entity.Id).OrderId)  // find order connected to this item
-                        .DateModified = DateTime.Now;
+                        .DateModified = DateTime.Now;   // Update the date modified attribute in the order connected to this item
             }
 
             _dbContext.SaveChanges();

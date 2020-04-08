@@ -12,5 +12,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
         /// <summary>Gets all states available for the product/service</summary>
         /// <returns>A list of all available services.</returns>
         IEnumerable<StateDTO> GetStates();
+
+        /// <summary>Gets all categories of items</summary>
+        /// <returns>A list of all categories</returns>
+        IEnumerable<CategoryDTO> GetCategories();
     }
 }
