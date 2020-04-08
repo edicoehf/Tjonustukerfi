@@ -90,6 +90,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             var entity = _dbContext.Order.FirstOrDefault(o => o.Id == id);
             if(entity == null) { throw new NotFoundException($"Order with id {id} was not found."); }
 
+            // Customer in input not valid
+            if(_dbContext.Customer.FirstOrDefault(c => c.Id == order.CustomerId) == null) { throw new NotFoundException($"Customer with ID {order.CustomerId} was not found."); }
+
             // Make sure that the items that are being added have the correct service and category
             foreach(ItemInputModel item in order.Items)
             {

@@ -270,7 +270,7 @@ namespace ThjonustukerfiTests.Tests
         public void UpdateOrder_should_update_order_correctly_and_itemlist_should_grow()
         {
             long orderID = 100;
-            long custId = 500;
+            long custId = 50;
             //* Arrange
             var orperInput = new OrderInputModel
             {
@@ -344,7 +344,7 @@ namespace ThjonustukerfiTests.Tests
         public void UpdateOrder_should_update_order_correctly_and_itemlist_should_shrink()
         {
             long orderID = 100;
-            long custId = 500;
+            long custId = 50;
             //* Arrange
             var orperInput = new OrderInputModel
             {
@@ -404,7 +404,7 @@ namespace ThjonustukerfiTests.Tests
         public void UpdateOrder_should_update_order_correctly_and_itemlist_should_be_empty()
         {
             long orderID = 100;
-            long custId = 500;
+            long custId = 50;
             //* Arrange
             var orperInput = new OrderInputModel
             {
@@ -453,7 +453,7 @@ namespace ThjonustukerfiTests.Tests
         public void UpdateOrder_should_update_order_correctly_and_itemlist_should_grow_to_five()
         {
             long orderID = 100;
-            long custId = 500;
+            long custId = 50;
             //* Arrange
             var clearItems = new OrderInputModel
             {
@@ -559,6 +559,7 @@ namespace ThjonustukerfiTests.Tests
 
                 //* Act then assert
                 Assert.ThrowsException<NotFoundException>(() => orderRepo.UpdateOrder(inp, -1));
+                Assert.ThrowsException<NotFoundException>(() => orderRepo.UpdateOrder(inp, 100));
             }
         }
 
