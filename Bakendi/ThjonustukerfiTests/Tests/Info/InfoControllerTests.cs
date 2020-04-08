@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -88,6 +89,32 @@ namespace ThjonustukerfiTests.Tests.Info
             Assert.IsNotNull(responseValue);
             Assert.AreEqual(200, response.StatusCode);
             Assert.AreEqual(retDTO, responseValue);
+        }
+
+        [TestMethod]
+        public void GetCategories_should_return_200OK_and_a_list_of_states()
+        {
+            //* Arrange
+            var retDTO = new List<CategoryDTO>()
+            {
+                new CategoryDTO { Id = 1, Name = "Lax" },
+                new CategoryDTO { Id = 2, Name = "Silungur" }
+            };
+
+            //Mock method
+            _infoServiceMock.Setup(method => method.GetCategories()).Returns(retDTO);
+
+            // Create controller
+            _infoController = new InfoController(_infoServiceMock.Object);
+
+            //* Act
+            var response = _infoController.GetCategories() as OkObjectResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.IsNotNull(response.Value);
+            Assert.AreEqual(StatusCodes.Status200OK, response.StatusCode);
+            Assert.IsInstanceOfType(response.Value as List<CategoryDTO>, typeof(List<CategoryDTO>));
         }
     }
 }
