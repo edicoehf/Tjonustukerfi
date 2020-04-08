@@ -37,5 +37,7 @@ namespace ThjonustukerfiWebAPI.Controllers
         {
             return Ok(_infoService.GetStates());
         }
+
+        //TODO get types
     }
 }

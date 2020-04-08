@@ -71,8 +71,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 if(_dbContext.Order.FirstOrDefault(o => o.Id == input.OrderId) == null) { throw new NotFoundException($"Order with ID {input.OrderId} was not found."); }
                 editOrder = true;
             }
+            //! ADD CHECK FOR TYPE AFTER ADDING THE TABLE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-            if(input.Type != null) { entity.Type = input.Type; }  // just edit if not empty
+            if(input.TypeId != null) { entity.TypeId = (long)input.TypeId; }
             if(editState) { entity.StateId = (long)input.StateId; }
             if(editService) { entity.ServiceId = (long)input.ServiceID; }
             if(editOrder)
@@ -82,7 +83,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             }
 
             // If no changes are made, send a bad request response
-            if(input.Type == null && !editState && !editService && !editOrder) {throw new BadRequestException($"The input had no valid values. No changes made."); }
+            if(input.TypeId == null && !editState && !editService && !editOrder) {throw new BadRequestException($"The input had no valid values. No changes made."); }
             else 
             {
                 // item and the order connected to it modified on this date
