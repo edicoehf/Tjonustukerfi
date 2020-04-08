@@ -14,5 +14,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         }
         public IEnumerable GetServices() => _infoRepo.GetServices();
         public IEnumerable GetStates() => _infoRepo.GetStates();
+
+        public IEnumerable GetCategories() => _infoRepo.GetCategories();
     }
 }
