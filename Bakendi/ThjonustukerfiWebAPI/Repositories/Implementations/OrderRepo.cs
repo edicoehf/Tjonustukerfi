@@ -40,7 +40,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 var itemEntity = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);                  // get item entity
                 var add = _mapper.Map<ItemDTO>(itemEntity);                                                 // map to DTO
                 add.Service = _dbContext.Service.FirstOrDefault(s => s.Id == itemEntity.ServiceId).Name;    // Find service name
-                add.State = _dbContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;
+                add.State = _dbContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;          // Find state name
+                add.Category = _dbContext.Category.FirstOrDefault(c => c.Id == itemEntity.CategoryId).Name; // Find category name 
                 dto.Items.Add(add);     // add item DTO to orderDTO item list
             }
 
@@ -337,6 +338,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                     var add = _mapper.Map<ItemDTO>(itemEntity);                                                 // map to DTO
                     add.Service = _dbContext.Service.FirstOrDefault(s => s.Id == itemEntity.ServiceId).Name;    // Find Service name
                     add.State = _dbContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;          // Find state name
+                    add.Category = _dbContext.Category.FirstOrDefault(c => c.Id == itemEntity.CategoryId).Name; // Find category name
                     dto.Items.Add(add);     // Add the itemDTO to the orderDTO
                 }
 
