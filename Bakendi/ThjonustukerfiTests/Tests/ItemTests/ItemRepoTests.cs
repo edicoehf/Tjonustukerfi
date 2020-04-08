@@ -262,6 +262,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 var itemDTO = _mapper.Map<ItemStateDTO>(itemEntity);
                 itemDTO.OrderId = mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemEntity.Id).OrderId;
                 itemDTO.State = mockContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;
+                itemDTO.Category = mockContext.Category.FirstOrDefault(c => c.Id == itemEntity.CategoryId).Name;
 
                 //* Act
                 var retVal = itemRepo.GetItemById(itemID);

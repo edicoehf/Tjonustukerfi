@@ -90,7 +90,6 @@ namespace ThjonustukerfiTests.Tests
             using (var mockContext = new DataContext(_options))
             {
                 //* Arrange
-                string serviceName = "Birkireyking";
                 long orderId = 100;
                 string customerName = "Viggi Siggi";
                 string OrderBarCode = "20200001";
@@ -100,11 +99,15 @@ namespace ThjonustukerfiTests.Tests
 
                 // Create a list that should be the same as the list returned in OrderDTO
                 var itemListDTO = new List<ItemDTO>();
-                var mockItems = mockContext.Item.ToList();
-                foreach (var item in mockItems)
+                var itemOrderConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderId).ToList();
+                
+                foreach (var item in itemOrderConnection)
                 {
-                    var add = _mapper.Map<ItemDTO>(item);
-                    add.Service = serviceName;
+                    var entity = mockContext.Item.FirstOrDefault(i => i.Id == item.ItemId);
+                    var add = _mapper.Map<ItemDTO>(entity);
+                    add.Service = mockContext.Service.FirstOrDefault(s => s.Id == entity.ServiceId).Name;
+                    add.State = mockContext.State.FirstOrDefault(s => s.Id == entity.StateId).Name;
+                    add.Category = mockContext.Category.FirstOrDefault(c => c.Id == entity.CategoryId).Name;
                     itemListDTO.Add(add);
                 }
 
@@ -123,7 +126,7 @@ namespace ThjonustukerfiTests.Tests
 
                 // Asserting items in order
                 Assert.IsNotNull(orderDTO.Items);
-                Assert.AreEqual(orderDTO.Items.Count, mockItems.Count);
+                Assert.AreEqual(orderDTO.Items.Count, itemListDTO.Count);
                 Assert.AreEqual(orderDTO.Items[0], itemListDTO[0]);
                 Assert.AreEqual(orderDTO.Items[1], itemListDTO[1]);
             };
