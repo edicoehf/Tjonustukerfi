@@ -108,7 +108,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         public void EditItem_should_edit_correct_items()
         {
             //* Arrange
-            string type = "This is not a fish";
+            long categoryId = 1;
             long stateID = 3;
             long serviceID = 2;
             long orderID = 100;
@@ -116,7 +116,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             long orderChange = 101;
             var itemInput = new EditItemInput
             {
-                Type = type,
+                CategoryId = categoryId,
                 StateId = stateID,
                 ServiceID = serviceID,
                 OrderId = orderChange
@@ -142,7 +142,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 var oldItemEntity = new Item()  // Copying item values (not the reference to the object)
                 {
                     Id = trackedEntity.Id,
-                    Type = trackedEntity.Type,
+                    CategoryId = trackedEntity.CategoryId,
                     StateId = trackedEntity.StateId,
                     ServiceId = trackedEntity.ServiceId,
                     Barcode = trackedEntity.Barcode,
@@ -175,7 +175,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 Assert.AreEqual(oldOrder2ListSize + 1, newOrder2ListSize);  // has been moved to other list
 
                 // Check that item properties have been updated correctly
-                Assert.AreEqual(type, changedItem.Type);
+                Assert.AreEqual(categoryId, changedItem.CategoryId);
                 Assert.AreEqual(stateID, changedItem.StateId);
                 Assert.AreEqual(serviceID, changedItem.ServiceId);
                 Assert.AreEqual(orderChange, mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == changedItem.Id).OrderId);
@@ -191,6 +191,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             var input2 = new EditItemInput { StateId = -1 };
             var input3 = new EditItemInput { ServiceID = -1 };
             var input4 = new EditItemInput { OrderId = -1 };
+            var input5 = new EditItemInput { CategoryId = -1 };
 
             long itemID = 2;
 
@@ -203,6 +204,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 Assert.ThrowsException<NotFoundException>(() => itemRepo.EditItem(input2, itemID));
                 Assert.ThrowsException<NotFoundException>(() => itemRepo.EditItem(input3, itemID));
                 Assert.ThrowsException<NotFoundException>(() => itemRepo.EditItem(input4, itemID));
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.EditItem(input5, itemID));
             }
         }
 
@@ -431,7 +433,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 new Item
                 {
                     Id = 1,
-                    Type = "Ysa bitar",
+                    CategoryId = 1,
                     StateId = 1,
                     ServiceId = 1,
                     Barcode = "50500001",
@@ -442,7 +444,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 new Item
                 {
                     Id = 2,
-                    Type = "Lax heil flok",
+                    CategoryId = 2,
                     StateId = 1,
                     ServiceId = 1,
                     Barcode = "50500002",
@@ -519,6 +521,14 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 new State() {Name = "Sótt", Id = 5}
             };
 
+            // Adding Types
+            var categories = new List<Category>()
+            {
+                // states fyrir reykofninn
+                new Category() {Name = "Lax", Id = 1},
+                new Category() {Name = "Silungur", Id = 2}
+            };
+
             // Adding all entities to the in memory database
             mockContext.Order.AddRange(orders);
             mockContext.Customer.AddRange(customers);
@@ -526,6 +536,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             mockContext.Item.AddRange(mockItems);
             mockContext.Service.AddRange(MockServiceList);
             mockContext.State.AddRange(states);
+            mockContext.Category.AddRange(categories);
             mockContext.SaveChanges();
             //! Building DB done
         }

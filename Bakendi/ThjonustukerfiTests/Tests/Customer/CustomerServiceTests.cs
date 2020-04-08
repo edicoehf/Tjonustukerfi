@@ -195,7 +195,7 @@ namespace ThjonustukerfiTests.Tests
                         new ItemDTO()
                         {
                             Id = 1,
-                            Type = "Ysa bitar",
+                            Category = "Ysa bitar",
                             Service = "Birkireyk"
                         }
                     },
@@ -212,7 +212,7 @@ namespace ThjonustukerfiTests.Tests
                         new ItemDTO()
                         {
                             Id = 1,
-                            Type = "Lax bitar",
+                            Category = "Lax bitar",
                             Service = "Birkireyk"
                         }
                     },
