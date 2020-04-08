@@ -113,8 +113,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             {
                 for(var i = 0; i < items.Count; i++)
                 {
-                    items[i].CategoryId = order.Items[i].CategoryId;
-                    items[i].ServiceId = order.Items[i].ServiceId;
+                    items[i].CategoryId = (long)order.Items[i].CategoryId;
+                    items[i].ServiceId = (long)order.Items[i].ServiceId;
                     items[i].DateModified = DateTime.Now;
                 }
             }
@@ -128,8 +128,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 var i = 0;
                 for( ; i < items.Count; i++)
                 {
-                    items[i].CategoryId = order.Items[i].CategoryId;
-                    items[i].ServiceId = order.Items[i].ServiceId;
+                    items[i].CategoryId = (long)order.Items[i].CategoryId;
+                    items[i].ServiceId = (long)order.Items[i].ServiceId;
                     items[i].DateModified = DateTime.Now;
                 }
 
@@ -149,8 +149,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 var i = 0;
                 for( ; i < order.Items.Count; i++)
                 {
-                    items[i].CategoryId = order.Items[i].CategoryId;
-                    items[i].ServiceId = order.Items[i].ServiceId;
+                    items[i].CategoryId = (long)order.Items[i].CategoryId;
+                    items[i].ServiceId = (long)order.Items[i].ServiceId;
                     items[i].DateModified = DateTime.Now;
                 }
 
