@@ -50,8 +50,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             var entity = _dbContext.Item.FirstOrDefault(i => i.Id == itemId);
             if(entity == null) { throw new NotFoundException($"Item with ID {itemId} was not found."); }
 
-            bool editState, editService, editOrder;
-            editState = editService = editOrder = false;
+            bool editState, editService, editOrder, editCategory;
+            editState = editService = editOrder = editCategory = false;
 
             // finish all checks before editing anything, unfilled inputs will not be edited
             if(input.StateId != null)
@@ -71,9 +71,13 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 if(_dbContext.Order.FirstOrDefault(o => o.Id == input.OrderId) == null) { throw new NotFoundException($"Order with ID {input.OrderId} was not found."); }
                 editOrder = true;
             }
-            //! ADD CHECK FOR TYPE AFTER ADDING THE TABLE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            if(input.CategoryId != null)
+            {
+                if(_dbContext.Category.FirstOrDefault(t => t.Id == input.CategoryId) == null) { throw new NotFoundException($"Category with ID {input.CategoryId} was not found."); }
+                editCategory = true;
+            }
 
-            if(input.TypeId != null) { entity.TypeId = (long)input.TypeId; }
+            if(editCategory) { entity.CategoryId = (long)input.CategoryId; }
             if(editState) { entity.StateId = (long)input.StateId; }
             if(editService) { entity.ServiceId = (long)input.ServiceID; }
             if(editOrder)
@@ -83,7 +87,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             }
 
             // If no changes are made, send a bad request response
-            if(input.TypeId == null && !editState && !editService && !editOrder) {throw new BadRequestException($"The input had no valid values. No changes made."); }
+            if(!editCategory && !editState && !editService && !editOrder) {throw new BadRequestException($"The input had no valid values. No changes made."); }
             else 
             {
                 // item and the order connected to it modified on this date

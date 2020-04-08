@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ThjonustukerfiWebAPI.Models;
@@ -9,9 +10,10 @@ using ThjonustukerfiWebAPI.Models;
 namespace ThjonustukerfiWebAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200408111348_changedTypeToCategory")]
+    partial class changedTypeToCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,9 +88,6 @@ namespace ThjonustukerfiWebAPI.Migrations
                     b.Property<string>("Barcode")
                         .HasColumnType("text");
 
-                    b.Property<long>("CategoryId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime?>("DateCompleted")
                         .HasColumnType("timestamp without time zone");
 
@@ -105,6 +104,9 @@ namespace ThjonustukerfiWebAPI.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<long>("StateId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("TypeId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");

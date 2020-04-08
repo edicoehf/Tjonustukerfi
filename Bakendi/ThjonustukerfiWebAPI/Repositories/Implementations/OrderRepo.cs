@@ -52,7 +52,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // TODO replace for actual barcode in both order and Item
             foreach(ItemInputModel item in order.Items)
             {
-                if(_dbContext.Service.FirstOrDefault(s => s.Id == item.ServiceId) == null) { throw new NotFoundException($"Service with id {item.ServiceId} was not found."); }
+                if(_dbContext.Service.FirstOrDefault(s => s.Id == item.ServiceId) == null) { throw new NotFoundException($"Service with ID {item.ServiceId} was not found."); }
+                if(_dbContext.Category.FirstOrDefault(c => c.Id == item.CategoryId) == null) { throw new NotFoundException($"Category with ID {item.CategoryId} was not found."); }
             }
             var orderToAdd = _mapper.Map<Order>(order);
             var barcodeEntry = _dbContext.Order.OrderByDescending(o => o.Barcode).FirstOrDefault();
@@ -88,6 +89,13 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             var entity = _dbContext.Order.FirstOrDefault(o => o.Id == id);
             if(entity == null) { throw new NotFoundException($"Order with id {id} was not found."); }
 
+            // Make sure that the items that are being added have the correct service and category
+            foreach(ItemInputModel item in order.Items)
+            {
+                if(_dbContext.Service.FirstOrDefault(s => s.Id == item.ServiceId) == null) { throw new NotFoundException($"Service with ID {item.ServiceId} was not found."); }
+                if(_dbContext.Category.FirstOrDefault(c => c.Id == item.CategoryId) == null) { throw new NotFoundException($"Category with ID {item.CategoryId} was not found."); }
+            }
+
             // update the customer ID
             entity.CustomerId = order.CustomerId;
 
@@ -104,7 +112,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             {
                 for(var i = 0; i < items.Count; i++)
                 {
-                    items[i].TypeId = order.Items[i].TypeId;
+                    items[i].CategoryId = order.Items[i].CategoryId;
                     items[i].ServiceId = order.Items[i].ServiceId;
                     items[i].DateModified = DateTime.Now;
                 }
@@ -119,7 +127,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 var i = 0;
                 for( ; i < items.Count; i++)
                 {
-                    items[i].TypeId = order.Items[i].TypeId;
+                    items[i].CategoryId = order.Items[i].CategoryId;
                     items[i].ServiceId = order.Items[i].ServiceId;
                     items[i].DateModified = DateTime.Now;
                 }
@@ -140,7 +148,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 var i = 0;
                 for( ; i < order.Items.Count; i++)
                 {
-                    items[i].TypeId = order.Items[i].TypeId;
+                    items[i].CategoryId = order.Items[i].CategoryId;
                     items[i].ServiceId = order.Items[i].ServiceId;
                     items[i].DateModified = DateTime.Now;
                 }
