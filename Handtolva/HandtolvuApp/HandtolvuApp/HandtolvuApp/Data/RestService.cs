@@ -36,12 +36,34 @@ namespace HandtolvuApp.Data
                     Item = JsonConvert.DeserializeObject<Item>(content);
                 }
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Debug.WriteLine(@"\tERROR {0}", ex.Message);
             }
 
             return Item;
+        }
+
+        public async Task<Order> GetOrderAsync(string barcode)
+        {
+            Order = null;
+
+            string Uri = "http://10.0.2.2:5000/api/orders?search=" + barcode;
+            try
+            {
+                var response = await _client.GetAsync(Uri);
+                if(response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    Order = JsonConvert.DeserializeObject<Order>(content);
+                }
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(@"\tERROR {0}", ex.Message);
+            }
+
+            return Order;
         }
 
         public async Task CheckoutOrder(string barcode)
