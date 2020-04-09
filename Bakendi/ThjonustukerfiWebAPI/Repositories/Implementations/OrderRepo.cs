@@ -40,7 +40,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 var itemEntity = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);                  // get item entity
                 var add = _mapper.Map<ItemDTO>(itemEntity);                                                 // map to DTO
                 add.Service = _dbContext.Service.FirstOrDefault(s => s.Id == itemEntity.ServiceId).Name;    // Find service name
-                add.State = _dbContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;
+                add.State = _dbContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;          // Find state name
+                add.Category = _dbContext.Category.FirstOrDefault(c => c.Id == itemEntity.CategoryId).Name; // Find category name 
                 dto.Items.Add(add);     // add item DTO to orderDTO item list
             }
 
@@ -52,7 +53,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // TODO replace for actual barcode in both order and Item
             foreach(ItemInputModel item in order.Items)
             {
-                if(_dbContext.Service.FirstOrDefault(s => s.Id == item.ServiceId) == null) { throw new NotFoundException($"Service with id {item.ServiceId} was not found."); }
+                if(_dbContext.Service.FirstOrDefault(s => s.Id == item.ServiceId) == null) { throw new NotFoundException($"Service with ID {item.ServiceId} was not found."); }
+                if(_dbContext.Category.FirstOrDefault(c => c.Id == item.CategoryId) == null) { throw new NotFoundException($"Category with ID {item.CategoryId} was not found."); }
             }
             var orderToAdd = _mapper.Map<Order>(order);
             var barcodeEntry = _dbContext.Order.OrderByDescending(o => o.Barcode).FirstOrDefault();
@@ -88,6 +90,16 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             var entity = _dbContext.Order.FirstOrDefault(o => o.Id == id);
             if(entity == null) { throw new NotFoundException($"Order with id {id} was not found."); }
 
+            // Customer in input not valid
+            if(_dbContext.Customer.FirstOrDefault(c => c.Id == order.CustomerId) == null) { throw new NotFoundException($"Customer with ID {order.CustomerId} was not found."); }
+
+            // Make sure that the items that are being added have the correct service and category
+            foreach(ItemInputModel item in order.Items)
+            {
+                if(_dbContext.Service.FirstOrDefault(s => s.Id == item.ServiceId) == null) { throw new NotFoundException($"Service with ID {item.ServiceId} was not found."); }
+                if(_dbContext.Category.FirstOrDefault(c => c.Id == item.CategoryId) == null) { throw new NotFoundException($"Category with ID {item.CategoryId} was not found."); }
+            }
+
             // update the customer ID
             entity.CustomerId = order.CustomerId;
 
@@ -104,8 +116,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             {
                 for(var i = 0; i < items.Count; i++)
                 {
-                    items[i].Type = order.Items[i].Type;
-                    items[i].ServiceId = order.Items[i].ServiceId;
+                    items[i].CategoryId = (long)order.Items[i].CategoryId;
+                    items[i].ServiceId = (long)order.Items[i].ServiceId;
                     items[i].DateModified = DateTime.Now;
                 }
             }
@@ -119,8 +131,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 var i = 0;
                 for( ; i < items.Count; i++)
                 {
-                    items[i].Type = order.Items[i].Type;
-                    items[i].ServiceId = order.Items[i].ServiceId;
+                    items[i].CategoryId = (long)order.Items[i].CategoryId;
+                    items[i].ServiceId = (long)order.Items[i].ServiceId;
                     items[i].DateModified = DateTime.Now;
                 }
 
@@ -140,8 +152,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 var i = 0;
                 for( ; i < order.Items.Count; i++)
                 {
-                    items[i].Type = order.Items[i].Type;
-                    items[i].ServiceId = order.Items[i].ServiceId;
+                    items[i].CategoryId = (long)order.Items[i].CategoryId;
+                    items[i].ServiceId = (long)order.Items[i].ServiceId;
                     items[i].DateModified = DateTime.Now;
                 }
 
@@ -329,6 +341,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                     var add = _mapper.Map<ItemDTO>(itemEntity);                                                 // map to DTO
                     add.Service = _dbContext.Service.FirstOrDefault(s => s.Id == itemEntity.ServiceId).Name;    // Find Service name
                     add.State = _dbContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;          // Find state name
+                    add.Category = _dbContext.Category.FirstOrDefault(c => c.Id == itemEntity.CategoryId).Name; // Find category name
                     dto.Items.Add(add);     // Add the itemDTO to the orderDTO
                 }
 

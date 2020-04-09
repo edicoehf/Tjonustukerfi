@@ -25,5 +25,10 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
         {
             return _mapper.Map<IEnumerable<StateDTO>>(_dbContext.State.ToList());   // Get list and map to DTO list
         }
+
+        public IEnumerable<CategoryDTO> GetCategories()
+        {
+            return _mapper.Map<IEnumerable<CategoryDTO>>(_dbContext.Category.ToList()); // Get list and map to DTO list
+        }
     }
 }

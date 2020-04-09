@@ -90,7 +90,6 @@ namespace ThjonustukerfiTests.Tests
             using (var mockContext = new DataContext(_options))
             {
                 //* Arrange
-                string serviceName = "Birkireyking";
                 long orderId = 100;
                 string customerName = "Viggi Siggi";
                 string OrderBarCode = "20200001";
@@ -100,11 +99,15 @@ namespace ThjonustukerfiTests.Tests
 
                 // Create a list that should be the same as the list returned in OrderDTO
                 var itemListDTO = new List<ItemDTO>();
-                var mockItems = mockContext.Item.ToList();
-                foreach (var item in mockItems)
+                var itemOrderConnection = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderId).ToList();
+                
+                foreach (var item in itemOrderConnection)
                 {
-                    var add = _mapper.Map<ItemDTO>(item);
-                    add.Service = serviceName;
+                    var entity = mockContext.Item.FirstOrDefault(i => i.Id == item.ItemId);
+                    var add = _mapper.Map<ItemDTO>(entity);
+                    add.Service = mockContext.Service.FirstOrDefault(s => s.Id == entity.ServiceId).Name;
+                    add.State = mockContext.State.FirstOrDefault(s => s.Id == entity.StateId).Name;
+                    add.Category = mockContext.Category.FirstOrDefault(c => c.Id == entity.CategoryId).Name;
                     itemListDTO.Add(add);
                 }
 
@@ -123,7 +126,7 @@ namespace ThjonustukerfiTests.Tests
 
                 // Asserting items in order
                 Assert.IsNotNull(orderDTO.Items);
-                Assert.AreEqual(orderDTO.Items.Count, mockItems.Count);
+                Assert.AreEqual(orderDTO.Items.Count, itemListDTO.Count);
                 Assert.AreEqual(orderDTO.Items[0], itemListDTO[0]);
                 Assert.AreEqual(orderDTO.Items[1], itemListDTO[1]);
             };
@@ -153,12 +156,12 @@ namespace ThjonustukerfiTests.Tests
                 {
                     new ItemInputModel 
                     {
-                        Type = "Ysa",
+                        CategoryId = 1,
                         ServiceId = 1
                     },
                     new ItemInputModel 
                     {
-                        Type = "Lax",
+                        CategoryId = 2,
                         ServiceId = 1
                     }
                 }
@@ -196,9 +199,9 @@ namespace ThjonustukerfiTests.Tests
 
                 // Assert Item
                 Assert.AreEqual(mockContext.Item.Count(), itemDbSize + inp.Items.Count());
-                Assert.AreEqual(itemListDTO[0].Type, inp.Items[0].Type);
+                Assert.AreEqual(itemListDTO[0].CategoryId, inp.Items[0].CategoryId);
                 Assert.AreEqual(itemListDTO[0].ServiceId, inp.Items[0].ServiceId);
-                Assert.AreEqual(itemListDTO[1].Type, inp.Items[1].Type);
+                Assert.AreEqual(itemListDTO[1].CategoryId, inp.Items[1].CategoryId);
                 Assert.AreEqual(itemListDTO[1].ServiceId, inp.Items[1].ServiceId);
 
                 // Assert ItemOrderConnection
@@ -222,12 +225,12 @@ namespace ThjonustukerfiTests.Tests
                 {
                     new ItemInputModel 
                     {
-                        Type = "Ysa",
+                        CategoryId = 1,
                         ServiceId = -1
                     },
                     new ItemInputModel 
                     {
-                        Type = "Lax",
+                        CategoryId = 2,
                         ServiceId = 2
                     }
                 }
@@ -267,7 +270,7 @@ namespace ThjonustukerfiTests.Tests
         public void UpdateOrder_should_update_order_correctly_and_itemlist_should_grow()
         {
             long orderID = 100;
-            long custId = 500;
+            long custId = 50;
             //* Arrange
             var orperInput = new OrderInputModel
             {
@@ -276,17 +279,17 @@ namespace ThjonustukerfiTests.Tests
                 {
                     new ItemInputModel 
                     {
-                        Type = "BREYTT",
+                        CategoryId = 1,
                         ServiceId = 2
                     },
                     new ItemInputModel 
                     {
-                        Type = "BREYTT",
+                        CategoryId = 1,
                         ServiceId = 3
                     },
                     new ItemInputModel 
                     {
-                        Type = "OGSTAEKKA",
+                        CategoryId = 1,
                         ServiceId = 4
                     }
                 }
@@ -327,9 +330,9 @@ namespace ThjonustukerfiTests.Tests
                 Assert.IsNotNull(newItemList);
                 Assert.AreEqual(newItemList.Count, oldItemList.Count + 1);      // list is going from two to three
                 // check type
-                Assert.AreEqual(newItemList[0].Type, orperInput.Items[0].Type);
-                Assert.AreEqual(newItemList[1].Type, orperInput.Items[1].Type);
-                Assert.AreEqual(newItemList[2].Type, orperInput.Items[2].Type);
+                Assert.AreEqual(newItemList[0].CategoryId, orperInput.Items[0].CategoryId);
+                Assert.AreEqual(newItemList[1].CategoryId, orperInput.Items[1].CategoryId);
+                Assert.AreEqual(newItemList[2].CategoryId, orperInput.Items[2].CategoryId);
                 // check service ID
                 Assert.AreEqual(newItemList[0].ServiceId, orperInput.Items[0].ServiceId);
                 Assert.AreEqual(newItemList[1].ServiceId, orperInput.Items[1].ServiceId);
@@ -341,7 +344,7 @@ namespace ThjonustukerfiTests.Tests
         public void UpdateOrder_should_update_order_correctly_and_itemlist_should_shrink()
         {
             long orderID = 100;
-            long custId = 500;
+            long custId = 50;
             //* Arrange
             var orperInput = new OrderInputModel
             {
@@ -350,7 +353,7 @@ namespace ThjonustukerfiTests.Tests
                 {
                     new ItemInputModel 
                     {
-                        Type = "MINNKA",
+                        CategoryId = 1,
                         ServiceId = 2
                     }
                 }
@@ -391,7 +394,7 @@ namespace ThjonustukerfiTests.Tests
                 Assert.IsNotNull(newItemList);
                 Assert.AreEqual(newItemList.Count, oldItemList.Count - 2);      // list is going from 3 to one
                 // check type
-                Assert.AreEqual(newItemList[0].Type, orperInput.Items[0].Type);
+                Assert.AreEqual(newItemList[0].CategoryId, orperInput.Items[0].CategoryId);
                 // check service ID
                 Assert.AreEqual(newItemList[0].ServiceId, orperInput.Items[0].ServiceId);
             }
@@ -401,7 +404,7 @@ namespace ThjonustukerfiTests.Tests
         public void UpdateOrder_should_update_order_correctly_and_itemlist_should_be_empty()
         {
             long orderID = 100;
-            long custId = 500;
+            long custId = 50;
             //* Arrange
             var orperInput = new OrderInputModel
             {
@@ -450,7 +453,7 @@ namespace ThjonustukerfiTests.Tests
         public void UpdateOrder_should_update_order_correctly_and_itemlist_should_grow_to_five()
         {
             long orderID = 100;
-            long custId = 500;
+            long custId = 50;
             //* Arrange
             var clearItems = new OrderInputModel
             {
@@ -464,27 +467,27 @@ namespace ThjonustukerfiTests.Tests
                 {
                     new ItemInputModel 
                     {
-                        Type = "STÆKKUN",
+                        CategoryId = 2,
                         ServiceId = 1
                     },
                     new ItemInputModel 
                     {
-                        Type = "STÆKKUN",
+                        CategoryId = 2,
                         ServiceId = 1
                     },
                     new ItemInputModel 
                     {
-                        Type = "STÆKKUN",
+                        CategoryId = 2,
                         ServiceId = 1
                     },
                     new ItemInputModel 
                     {
-                        Type = "STÆKKUN",
+                        CategoryId = 2,
                         ServiceId = 1
                     },
                     new ItemInputModel 
                     {
-                        Type = "STÆKKUN",
+                        CategoryId = 2,
                         ServiceId = 1
                     }
                 }
@@ -526,11 +529,11 @@ namespace ThjonustukerfiTests.Tests
                 Assert.IsNotNull(newItemList);
                 Assert.AreEqual(newItemList.Count, oldItemList.Count + 5);      // list is going from zero to five
                 // check type
-                Assert.AreEqual(newItemList[0].Type, "STÆKKUN");
-                Assert.AreEqual(newItemList[1].Type, "STÆKKUN");
-                Assert.AreEqual(newItemList[2].Type, "STÆKKUN");
-                Assert.AreEqual(newItemList[3].Type, "STÆKKUN");
-                Assert.AreEqual(newItemList[4].Type, "STÆKKUN");
+                Assert.AreEqual(newItemList[0].CategoryId, 2);
+                Assert.AreEqual(newItemList[1].CategoryId, 2);
+                Assert.AreEqual(newItemList[2].CategoryId, 2);
+                Assert.AreEqual(newItemList[3].CategoryId, 2);
+                Assert.AreEqual(newItemList[4].CategoryId, 2);
                 // check service ID
                 Assert.AreEqual(newItemList[0].ServiceId, (long)1);
                 Assert.AreEqual(newItemList[1].ServiceId, (long)1);
@@ -556,6 +559,7 @@ namespace ThjonustukerfiTests.Tests
 
                 //* Act then assert
                 Assert.ThrowsException<NotFoundException>(() => orderRepo.UpdateOrder(inp, -1));
+                Assert.ThrowsException<NotFoundException>(() => orderRepo.UpdateOrder(inp, 100));
             }
         }
 
@@ -587,7 +591,7 @@ namespace ThjonustukerfiTests.Tests
                     oldItemsStates.Add(new Item()   // copying each variable rather than the reference of the objects
                     {
                         Id = entity.Id,
-                        Type = entity.Type,
+                        CategoryId = entity.CategoryId,
                         StateId = entity.StateId,
                         ServiceId = entity.ServiceId,
                         Barcode = entity.Barcode,
@@ -792,7 +796,7 @@ namespace ThjonustukerfiTests.Tests
                 new Item
                 {
                     Id = 1,
-                    Type = "Ysa bitar",
+                    CategoryId = 1,
                     StateId = 1,
                     ServiceId = 1,
                     Barcode = "50500001",
@@ -802,7 +806,7 @@ namespace ThjonustukerfiTests.Tests
                 new Item
                 {
                     Id = 2,
-                    Type = "Lax heil flok",
+                    CategoryId = 2,
                     StateId = 1,
                     ServiceId = 1,
                     Barcode = "50500002",
@@ -812,10 +816,12 @@ namespace ThjonustukerfiTests.Tests
             };
 
             // Adding service
-            Service mockService = new Service()
+            var mockServices = new List<Service>()
             {
-                Name = serviceName,
-                Id = 1
+                new Service() { Name = serviceName, Id = 1 },
+                new Service() { Name = "Taðreyking", Id = 2 },
+                new Service() { Name = "Viðarreyking", Id = 3 },
+                new Service() { Name = "Salt pækill", Id = 4 }
             };
 
             // Build a list of size 20, make it queryable for the database mock
@@ -855,13 +861,22 @@ namespace ThjonustukerfiTests.Tests
                 new State() {Name = "Sótt", Id = 5}
             };
 
+            // Adding categories
+            var categories = new List<Category>()
+            {
+                // Catagories for Reykofninn
+                new Category() {Name = "Lax", Id = 1},
+                new Category() {Name = "Silungur", Id = 2}
+            };
+
             // Adding all entities to the in memory database
             mockContext.Order.AddRange(orders);
             mockContext.Customer.AddRange(customers);
             mockContext.ItemOrderConnection.AddRange(mockIOConnect);
             mockContext.Item.AddRange(mockItems);
-            mockContext.Service.Add(mockService);
+            mockContext.Service.AddRange(mockServices);
             mockContext.State.AddRange(states);
+            mockContext.Category.AddRange(categories);
             mockContext.SaveChanges();
             //! Building DB done
         }
