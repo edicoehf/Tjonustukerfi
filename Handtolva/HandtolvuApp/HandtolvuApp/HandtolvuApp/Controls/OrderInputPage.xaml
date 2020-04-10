@@ -29,10 +29,10 @@
                Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" 
                Margin="0, 20, 0, 0"/>
 
-        <Label Text="Sláðu inn vörunúmer eða skannaðu strikamerki." FontSize="18"
+        <Label Text="Sláðu inn pöntunarnúmer eða skannaðu strikamerki." FontSize="18"
                Grid.Row="1" Grid.ColumnSpan="4"
-               HorizontalOptions="Center"
-               VerticalOptions="CenterAndExpand" 
+               HorizontalTextAlignment="Center"
+               VerticalOptions="Center" 
                />
 
         <Editor Grid.Column="0" Grid.ColumnSpan="3"

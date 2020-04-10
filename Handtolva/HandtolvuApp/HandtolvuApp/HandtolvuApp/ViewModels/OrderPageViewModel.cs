@@ -18,6 +18,7 @@ namespace HandtolvuApp.ViewModels
 
             SelectedItemChangedCommand = new Command(async () =>
             {
+                SelectedItem.OrderId = Order.Id;
                 var itemVM = new ItemViewModel(SelectedItem);
                 var itemPage = new ItemPage();
                 itemPage.BindingContext = itemVM;
