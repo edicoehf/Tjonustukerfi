@@ -26,7 +26,7 @@ namespace HandtolvuApp.Data
             //set Item to null for future use
             Item = null;
             // String for Api call, might want to change this to constant
-            string Uri = "http://10.0.2.2:5000/api/items?search=" + barcode;
+            string Uri = "http://10.0.2.2:5000/api/items/search?barcode=" + barcode;
             try
             {
                 var response = await _client.GetAsync(Uri);
@@ -48,7 +48,7 @@ namespace HandtolvuApp.Data
         {
             Order = null;
 
-            string Uri = "http://10.0.2.2:5000/api/orders?search=" + barcode;
+            string Uri = "http://10.0.2.2:5000/api/orders/search?barcode=" + barcode;
             try
             {
                 var response = await _client.GetAsync(Uri);
@@ -70,7 +70,7 @@ namespace HandtolvuApp.Data
         {
             Order = null;
             // uri to check if order with barcode exists
-            string checkOrderUri = "http://10.0.2.2:5000/api/orders?search=" + barcode;
+            string checkOrderUri = "http://10.0.2.2:5000/api/orders/search?barcode=" + barcode;
             // uri to set order to completed state
             string checkoutUri = "http://10.0.2.2:5000/api/orders/";
             try

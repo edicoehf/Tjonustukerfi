@@ -13,6 +13,6 @@ namespace HandtolvuApp.Models
         public List<Item> Items { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
-        public DateTime DateCompleted { get; set; }
+        public DateTime? DateCompleted { get; set; }
     }
 }
