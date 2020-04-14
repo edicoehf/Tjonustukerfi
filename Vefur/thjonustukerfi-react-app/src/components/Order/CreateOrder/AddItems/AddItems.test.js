@@ -1,331 +1,102 @@
 import React from "react";
 import { shallow, mount } from "enzyme";
+import { fireEvent } from "@testing-library/react";
 import AddItems from "./AddItems";
+import { RadioGroup, TextField } from "@material-ui/core";
 
 const findByName = (fields, name) => {
     for (var i = 0; i < fields.length; i++) {
-        if (fields.at(i).instance().name === name) {
+        if (fields.at(i).props().name === name) {
             return fields.at(i);
         }
     }
     return null;
 };
 
-describe("<CustomerInputForm />", () => {
-    describe("<CustomerInputForm with no existingCustomer />", () => {
-        let wrapper;
-        let checkWrapper;
-        let testState;
-        let inputs;
-        const setState = jest.fn();
-        const useStateSpy = jest.spyOn(React, "useState");
-        const handler = () => {};
-        useStateSpy.mockImplementation((init) => [init, setState]);
-        checkWrapper = mount(
-            shallow(
-                <CustomerInputForm
-                    existingCustomer={{}}
-                    submitHandler={handler}
-                    processing={false}
-                />
-            ).get(0)
-        );
+describe("<AddItems />", () => {
+    let wrapper;
+    let checkWrapper;
+    let testState;
+    let radios;
+    let textfields;
+    const setState = jest.fn();
+    const useStateSpy = jest.spyOn(React, "useState");
+    const handler = () => {};
+    useStateSpy.mockImplementation((init) => [init, setState]);
+    checkWrapper = mount(shallow(<AddItems addItems={handler} />).get(0));
 
-        beforeEach(() => {
-            wrapper = mount(
-                shallow(
-                    <CustomerInputForm
-                        existingCustomer={{}}
-                        submitHandler={handler}
-                        processing={false}
-                    />
-                ).get(0)
-            );
-            testState = {
-                name: "",
-                ssn: "",
-                telephone: "",
-                email: "",
-                postalCode: "",
-                address: "",
-            };
-            inputs = wrapper.find("input");
+    beforeEach(() => {
+        wrapper = mount(shallow(<AddItems addItems={handler} />).get(0));
+        testState = {
+            category: null,
+            service: null,
+            amount: 1,
+        };
+        radios = wrapper.find(RadioGroup);
+        textfields = wrapper.find(TextField);
+    });
+
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
+    describe("Category select", () => {
+        it("Should be null at start", () => {
+            const cat = findByName(radios, "category");
+            expect(cat.props().value).toBe(null);
         });
 
-        afterEach(() => {
-            jest.clearAllMocks();
+        it("Should capture Category correctly onChange", () => {
+            const cat = findByName(radios, "category");
+            cat.props().onChange({ target: { name: "category", value: "3" } });
+            testState.category = "3";
+            expect(setState).toHaveBeenCalledWith(testState);
         });
 
-        describe("Name input", () => {
-            const fields = findByName(checkWrapper.find("input"), "name");
-            if (!fields) {
-                return;
-            }
-            it("Should have length 0 at start", () => {
-                const name = findByName(inputs, "name");
-                expect(name.instance().value).toHaveLength(0);
-            });
-
-            it("Should capture Name correctly onChange", () => {
-                const name = findByName(inputs, "name");
-                name.instance().value = "Anna";
-                testState.name = "Anna";
-                name.simulate("change");
-                expect(setState).toHaveBeenCalledWith(testState);
-            });
-
-            it("Should capture name incorrectly onChange", () => {
-                const name = findByName(inputs, "name");
-                name.instance().value = "Gunna";
-                name.simulate("change");
-                expect(name.instance().value).not.toBe("Anna");
-            });
-        });
-
-        describe("SSN input", () => {
-            const fields = findByName(checkWrapper.find("input"), "ssn");
-            if (!fields) {
-                return;
-            }
-            it("Should have length 0 at start", () => {
-                const ssn = findByName(inputs, "ssn");
-                expect(ssn.instance().value).toHaveLength(0);
-            });
-
-            it("Should capture SSN correctly onChange", () => {
-                const ssn = findByName(inputs, "ssn");
-                ssn.instance().value = "0123456789";
-                testState.ssn = "0123456789";
-                ssn.simulate("change");
-                expect(setState).toHaveBeenCalledWith(testState);
-            });
-
-            it("Should capture SSN incorrectly onChange", () => {
-                const ssn = findByName(inputs, "ssn");
-                ssn.instance().value = "0123456789";
-                ssn.simulate("change");
-                expect(ssn.instance().value).not.toBe("0123456789");
-            });
-        });
-
-        describe("Telephone input", () => {
-            const fields = findByName(checkWrapper.find("input"), "telephone");
-            if (!fields) {
-                return;
-            }
-            it("Should have length 0 at start", () => {
-                const telephone = findByName(inputs, "telephone");
-                expect(telephone.instance().value).toHaveLength(0);
-            });
-
-            it("Should capture Telephone correctly onChange", () => {
-                const telephone = findByName(inputs, "telephone");
-                telephone.instance().value = "1234567";
-                testState.telephone = "1234567";
-                telephone.simulate("change");
-                expect(setState).toHaveBeenCalledWith(testState);
-            });
-
-            it("Should capture Telephone incorrectly onChange", () => {
-                const telephone = findByName(inputs, "telephone");
-                telephone.instance().value = "1234567";
-                telephone.simulate("change");
-                expect(telephone.instance().value).not.toBe("7654321");
-            });
-        });
-
-        describe("Email input", () => {
-            const fields = findByName(checkWrapper.find("input"), "email");
-            if (!fields) {
-                return;
-            }
-            it("Should have length 0 at start", () => {
-                const email = findByName(inputs, "email");
-                expect(email.instance().value).toHaveLength(0);
-            });
-
-            it("Should capture Email correctly onChange", () => {
-                const email = findByName(inputs, "email");
-                email.instance().value = "siggi@oli.is";
-                testState.email = "siggi@oli.is";
-                email.simulate("change");
-                expect(setState).toHaveBeenCalledWith(testState);
-            });
-
-            it("Should capture Email incorrectly onChange", () => {
-                const email = findByName(inputs, "email");
-                email.instance().value = "siggi@oli.is";
-                email.simulate("change");
-                expect(email.instance().value).not.toBe("siggi@gunni.is");
-            });
-        });
-
-        describe("Address input", () => {
-            const fields = findByName(checkWrapper.find("input"), "address");
-            if (!fields) {
-                return;
-            }
-            it("Should have length 0 at start", () => {
-                const address = findByName(inputs, "address");
-                expect(address.instance().value).toHaveLength(0);
-            });
-
-            it("Should capture Address correctly onChange", () => {
-                const address = findByName(inputs, "address");
-                address.instance().value = "olabakki 4";
-                testState.address = "olabakki 4";
-                address.simulate("change");
-                expect(setState).toHaveBeenCalledWith(testState);
-            });
-
-            it("Should capture Address incorrectly onChange", () => {
-                const address = findByName(inputs, "address");
-                address.instance().value = "olabakki 4";
-                address.simulate("change");
-                expect(address.instance().value).not.toBe("olabakki 5");
-            });
-        });
-
-        describe("Postal code input", () => {
-            const fields = findByName(checkWrapper.find("input"), "postalCode");
-            if (!fields) {
-                return;
-            }
-            it("Should have length 0 at start", () => {
-                const postalCode = findByName(inputs, "postalCode");
-                expect(postalCode.instance().value).toHaveLength(0);
-            });
-
-            it("Should capture Postal code correctly onChange", () => {
-                const postalCode = findByName(inputs, "postalCode");
-                postalCode.instance().value = "801";
-                testState.postalCode = "801";
-                postalCode.simulate("change");
-                expect(setState).toHaveBeenCalledWith(testState);
-            });
-
-            it("Should capture Postal code incorrectly onChange", () => {
-                const postalCode = findByName(inputs, "postalCode");
-                postalCode.instance().value = "801";
-                postalCode.simulate("change");
-                expect(postalCode.instance().value).not.toBe("800");
-            });
+        it("Should capture Category incorrectly onChange", () => {
+            const cat = findByName(radios, "category");
+            cat.props().onChange({ target: { name: "category", value: "2" } });
+            expect(cat.props().value).not.toBe("3");
         });
     });
 
-    describe("<CustomerInputForm with existingCustomer />", () => {
-        let wrapper;
-        let checkWrapper;
-        const initialState = {
-            name: "Siggi Viggi",
-            ssn: "1205654059",
-            telephone: "5812345",
-            email: "siggi@viggi.is",
-            postalCode: "800",
-            address: "Bakkabakki 2",
-        };
-        let testState;
-        let inputs;
-        checkWrapper = mount(
-            shallow(
-                <CustomerInputForm
-                    existingCustomer={initialState}
-                    submitHandler={() => {}}
-                    processing={false}
-                />
-            ).get(0)
-        );
-
-        beforeEach(() => {
-            testState = initialState;
-            wrapper = mount(
-                shallow(
-                    <CustomerInputForm
-                        existingCustomer={testState}
-                        submitHandler={() => {}}
-                        processing={false}
-                    />
-                ).get(0)
-            );
-            inputs = wrapper.find("input");
+    describe("Service select", () => {
+        it("Should be null at start", () => {
+            const serv = findByName(radios, "service");
+            expect(serv.props().value).toBe(null);
         });
 
-        afterEach(() => {
-            jest.clearAllMocks();
+        it("Should capture Service correctly onChange", () => {
+            const serv = findByName(radios, "service");
+            serv.props().onChange({ target: { name: "service", value: "3" } });
+            testState.service = "3";
+            expect(setState).toHaveBeenCalledWith(testState);
         });
 
-        describe("Name input", () => {
-            const fields = findByName(checkWrapper.find("input"), "name");
-            if (!fields) {
-                return;
-            }
+        it("Should capture Service incorrectly onChange", () => {
+            const serv = findByName(radios, "service");
+            serv.props().onChange({ target: { name: "service", value: "2" } });
+            expect(serv.props().value).not.toBe("3");
+        });
+    });
 
-            it("Should receive name from props", () => {
-                const name = findByName(inputs, "name");
-                expect(name.instance().value).toBe(initialState.name);
-            });
+    describe("Amount select", () => {
+        it("Should be 1 at start", () => {
+            const amnt = findByName(textfields, "amount");
+            expect(amnt.props().value).toBe(1);
         });
 
-        describe("SSN input", () => {
-            const fields = findByName(checkWrapper.find("input"), "ssn");
-            if (!fields) {
-                return;
-            }
-
-            it("Should receive snn from props", () => {
-                const ssn = findByName(inputs, "ssn");
-                expect(ssn.instance().value).toBe(initialState.ssn);
-            });
+        it("Should capture Amount correctly onChange", () => {
+            const amnt = findByName(textfields, "amount");
+            amnt.props().onChange({ target: { name: "amount", value: "3" } });
+            testState.amount = "3";
+            expect(setState).toHaveBeenCalledWith(testState);
         });
 
-        describe("Telephone input", () => {
-            const fields = findByName(checkWrapper.find("input"), "telephone");
-            if (!fields) {
-                return;
-            }
-
-            it("Should receive telephone from props", () => {
-                const telephone = findByName(inputs, "telephone");
-                expect(telephone.instance().value).toBe(initialState.telephone);
-            });
-        });
-
-        describe("Email input", () => {
-            const fields = findByName(checkWrapper.find("input"), "email");
-            if (!fields) {
-                return;
-            }
-
-            it("Should receive email from props", () => {
-                const email = findByName(inputs, "email");
-                expect(email.instance().value).toBe(initialState.email);
-            });
-        });
-
-        describe("Address input", () => {
-            const fields = findByName(checkWrapper.find("input"), "address");
-            if (!fields) {
-                return;
-            }
-
-            it("Should receive address from props", () => {
-                const address = findByName(inputs, "address");
-                expect(address.instance().value).toBe(initialState.address);
-            });
-        });
-
-        describe("Postal code input", () => {
-            const fields = findByName(checkWrapper.find("input"), "postalCode");
-            if (!fields) {
-                return;
-            }
-
-            it("Should receive postalcode from props", () => {
-                const postalcode = findByName(inputs, "postalCode");
-                expect(postalcode.instance().value).toBe(
-                    initialState.postalCode
-                );
-            });
+        it("Should capture Amount incorrectly onChange", () => {
+            const amnt = findByName(textfields, "amount");
+            amnt.props().onChange({ target: { name: "amount", value: "2" } });
+            expect(amnt.props().value).not.toBe("3");
         });
     });
 });
