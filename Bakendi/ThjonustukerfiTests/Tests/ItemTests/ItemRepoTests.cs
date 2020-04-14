@@ -263,6 +263,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 itemDTO.OrderId = mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemEntity.Id).OrderId;
                 itemDTO.State = mockContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;
                 itemDTO.Category = mockContext.Category.FirstOrDefault(c => c.Id == itemEntity.CategoryId).Name;
+                itemDTO.Service = mockContext.Service.FirstOrDefault(s => s.Id == itemEntity.ServiceId).Name;
 
                 //* Act
                 var retVal = itemRepo.GetItemById(itemID);
