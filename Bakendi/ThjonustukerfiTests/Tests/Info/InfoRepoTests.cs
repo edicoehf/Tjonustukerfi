@@ -47,11 +47,12 @@ namespace ThjonustukerfiTests.Tests.Info
                 var infoRepo = new InfoRepo(mockContext, _mapper);
 
                 //* Act
-                List<ServiceDTO> result = infoRepo.GetServices() as List<ServiceDTO>;   // convert IEnumberable to List
+                var result = infoRepo.GetServices();
 
                 //* Assert
                 Assert.IsNotNull(result);
-                Assert.AreEqual(0, result.Count);
+                Assert.IsInstanceOfType(result, typeof(IEnumerable<ServiceDTO>));
+                Assert.AreEqual(0, result.Count());
             }
         }
 
@@ -64,11 +65,30 @@ namespace ThjonustukerfiTests.Tests.Info
                 var infoRepo = new InfoRepo(mockContext, _mapper);
 
                 //* Act
-                List<StateDTO> result = infoRepo.GetStates() as List<StateDTO>; // convert IEnumberable to List
+                var result = infoRepo.GetStates();
 
                 //* Assert
                 Assert.IsNotNull(result);
-                Assert.AreEqual(0, result.Count);
+                Assert.IsInstanceOfType(result, typeof(IEnumerable<StateDTO>));
+                Assert.AreEqual(0, result.Count());
+            }
+        }
+
+        [TestMethod]
+        public void GetCategories_should_return_an_empty_list()
+        {
+            //* Arrange
+            using(var mockContext = new DataContext(_options))
+            {
+                var infoRepo = new InfoRepo(mockContext, _mapper);
+
+                //* Act
+                var result = infoRepo.GetCategories();
+
+                //* Assert
+                Assert.IsNotNull(result);
+                Assert.IsInstanceOfType(result, typeof(IEnumerable<CategoryDTO>));
+                Assert.AreEqual(0, result.Count());
             }
         }
 
@@ -127,6 +147,26 @@ namespace ThjonustukerfiTests.Tests.Info
             }
         }
 
+        [TestMethod]
+        public void GetCategories_should_return_a_list_of_CategoryDTO_with_correct_size()
+        {
+            //* Arrange
+            using(var mockContext = new DataContext(_options))
+            {
+                // Setup repo
+                var infoRepo = new InfoRepo(mockContext, _mapper);
+                var DbTableSize = mockContext.Category.Count();
+
+                //* Act
+                var result = infoRepo.GetCategories();
+
+                //* Assert
+                Assert.IsNotNull(result);
+                Assert.IsInstanceOfType(result, typeof(IEnumerable<CategoryDTO>));
+                Assert.AreEqual(DbTableSize, result.Count());
+            }
+        }
+
         //**********     Helper functions     **********//
         private void FillDatabase(DataContext mockContext)
         {
@@ -146,9 +186,18 @@ namespace ThjonustukerfiTests.Tests.Info
                 new State() {Name = "Sótt", Id = 5}
             };
 
+            var categories = new List<Category>()
+            {
+                // Categories for Reykofninn
+                new Category() {Name = "Lax", Id = 1},
+                new Category() {Name = "Silungur", Id = 2},
+                new Category() {Name = "Lambakjöt", Id = 3}
+            };
+
             // Adding services to the in memory database and saving it
             mockContext.Service.AddRange(services);
             mockContext.State.AddRange(states);
+            mockContext.Category.AddRange(categories);
             mockContext.SaveChanges();
         }
     }

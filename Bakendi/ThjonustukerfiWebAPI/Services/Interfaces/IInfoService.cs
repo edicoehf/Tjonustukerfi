@@ -11,5 +11,9 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
         /// <summary>Gets all states available for the product/service</summary>
         /// <returns>A list of all states.</returns>
         IEnumerable GetStates();
+
+        /// <summary>Gets all categories of items</summary>
+        /// <returns>A list of all categories</returns>
+        IEnumerable GetCategories();
     }
 }

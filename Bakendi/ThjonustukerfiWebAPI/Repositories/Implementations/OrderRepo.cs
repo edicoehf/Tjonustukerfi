@@ -40,7 +40,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 var itemEntity = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);                  // get item entity
                 var add = _mapper.Map<ItemDTO>(itemEntity);                                                 // map to DTO
                 add.Service = _dbContext.Service.FirstOrDefault(s => s.Id == itemEntity.ServiceId).Name;    // Find service name
-                add.State = _dbContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;
+                add.State = _dbContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;          // Find state name
+                add.Category = _dbContext.Category.FirstOrDefault(c => c.Id == itemEntity.CategoryId).Name; // Find category name 
                 dto.Items.Add(add);     // add item DTO to orderDTO item list
             }
 
@@ -52,7 +53,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // TODO replace for actual barcode in both order and Item
             foreach(ItemInputModel item in order.Items)
             {
-                if(_dbContext.Service.FirstOrDefault(s => s.Id == item.ServiceId) == null) { throw new NotFoundException($"Service with id {item.ServiceId} was not found."); }
+                if(_dbContext.Service.FirstOrDefault(s => s.Id == item.ServiceId) == null) { throw new NotFoundException($"Service with ID {item.ServiceId} was not found."); }
+                if(_dbContext.Category.FirstOrDefault(c => c.Id == item.CategoryId) == null) { throw new NotFoundException($"Category with ID {item.CategoryId} was not found."); }
             }
             var orderToAdd = _mapper.Map<Order>(order);
             var barcodeEntry = _dbContext.Order.OrderByDescending(o => o.Barcode).FirstOrDefault();
@@ -88,6 +90,16 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             var entity = _dbContext.Order.FirstOrDefault(o => o.Id == id);
             if(entity == null) { throw new NotFoundException($"Order with id {id} was not found."); }
 
+            // Customer in input not valid
+            if(_dbContext.Customer.FirstOrDefault(c => c.Id == order.CustomerId) == null) { throw new NotFoundException($"Customer with ID {order.CustomerId} was not found."); }
+
+            // Make sure that the items that are being added have the correct service and category
+            foreach(ItemInputModel item in order.Items)
+            {
+                if(_dbContext.Service.FirstOrDefault(s => s.Id == item.ServiceId) == null) { throw new NotFoundException($"Service with ID {item.ServiceId} was not found."); }
+                if(_dbContext.Category.FirstOrDefault(c => c.Id == item.CategoryId) == null) { throw new NotFoundException($"Category with ID {item.CategoryId} was not found."); }
+            }
+
             // update the customer ID
             entity.CustomerId = order.CustomerId;
 
@@ -104,8 +116,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             {
                 for(var i = 0; i < items.Count; i++)
                 {
-                    items[i].Type = order.Items[i].Type;
-                    items[i].ServiceId = order.Items[i].ServiceId;
+                    items[i].CategoryId = (long)order.Items[i].CategoryId;
+                    items[i].ServiceId = (long)order.Items[i].ServiceId;
                     items[i].DateModified = DateTime.Now;
                 }
             }
@@ -119,8 +131,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 var i = 0;
                 for( ; i < items.Count; i++)
                 {
-                    items[i].Type = order.Items[i].Type;
-                    items[i].ServiceId = order.Items[i].ServiceId;
+                    items[i].CategoryId = (long)order.Items[i].CategoryId;
+                    items[i].ServiceId = (long)order.Items[i].ServiceId;
                     items[i].DateModified = DateTime.Now;
                 }
 
@@ -140,8 +152,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 var i = 0;
                 for( ; i < order.Items.Count; i++)
                 {
-                    items[i].Type = order.Items[i].Type;
-                    items[i].ServiceId = order.Items[i].ServiceId;
+                    items[i].CategoryId = (long)order.Items[i].CategoryId;
+                    items[i].ServiceId = (long)order.Items[i].ServiceId;
                     items[i].DateModified = DateTime.Now;
                 }
 
@@ -250,33 +262,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
         public IEnumerable<OrderDTO> GetAllOrders()
         {
             var ordersEntity = _dbContext.Order.ToList();
-            var orders = new List<OrderDTO>();
-
-            // If the list is empty, just return it
-            if(!ordersEntity.Any()) { return orders; }
-
-            // Loop through all orders
-            foreach (var order in ordersEntity)
-            {
-                var dto = _mapper.Map<OrderDTO>(order);
-                dto.Customer = _dbContext.Customer.FirstOrDefault(c => c.Id == order.CustomerId).Name; // get customer name
-                
-                // Loop through all items in the order and add them to the DTO
-                var itemList = _dbContext.ItemOrderConnection.Where(c => c.OrderId == order.Id).ToList();
-                dto.Items = new List<ItemDTO>();
-                foreach (var item in itemList)
-                {
-                    var itemEntity = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);                      // get item entity
-                    var add = _mapper.Map<ItemDTO>(itemEntity);                                                 // map to DTO
-                    add.Service = _dbContext.Service.FirstOrDefault(s => s.Id == itemEntity.ServiceId).Name;    // Find Service name
-                    add.State = _dbContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;          // Find state name
-                    dto.Items.Add(add);     // Add the itemDTO to the orderDTO
-                }
-
-                orders.Add(dto);
-            }
             
-            return orders;
+            return GetOrderDTOwithOrderList(ordersEntity);
         }
 
         public void CompleteOrder(long orderId)
@@ -308,6 +295,60 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             if(entity == null) { throw new NotFoundException($"Order with barcode {barcode} was not found."); }
 
             return entity.Id;
+        }
+
+        public List<OrderDTO> GetActiveOrdersByCustomerId(long customerId)
+        {
+            var orders = _dbContext.Order.Where(o => o.CustomerId == customerId).ToList();  // get orders with this customer
+            var orderDTOs = GetOrderDTOwithOrderList(orders);   // Get DTO list of orders that has the item connection
+
+            var activeOrders = new List<OrderDTO>();    // Create a new list of active orders
+
+            foreach (var order in orderDTOs)    // loop through all orders
+            {
+                foreach (var item in order.Items)   // loop through all items in all orders
+                {
+                    if(item.State != "Sótt")    // If any item is not done, add order to active orders and check next order
+                    {
+                        activeOrders.Add(order);
+                        break;
+                    }
+                }
+            }
+
+            return activeOrders;    // Active orders, empty list if there are none
+        }
+
+        private List<OrderDTO> GetOrderDTOwithOrderList(List<Order> ordersEntity)
+        {
+            var orders = new List<OrderDTO>();
+
+            // If the list is empty, just return it
+            if(!ordersEntity.Any()) { return orders; }
+
+            // Loop through all orders
+            foreach (var order in ordersEntity)
+            {
+                var dto = _mapper.Map<OrderDTO>(order);
+                dto.Customer = _dbContext.Customer.FirstOrDefault(c => c.Id == order.CustomerId).Name; // get customer name
+                
+                // Loop through all items in the order and add them to the DTO
+                var itemList = _dbContext.ItemOrderConnection.Where(c => c.OrderId == order.Id).ToList();
+                dto.Items = new List<ItemDTO>();
+                foreach (var item in itemList)
+                {
+                    var itemEntity = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);                      // get item entity
+                    var add = _mapper.Map<ItemDTO>(itemEntity);                                                 // map to DTO
+                    add.Service = _dbContext.Service.FirstOrDefault(s => s.Id == itemEntity.ServiceId).Name;    // Find Service name
+                    add.State = _dbContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;          // Find state name
+                    add.Category = _dbContext.Category.FirstOrDefault(c => c.Id == itemEntity.CategoryId).Name; // Find category name
+                    dto.Items.Add(add);     // Add the itemDTO to the orderDTO
+                }
+
+                orders.Add(dto);
+            }
+            
+            return orders;
         }
     }
 }

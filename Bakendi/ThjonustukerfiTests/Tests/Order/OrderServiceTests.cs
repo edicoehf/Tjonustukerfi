@@ -36,7 +36,7 @@ namespace ThjonustukerfiTests.Tests
                 Items = new List<ItemInputModel>()
                 {
                     new ItemInputModel {
-                        Type = "Ysa"
+                        CategoryId = 1
                     }
                 }
             };
@@ -66,7 +66,7 @@ namespace ThjonustukerfiTests.Tests
                 Items = new List<ItemInputModel>()
                 {
                     new ItemInputModel {
-                        Type = "Ysa"
+                        CategoryId = 1
                     }
                 }
             };  
@@ -95,7 +95,7 @@ namespace ThjonustukerfiTests.Tests
                         new ItemDTO()
                         {
                             Id = 1,
-                            Type = "Ysa bitar",
+                            Category = "Ysa bitar",
                             Service = "Birkireyk"
                         }
                     },
@@ -163,6 +163,7 @@ namespace ThjonustukerfiTests.Tests
             Assert.IsInstanceOfType(retVal, typeof(OrderDTO));
         }
 
+        /// <summary>Creates a list of order DTO for testing</summary>
         private List<OrderDTO> CreateOrderDTOList()
         {
             return new List<OrderDTO>()
@@ -176,7 +177,7 @@ namespace ThjonustukerfiTests.Tests
                         new ItemDTO()
                         {
                             Id = 1,
-                            Type = "Ysa bitar",
+                            Category = "Ysa bitar",
                             Service = "Birkireyk"
                         }
                     },
@@ -193,7 +194,7 @@ namespace ThjonustukerfiTests.Tests
                         new ItemDTO()
                         {
                             Id = 1,
-                            Type = "Lax bitar",
+                            Category = "Lax bitar",
                             Service = "Birkireyk"
                         }
                     },

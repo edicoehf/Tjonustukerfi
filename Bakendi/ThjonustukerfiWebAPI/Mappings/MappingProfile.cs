@@ -51,6 +51,10 @@ namespace ThjonustukerfiWebAPI.Mappings
             //* State Mappings
             // Automapper for State to StateDTO
             CreateMap<State, StateDTO>();
+
+            //* Category Mappings
+            // Automapper for Category to CategoryDTO
+            CreateMap<Category, CategoryDTO>();
         }
     }
 }

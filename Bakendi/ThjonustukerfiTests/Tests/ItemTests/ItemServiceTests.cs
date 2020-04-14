@@ -29,7 +29,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             {
                 Id = itemID,
                 OrderId = 1,
-                Type = "Test",
+                Category = "Test",
                 State = "Í vinnslu",
                 DateModified = DateTime.Now
             };
@@ -59,7 +59,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             {
                 Id = itemID,
                 OrderId = 2,
-                Type = "bitar",
+                Category = "bitar",
                 State = "Í vinnslu",
                 DateModified = DateTime.Now
             };

@@ -29,7 +29,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             {
                 Id = 1,
                 OrderId = 1,
-                Type = "Test",
+                Category = "Test",
                 State = "Í vinnslu",
                 DateModified = DateTime.Now
             };
@@ -53,7 +53,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         {
             var item = new EditItemInput
             {
-                Type = "Hello"
+                CategoryId = 1
             };
 
             // setup and create controller
@@ -97,7 +97,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             {
                 Id = itemID,
                 OrderId = 2,
-                Type = "bitar",
+                Category = "bitar",
                 State = "Í vinnslu",
                 DateModified = DateTime.Now
             };
