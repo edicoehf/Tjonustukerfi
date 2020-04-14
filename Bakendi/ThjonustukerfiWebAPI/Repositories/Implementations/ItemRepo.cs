@@ -79,9 +79,24 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 editCategory = true;
             }
 
+            // Update Category
             if(editCategory) { entity.CategoryId = (long)input.CategoryId; }
-            if(editState) { entity.StateId = (long)input.StateId; }
+
+            // Update State
+            if(editState) 
+            {
+                entity.StateId = (long)input.StateId; 
+
+                // Update/create timestamp
+                var timestamp = _dbContext.ItemTimestamp.FirstOrDefault(ts => ts.ItemId == entity.Id && ts.StateId == entity.StateId);
+                if(timestamp == null) { _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(entity)); }
+                else { timestamp.TimeOfChange = DateTime.Now; }
+            }
+
+            // Update Service
             if(editService) { entity.ServiceId = (long)input.ServiceID; }
+
+            // Update order
             if(editOrder)
             {
                 var connection = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemId);    // get the item order connection
@@ -123,6 +138,11 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             entity.DateModified = DateTime.Now;
             entity.DateCompleted = DateTime.Now;
 
+            // Update/create timestamp
+            var timestamp = _dbContext.ItemTimestamp.FirstOrDefault(ts => ts.ItemId == entity.Id && ts.StateId == entity.StateId);
+            if(timestamp == null) { _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(entity)); }
+            else { timestamp.TimeOfChange = DateTime.Now; }
+
             // Update date modified of order connected to this
             _dbContext.Order.FirstOrDefault(o =>
                     o.Id == _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == entity.Id).OrderId)  // find order connected to this item
@@ -133,12 +153,19 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
         public void RemoveItem(long itemId)
         {
+            // Get entity
             var entity = _dbContext.Item.FirstOrDefault(i => i.Id == itemId);
             if(entity == null) { throw new NotFoundException($"Item with ID {itemId} was not found. "); }
 
+            // Get connection and remove the connection
             var itemOrderConnection = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == entity.Id);
             if(itemOrderConnection != null) { _dbContext.ItemOrderConnection.Remove(itemOrderConnection); }
 
+            // Get the timestamp and remove it
+            var itemTimestamps = _dbContext.ItemTimestamp.Where(ts => ts.ItemId == entity.Id).ToList();
+            if(itemTimestamps != null) { _dbContext.RemoveRange(itemTimestamps); }
+
+            // Remove entity
             _dbContext.Remove(entity);
 
             _dbContext.SaveChanges();
