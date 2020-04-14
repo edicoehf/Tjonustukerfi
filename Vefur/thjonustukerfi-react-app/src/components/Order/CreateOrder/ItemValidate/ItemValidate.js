@@ -7,7 +7,9 @@ const itemValidate = (values) => {
     if (service === null) {
         errors.service = "Þjónustu vantar";
     }
-    if (amount < 1) {
+    if (amount === null) {
+        errors.amount = "Fjölda vantar";
+    } else if (amount < 1) {
         errors.amount = "Fjöldi verður að vera stærri en 0";
     }
     return errors;
