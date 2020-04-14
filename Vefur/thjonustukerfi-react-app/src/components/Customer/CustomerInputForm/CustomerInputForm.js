@@ -11,7 +11,7 @@ const initialState = {
     telephone: "",
     email: "",
     postalCode: "",
-    address: ""
+    address: "",
 };
 
 const CustomerInputForm = ({ existingCustomer, submitHandler, processing }) => {
@@ -20,7 +20,7 @@ const CustomerInputForm = ({ existingCustomer, submitHandler, processing }) => {
     const state = isExistingCustomer ? existingCustomer : initialState;
 
     // isSubmitting, resetFields
-    const { handleSubmit, handleChangeText, values, errors } = useForm(
+    const { handleSubmit, handleChange, values, errors } = useForm(
         state,
         validateForm,
         submitHandler
@@ -36,7 +36,7 @@ const CustomerInputForm = ({ existingCustomer, submitHandler, processing }) => {
                     htmlId="name"
                     label="Nafn"
                     errorMessage={errors.name}
-                    onInput={handleChangeText}
+                    onInput={handleChange}
                 />
                 <Input
                     type="text"
@@ -45,7 +45,7 @@ const CustomerInputForm = ({ existingCustomer, submitHandler, processing }) => {
                     htmlId="ssn"
                     label="Kennitala"
                     errorMessage={errors.ssn}
-                    onInput={handleChangeText}
+                    onInput={handleChange}
                 />
                 <Input
                     type="text"
@@ -54,7 +54,7 @@ const CustomerInputForm = ({ existingCustomer, submitHandler, processing }) => {
                     htmlId="telephone"
                     label="Símanúmer"
                     errorMessage={errors.telephone}
-                    onInput={handleChangeText}
+                    onInput={handleChange}
                 />
                 <Input
                     type="text"
@@ -63,7 +63,7 @@ const CustomerInputForm = ({ existingCustomer, submitHandler, processing }) => {
                     htmlId="email"
                     label="Netfang"
                     errorMessage={errors.email}
-                    onInput={handleChangeText}
+                    onInput={handleChange}
                 />
                 <Input
                     type="text"
@@ -72,7 +72,7 @@ const CustomerInputForm = ({ existingCustomer, submitHandler, processing }) => {
                     htmlId="address"
                     label="Heimilisfang"
                     errorMessage={errors.address}
-                    onInput={handleChangeText}
+                    onInput={handleChange}
                 />
                 <Input
                     type="text"
@@ -81,7 +81,7 @@ const CustomerInputForm = ({ existingCustomer, submitHandler, processing }) => {
                     htmlId="postalCode"
                     label="Póstnúmer"
                     errorMessage={errors.postalCode}
-                    onInput={handleChangeText}
+                    onInput={handleChange}
                 />
                 <input
                     disabled={processing}
