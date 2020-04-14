@@ -39,6 +39,9 @@ const AddItems = ({ addItems }) => {
                     value={values.category}
                     onChange={handleChange}
                 >
+                    {errors.category && (
+                        <p className="error">{errors.category}</p>
+                    )}
                     {categories.map((cat) => (
                         <FormControlLabel
                             key={cat.id}
@@ -54,6 +57,9 @@ const AddItems = ({ addItems }) => {
                     value={values.service}
                     onChange={handleChange}
                 >
+                    {errors.service && (
+                        <p className="error">{errors.service}</p>
+                    )}
                     {services.map((serv) => (
                         <FormControlLabel
                             key={serv.id}
@@ -64,6 +70,7 @@ const AddItems = ({ addItems }) => {
                     ))}
                 </RadioGroup>
                 <FormLabel component="legend">Fjöldi:</FormLabel>
+                {errors.amount && <p className="error">{errors.amount}</p>}
                 <TextField
                     value={values.amount}
                     type="number"
