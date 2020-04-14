@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ThjonustukerfiWebAPI.Models;
@@ -9,9 +10,10 @@ using ThjonustukerfiWebAPI.Models;
 namespace ThjonustukerfiWebAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200414102611_itemTimestampTable")]
+    partial class itemTimestampTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -130,12 +132,15 @@ namespace ThjonustukerfiWebAPI.Migrations
                     b.ToTable("ItemOrderConnection");
                 });
 
-            modelBuilder.Entity("ThjonustukerfiWebAPI.Models.Entities.ItemTimestamp", b =>
+            modelBuilder.Entity("ThjonustukerfiWebAPI.Models.Entities.ItemTimeStamp", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<long>("ItemId")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("StateId")
                         .HasColumnType("bigint");
@@ -145,7 +150,7 @@ namespace ThjonustukerfiWebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ItemTimestamp");
+                    b.ToTable("ItemTimeStamp");
                 });
 
             modelBuilder.Entity("ThjonustukerfiWebAPI.Models.Entities.Log", b =>

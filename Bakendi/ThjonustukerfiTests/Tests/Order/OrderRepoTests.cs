@@ -815,6 +815,13 @@ namespace ThjonustukerfiTests.Tests
                 }
             };
 
+            // Adding timestamp
+            List<ItemTimestamp> mockTimestamps = new List<ItemTimestamp>();
+            foreach (var item in mockItems)
+            {
+                mockTimestamps.Add(_mapper.Map<ItemTimestamp>(item));
+            }
+
             // Adding service
             var mockServices = new List<Service>()
             {
@@ -874,6 +881,7 @@ namespace ThjonustukerfiTests.Tests
             mockContext.Customer.AddRange(customers);
             mockContext.ItemOrderConnection.AddRange(mockIOConnect);
             mockContext.Item.AddRange(mockItems);
+            mockContext.ItemTimestamp.AddRange(mockTimestamps);
             mockContext.Service.AddRange(mockServices);
             mockContext.State.AddRange(states);
             mockContext.Category.AddRange(categories);

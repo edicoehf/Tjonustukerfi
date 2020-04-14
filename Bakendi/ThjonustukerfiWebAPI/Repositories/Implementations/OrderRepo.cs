@@ -157,11 +157,13 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                     items[i].DateModified = DateTime.Now;
                 }
 
-                // rest of the items to delete off the tail
+                // rest of the items to delete off the tail as well as the timestamp
                 var itemListToDelete = new List<Item>();
+                var timestampsToDelete = new List<ItemTimestamp>();
                 for( ; i < items.Count; i++)
                 {
                     itemListToDelete.Add(items[i]);
+                    timestampsToDelete.Add(_dbContext.ItemTimestamp.FirstOrDefault(ts => ts.Id == items[i].Id));    // Get timestamp with item
                 }
 
                 // get the connection table variables that connect the order with the items about to be removed
@@ -171,8 +173,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                     itemConnectionListToDelete.Add(_dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == item.Id));
                 }
 
-                // remove both items and their order connections
+                // remove timestamps, items and their order connections
                 _dbContext.Item.RemoveRange(itemListToDelete);
+                _dbContext.ItemTimestamp.RemoveRange(timestampsToDelete);
                 _dbContext.ItemOrderConnection.RemoveRange(itemConnectionListToDelete);
             }
 
@@ -220,6 +223,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 itemToAdd.Id = newItemId;
                 itemToAdd.Barcode = newItemBarcode.ToString();
                 _dbContext.Item.Add(itemToAdd);
+
+                // Create Timestamp
+                _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(itemToAdd));
 
                 var itemOrderConnection = new ItemOrderConnection {
                     OrderId = orderId,
@@ -337,7 +343,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 dto.Items = new List<ItemDTO>();
                 foreach (var item in itemList)
                 {
-                    var itemEntity = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);                      // get item entity
+                    var itemEntity = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);                  // get item entity
                     var add = _mapper.Map<ItemDTO>(itemEntity);                                                 // map to DTO
                     add.Service = _dbContext.Service.FirstOrDefault(s => s.Id == itemEntity.ServiceId).Name;    // Find Service name
                     add.State = _dbContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;          // Find state name

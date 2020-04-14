@@ -55,6 +55,10 @@ namespace ThjonustukerfiWebAPI.Mappings
             //* Category Mappings
             // Automapper for Category to CategoryDTO
             CreateMap<Category, CategoryDTO>();
+
+            //* ItemTimestamp Mappings
+            CreateMap<Item, ItemTimestamp>()
+                .ForMember(src => src.TimeOfChange, opt => opt.MapFrom(src => DateTime.Now));
         }
     }
 }
