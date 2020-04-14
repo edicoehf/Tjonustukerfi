@@ -254,7 +254,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             foreach (var item in itemListConnections)
             {
                 itemList.Add(_dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
-                itemTimestamps.Add(_dbContext.ItemTimestamp.FirstOrDefault(ts => ts.ItemId == item.ItemId));
+                itemTimestamps.AddRange(_dbContext.ItemTimestamp.Where(ts => ts.ItemId == item.ItemId).ToList());
             }
 
             // remove items
