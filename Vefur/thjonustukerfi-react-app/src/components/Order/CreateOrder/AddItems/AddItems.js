@@ -13,6 +13,7 @@ import useGetServices from "../../../../hooks/useGetServices";
 import useGetCategories from "../../../../hooks/useGetCategories";
 import useForm from "../../../../hooks/useForm";
 import itemValidate from "../ItemValidate/ItemValidate";
+import "./AddItems.css";
 
 const initialState = {
     category: null,
@@ -40,6 +41,7 @@ const AddItems = ({ addItems }) => {
                 <FormLabel component="legend">Tegund:</FormLabel>
                 <RadioGroup
                     name="category"
+                    className="select"
                     value={values.category}
                     onChange={handleChange}
                 >
@@ -58,6 +60,7 @@ const AddItems = ({ addItems }) => {
                 <FormLabel component="legend">Þjónusta:</FormLabel>
                 <RadioGroup
                     name="service"
+                    className="select"
                     value={values.service}
                     onChange={handleChange}
                 >
@@ -76,6 +79,8 @@ const AddItems = ({ addItems }) => {
                 <FormLabel component="legend">Fjöldi:</FormLabel>
                 {errors.amount && <p className="error">{errors.amount}</p>}
                 <TextField
+                    name="amount"
+                    className="select"
                     value={values.amount}
                     type="number"
                     InputLabelProps={{
@@ -83,9 +88,9 @@ const AddItems = ({ addItems }) => {
                     }}
                     variant="standard"
                     onChange={handleChange}
-                    name="amount"
                 />
                 <Button
+                    className="sbm-btn"
                     variant="contained"
                     color="primary"
                     size="large"
