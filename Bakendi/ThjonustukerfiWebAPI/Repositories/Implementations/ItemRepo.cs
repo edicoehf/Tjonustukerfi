@@ -32,7 +32,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             stateDTO.OrderId = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == entity.Id).OrderId;   // get order ID
             stateDTO.State = _dbContext.State.FirstOrDefault(s => s.Id == entity.StateId).Name;                         // get state name
             stateDTO.Category = _dbContext.Category.FirstOrDefault(c => c.Id == entity.CategoryId).Name;                // get category name
-            stateDTO.Service = _dbContext.Service.FirstOrDefault(s => s.Id == entity.ServiceId).Name;
+            stateDTO.Service = _dbContext.Service.FirstOrDefault(s => s.Id == entity.ServiceId).Name;                   // get service name
 
             return stateDTO;
         }
