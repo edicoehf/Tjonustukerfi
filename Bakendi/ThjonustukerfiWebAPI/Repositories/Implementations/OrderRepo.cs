@@ -163,7 +163,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 for( ; i < items.Count; i++)
                 {
                     itemListToDelete.Add(items[i]);
-                    timestampsToDelete.Add(_dbContext.ItemTimestamp.FirstOrDefault(ts => ts.Id == items[i].Id));    // Get timestamp with item
+                    timestampsToDelete.AddRange(_dbContext.ItemTimestamp.Where(ts => ts.ItemId == items[i].Id).ToList());    // Get timestamp with item
                 }
 
                 // get the connection table variables that connect the order with the items about to be removed
@@ -254,7 +254,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             foreach (var item in itemListConnections)
             {
                 itemList.Add(_dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
-                itemTimestamps.Add(_dbContext.ItemTimestamp.FirstOrDefault(ts => ts.Id == item.ItemId));
+                itemTimestamps.Add(_dbContext.ItemTimestamp.FirstOrDefault(ts => ts.ItemId == item.ItemId));
             }
 
             // remove items
@@ -294,6 +294,12 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 itemToChange.StateId = 5;  //TODO: Same as in complete Item, update id to be more general (e.g. some global enunm or somthing)
                 itemToChange.DateCompleted = currentDate;
                 itemToChange.DateModified = currentDate;
+
+                // Update the timestamp
+                // state and item need to be the same else create a new timestamp
+                var timeStamp = _dbContext.ItemTimestamp.FirstOrDefault(ts => ts.ItemId == itemToChange.Id && ts.StateId == itemToChange.StateId);
+                if (timeStamp == null) { _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(itemToChange)); }
+                else { timeStamp.TimeOfChange = currentDate; }
             }
 
             _dbContext.SaveChanges();
