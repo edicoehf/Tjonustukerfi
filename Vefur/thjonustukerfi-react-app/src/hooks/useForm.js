@@ -17,6 +17,7 @@ const useForm = (initialState, validate, submitHandler) => {
     }, [errors, values, submitHandler, isSubmitting]);
 
     const handleChange = (e) => {
+        console.log(e);
         setValues({
             ...values,
             [e.target.name]: e.target.value,
@@ -30,7 +31,12 @@ const useForm = (initialState, validate, submitHandler) => {
         setErrors(validationErrors);
     };
 
-    return { handleSubmit, handleChange, values, errors };
+    return {
+        handleSubmit,
+        handleChange,
+        values,
+        errors,
+    };
 };
 
 export default useForm;
