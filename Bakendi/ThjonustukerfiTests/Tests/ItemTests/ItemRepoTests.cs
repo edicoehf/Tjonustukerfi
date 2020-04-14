@@ -62,6 +62,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 Assert.IsTrue(mockContext.Customer.Any());
                 Assert.IsTrue(mockContext.ItemOrderConnection.Any());
                 Assert.IsTrue(mockContext.Item.Any());
+                Assert.IsTrue(mockContext.ItemTimestamp.Any());
                 Assert.IsTrue(mockContext.Service.Any());
                 Assert.IsTrue(mockContext.State.Any());
             }
@@ -134,8 +135,12 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 {
                     oldItemList1.Add(mockContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
                 }
+                // note: there are two orders because we are also changing the order id in this update
                 var oldOrder1ListSize = oldItemList1.Count;
                 var oldOrder2ListSize = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderChange).Count();
+
+                // number of timestamps of the item before change
+                var oldTimestampCount = mockContext.ItemTimestamp.Where(ts => ts.ItemId == itemID).Count();
 
                 // item:
                 var trackedEntity = oldItemList1.FirstOrDefault(i => i.Id == itemID);
@@ -168,6 +173,9 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 var changedItem = mockContext.Item.FirstOrDefault(i => i.Id == itemID);
                 var newOrder2ListSize = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderChange).Count();
 
+                // number of timestamps after change
+                var newTimestampCount = mockContext.ItemTimestamp.Where(ts => ts.ItemId == itemID).Count();
+
                 //* Assert
                 Assert.IsNotNull(changedItem);
                 Assert.AreNotEqual(oldItemEntity, changedItem);             // items have been updated
@@ -179,6 +187,9 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 Assert.AreEqual(stateID, changedItem.StateId);
                 Assert.AreEqual(serviceID, changedItem.ServiceId);
                 Assert.AreEqual(orderChange, mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == changedItem.Id).OrderId);
+
+                // check that there is one new timestamp
+                Assert.AreEqual(oldTimestampCount + 1, newTimestampCount);
             }
         }
 
@@ -219,6 +230,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
 
                 var oldStateId = mockContext.Item.FirstOrDefault(i => i.Id == itemID).StateId;
+                var oldTimestampSize = mockContext.ItemTimestamp.Where(ts => ts.ItemId == itemID).Count();
 
                 //* Act
                 itemRepo.CompleteItem(itemID);
@@ -229,6 +241,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 Assert.IsNotNull(itemEntity);
                 Assert.AreNotEqual(oldStateId, itemEntity.StateId);
                 Assert.AreEqual(5, itemEntity.StateId); //TODO: same as in the method in repo, too hardcoded state as five. Change later
+                Assert.AreEqual(oldTimestampSize + 1, mockContext.ItemTimestamp.Where(ts => ts.ItemId == itemID).Count());  // did we add one more timestamp?
             }
         }
 
@@ -304,7 +317,9 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
 
                 var itemOrderConnections = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
-                var oldItemOrderSize = itemOrderConnections.Count;    // Item order connection size before remove
+                var oldItemOrderSize = itemOrderConnections.Count;              // Item order connection size before remove
+                var oldTimestampSize = mockContext.ItemTimestamp.Where(ts => ts.ItemId == itemID).Count();  // number of timestamps that are related to this item
+                var oldTimestampTableSize = mockContext.ItemTimestamp.Count();  // size of timestamp table before delete
                 
                 var oldItemList = new List<Item>();
                 foreach (var item in itemOrderConnections)  // get the list of items
@@ -329,6 +344,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 //* Assert
                 Assert.AreEqual(oldItemOrderSize - 1, newItemOrderSize);    // check the item order connections list
                 Assert.AreEqual(oldItemListCount - 1, newItemListCount);    // check the size of the item list itself
+                Assert.AreEqual(oldTimestampTableSize - oldTimestampSize, mockContext.ItemTimestamp.Count());   // did we remove the correct amount of timestamps?
             }
         }
 
@@ -456,6 +472,13 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 }
             };
 
+            // Adding timestamp
+            List<ItemTimestamp> mockTimestamps = new List<ItemTimestamp>();
+            foreach (var item in mockItems)
+            {
+                mockTimestamps.Add(_mapper.Map<ItemTimestamp>(item));
+            }
+
             // Adding service
             var MockServiceList = new List<Service>()
             {
@@ -536,6 +559,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             mockContext.Customer.AddRange(customers);
             mockContext.ItemOrderConnection.AddRange(mockIOConnect);
             mockContext.Item.AddRange(mockItems);
+            mockContext.ItemTimestamp.AddRange(mockTimestamps);
             mockContext.Service.AddRange(MockServiceList);
             mockContext.State.AddRange(states);
             mockContext.Category.AddRange(categories);
