@@ -2,7 +2,7 @@ import React from "react";
 import categoryService from "../services/categoryService";
 
 const useGetCategories = () => {
-    const [categories, setCategories] = React.useState({});
+    const [categories, setCategories] = React.useState([]);
     const [error, setError] = React.useState(null);
 
     React.useEffect(() => {
