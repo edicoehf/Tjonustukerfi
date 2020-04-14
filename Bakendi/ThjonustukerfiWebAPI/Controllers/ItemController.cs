@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ThjonustukerfiWebAPI.Models.InputModels;
@@ -97,6 +98,34 @@ namespace ThjonustukerfiWebAPI.Controllers
             _itemService.RemoveItemQuery(barcode);
 
             return NoContent();
+        }
+
+        /// <summary>Changes the state of all the items in the input. Takes in a list of ItemStateChangeInputModel.</summary>
+        /// <response code="200">All items have been updated</response>
+        /// <response code="404">Input was not valid</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("statechangebyid")]
+        [HttpPatch]
+        public IActionResult ChangeItemState([FromBody] List<ItemStateChangeInputModel> stateChanges)
+        {
+            _itemService.ChangeItemState(stateChanges);
+
+            return Ok();
+        }
+
+        /// <summary>Changes the state of all the items in the input. Takes in a list of ItemStateChangeInputModel.</summary>
+        /// <response code="200">All items have been updated</response>
+        /// <response code="404">Input was not valid</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("statechangebybarcode")]
+        [HttpPatch]
+        public IActionResult ChangeItemStateBarcode([FromBody] List<ItemStateChangeBarcodeInputModel> stateChanges)
+        {
+            _itemService.ChangeItemStateBarcode(stateChanges);
+
+            return Ok();
         }
     }
 }

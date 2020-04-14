@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.InputModels;
 
@@ -23,5 +24,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
 
          /// <summary>Removes Item with the given ID</summary>
         void RemoveItem(long itemId);
+
+        /// <summary>Changes the state of all items in the input with item ID</summary>
+        void ChangeItemState(List<ItemStateChangeInputModel> stateChanges);
     }
 }

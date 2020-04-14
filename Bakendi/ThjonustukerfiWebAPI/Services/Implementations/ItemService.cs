@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.InputModels;
 using ThjonustukerfiWebAPI.Repositories.Interfaces;
@@ -22,5 +23,23 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         public void CompleteItem(long id) => _itemRepo.CompleteItem(id);
         public void RemoveItem(long itemId) => _itemRepo.RemoveItem(itemId);
         public void RemoveItemQuery(string barcode) => _itemRepo.RemoveItem(_itemRepo.SearchItem(barcode));
+        public void ChangeItemState(List<ItemStateChangeInputModel> stateChanges) { _itemRepo.ChangeItemState(stateChanges); }
+        public void ChangeItemStateBarcode(List<ItemStateChangeBarcodeInputModel> stateChanges)
+        {
+            // create list with IDs in stead of barcode
+            var stateChangesWithId = new List<ItemStateChangeInputModel>();
+            foreach (var change in stateChanges)
+            {
+                // add with correct ID
+                stateChangesWithId.Add(new ItemStateChangeInputModel
+                {
+                    ItemId = _itemRepo.SearchItem(change.Barcode),
+                    StateChangeTo = change.StateChangeTo
+                });
+            }
+
+            // update the items
+            _itemRepo.ChangeItemState(stateChangesWithId);
+        }
     }
 }
