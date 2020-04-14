@@ -206,7 +206,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
         }
 
-        //! Doesn't do SaveChanges(), rember to use save changes after calling this function
+        //! Doesn't do SaveChanges(), remember to use save changes after calling this function
         /// <summary>Used to add multiple items in order input</summary>
         private void AddMultipleItems(List<ItemInputModel> inpItems, long orderId)
         {
@@ -248,15 +248,19 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // Get list connections
             var itemListConnections = _dbContext.ItemOrderConnection.Where(c => c.OrderId == entity.Id).ToList();
             
-            // Get all items in order
+            // Get all items in order and timestamp
             var itemList = new List<Item>();
+            var itemTimestamps = new List<ItemTimestamp>();
             foreach (var item in itemListConnections)
             {
                 itemList.Add(_dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
+                itemTimestamps.Add(_dbContext.ItemTimestamp.FirstOrDefault(ts => ts.Id == item.ItemId));
             }
 
             // remove items
             if(itemList.Count > 0) { _dbContext.Item.RemoveRange(itemList); }
+            // remove timestamps
+            if(itemTimestamps.Count > 0) {  _dbContext.ItemTimestamp.RemoveRange(itemTimestamps); }
             // remove connections
             if(itemListConnections.Count > 0) { _dbContext.ItemOrderConnection.RemoveRange(itemListConnections); }
             // remove entity
