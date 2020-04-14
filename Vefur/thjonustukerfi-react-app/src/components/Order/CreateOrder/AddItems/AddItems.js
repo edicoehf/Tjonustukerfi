@@ -21,12 +21,16 @@ const initialState = {
 };
 
 const AddItems = ({ addItems }) => {
-    const { services, error: serviceError } = useGetServices();
-    const { categories, error: categoryError } = useGetCategories();
-    const { handleSubmit, handleChange, values, errors } = useForm(
+    const submitHandler = (values) => {
+        addItems(values, resetFields);
+    };
+
+    const { services } = useGetServices();
+    const { categories } = useGetCategories();
+    const { handleSubmit, handleChange, resetFields, values, errors } = useForm(
         initialState,
         itemValidate,
-        addItems
+        submitHandler
     );
 
     return (

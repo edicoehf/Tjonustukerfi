@@ -2,8 +2,9 @@ import React from "react";
 import AddItems from "../AddItems/AddItems";
 
 const CreateOrderView = () => {
-    const addItems = (items) => {
+    const addItems = (items, cb) => {
         console.log(items);
+        cb();
     };
 
     return (

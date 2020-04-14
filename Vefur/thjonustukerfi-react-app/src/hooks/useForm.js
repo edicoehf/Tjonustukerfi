@@ -31,9 +31,14 @@ const useForm = (initialState, validate, submitHandler) => {
         setErrors(validationErrors);
     };
 
+    const resetFields = () => {
+        setValues(initialState);
+    };
+
     return {
         handleSubmit,
         handleChange,
+        resetFields,
         values,
         errors,
     };
