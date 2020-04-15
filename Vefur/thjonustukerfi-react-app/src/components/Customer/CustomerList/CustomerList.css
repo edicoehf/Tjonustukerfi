@@ -1,4 +1,4 @@
-.list {
+.customer-list {
     display: grid;
     grid-template-columns: 80% 20%;
 }

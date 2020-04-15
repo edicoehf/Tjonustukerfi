@@ -3,7 +3,7 @@ import { ListGroup } from "react-bootstrap";
 import CustomerActions from "../Actions/CustomerActions/CustomerActions";
 import "./CustomerListItem.css";
 
-const CustomerListItem = props => {
+const CustomerListItem = (props) => {
     const { customer } = props;
     return (
         <>
