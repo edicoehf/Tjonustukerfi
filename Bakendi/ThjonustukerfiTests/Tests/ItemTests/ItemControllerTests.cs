@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -149,6 +150,42 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             //* Assert
             Assert.IsNotNull(response);
             Assert.AreEqual(204, response.StatusCode);
+        }
+
+        [TestMethod]
+        public void ChangeItemStateById_should_return_an_OKresult()
+        {
+            //* Arrange
+            // Mock Service
+            _itemServiceMock.Setup(method => method.ChangeItemStateById(It.IsAny<List<ItemStateChangeInputModel>>())).Verifiable();
+
+            // Create controller
+            _itemController = new ItemController(_itemServiceMock.Object);
+
+            //* Act
+            var response = _itemController.ChangeItemStateById(new List<ItemStateChangeInputModel>()) as OkResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(200, response.StatusCode);
+        }
+
+        [TestMethod]
+        public void ChangeItemStateBarcode_should_return_an_OKresult()
+        {
+            //* Arrange
+            // Mock Service
+            _itemServiceMock.Setup(method => method.ChangeItemStateBarcode(It.IsAny<List<ItemStateChangeBarcodeInputModel>>())).Verifiable();
+
+            // Create controller
+            _itemController = new ItemController(_itemServiceMock.Object);
+
+            //* Act
+            var response = _itemController.ChangeItemStateBarcode(new List<ItemStateChangeBarcodeInputModel>()) as OkResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(200, response.StatusCode);
         }
     }
 }
