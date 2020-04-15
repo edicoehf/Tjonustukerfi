@@ -10,6 +10,7 @@ import {
     Fab,
 } from "@material-ui/core";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
+import "./ViewItems.css";
 
 const ViewItems = ({ items, remove }) => {
     return (
@@ -33,6 +34,7 @@ const ViewItems = ({ items, remove }) => {
                                 <TableCell>{item.amount}</TableCell>
                                 <TableCell align="right">
                                     <Fab
+                                        className="dlt-btn"
                                         onClick={() => remove(item)}
                                         size="small"
                                     >
