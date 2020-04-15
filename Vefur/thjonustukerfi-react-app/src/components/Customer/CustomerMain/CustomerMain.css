@@ -12,3 +12,8 @@
 .create-button {
     align-self: flex-end;
 }
+.no-customers {
+    display: flex;
+    justify-content: center;
+    color: rgb(102, 100, 0);
+}

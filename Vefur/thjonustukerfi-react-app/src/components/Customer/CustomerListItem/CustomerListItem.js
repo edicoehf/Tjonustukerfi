@@ -8,14 +8,13 @@ const CustomerListItem = props => {
     return (
         <>
             <ListGroup.Item
-                className="item"
                 variant="light"
                 action
                 href={"/customer/" + customer.id}
             >
                 {customer.name} - {customer.email}
             </ListGroup.Item>
-            <ListGroup.Item className="item buttons">
+            <ListGroup.Item className="buttons">
                 <CustomerActions id={customer.id} />
             </ListGroup.Item>
         </>
