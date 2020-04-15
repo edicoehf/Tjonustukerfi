@@ -4,6 +4,7 @@ import ViewItems from "../ViewItems/ViewItems";
 import useGetServices from "../../../../hooks/useGetServices";
 import useGetCategories from "../../../../hooks/useGetCategories";
 import AddCustomer from "../AddCustomer/AddCustomer";
+import "./CreateOrderView.css";
 
 const CreateOrderView = () => {
     const [items, setItems] = React.useState([]);
