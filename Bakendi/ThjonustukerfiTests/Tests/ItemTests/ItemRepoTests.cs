@@ -469,10 +469,8 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
 
                 //* Act and Assert
-                // Invalid itemId
-                Assert.ThrowsException<NotFoundException>(() => itemRepo.ChangeItemStateById(input1));
-                // Invalid StateID
-                Assert.ThrowsException<NotFoundException>(() => itemRepo.ChangeItemStateById(input2));
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.ChangeItemStateById(input1));  // Invalid itemId
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.ChangeItemStateById(input2));  // Invalid StateID
             }
         }
 
