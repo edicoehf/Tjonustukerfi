@@ -14,6 +14,35 @@ const findByName = (fields, name) => {
 };
 
 describe("<AddItems />", () => {
+    const categories = [
+        {
+            id: 0,
+            name: "silungur",
+        },
+        {
+            id: 1,
+            name: "lax",
+        },
+        {
+            id: 2,
+            name: "thorskur",
+        },
+    ];
+    const services = [
+        {
+            id: 0,
+            name: "birkireyking",
+        },
+        {
+            id: 1,
+            name: "tadreyking",
+        },
+        {
+            id: 2,
+            name: "graf",
+        },
+    ];
+
     let wrapper;
     let checkWrapper;
     let testState;
@@ -23,10 +52,26 @@ describe("<AddItems />", () => {
     const useStateSpy = jest.spyOn(React, "useState");
     const handler = () => {};
     useStateSpy.mockImplementation((init) => [init, setState]);
-    checkWrapper = mount(shallow(<AddItems addItems={handler} />).get(0));
+    checkWrapper = mount(
+        shallow(
+            <AddItems
+                addItems={handler}
+                categories={categories}
+                services={services}
+            />
+        ).get(0)
+    );
 
     beforeEach(() => {
-        wrapper = mount(shallow(<AddItems addItems={handler} />).get(0));
+        wrapper = mount(
+            shallow(
+                <AddItems
+                    addItems={handler}
+                    categories={categories}
+                    services={services}
+                />
+            ).get(0)
+        );
         testState = {
             category: null,
             service: null,
