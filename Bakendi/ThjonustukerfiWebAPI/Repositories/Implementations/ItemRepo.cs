@@ -198,18 +198,23 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             if(orderId != -1) { SetOrderCompleteStatus(new List<long>() { orderId }); }
         }
 
-        public void ChangeItemStateById(List<ItemStateChangeInputModel> stateChanges)
+        public List<ItemStateChangeInputModel> ChangeItemStateById(List<ItemStateChangeInputModel> stateChanges)
         {
-            //TODO: Ask, if the list is of size 100 and 2 or 1 have incorrect inputs, should this function update all that are correct or should it update none? As of now, updating none.
-            // If this should be changed, just put the two forloops together and do not throw exception
+            var invalidInputs = new List<ItemStateChangeInputModel>();
+            // Gets invalid inputs if any
             foreach (var item in stateChanges)
             {
                 // check if all item IDs are valid
-                if(_dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId) == null) { throw new NotFoundException($"Item with ID {item.ItemId} was not found."); }
-
+                if(_dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId) == null) { invalidInputs.Add(item); }
                 // check if all state changes are valid
-                if(_dbContext.State.FirstOrDefault(s => s.Id == item.StateChangeTo) == null) { throw new NotFoundException($"State with ID {item.StateChangeTo} was not found."); }
+                else if(_dbContext.State.FirstOrDefault(s => s.Id == item.StateChangeTo) == null) { invalidInputs.Add(item); }
             }
+
+            // Remove items that are invalid
+            stateChanges.RemoveExisting(invalidInputs);
+
+            // If all inputs are invalid
+            if(!stateChanges.Any()) { throw new NotFoundException("Input not valid, no changes made."); }
 
             var ordersToCheck = new List<long>();
 
@@ -235,6 +240,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             _dbContext.SaveChanges();
 
             SetOrderCompleteStatus(ordersToCheck);
+
+            return invalidInputs;
         }
 
         /// <summary>Sets all orders in list date completed, only if order is complete, else it sets it to null</summary>

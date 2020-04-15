@@ -27,9 +27,11 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
         void RemoveItemQuery(string barcode);
 
         /// <summary>Changes the state of all items in the input with item ID</summary>
-        void ChangeItemStateById(List<ItemStateChangeInputModel> stateChanges);
+        /// <returns>List of inputs that are not correct and did not update, if any</returns>
+        List<ItemStateChangeInputModel> ChangeItemStateById(List<ItemStateChangeInputModel> stateChanges);
 
         /// <summary>Changes the state of all items in the input with item barcode"</summary>
-        void ChangeItemStateBarcode(List<ItemStateChangeBarcodeInputModel> stateChanges);
+        /// <returns>List of inputs that are not correct and did not update, if any</returns>
+        List<ItemStateChangeBarcodeInputModel> ChangeItemStateBarcode(List<ItemStateChangeBarcodeInputModel> stateChanges);
     }
 }

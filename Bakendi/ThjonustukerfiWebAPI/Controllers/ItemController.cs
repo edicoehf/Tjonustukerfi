@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ThjonustukerfiWebAPI.Models.InputModels;
@@ -102,28 +103,34 @@ namespace ThjonustukerfiWebAPI.Controllers
 
         /// <summary>Changes the state of all the items in the input. Takes in a list of ItemStateChangeInputModel.</summary>
         /// <response code="200">All items have been updated</response>
-        /// <response code="404">Input was not valid</response>
+        /// <response code="202">Partial success, some inputs are invalid. A list of invalid inputs are returned.</response>
+        /// <response code="404">Input was not valid, no changes were made.</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("statechangebyid")]
         [HttpPatch]
         public IActionResult ChangeItemStateById([FromBody] List<ItemStateChangeInputModel> stateChanges)
         {
-            _itemService.ChangeItemStateById(stateChanges);
+            var invalidInput = _itemService.ChangeItemStateById(stateChanges);
+
+            if(invalidInput.Any()) { return Accepted(invalidInput); }
 
             return Ok();
         }
 
         /// <summary>Changes the state of all the items in the input. Takes in a list of ItemStateChangeInputModel.</summary>
-        /// <response code="200">All items have been updated</response>
-        /// <response code="404">Input was not valid</response>
+        /// <response code="200">All items have been updated.</response>
+        /// <response code="202">Partial success, some inputs are invalid. A list of invalid inputs are returned.</response>
+        /// <response code="404">Input was not valid, no changes were made.</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("statechangebybarcode")]
         [HttpPatch]
         public IActionResult ChangeItemStateBarcode([FromBody] List<ItemStateChangeBarcodeInputModel> stateChanges)
         {
-            _itemService.ChangeItemStateBarcode(stateChanges);
+            var invalidInput = _itemService.ChangeItemStateBarcode(stateChanges);
+
+            if(invalidInput.Any()) { return Accepted(invalidInput); }
 
             return Ok();
         }

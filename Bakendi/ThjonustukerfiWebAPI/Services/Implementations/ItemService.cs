@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using ThjonustukerfiWebAPI.Models.DTOs;
+using ThjonustukerfiWebAPI.Models.Exceptions;
 using ThjonustukerfiWebAPI.Models.InputModels;
 using ThjonustukerfiWebAPI.Repositories.Interfaces;
 using ThjonustukerfiWebAPI.Services.Interfaces;
@@ -9,9 +12,11 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
     public class ItemService : IItemService
     {
         private IItemRepo _itemRepo;
-        public ItemService(IItemRepo itemRepo)
+        private IMapper _mapper;
+        public ItemService(IItemRepo itemRepo, IMapper mapper)
         {
             _itemRepo = itemRepo;
+            _mapper = mapper;
         }
         public ItemStateDTO GetItemById(long itemId) => _itemRepo.GetItemById(itemId);
         public ItemDTO CreateItem(ItemInputModel item)
@@ -23,23 +28,39 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         public void CompleteItem(long id) => _itemRepo.CompleteItem(id);
         public void RemoveItem(long itemId) => _itemRepo.RemoveItem(itemId);
         public void RemoveItemQuery(string barcode) => _itemRepo.RemoveItem(_itemRepo.SearchItem(barcode));
-        public void ChangeItemStateById(List<ItemStateChangeInputModel> stateChanges) => _itemRepo.ChangeItemStateById(stateChanges);
-        public void ChangeItemStateBarcode(List<ItemStateChangeBarcodeInputModel> stateChanges)
+        public List<ItemStateChangeInputModel> ChangeItemStateById(List<ItemStateChangeInputModel> stateChanges) => _itemRepo.ChangeItemStateById(stateChanges);
+        public List<ItemStateChangeBarcodeInputModel> ChangeItemStateBarcode(List<ItemStateChangeBarcodeInputModel> stateChanges)
         {
+            var invalidInputs = new List<ItemStateChangeBarcodeInputModel>();
             // create list with IDs in stead of barcode
             var stateChangesWithId = new List<ItemStateChangeInputModel>();
             foreach (var change in stateChanges)
             {
-                // add with correct ID
-                stateChangesWithId.Add(new ItemStateChangeInputModel
+                long itemId;
+
+                // If barcode is invalid, add it to invalid list. Will not add to ID list if barcode is invalid
+                try 
                 {
-                    ItemId = _itemRepo.SearchItem(change.Barcode),
-                    StateChangeTo = change.StateChangeTo
-                });
+                    itemId = _itemRepo.SearchItem(change.Barcode);
+
+                    // add with correct ID
+                    stateChangesWithId.Add(new ItemStateChangeInputModel
+                    {
+                        ItemId = itemId,
+                        Barcode = change.Barcode,
+                        StateChangeTo = change.StateChangeTo
+                    });
+                }
+                catch (NotFoundException) { invalidInputs.Add(change); }
             }
 
-            // update the items
-            _itemRepo.ChangeItemStateById(stateChangesWithId);
+            // update the items, returns any and all inputs that are not correct
+            var invalidInputStates = _itemRepo.ChangeItemStateById(stateChangesWithId);
+
+            // Put the invalid inputs together
+            invalidInputs.AddRange(_mapper.Map<List<ItemStateChangeBarcodeInputModel>>(invalidInputStates));
+
+            return invalidInputs;
         }
     }
 }
