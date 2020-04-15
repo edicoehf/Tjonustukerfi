@@ -451,6 +451,73 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
+        public void ChangeItemStateById_should_return_an_invalid_list()
+        {
+            //* Arrange
+            long invalidId = -1;
+            long invalidState = -1;
+            long validId = 2;
+            long validState = 5;
+
+            // The input with valid and invalid variables
+            var input = new List<ItemStateChangeInputModel>()
+            {
+                new ItemStateChangeInputModel { ItemId = invalidId, StateChangeTo = validState },
+                new ItemStateChangeInputModel { ItemId = validId, StateChangeTo = invalidState },
+                new ItemStateChangeInputModel { ItemId = validId, StateChangeTo = validState }
+            };
+
+            // Expected return from the function
+            var expectedReturn = new List<ItemStateChangeInputModel>()
+            {
+                new ItemStateChangeInputModel { ItemId = invalidId, StateChangeTo = validState },
+                new ItemStateChangeInputModel { ItemId = validId, StateChangeTo = invalidState }
+            };
+
+            using(var mockContext = new DataContext(_options))
+            {
+                var itemRepo = new ItemRepo(mockContext, _mapper);
+
+                //* Act
+                var returnedValue = itemRepo.ChangeItemStateById(input);
+
+                //* Assert
+                Assert.IsNotNull(returnedValue);
+                Assert.AreEqual(expectedReturn.Count, returnedValue.Count);
+                foreach (var inp in returnedValue)
+                {
+                    Assert.IsTrue(expectedReturn.Contains(inp));
+                }
+            }
+        }
+
+        [TestMethod]
+        public void ChangeItemStateById_should_return_an_empty_list()
+        {
+            //* Arrange
+            long validId = 2;
+            long validState = 5;
+
+            // The input with valid and invalid variables
+            var input = new List<ItemStateChangeInputModel>()
+            {
+                new ItemStateChangeInputModel { ItemId = validId, StateChangeTo = validState }
+            };
+
+            using(var mockContext = new DataContext(_options))
+            {
+                var itemRepo = new ItemRepo(mockContext, _mapper);
+
+                //* Act
+                var returnedValue = itemRepo.ChangeItemStateById(input);
+
+                //* Assert
+                Assert.IsNotNull(returnedValue);
+                Assert.AreEqual(0, returnedValue.Count);
+            }
+        }
+
+        [TestMethod]
         public void ChangeItemStateById_should_throw_correct_exceptions()
         {
             //* Arrange
@@ -469,6 +536,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
 
                 //* Act and Assert
+                // The exceptions are thrown because there is no valid inputs
                 Assert.ThrowsException<NotFoundException>(() => itemRepo.ChangeItemStateById(input1));  // Invalid itemId
                 Assert.ThrowsException<NotFoundException>(() => itemRepo.ChangeItemStateById(input2));  // Invalid StateID
             }
