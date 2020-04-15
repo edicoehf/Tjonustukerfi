@@ -364,6 +364,118 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             }
         }
 
+        [TestMethod]
+        public void ChangeItemStateById_should_change_state_of_item_to_2_and_order_connected_to_it_should_not_have_completeDate()
+        {
+            //* Arrange
+            long itemId = 2;
+            long stateChange = 2;
+
+            var input = new List<ItemStateChangeInputModel>()
+            {
+                new ItemStateChangeInputModel
+                {
+                    ItemId = itemId,
+                    StateChangeTo = stateChange
+                }
+            };
+
+            // This item is the only Item in the order at this moment
+            using(var mockContext = new DataContext(_options))
+            {
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                // Get old state
+                var oldItemState = mockContext.Item.FirstOrDefault(i => i.Id == itemId).StateId;
+
+                //* Act
+                itemRepo.ChangeItemStateById(input);
+
+                //* Assert
+                var item = mockContext.Item.FirstOrDefault(i => i.Id == itemId);    // get item to check
+
+                Assert.IsNotNull(item);
+                Assert.AreNotEqual(oldItemState, item.StateId);
+                Assert.AreEqual(stateChange, item.StateId);
+
+                // check order connected
+                var order = mockContext.Order.FirstOrDefault(o =>
+                    o.Id == mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemId).OrderId);
+
+                Assert.IsNotNull(order);
+                Assert.IsNull(order.DateCompleted); // since the order is not complete, it should not have a date completed
+            }
+        }
+
+        [TestMethod]
+        public void ChangeItemStateById_should_change_state_of_item_to_5_and_order_connected_to_it_should_have_completeDate()
+        {
+            //* Arrange
+            long itemId = 2;
+            long stateChange = 5;
+
+            var input = new List<ItemStateChangeInputModel>()
+            {
+                new ItemStateChangeInputModel
+                {
+                    ItemId = itemId,
+                    StateChangeTo = stateChange
+                }
+            };
+
+            // This item is the only Item in the order at this moment
+            using(var mockContext = new DataContext(_options))
+            {
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                // get old state
+                var oldItemState = mockContext.Item.FirstOrDefault(i => i.Id == itemId).StateId;
+
+                //* Act
+                itemRepo.ChangeItemStateById(input);
+
+                //* Assert
+                var item = mockContext.Item.FirstOrDefault(i => i.Id == itemId);    // Get item to check
+
+                Assert.IsNotNull(item);
+                Assert.AreNotEqual(oldItemState, item.StateId);
+                Assert.AreEqual(stateChange, item.StateId);
+
+                // check order connected
+                var order = mockContext.Order.FirstOrDefault(o =>
+                    o.Id == mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemId).OrderId);
+
+                Assert.IsNotNull(order);
+                Assert.IsNotNull(order.DateCompleted);  // now the order is complete since the only item in the order is complete
+            }
+        }
+
+        [TestMethod]
+        public void ChangeItemStateById_should_throw_correct_exceptions()
+        {
+            //* Arrange
+            var input1 = new List<ItemStateChangeInputModel>()
+            {
+                new ItemStateChangeInputModel { ItemId = -1, StateChangeTo = 2 }
+            };
+            var input2 = new List<ItemStateChangeInputModel>()
+            {
+                new ItemStateChangeInputModel { ItemId = 2, StateChangeTo = -1 }
+            };
+
+            using(var mockContext = new DataContext(_options))
+            {
+                // Mock repo
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                //* Act and Assert
+                // Invalid itemId
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.ChangeItemStateById(input1));
+                // Invalid StateID
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.ChangeItemStateById(input2));
+            }
+        }
+
         //**********     Helper functions     **********//
         private void FillDatabase(DataContext mockContext)
         {
