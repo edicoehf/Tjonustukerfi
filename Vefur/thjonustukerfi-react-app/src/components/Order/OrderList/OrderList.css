@@ -1,0 +1,19 @@
+.list {
+    display: grid;
+    grid-template-columns: 20% 60% 20%;
+}
+.item {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+.actions {
+    padding-right: 5%;
+}
+.actions-item {
+    justify-content: center;
+}
+.buttons {
+    justify-content: center;
+}
