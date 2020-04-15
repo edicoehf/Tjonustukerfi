@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import useGetAllOrders from "../../../hooks/useGetAllOrders";
 import OrderList from "../OrderList/OrderList";
+import "./OrderMain.css";
 
 const OrderMain = () => {
     const { orders, error, isLoading } = useGetAllOrders();

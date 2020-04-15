@@ -10,7 +10,7 @@ const OrderList = ({ orders, isLoading, error }) => {
                 isLoading ? (
                     <p> Sæki Pantanir </p>
                 ) : (
-                    <ListGroup className="list">
+                    <ListGroup className="order-list">
                         <ListGroup.Item className="item" variant="dark">
                             <h5>Pantananúmer</h5>
                         </ListGroup.Item>

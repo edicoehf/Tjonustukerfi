@@ -1,0 +1,19 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    align-content: space-around;
+}
+.main-item {
+    padding-bottom: 1em;
+}
+.header {
+    align-self: center;
+}
+.create-button {
+    align-self: flex-end;
+}
+.no-order {
+    display: flex;
+    justify-content: center;
+    color: rgb(102, 100, 0);
+}
