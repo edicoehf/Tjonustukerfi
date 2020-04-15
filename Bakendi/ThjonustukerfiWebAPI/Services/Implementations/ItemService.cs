@@ -23,7 +23,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         public void CompleteItem(long id) => _itemRepo.CompleteItem(id);
         public void RemoveItem(long itemId) => _itemRepo.RemoveItem(itemId);
         public void RemoveItemQuery(string barcode) => _itemRepo.RemoveItem(_itemRepo.SearchItem(barcode));
-        public void ChangeItemStateById(List<ItemStateChangeInputModel> stateChanges) { _itemRepo.ChangeItemStateById(stateChanges); }
+        public void ChangeItemStateById(List<ItemStateChangeInputModel> stateChanges) => _itemRepo.ChangeItemStateById(stateChanges);
         public void ChangeItemStateBarcode(List<ItemStateChangeBarcodeInputModel> stateChanges)
         {
             // create list with IDs in stead of barcode
