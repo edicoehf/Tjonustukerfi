@@ -24,16 +24,18 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         public void SearchItem_should_return_a_ItemStateDTO()
         {
             //* Arrange
+            long itemID = 1;
             var retDTO = new ItemStateDTO
             {
-                Id = 1,
+                Id = itemID,
                 OrderId = 1,
-                Type = "Test",
+                Category = "Test",
                 State = "Í vinnslu",
                 DateModified = DateTime.Now
             };
             // Mock the method
-            _itemRepoMock.Setup(method => method.SearchItem("someString")).Returns(retDTO);
+            _itemRepoMock.Setup(method => method.SearchItem("someString")).Returns(itemID);
+            _itemRepoMock.Setup(method => method.GetItemById(itemID)).Returns(retDTO);
 
             // Create controller
             _itemService = new ItemService(_itemRepoMock.Object);
@@ -44,6 +46,34 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             //* Assert
             Assert.IsNotNull(response);
             Assert.IsInstanceOfType(response, typeof(ItemStateDTO));
+        }
+
+        [TestMethod]
+        public void GetItemById_should_return_a_single_itemstateDTO()
+        {
+            //* Arrange
+            long itemID = 1;
+
+            // Mock dto and repo
+            ItemStateDTO itemstate = new ItemStateDTO
+            {
+                Id = itemID,
+                OrderId = 2,
+                Category = "bitar",
+                State = "Í vinnslu",
+                DateModified = DateTime.Now
+            };
+            _itemRepoMock.Setup(method => method.GetItemById(itemID)).Returns(itemstate);
+
+            // Create service
+            _itemService = new ItemService(_itemRepoMock.Object);
+
+            //* Act
+            var retVal = _itemService.GetItemById(itemID);
+
+            //* Assert
+            Assert.IsNotNull(retVal);
+            Assert.IsInstanceOfType(retVal, typeof(ItemStateDTO));
         }
     }
 }

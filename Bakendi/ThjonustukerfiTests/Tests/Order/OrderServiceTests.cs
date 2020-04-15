@@ -8,6 +8,7 @@ using ThjonustukerfiWebAPI.Repositories.Interfaces;
 using ThjonustukerfiWebAPI.Services.Implementations;
 using ThjonustukerfiWebAPI.Services.Interfaces;
 using System;
+using System.Linq;
 
 namespace ThjonustukerfiTests.Tests
 {
@@ -35,7 +36,7 @@ namespace ThjonustukerfiTests.Tests
                 Items = new List<ItemInputModel>()
                 {
                     new ItemInputModel {
-                        Type = "Ysa"
+                        CategoryId = 1
                     }
                 }
             };
@@ -65,7 +66,7 @@ namespace ThjonustukerfiTests.Tests
                 Items = new List<ItemInputModel>()
                 {
                     new ItemInputModel {
-                        Type = "Ysa"
+                        CategoryId = 1
                     }
                 }
             };  
@@ -94,7 +95,7 @@ namespace ThjonustukerfiTests.Tests
                         new ItemDTO()
                         {
                             Id = 1,
-                            Type = "Ysa bitar",
+                            Category = "Ysa bitar",
                             Service = "Birkireyk"
                         }
                     },
@@ -139,6 +140,30 @@ namespace ThjonustukerfiTests.Tests
             }
         }
 
+        [TestMethod]
+        public void SearchOrder_should_return_a_OrderDTO()
+        {
+            //* Arrange
+            long orderID = 1;
+            string barcode = "0100001111";
+            var retDTO = CreateOrderDTOList().First();
+
+            // mock
+            _orderRepoMock.Setup(method => method.SearchOrder(barcode)).Returns(orderID);
+            _orderRepoMock.Setup(method => method.GetOrderbyId(orderID)).Returns(retDTO);
+
+            // Create controller
+            _orderService = new OrderService(_orderRepoMock.Object, _customerRepoMock.Object);
+
+            //* Act
+            var retVal = _orderService.SearchOrder(barcode);
+
+            //* Assert
+            Assert.IsNotNull(retVal);
+            Assert.IsInstanceOfType(retVal, typeof(OrderDTO));
+        }
+
+        /// <summary>Creates a list of order DTO for testing</summary>
         private List<OrderDTO> CreateOrderDTOList()
         {
             return new List<OrderDTO>()
@@ -152,7 +177,7 @@ namespace ThjonustukerfiTests.Tests
                         new ItemDTO()
                         {
                             Id = 1,
-                            Type = "Ysa bitar",
+                            Category = "Ysa bitar",
                             Service = "Birkireyk"
                         }
                     },
@@ -169,7 +194,7 @@ namespace ThjonustukerfiTests.Tests
                         new ItemDTO()
                         {
                             Id = 1,
-                            Type = "Lax bitar",
+                            Category = "Lax bitar",
                             Service = "Birkireyk"
                         }
                     },

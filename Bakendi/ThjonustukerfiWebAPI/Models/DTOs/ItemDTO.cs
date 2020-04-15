@@ -4,8 +4,9 @@ namespace ThjonustukerfiWebAPI.Models.DTOs
     public class ItemDTO
     {
         public long Id { get; set; }
-        public string Type { get; set; }
+        public string Category { get; set; }
         public string Service { get; set; }
+        public string State { get; set; }
         public string Barcode { get; set; }
 
         //*     Overrides     *//
@@ -20,7 +21,7 @@ namespace ThjonustukerfiWebAPI.Models.DTOs
                 return false;
             }
 
-            return i1.Id == i2.Id && i1.Type == i2.Type && i1.Service == i2.Service && i1.Barcode == i2.Barcode;
+            return i1.Id == i2.Id && i1.Category == i2.Category && i1.Service == i2.Service && i1.Barcode == i2.Barcode;
         }
 
         public static bool operator !=(ItemDTO i1, ItemDTO i2)

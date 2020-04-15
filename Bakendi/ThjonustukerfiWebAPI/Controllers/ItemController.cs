@@ -16,6 +16,19 @@ namespace ThjonustukerfiWebAPI.Controllers
             _itemService = itemService;
         }
 
+        /// <summary>Gets item by given ID</summary>
+        /// <returns>Item and its status</returns>
+        /// <response code="200">Item was successfully retrieved</response>
+        /// <response code="404">Item with given ID was not found</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("{id:long}")]
+        [HttpGet]
+        public IActionResult GetItemById(long id)
+        {
+            return Ok(_itemService.GetItemById(id));
+        }
+
         /// <summary>Changes information of an item with the given input. Empty fields will not be edited.</summary>
         /// <response code="200">Item has been edited successfully.</response>
         /// <response code="400">Input model is not valid.</response>
@@ -23,11 +36,11 @@ namespace ThjonustukerfiWebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("{id:long}")]
         [HttpPatch]
-        public IActionResult EditItem([FromBody] EditItemInput input, long Id)
+        public IActionResult EditItem([FromBody] EditItemInput input, long id)
         {
             if(!ModelState.IsValid) { return BadRequest("Input model is not valid"); }
 
-            _itemService.EditItem(input, Id);
+            _itemService.EditItem(input, id);
 
             return Ok();
         }
@@ -38,11 +51,52 @@ namespace ThjonustukerfiWebAPI.Controllers
         /// <response code="404">The Item with the given barcode was not found.</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Route("")]
+        [Route("search")]
         [HttpGet]
-        public IActionResult SearchItem([FromQuery(Name = "search")] string search)
+        public IActionResult SearchItem([FromQuery(Name = "barcode")] string search)
         {
             return Ok(_itemService.SearchItem(search));
+        }
+
+        /// <summary>Sets the item with the given ID to the complete state.</summary>
+        /// <response code="200">Item is set to complete (sótt).</response>
+        /// <response code="404">Item with the given ID was not found.</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("{id:long}/complete")]
+        [HttpPatch]
+        public IActionResult CompleteItem(long id)
+        {
+            _itemService.CompleteItem(id);
+
+            return Ok();
+        }
+
+        /// <summary>Removes Item with the given ID.</summary>
+        /// <response code="204">Item was successfully removed.</response>
+        /// <response code="404">Item with the given ID was not found.</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("{id:long}")]
+        [HttpDelete]
+        public IActionResult RemoveItem(long id)
+        {
+            _itemService.RemoveItem(id);
+            return NoContent();
+        }
+
+        /// <summary>Removes item by barcode</summary>
+        /// <response code="204">Item was successfully removed.</response>
+        /// <response code="404">Item with the given ID was not found</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("remove")]
+        [HttpDelete]
+        public IActionResult RemoveItemQuery([FromQuery(Name = "barcode")] string barcode)
+        {
+            _itemService.RemoveItemQuery(barcode);
+
+            return NoContent();
         }
     }
 }

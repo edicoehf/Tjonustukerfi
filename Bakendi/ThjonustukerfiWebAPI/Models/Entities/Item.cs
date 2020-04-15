@@ -7,7 +7,7 @@ namespace ThjonustukerfiWebAPI.Models.Entities
     public class Item
     {
         public long Id { get; set; }
-        public string Type { get; set; }
+        public long CategoryId { get; set; }
         [ForeignKey("State")]
         public long StateId { get; set; }
         [ForeignKey("Service")]
@@ -31,7 +31,7 @@ namespace ThjonustukerfiWebAPI.Models.Entities
                 return false;
             }
 
-            return i1.Id == i2.Id && i1.Type == i2.Type && i1.StateId == i2.StateId &&
+            return i1.Id == i2.Id && i1.CategoryId == i2.CategoryId && i1.StateId == i2.StateId &&
                         i1.ServiceId == i2.ServiceId && i1.Barcode == i2.Barcode && i1.JSON == i2.JSON &&
                         i1.DateCreated == i2.DateCreated && i1.DateModified == i2.DateModified && i1.DateCompleted == i2.DateCompleted;
         }

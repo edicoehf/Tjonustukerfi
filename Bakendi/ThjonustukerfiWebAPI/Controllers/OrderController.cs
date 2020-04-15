@@ -65,10 +65,10 @@ namespace ThjonustukerfiWebAPI.Controllers
         /// <returns>OK 200 status</returns>
         /// <response code="200">Order has been successfully created.</response>
         /// <response code="400">Input not valid.</response>
-        /// <response code="409">The customer with the given ID was not found.</response>
+        /// <response code="404">The customer with the given ID was not found.</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("{id:long}")]
         [HttpPatch]
         public IActionResult UpdateOrder([FromBody] OrderInputModel order, long id)
@@ -83,14 +83,55 @@ namespace ThjonustukerfiWebAPI.Controllers
         /// <summary>Deletes an Order with the given ID.</summary>
         /// <returns>Returns no content.</returns>
         /// <response code="204">Order successfully deleted.</response>
-        /// <response code="409">Order with the given ID was not found.</response>
+        /// <response code="404">Order with the given ID was not found.</response>
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("{id:long}")]
         [HttpDelete]
         public IActionResult DeleteByOrderId(long id)
         {
             _orderService.DeleteByOrderId(id);
+
+            return NoContent();
+        }
+
+        /// <summary>Completes a whole order, updates all items in order to complete</summary>
+        /// <response code="200">Successfully updated order to complete</response>
+        /// <response code="404">Order with given ID was not found</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("{id:long}/complete")]
+        [HttpPatch]
+        public IActionResult CompleteOrder(long id)
+        {
+            _orderService.CompleteOrder(id);
+
+            return Ok();
+        }
+
+        /// <summary>Searches for the order with the given barcode (as a query).</summary>
+        /// <returns>Order data transfer object</returns>
+        /// <response code="200">Successfully found the order and returns it.</response>
+        /// <response code="404">The order with the given barcode was not found</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("search")]
+        [HttpGet]
+        public IActionResult SearchOrder([FromQuery(Name = "barcode")] string search)
+        {
+            return Ok(_orderService.SearchOrder(search));
+        }
+
+        /// <summary>Removes order by barcode</summary>
+        /// <response code="204">Order was successfully removed.</response>
+        /// <response code="404">Order with the given ID was not found</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("remove")]
+        [HttpDelete]
+        public IActionResult RemoveOrderQuery([FromQuery(Name = "barcode")] string barcode)
+        {
+            _orderService.RemoveOrderQuery(barcode);
 
             return NoContent();
         }

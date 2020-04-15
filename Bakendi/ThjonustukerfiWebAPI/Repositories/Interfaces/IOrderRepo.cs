@@ -23,5 +23,16 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
         /// <summary>Gets all orders in the database.</summary>
         /// <returns>A list of OrderDTO.</returns>
         IEnumerable<OrderDTO> GetAllOrders();
+
+        /// <summary>Sets all items to complete in order</summary>
+        void CompleteOrder(long orderId);
+
+        /// <summary>Finds ID of order with the given barcode.</summary>
+        /// <returns>The orders ID</returns>
+        long SearchOrder(string barcode);
+
+        /// <summary>Gets a list of all active orders with the customer</summary>
+        /// <returns>A list of active orders, empty if no orders exist that are active</returns>
+        List<OrderDTO> GetActiveOrdersByCustomerId(long customerID);
     }
 }

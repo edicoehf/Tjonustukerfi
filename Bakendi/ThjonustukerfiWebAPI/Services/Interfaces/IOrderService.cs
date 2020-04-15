@@ -23,5 +23,14 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
         /// <summary>Gets all orders.</summary>
         /// <returns>A list of all orders.</returns>
         IEnumerable GetAllOrders();
+
+        /// <summary>Sets all items to complete in order</summary>
+        void CompleteOrder(long orderId);
+
+        /// <summary>Gets the order with the given barcode</summary>
+        OrderDTO SearchOrder(string barcode);
+
+        /// <summary>Removes the order with the given barcode</summary>
+        void RemoveOrderQuery(string barcode);
     }
 }

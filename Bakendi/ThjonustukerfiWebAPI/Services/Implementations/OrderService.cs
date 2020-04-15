@@ -28,5 +28,16 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         public void UpdateOrder(OrderInputModel order, long id) => _orderRepo.UpdateOrder(order, id);
         public void DeleteByOrderId(long id) => _orderRepo.DeleteByOrderId(id);
         public IEnumerable GetAllOrders() => _orderRepo.GetAllOrders();
+
+        public void CompleteOrder(long orderId) => _orderRepo.CompleteOrder(orderId);
+
+        public OrderDTO SearchOrder(string barcode)
+        {
+            var orderID = _orderRepo.SearchOrder(barcode);  // Throws not found exception if no order has this barcode
+
+            return _orderRepo.GetOrderbyId(orderID);
+        }
+
+        public void RemoveOrderQuery(string barcode) => _orderRepo.DeleteByOrderId(_orderRepo.SearchOrder(barcode));
     }
 }

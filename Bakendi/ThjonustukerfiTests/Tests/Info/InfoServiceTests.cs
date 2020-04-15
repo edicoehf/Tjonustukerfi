@@ -48,6 +48,7 @@ namespace ThjonustukerfiTests.Tests.Info
 
             //* Assert
             Assert.IsNotNull(returnValue);
+            Assert.IsInstanceOfType(returnValue, typeof(List<ServiceDTO>));
             Assert.AreEqual(retDTO, returnValue);
         }
 
@@ -79,6 +80,31 @@ namespace ThjonustukerfiTests.Tests.Info
 
             //* Assert
             Assert.IsNotNull(returnValue);
+            Assert.IsInstanceOfType(returnValue, typeof(List<StateDTO>));
+            Assert.AreEqual(retDTO, returnValue);
+        }
+
+        [TestMethod]
+        public void GetCategories_should_return_a_list_of_CategoryDTO()
+        {
+            //* Arrange
+            var retDTO = new List<CategoryDTO>()
+            {
+                new CategoryDTO { Id = 1, Name = "Lax" },
+                new CategoryDTO { Id = 2, Name = "Silungur" }
+            };
+            // mock method
+            _infoRepoMock.Setup(method => method.GetCategories()).Returns(retDTO);
+
+            // Create service
+            _infoService = new InfoService(_infoRepoMock.Object);
+
+            //* Act
+            var returnValue = _infoService.GetCategories();
+
+            //* Assert
+            Assert.IsNotNull(returnValue);
+            Assert.IsInstanceOfType(returnValue, typeof(List<CategoryDTO>));
             Assert.AreEqual(retDTO, returnValue);
         }
     }

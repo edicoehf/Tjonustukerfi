@@ -29,12 +29,12 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             {
                 Id = 1,
                 OrderId = 1,
-                Type = "Test",
+                Category = "Test",
                 State = "Í vinnslu",
                 DateModified = DateTime.Now
             };
             // Mock the method
-            _itemServiceMock.Setup(method => method.SearchItem("someString")).Returns(retDTO);
+            _itemServiceMock.Setup(method => method.SearchItem("someString")).Returns(retDTO).Verifiable();
 
             // Create controller
             _itemController = new ItemController(_itemServiceMock.Object);
@@ -53,7 +53,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         {
             var item = new EditItemInput
             {
-                Type = "Hello"
+                CategoryId = 1
             };
 
             // setup and create controller
@@ -66,6 +66,89 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             //* Assert
             Assert.IsNotNull(response);
             Assert.AreEqual(200, response.StatusCode);
+        }
+
+        [TestMethod]
+        public void FinishItem_should_return_200_status_ok()
+        {
+            //* Arrange
+            long itemID = 1;
+
+            // setup and create controller
+            _itemServiceMock.Setup(method => method.CompleteItem(It.IsAny<long>())).Verifiable();
+            _itemController = new ItemController(_itemServiceMock.Object);
+
+            //* Act
+            var response = _itemController.CompleteItem(itemID) as OkResult;
+            
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(200, response.StatusCode);
+        }
+
+        [TestMethod]
+        public void GetItemById_should_respond_200OK_and_a_itemstateDTO()
+        {
+            //* Arrange
+            long itemID = 1;
+
+            // Mock dto and service
+            ItemStateDTO itemstate = new ItemStateDTO
+            {
+                Id = itemID,
+                OrderId = 2,
+                Category = "bitar",
+                State = "Í vinnslu",
+                DateModified = DateTime.Now
+            };
+            _itemServiceMock.Setup(method => method.GetItemById(itemID)).Returns(itemstate);
+
+            // Create controller
+            _itemController = new ItemController(_itemServiceMock.Object);
+
+            //* Act
+            var response = _itemController.GetItemById(itemID) as OkObjectResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(200, response.StatusCode);
+            Assert.IsInstanceOfType(response.Value as ItemStateDTO, typeof(ItemStateDTO));
+        }
+
+        [TestMethod]
+        public void RemoveItem_should_return_no_content_response()
+        {
+            //* Arrange
+            // Mock service
+            _itemServiceMock.Setup(method => method.RemoveItem(It.IsAny<long>())).Verifiable();
+
+            // Create controller
+            _itemController = new ItemController(_itemServiceMock.Object);
+
+            //* Act
+            var response = _itemController.RemoveItem(1) as NoContentResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(204, response.StatusCode);
+        }
+
+        [TestMethod]
+        public void RemoveItemQuery_should_return_NoContent_response()
+        {
+            //* Arrange
+            // Mock service
+            _itemServiceMock.Setup(method => method.RemoveItemQuery(It.IsAny<string>())).Verifiable();
+
+            // Create controller
+            _itemController = new ItemController(_itemServiceMock.Object);
+
+            //* Act
+            var response = _itemController.RemoveItemQuery("some random string") as NoContentResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(204, response.StatusCode);
         }
     }
 }

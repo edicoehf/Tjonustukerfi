@@ -15,6 +15,7 @@ namespace ThjonustukerfiWebAPI.Models
         public virtual DbSet<Service> Service { get; set; }
         public virtual DbSet<State> State { get; set; }
         public virtual DbSet<ServiceState> ServiceState { get; set; }
+        public virtual DbSet<Category> Category { get; set; }
 
         //* Error logs
         public virtual DbSet<Log> ExceptionLog { get; set; }

@@ -37,5 +37,16 @@ namespace ThjonustukerfiWebAPI.Controllers
         {
             return Ok(_infoService.GetStates());
         }
+
+        /// <summary>Gets all available categories</summary>
+        /// <returns>List of categories</returns>
+        /// <response code="200">Returns a list of available categories</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Route("categories")]
+        [HttpGet]
+        public IActionResult GetCategories()
+        {
+            return Ok(_infoService.GetCategories());
+        }
     }
 }
