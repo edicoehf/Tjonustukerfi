@@ -23,20 +23,31 @@ const CustomerMain = () => {
                     Bæta við viðskiptavin
                 </Link>
             </div>
-            <div className="main-item search-bar">
-                <SearchBar
-                    searchTerm={searchTerm}
-                    handleChange={handleChange}
-                    placeHolder={searchBarPlaceHolder}
-                />
-            </div>
-            <div className="main-item">
-                <CustomerList
-                    customers={searchResults}
-                    error={error}
-                    isLoading={isLoading}
-                />
-            </div>
+            {!customers.length > 0 ? (
+                <>
+                    <h4 className="main-item no-customers">
+                        Enginn viðskiptavinur fannst. Má bjóða þér að bæta við
+                        viðskiptavin?{" "}
+                    </h4>{" "}
+                </>
+            ) : (
+                <>
+                    <div className="main-item search-bar">
+                        <SearchBar
+                            searchTerm={searchTerm}
+                            handleChange={handleChange}
+                            placeHolder={searchBarPlaceHolder}
+                        />
+                    </div>
+                    <div className="main-item">
+                        <CustomerList
+                            customers={searchResults}
+                            error={error}
+                            isLoading={isLoading}
+                        />
+                    </div>
+                </>
+            )}
         </div>
     );
 };

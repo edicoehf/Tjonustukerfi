@@ -8,6 +8,8 @@ import CustomerView from "./components/Customer/CustomerView/CustomerView";
 import UpdateCustomer from "./components/Customer/UpdateCustomer/UpdateCustomer";
 import OrderView from "./components/Order/OrderView/OrderView";
 import CustomerMain from "./components/Customer/CustomerMain/CustomerMain";
+import CreateOrderView from "./components/Order/CreateOrder/CreateOrderView/CreateOrderView";
+import OrderMain from "./components/Order/OrderMain/OrderMain";
 
 function App() {
     return (
@@ -35,6 +37,12 @@ function App() {
                         component={CustomerView}
                     />
                     <Route exact path="/order/:id" component={OrderView} />
+                    <Route
+                        exact
+                        path="/new-order"
+                        component={CreateOrderView}
+                    />
+                    <Route exact path="/orders" component={OrderMain} />
                 </Switch>
             </div>
         </div>

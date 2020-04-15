@@ -10,7 +10,7 @@ const CustomerList = ({ customers, error, isLoading }) => {
                 isLoading ? (
                     <p> Sæki viðskiptavini </p>
                 ) : (
-                    <ListGroup className="list">
+                    <ListGroup className="customer-list">
                         <ListGroup.Item className="item" variant="dark">
                             <h5>Nafn</h5>
                         </ListGroup.Item>
@@ -20,7 +20,7 @@ const CustomerList = ({ customers, error, isLoading }) => {
                         >
                             <h5 className="actions">Aðgerðir</h5>
                         </ListGroup.Item>
-                        {customers.map(item => (
+                        {customers.map((item) => (
                             <CustomerListItem customer={item} key={item.id} />
                         ))}
                     </ListGroup>
