@@ -1,6 +1,8 @@
 using System;
+using AutoMapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using ThjonustukerfiWebAPI.Mappings;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Repositories.Interfaces;
 using ThjonustukerfiWebAPI.Services.Implementations;
@@ -13,11 +15,17 @@ namespace ThjonustukerfiTests.Tests.ItemTests
     {
         private IItemService _itemService;
         private Mock<IItemRepo> _itemRepoMock;
+        private Mapper _mapper;
 
         [TestInitialize]
         public void Initialize()
         {
             _itemRepoMock = new Mock<IItemRepo>();
+
+            // Setting up automapper
+            var myProfile = new MappingProfile();   // Create a new profile like the one we implemented
+            var myConfig = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));   // Setup a configuration with our profile
+            _mapper = new Mapper(myConfig); // Create a new mapper with our profile
         }
 
         [TestMethod]
@@ -38,7 +46,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             _itemRepoMock.Setup(method => method.GetItemById(itemID)).Returns(retDTO);
 
             // Create controller
-            _itemService = new ItemService(_itemRepoMock.Object);
+            _itemService = new ItemService(_itemRepoMock.Object, _mapper);
 
             //* Act
             var response = _itemService.SearchItem("someString");
@@ -66,7 +74,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             _itemRepoMock.Setup(method => method.GetItemById(itemID)).Returns(itemstate);
 
             // Create service
-            _itemService = new ItemService(_itemRepoMock.Object);
+            _itemService = new ItemService(_itemRepoMock.Object, _mapper);
 
             //* Act
             var retVal = _itemService.GetItemById(itemID);
