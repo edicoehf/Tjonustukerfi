@@ -29,16 +29,16 @@ const getAllOrders = () => {
     return fetch(endpoint, {
         method: "GET",
         headers: {
-            crossDomain: true
-        }
+            crossDomain: true,
+        },
     })
         .then(handleErrors)
         .then(handleData)
-        .catch(error => Promise.reject(error));
+        .catch((error) => Promise.reject(error));
 };
 
 export default {
     getOrderById,
-    getAllOrders
+    getAllOrders,
     deleteOrderById,
 };
