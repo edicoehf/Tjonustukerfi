@@ -17,7 +17,6 @@ const useForm = (initialState, validate, submitHandler) => {
     }, [errors, values, submitHandler, isSubmitting]);
 
     const handleChange = (e) => {
-        console.log(e);
         setValues({
             ...values,
             [e.target.name]: e.target.value,
