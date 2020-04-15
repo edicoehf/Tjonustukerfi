@@ -26,9 +26,9 @@ const ViewItems = ({ items, remove }) => {
                             <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
-                    <TableBody>
+                    <TableBody className="order-body">
                         {items.map((item, i) => (
-                            <TableRow key={i}>
+                            <TableRow key={i} className="order-row">
                                 <TableCell>{item.categoryName}</TableCell>
                                 <TableCell>{item.serviceName}</TableCell>
                                 <TableCell>{item.amount}</TableCell>
