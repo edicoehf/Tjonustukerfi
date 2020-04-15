@@ -107,9 +107,9 @@ namespace ThjonustukerfiWebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("statechangebyid")]
         [HttpPatch]
-        public IActionResult ChangeItemState([FromBody] List<ItemStateChangeInputModel> stateChanges)
+        public IActionResult ChangeItemStateById([FromBody] List<ItemStateChangeInputModel> stateChanges)
         {
-            _itemService.ChangeItemState(stateChanges);
+            _itemService.ChangeItemStateById(stateChanges);
 
             return Ok();
         }

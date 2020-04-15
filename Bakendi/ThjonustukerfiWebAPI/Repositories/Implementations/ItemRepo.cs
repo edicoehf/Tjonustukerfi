@@ -198,7 +198,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             if(orderId != -1) { SetOrderCompleteStatus(new List<long>() { orderId }); }
         }
 
-        public void ChangeItemState(List<ItemStateChangeInputModel> stateChanges)
+        public void ChangeItemStateById(List<ItemStateChangeInputModel> stateChanges)
         {
             //TODO: Ask, if the list is of size 100 and 2 or 1 have incorrect inputs, should this function update all that are correct or should it update none? As of now, updating none.
             // If this should be changed, just put the two forloops together and do not throw exception
