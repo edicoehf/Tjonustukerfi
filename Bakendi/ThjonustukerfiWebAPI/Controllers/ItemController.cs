@@ -144,7 +144,7 @@ namespace ThjonustukerfiWebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("nextstate")]
         [HttpGet]
-        public IActionResult GetItemNextStatesById([FromQuery(Name = "itemid")] long? itemid, [FromQuery(Name = "barcode")] string barcode)
+        public IActionResult GetItemNextStates([FromQuery(Name = "itemid")] long? itemid, [FromQuery(Name = "barcode")] string barcode)
         {
             if (itemid != null)         // Check if searching via ID
             {
