@@ -1,11 +1,20 @@
 import React from "react";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
+import { Modal, Backdrop, Fade, AppBar, Tabs, Tab } from "@material-ui/core";
 import CustomerSelectView from "../CustomerSelect/CustomerSelectView/CustomerSelectView";
 import "./PickCustomerModal.css";
+import AddNewCustomer from "../AddNewCustomer/AddNewCustomer";
+
+const TabPanel = ({ value, index, children }) => {
+    return <>{value === index && children}</>;
+};
 
 const PickCustomerModal = ({ open, handleClose, addCustomer }) => {
+    const [tab, setTab] = React.useState(0);
+
+    const handleChangeTab = (event, newValue) => {
+        setTab(newValue);
+    };
+
     const addCustomerAndClose = (customer) => {
         addCustomer(customer);
         handleClose();
@@ -24,8 +33,30 @@ const PickCustomerModal = ({ open, handleClose, addCustomer }) => {
         >
             <Fade in={open}>
                 <div className="fade-modal">
-                    <h2 id="customer-modal-title">Viðskiptavinir</h2>
-                    <CustomerSelectView addCustomer={addCustomerAndClose} />
+                    <AppBar position="static">
+                        <Tabs
+                            onChange={handleChangeTab}
+                            aria-label="simple tabs example"
+                            value={tab}
+                            centered
+                        >
+                            <Tab label="Leita að viðskiptavin" />
+                            <Tab label="Nýr viðskiptavinur" />
+                        </Tabs>
+                    </AppBar>
+                    <TabPanel index={0} value={tab}>
+                        <div className="tab">
+                            <h2 id="customer-modal-title">Viðskiptavinir</h2>
+                            <CustomerSelectView
+                                addCustomer={addCustomerAndClose}
+                            />
+                        </div>
+                    </TabPanel>
+                    <TabPanel index={1} value={tab}>
+                        <div className="tab">
+                            <AddNewCustomer />
+                        </div>
+                    </TabPanel>
                 </div>
             </Fade>
         </Modal>
