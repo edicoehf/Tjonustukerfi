@@ -32,7 +32,11 @@ const AddCustomer = ({ customer, addCustomer }) => {
                     <></>
                 )}
             </div>
-            <PickCustomerModal open={modalOpen} handleClose={handleClose} />
+            <PickCustomerModal
+                open={modalOpen}
+                handleClose={handleClose}
+                addCustomer={addCustomer}
+            />
         </>
     );
 };

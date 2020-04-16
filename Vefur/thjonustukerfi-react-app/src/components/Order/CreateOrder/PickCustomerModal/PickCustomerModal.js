@@ -5,7 +5,12 @@ import Fade from "@material-ui/core/Fade";
 import CustomerSelectView from "../CustomerSelect/CustomerSelectView/CustomerSelectView";
 import "./PickCustomerModal.css";
 
-const PickCustomerModal = ({ open, handleClose }) => {
+const PickCustomerModal = ({ open, handleClose, addCustomer }) => {
+    const addCustomerAndClose = (customer) => {
+        addCustomer(customer);
+        handleClose();
+    };
+
     return (
         <Modal
             className="pick-customer-modal"
@@ -20,7 +25,7 @@ const PickCustomerModal = ({ open, handleClose }) => {
             <Fade in={open}>
                 <div className="fade-modal">
                     <h2 id="customer-modal-title">Viðskiptavinir</h2>
-                    <CustomerSelectView />
+                    <CustomerSelectView addCustomer={addCustomerAndClose} />
                 </div>
             </Fade>
         </Modal>

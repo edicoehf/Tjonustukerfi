@@ -6,12 +6,11 @@ import SearchBar from "../../../../SearchBar/SearchBar";
 import { List } from "@material-ui/core";
 import CustomerSelectListItem from "../CustomerSelectListItem/CustomerSelectListItem";
 
-const CustomerSelectView = () => {
+const CustomerSelectView = ({ addCustomer }) => {
     const { customers, error, isLoading } = useGetAllCustomers();
     customers.sort((a, b) => a.name.localeCompare(b.name));
     const { searchResults, handleChange, searchTerm } = useSearchBar(customers);
     const searchBarPlaceHolder = "Má bjóða þér að leita eftir nafni?";
-
     return (
         <>
             {!error ? (
@@ -37,6 +36,7 @@ const CustomerSelectView = () => {
                                     <CustomerSelectListItem
                                         key={customer.id}
                                         customer={customer}
+                                        addCustomer={addCustomer}
                                     />
                                 ))}
                             </List>
