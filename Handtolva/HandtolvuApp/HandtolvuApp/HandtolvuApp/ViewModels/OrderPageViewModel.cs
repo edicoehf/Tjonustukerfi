@@ -24,6 +24,11 @@ namespace HandtolvuApp.ViewModels
                 itemPage.BindingContext = itemVM;
                 await App.Current.MainPage.Navigation.PushAsync(itemPage);
             });
+
+            CheckoutCommand = new Command(async () =>
+            {
+                await App.ItemManager.CheckoutOrder(Order.Id);
+            });
         }
 
         Item selectedItem;
@@ -43,6 +48,8 @@ namespace HandtolvuApp.ViewModels
         }
 
         public Command SelectedItemChangedCommand { get; }
+
+        public Command CheckoutCommand { get; }
 
         Order order;
 

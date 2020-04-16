@@ -8,8 +8,8 @@
   
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height=".1*"/>
-                <RowDefinition Height=".1*"/>
+                <RowDefinition Height=".3*"/>
+                <RowDefinition Height=".01*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -20,15 +20,10 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Label Text="Id"
-                   Grid.Row="0" Grid.Column="0"/>
-            <Label Text="{Binding Order.Id}"
-                   Grid.Row="1" Grid.Column="0"/>
-
-            <Label Text="Customer"
-                   Grid.Row="0" Grid.Column="1"/>
-            <Label Text="{Binding Order.Customer}"
-                   Grid.Row="1" Grid.Column="1"/>
+        <Button Text="Skrá út" Grid.Row="0"  Grid.Column="0"
+                Grid.ColumnSpan="2" Command="{Binding CheckoutCommand}" 
+                Margin="10, 10, 10, 10" BackgroundColor="DodgerBlue"
+                CornerRadius="20"/>
 
         <CollectionView ItemsSource="{Binding Order.Items}" Grid.Row="2" Grid.ColumnSpan="5"
                         SelectionMode="Single"

@@ -66,26 +66,21 @@ namespace HandtolvuApp.Data
             return Order;
         }
 
-        public async Task CheckoutOrder(string barcode)
+        public async Task CheckoutOrder(long id)
         {
-            Order = null;
-            // uri to check if order with barcode exists
-            string checkOrderUri = "http://10.0.2.2:5000/api/orders/search?barcode=" + barcode;
             // uri to set order to completed state
             string checkoutUri = "http://10.0.2.2:5000/api/orders/";
             try
             {
-                var tempResponse = await _client.GetAsync(checkOrderUri);
-                if(tempResponse.IsSuccessStatusCode)
+                var method = new HttpMethod("PATCH");
+                checkoutUri = checkoutUri + id + "/complete";
+
+                var request = new HttpRequestMessage(method, checkoutUri);
+                var response = await _client.SendAsync(request);
+                
+                if(response.IsSuccessStatusCode)
                 {
-                    var content = await tempResponse.Content.ReadAsStringAsync();
-                    Order = JsonConvert.DeserializeObject<Order>(content);
-
-                    var method = new HttpMethod("PATCH");
-                    checkoutUri = checkoutUri + Order.Id + "/complete";
-
-                    var request = new HttpRequestMessage(method, checkoutUri);
-                    var checkoutResponse = await _client.SendAsync(request);
+                    Debug.WriteLine(@"\tOrder successfully completed");
                 }
             }
             catch (Exception ex)
