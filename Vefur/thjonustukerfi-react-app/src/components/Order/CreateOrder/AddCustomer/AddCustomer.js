@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "@material-ui/core";
 import AddBoxIcon from "@material-ui/icons/AddBox";
+import EditIcon from "@material-ui/icons/Edit";
 import PickCustomerModal from "../PickCustomerModal/PickCustomerModal";
 import "./AddCustomer.css";
 import CustomerDetails from "../../../Customer/CustomerDetails/CustomerDetails";
@@ -30,7 +31,19 @@ const AddCustomer = ({ customer, addCustomer }) => {
                         Velja viðskiptavin
                     </Button>
                 ) : (
-                    <CustomerDetails id={customer.id} />
+                    <>
+                        <CustomerDetails id={customer.id} />
+                        <Button
+                            className="edt-btn"
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            startIcon={<EditIcon />}
+                            onClick={handleOpen}
+                        >
+                            Velja annan viðskiptavin
+                        </Button>
+                    </>
                 )}
             </div>
             <PickCustomerModal
