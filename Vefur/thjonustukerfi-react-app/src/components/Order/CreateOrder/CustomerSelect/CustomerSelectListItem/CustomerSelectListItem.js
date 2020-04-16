@@ -4,11 +4,11 @@ import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 
 const CustomerSelectListItem = ({ customer }) => {
     return (
-        <ListItem className="customer-select-list-item">
+        <ListItem button className="customer-select-list-item">
+            <ListItemText primary={customer.name} secondary={customer.email} />
             <ListItemIcon>
                 <AddCircleOutlineIcon />
             </ListItemIcon>
-            <ListItemText primary={customer.name} secondary={customer.email} />
         </ListItem>
     );
 };

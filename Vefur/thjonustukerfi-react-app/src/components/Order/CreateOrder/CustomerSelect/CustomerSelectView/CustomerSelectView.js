@@ -32,7 +32,7 @@ const CustomerSelectView = () => {
                                 bæta við viðskiptavin?{" "}
                             </h4>
                         ) : (
-                            <List dense={dense}>
+                            <List className="customer-select-list">
                                 {searchResults.map((customer) => (
                                     <CustomerSelectListItem
                                         key={customer.id}

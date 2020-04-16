@@ -2,6 +2,8 @@ import React from "react";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
+import CustomerSelectView from "../CustomerSelect/CustomerSelectView/CustomerSelectView";
+import "./PickCustomerModal.css";
 
 const PickCustomerModal = ({ open, handleClose }) => {
     return (
@@ -18,7 +20,7 @@ const PickCustomerModal = ({ open, handleClose }) => {
             <Fade in={open}>
                 <div className="fade-modal">
                     <h2 id="customer-modal-title">Viðskiptavinir</h2>
-                    <p id="customer-modal-description">listi af customers</p>
+                    <CustomerSelectView />
                 </div>
             </Fade>
         </Modal>
