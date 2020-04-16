@@ -1,5 +1,5 @@
 .add-customer {
-    width: 30rem;
+    min-width: 15rem;
 }
 
 tr.customer-property {

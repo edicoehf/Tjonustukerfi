@@ -16,5 +16,5 @@ legend.MuiFormLabel-root {
 }
 
 .add-items {
-    width: 15rem;
+    min-width: 15rem;
 }
