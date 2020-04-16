@@ -76,5 +76,11 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
 
             return nextStateDto;
         }
+
+        public NextStatesDTO GetItemNextStatesByBarcode(string barcode)
+        {
+            // Get the ID and use get by ID
+            return GetItemNextStates(_itemRepo.SearchItem(barcode));
+        }
     }
 }
