@@ -62,6 +62,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 Assert.IsTrue(mockContext.Customer.Any());
                 Assert.IsTrue(mockContext.ItemOrderConnection.Any());
                 Assert.IsTrue(mockContext.Item.Any());
+                Assert.IsTrue(mockContext.ItemTimestamp.Any());
                 Assert.IsTrue(mockContext.Service.Any());
                 Assert.IsTrue(mockContext.State.Any());
             }
@@ -134,8 +135,12 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 {
                     oldItemList1.Add(mockContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
                 }
+                // note: there are two orders because we are also changing the order id in this update
                 var oldOrder1ListSize = oldItemList1.Count;
                 var oldOrder2ListSize = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderChange).Count();
+
+                // number of timestamps of the item before change
+                var oldTimestampCount = mockContext.ItemTimestamp.Where(ts => ts.ItemId == itemID).Count();
 
                 // item:
                 var trackedEntity = oldItemList1.FirstOrDefault(i => i.Id == itemID);
@@ -168,6 +173,9 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 var changedItem = mockContext.Item.FirstOrDefault(i => i.Id == itemID);
                 var newOrder2ListSize = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderChange).Count();
 
+                // number of timestamps after change
+                var newTimestampCount = mockContext.ItemTimestamp.Where(ts => ts.ItemId == itemID).Count();
+
                 //* Assert
                 Assert.IsNotNull(changedItem);
                 Assert.AreNotEqual(oldItemEntity, changedItem);             // items have been updated
@@ -179,6 +187,9 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 Assert.AreEqual(stateID, changedItem.StateId);
                 Assert.AreEqual(serviceID, changedItem.ServiceId);
                 Assert.AreEqual(orderChange, mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == changedItem.Id).OrderId);
+
+                // check that there is one new timestamp
+                Assert.AreEqual(oldTimestampCount + 1, newTimestampCount);
             }
         }
 
@@ -219,6 +230,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
 
                 var oldStateId = mockContext.Item.FirstOrDefault(i => i.Id == itemID).StateId;
+                var oldTimestampSize = mockContext.ItemTimestamp.Where(ts => ts.ItemId == itemID).Count();
 
                 //* Act
                 itemRepo.CompleteItem(itemID);
@@ -229,6 +241,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 Assert.IsNotNull(itemEntity);
                 Assert.AreNotEqual(oldStateId, itemEntity.StateId);
                 Assert.AreEqual(5, itemEntity.StateId); //TODO: same as in the method in repo, too hardcoded state as five. Change later
+                Assert.AreEqual(oldTimestampSize + 1, mockContext.ItemTimestamp.Where(ts => ts.ItemId == itemID).Count());  // did we add one more timestamp?
             }
         }
 
@@ -263,6 +276,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 itemDTO.OrderId = mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemEntity.Id).OrderId;
                 itemDTO.State = mockContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;
                 itemDTO.Category = mockContext.Category.FirstOrDefault(c => c.Id == itemEntity.CategoryId).Name;
+                itemDTO.Service = mockContext.Service.FirstOrDefault(s => s.Id == itemEntity.ServiceId).Name;
 
                 //* Act
                 var retVal = itemRepo.GetItemById(itemID);
@@ -303,7 +317,9 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
 
                 var itemOrderConnections = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderID).ToList();
-                var oldItemOrderSize = itemOrderConnections.Count;    // Item order connection size before remove
+                var oldItemOrderSize = itemOrderConnections.Count;              // Item order connection size before remove
+                var oldTimestampSize = mockContext.ItemTimestamp.Where(ts => ts.ItemId == itemID).Count();  // number of timestamps that are related to this item
+                var oldTimestampTableSize = mockContext.ItemTimestamp.Count();  // size of timestamp table before delete
                 
                 var oldItemList = new List<Item>();
                 foreach (var item in itemOrderConnections)  // get the list of items
@@ -328,6 +344,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 //* Assert
                 Assert.AreEqual(oldItemOrderSize - 1, newItemOrderSize);    // check the item order connections list
                 Assert.AreEqual(oldItemListCount - 1, newItemListCount);    // check the size of the item list itself
+                Assert.AreEqual(oldTimestampTableSize - oldTimestampSize, mockContext.ItemTimestamp.Count());   // did we remove the correct amount of timestamps?
             }
         }
 
@@ -344,6 +361,184 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
                 //* Act and Assert
                 Assert.ThrowsException<NotFoundException>(() => itemRepo.RemoveItem(itemID));
+            }
+        }
+
+        [TestMethod]
+        public void ChangeItemStateById_should_change_state_of_item_to_2_and_order_connected_to_it_should_not_have_completeDate()
+        {
+            //* Arrange
+            long itemId = 2;
+            long stateChange = 2;
+
+            var input = new List<ItemStateChangeInputModel>()
+            {
+                new ItemStateChangeInputModel
+                {
+                    ItemId = itemId,
+                    StateChangeTo = stateChange
+                }
+            };
+
+            // This item is the only Item in the order at this moment
+            using(var mockContext = new DataContext(_options))
+            {
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                // Get old state
+                var oldItemState = mockContext.Item.FirstOrDefault(i => i.Id == itemId).StateId;
+
+                //* Act
+                itemRepo.ChangeItemStateById(input);
+
+                //* Assert
+                var item = mockContext.Item.FirstOrDefault(i => i.Id == itemId);    // get item to check
+
+                Assert.IsNotNull(item);
+                Assert.AreNotEqual(oldItemState, item.StateId);
+                Assert.AreEqual(stateChange, item.StateId);
+
+                // check order connected
+                var order = mockContext.Order.FirstOrDefault(o =>
+                    o.Id == mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemId).OrderId);
+
+                Assert.IsNotNull(order);
+                Assert.IsNull(order.DateCompleted); // since the order is not complete, it should not have a date completed
+            }
+        }
+
+        [TestMethod]
+        public void ChangeItemStateById_should_change_state_of_item_to_5_and_order_connected_to_it_should_have_completeDate()
+        {
+            //* Arrange
+            long itemId = 2;
+            long stateChange = 5;
+
+            var input = new List<ItemStateChangeInputModel>()
+            {
+                new ItemStateChangeInputModel
+                {
+                    ItemId = itemId,
+                    StateChangeTo = stateChange
+                }
+            };
+
+            // This item is the only Item in the order at this moment
+            using(var mockContext = new DataContext(_options))
+            {
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                // get old state
+                var oldItemState = mockContext.Item.FirstOrDefault(i => i.Id == itemId).StateId;
+
+                //* Act
+                itemRepo.ChangeItemStateById(input);
+
+                //* Assert
+                var item = mockContext.Item.FirstOrDefault(i => i.Id == itemId);    // Get item to check
+
+                Assert.IsNotNull(item);
+                Assert.AreNotEqual(oldItemState, item.StateId);
+                Assert.AreEqual(stateChange, item.StateId);
+
+                // check order connected
+                var order = mockContext.Order.FirstOrDefault(o =>
+                    o.Id == mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemId).OrderId);
+
+                Assert.IsNotNull(order);
+                Assert.IsNotNull(order.DateCompleted);  // now the order is complete since the only item in the order is complete
+            }
+        }
+
+        [TestMethod]
+        public void ChangeItemStateById_should_return_an_invalid_list()
+        {
+            //* Arrange
+            long invalidId = -1;
+            long invalidState = -1;
+            long validId = 2;
+            long validState = 5;
+
+            // The input with valid and invalid variables
+            var input = new List<ItemStateChangeInputModel>()
+            {
+                new ItemStateChangeInputModel { ItemId = invalidId, StateChangeTo = validState },
+                new ItemStateChangeInputModel { ItemId = validId, StateChangeTo = invalidState },
+                new ItemStateChangeInputModel { ItemId = validId, StateChangeTo = validState }
+            };
+
+            // Expected return from the function
+            var expectedReturn = new List<ItemStateChangeInputModel>()
+            {
+                new ItemStateChangeInputModel { ItemId = invalidId, StateChangeTo = validState },
+                new ItemStateChangeInputModel { ItemId = validId, StateChangeTo = invalidState }
+            };
+
+            using(var mockContext = new DataContext(_options))
+            {
+                var itemRepo = new ItemRepo(mockContext, _mapper);
+
+                //* Act
+                var returnedValue = itemRepo.ChangeItemStateById(input);
+
+                //* Assert
+                Assert.IsNotNull(returnedValue);
+                Assert.AreEqual(expectedReturn.Count, returnedValue.Count);
+                foreach (var inp in returnedValue)
+                {
+                    Assert.IsTrue(expectedReturn.Contains(inp));
+                }
+            }
+        }
+
+        [TestMethod]
+        public void ChangeItemStateById_should_return_an_empty_list()
+        {
+            //* Arrange
+            long validId = 2;
+            long validState = 5;
+
+            // The input with valid and invalid variables
+            var input = new List<ItemStateChangeInputModel>()
+            {
+                new ItemStateChangeInputModel { ItemId = validId, StateChangeTo = validState }
+            };
+
+            using(var mockContext = new DataContext(_options))
+            {
+                var itemRepo = new ItemRepo(mockContext, _mapper);
+
+                //* Act
+                var returnedValue = itemRepo.ChangeItemStateById(input);
+
+                //* Assert
+                Assert.IsNotNull(returnedValue);
+                Assert.AreEqual(0, returnedValue.Count);
+            }
+        }
+
+        [TestMethod]
+        public void ChangeItemStateById_should_throw_correct_exceptions()
+        {
+            //* Arrange
+            var input1 = new List<ItemStateChangeInputModel>()
+            {
+                new ItemStateChangeInputModel { ItemId = -1, StateChangeTo = 2 }
+            };
+            var input2 = new List<ItemStateChangeInputModel>()
+            {
+                new ItemStateChangeInputModel { ItemId = 2, StateChangeTo = -1 }
+            };
+
+            using(var mockContext = new DataContext(_options))
+            {
+                // Mock repo
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                //* Act and Assert
+                // The exceptions are thrown because there is no valid inputs
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.ChangeItemStateById(input1));  // Invalid itemId
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.ChangeItemStateById(input2));  // Invalid StateID
             }
         }
 
@@ -455,6 +650,13 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 }
             };
 
+            // Adding timestamp
+            List<ItemTimestamp> mockTimestamps = new List<ItemTimestamp>();
+            foreach (var item in mockItems)
+            {
+                mockTimestamps.Add(_mapper.Map<ItemTimestamp>(item));
+            }
+
             // Adding service
             var MockServiceList = new List<Service>()
             {
@@ -535,6 +737,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             mockContext.Customer.AddRange(customers);
             mockContext.ItemOrderConnection.AddRange(mockIOConnect);
             mockContext.Item.AddRange(mockItems);
+            mockContext.ItemTimestamp.AddRange(mockTimestamps);
             mockContext.Service.AddRange(MockServiceList);
             mockContext.State.AddRange(states);
             mockContext.Category.AddRange(categories);
