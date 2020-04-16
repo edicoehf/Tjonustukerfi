@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.InputModels;
 
@@ -24,5 +25,13 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
 
         /// <summary>Removes item with the given barcode</summary>
         void RemoveItemQuery(string barcode);
+
+        /// <summary>Changes the state of all items in the input with item ID</summary>
+        /// <returns>List of inputs that are not correct and did not update, if any</returns>
+        List<ItemStateChangeInputModel> ChangeItemStateById(List<ItemStateChangeInputModel> stateChanges);
+
+        /// <summary>Changes the state of all items in the input with item barcode"</summary>
+        /// <returns>List of inputs that are not correct and did not update, if any</returns>
+        List<ItemStateChangeBarcodeInputModel> ChangeItemStateBarcode(List<ItemStateChangeBarcodeInputModel> stateChanges);
     }
 }
