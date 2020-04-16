@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ThjonustukerfiWebAPI.Mappings;
 using ThjonustukerfiWebAPI.Models.DTOs;
+using ThjonustukerfiWebAPI.Models.Entities;
 using ThjonustukerfiWebAPI.Models.Exceptions;
 using ThjonustukerfiWebAPI.Models.InputModels;
 using ThjonustukerfiWebAPI.Repositories.Interfaces;
@@ -177,6 +178,66 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             //* Assert
             Assert.IsNotNull(retVal);
             Assert.AreEqual(0, retVal.Count);
+        }
+
+        [TestMethod]
+        public void GetItemNextStates_should_return_NextStatesDTO()
+        {
+            //* Arrange
+            long itemId = 1;
+            var stateDTOs = new List<StateDTO>()
+            {
+                new StateDTO {Id = 2, Name = "fridge1"},
+                new StateDTO {Id = 3, Name = "fridge2"},
+                new StateDTO {Id = 4, Name = "freezer"},
+            };
+
+            // Mock repo
+            _itemRepoMock.Setup(method => method.GetItemEntity(itemId)).Returns(new Item() { StateId = 1, ServiceId = 1 });
+            _infoRepoMock.Setup(method => method.GetStatebyId(1)).Returns(new StateDTO() { Id = 1, Name = "production" });
+            _infoRepoMock.Setup(method => method.GetNextStates(1, 1)).Returns(stateDTOs);
+
+            // Create service
+            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
+
+            // * Act
+            var retVal = _itemService.GetItemNextStates(itemId);
+
+            //* Assert
+            Assert.IsNotNull(retVal);
+            Assert.IsInstanceOfType(retVal, typeof(NextStatesDTO));
+            Assert.AreEqual(stateDTOs.Count, retVal.NextAvailableStates.Count);
+        }
+
+        [TestMethod]
+        public void GetItemNextStatesByBarcode_should_return_NextStatesDTO()
+        {
+            //* Arrange
+            string barcode = "is this a barcode?";
+            long itemId = 1;
+            var stateDTOs = new List<StateDTO>()
+            {
+                new StateDTO {Id = 2, Name = "fridge1"},
+                new StateDTO {Id = 3, Name = "fridge2"},
+                new StateDTO {Id = 4, Name = "freezer"},
+            };
+
+            // Mock repo
+            _itemRepoMock.Setup(method => method.SearchItem(barcode)).Returns(itemId);
+            _itemRepoMock.Setup(method => method.GetItemEntity(itemId)).Returns(new Item() { StateId = 1, ServiceId = 1 });
+            _infoRepoMock.Setup(method => method.GetStatebyId(1)).Returns(new StateDTO() { Id = 1, Name = "production" });
+            _infoRepoMock.Setup(method => method.GetNextStates(1, 1)).Returns(stateDTOs);
+
+            // Create service
+            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
+
+            // * Act
+            var retVal = _itemService.GetItemNextStatesByBarcode(barcode);
+
+            //* Assert
+            Assert.IsNotNull(retVal);
+            Assert.IsInstanceOfType(retVal, typeof(NextStatesDTO));
+            Assert.AreEqual(stateDTOs.Count, retVal.NextAvailableStates.Count);
         }
     }
 }
