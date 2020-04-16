@@ -8,7 +8,7 @@ namespace HandtolvuApp.Models
     {
         public long Id { get; set; }
         public long OrderId { get; set; }
-        public string Type { get; set; }
+        public string Category { get; set; }
         public string State { get; set; }
         public DateTime DateModified { get; set; }
     }

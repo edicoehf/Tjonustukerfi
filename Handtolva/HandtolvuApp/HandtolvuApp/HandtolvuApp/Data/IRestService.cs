@@ -9,5 +9,7 @@ namespace HandtolvuApp.Data
     public interface IRestService
     {
         Task<Item> GetItemAsync(string barcode);
+        Task<Order> GetOrderAsync(string barcode);
+        Task CheckoutOrder(long id);
     }
 }

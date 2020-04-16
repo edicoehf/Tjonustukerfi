@@ -30,9 +30,9 @@
             <Label Text="{Binding Item.OrderId}"
                    Grid.Row="1" Grid.Column="1"/>
 
-            <Label Text="Type"
+            <Label Text="Category"
                    Grid.Row="0" Grid.Column="2"/>
-            <Label Text="{Binding Item.Type}"
+            <Label Text="{Binding Item.Category}"
                    Grid.Row="1" Grid.Column="2"/>
 
             <Label Text="State"
