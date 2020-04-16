@@ -3,6 +3,7 @@ import { Button } from "@material-ui/core";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import PickCustomerModal from "../PickCustomerModal/PickCustomerModal";
 import "./AddCustomer.css";
+import CustomerDetails from "../../../Customer/CustomerDetails/CustomerDetails";
 
 const AddCustomer = ({ customer, addCustomer }) => {
     const [modalOpen, setModalOpen] = React.useState(false);
@@ -16,7 +17,7 @@ const AddCustomer = ({ customer, addCustomer }) => {
     return (
         <>
             <div className="add-customer">
-                <h3>Viðskiptavinir</h3>
+                <h3>Viðskiptavinur</h3>
                 {!customer ? (
                     <Button
                         className="pck-btn"
@@ -29,7 +30,7 @@ const AddCustomer = ({ customer, addCustomer }) => {
                         Velja viðskiptavin
                     </Button>
                 ) : (
-                    <></>
+                    <CustomerDetails id={customer.id} />
                 )}
             </div>
             <PickCustomerModal

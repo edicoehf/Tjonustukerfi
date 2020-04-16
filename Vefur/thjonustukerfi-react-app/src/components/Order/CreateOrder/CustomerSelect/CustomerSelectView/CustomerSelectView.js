@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import useGetAllCustomers from "../../../../../hooks/useGetAllCustomers";
 import useSearchBar from "../../../../../hooks/useSearchBar";
 import SearchBar from "../../../../SearchBar/SearchBar";
@@ -11,6 +10,7 @@ const CustomerSelectView = ({ addCustomer }) => {
     customers.sort((a, b) => a.name.localeCompare(b.name));
     const { searchResults, handleChange, searchTerm } = useSearchBar(customers);
     const searchBarPlaceHolder = "Má bjóða þér að leita eftir nafni?";
+
     return (
         <>
             {!error ? (
@@ -25,11 +25,10 @@ const CustomerSelectView = ({ addCustomer }) => {
                                 placeHolder={searchBarPlaceHolder}
                             />
                         </div>
-                        {!customers.length > 0 ? (
-                            <h4 className="no-customers">
-                                Enginn viðskiptavinur fannst. Má bjóða þér að
-                                bæta við viðskiptavin?{" "}
-                            </h4>
+                        {searchResults.length === 0 ? (
+                            <p className="error no-customers">
+                                Enginn viðskiptavinur fannst
+                            </p>
                         ) : (
                             <List className="customer-select-list">
                                 {searchResults.map((customer) => (

@@ -1,3 +1,7 @@
 .add-customer {
     width: 15rem;
 }
+
+tr.customer-property {
+    border-bottom: 1px solid #3f51b5;
+}
