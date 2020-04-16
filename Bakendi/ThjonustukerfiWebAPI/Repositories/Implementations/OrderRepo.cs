@@ -157,11 +157,13 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                     items[i].DateModified = DateTime.Now;
                 }
 
-                // rest of the items to delete off the tail
+                // rest of the items to delete off the tail as well as the timestamp
                 var itemListToDelete = new List<Item>();
+                var timestampsToDelete = new List<ItemTimestamp>();
                 for( ; i < items.Count; i++)
                 {
                     itemListToDelete.Add(items[i]);
+                    timestampsToDelete.AddRange(_dbContext.ItemTimestamp.Where(ts => ts.ItemId == items[i].Id).ToList());    // Get timestamp with item
                 }
 
                 // get the connection table variables that connect the order with the items about to be removed
@@ -171,8 +173,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                     itemConnectionListToDelete.Add(_dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == item.Id));
                 }
 
-                // remove both items and their order connections
+                // remove timestamps, items and their order connections
                 _dbContext.Item.RemoveRange(itemListToDelete);
+                _dbContext.ItemTimestamp.RemoveRange(timestampsToDelete);
                 _dbContext.ItemOrderConnection.RemoveRange(itemConnectionListToDelete);
             }
 
@@ -203,7 +206,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
         }
 
-        //! Doesn't do SaveChanges(), rember to use save changes after calling this function
+        //! Doesn't do SaveChanges(), remember to use save changes after calling this function
         /// <summary>Used to add multiple items in order input</summary>
         private void AddMultipleItems(List<ItemInputModel> inpItems, long orderId)
         {
@@ -220,6 +223,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 itemToAdd.Id = newItemId;
                 itemToAdd.Barcode = newItemBarcode.ToString();
                 _dbContext.Item.Add(itemToAdd);
+
+                // Create Timestamp
+                _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(itemToAdd));
 
                 var itemOrderConnection = new ItemOrderConnection {
                     OrderId = orderId,
@@ -242,15 +248,19 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // Get list connections
             var itemListConnections = _dbContext.ItemOrderConnection.Where(c => c.OrderId == entity.Id).ToList();
             
-            // Get all items in order
+            // Get all items in order and timestamp
             var itemList = new List<Item>();
+            var itemTimestamps = new List<ItemTimestamp>();
             foreach (var item in itemListConnections)
             {
                 itemList.Add(_dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
+                itemTimestamps.AddRange(_dbContext.ItemTimestamp.Where(ts => ts.ItemId == item.ItemId).ToList());
             }
 
             // remove items
             if(itemList.Count > 0) { _dbContext.Item.RemoveRange(itemList); }
+            // remove timestamps
+            if(itemTimestamps.Count > 0) {  _dbContext.ItemTimestamp.RemoveRange(itemTimestamps); }
             // remove connections
             if(itemListConnections.Count > 0) { _dbContext.ItemOrderConnection.RemoveRange(itemListConnections); }
             // remove entity
@@ -284,6 +294,12 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 itemToChange.StateId = 5;  //TODO: Same as in complete Item, update id to be more general (e.g. some global enunm or somthing)
                 itemToChange.DateCompleted = currentDate;
                 itemToChange.DateModified = currentDate;
+
+                // Update the timestamp
+                // state and item need to be the same else create a new timestamp
+                var timeStamp = _dbContext.ItemTimestamp.FirstOrDefault(ts => ts.ItemId == itemToChange.Id && ts.StateId == itemToChange.StateId);
+                if (timeStamp == null) { _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(itemToChange)); }
+                else { timeStamp.TimeOfChange = currentDate; }
             }
 
             _dbContext.SaveChanges();
@@ -337,7 +353,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 dto.Items = new List<ItemDTO>();
                 foreach (var item in itemList)
                 {
-                    var itemEntity = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);                      // get item entity
+                    var itemEntity = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);                  // get item entity
                     var add = _mapper.Map<ItemDTO>(itemEntity);                                                 // map to DTO
                     add.Service = _dbContext.Service.FirstOrDefault(s => s.Id == itemEntity.ServiceId).Name;    // Find Service name
                     add.State = _dbContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;          // Find state name

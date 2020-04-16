@@ -1,12 +1,12 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import customerService from "../services/customerService";
 
 const useGetAllCustomers = () => {
-    const [customers, setCustomers] = React.useState([]);
-    const [isLoading, setIsLoading] = React.useState(true);
-    const [error, setError] = React.useState(null);
+    const [customers, setCustomers] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    React.useEffect(() => {
+    useEffect(() => {
         customerService
             .getAllCustomers()
             .then(customers => {

@@ -3,19 +3,18 @@ import { ListGroup } from "react-bootstrap";
 import CustomerActions from "../Actions/CustomerActions/CustomerActions";
 import "./CustomerListItem.css";
 
-const CustomerListItem = props => {
+const CustomerListItem = (props) => {
     const { customer } = props;
     return (
         <>
             <ListGroup.Item
-                className="item"
                 variant="light"
                 action
                 href={"/customer/" + customer.id}
             >
                 {customer.name} - {customer.email}
             </ListGroup.Item>
-            <ListGroup.Item className="item buttons">
+            <ListGroup.Item className="buttons">
                 <CustomerActions id={customer.id} />
             </ListGroup.Item>
         </>
