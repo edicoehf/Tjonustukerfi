@@ -33,5 +33,9 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
         /// <summary>Changes the state of all items in the input with item barcode"</summary>
         /// <returns>List of inputs that are not correct and did not update, if any</returns>
         List<ItemStateChangeBarcodeInputModel> ChangeItemStateBarcode(List<ItemStateChangeBarcodeInputModel> stateChanges);
+
+        /// <summary>Gets the current state of Item and next availables states</summary>
+        /// <returns>Current state and a list of next states</returns>
+        NextStatesDTO GetItemNextStates(long id);
     }
 }

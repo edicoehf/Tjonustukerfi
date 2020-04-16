@@ -134,5 +134,17 @@ namespace ThjonustukerfiWebAPI.Controllers
 
             return Ok();
         }
+
+        /// <summary>Gets the next states for the Item. Returns an empty list if the item is in its last state</summary>
+        /// <response code="200">States successfully retrieved</response>
+        /// <response code="404">Item was not found</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("{id:long}/nextstate")]
+        [HttpGet]
+        public IActionResult GetItemNextStates(long id)
+        {
+            return Ok(_itemService.GetItemNextStates(id));
+        }
     }
 }

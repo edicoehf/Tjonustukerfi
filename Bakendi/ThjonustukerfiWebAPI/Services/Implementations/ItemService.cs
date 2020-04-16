@@ -12,10 +12,12 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
     public class ItemService : IItemService
     {
         private IItemRepo _itemRepo;
+        private IInfoRepo _infoRepo;
         private IMapper _mapper;
-        public ItemService(IItemRepo itemRepo, IMapper mapper)
+        public ItemService(IItemRepo itemRepo, IInfoRepo infoRepo, IMapper mapper)
         {
             _itemRepo = itemRepo;
+            _infoRepo = infoRepo;
             _mapper = mapper;
         }
         public ItemStateDTO GetItemById(long itemId) => _itemRepo.GetItemById(itemId);
@@ -61,6 +63,18 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             invalidInputs.AddRange(_mapper.Map<List<ItemStateChangeBarcodeInputModel>>(invalidInputStates));
 
             return invalidInputs;
+        }
+        public NextStatesDTO GetItemNextStates(long id)
+        {
+            // Get entity
+            var entity = _itemRepo.GetItemEntity(id);
+
+            // Get the current and next states
+            var nextStateDto = new NextStatesDTO();
+            nextStateDto.CurrentState = _infoRepo.GetStatebyId(entity.StateId);
+            nextStateDto.NextAvailableStates = _infoRepo.GetNextStates(entity.ServiceId, entity.StateId);
+
+            return nextStateDto;
         }
     }
 }
