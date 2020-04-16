@@ -20,5 +20,15 @@ namespace HandtolvuApp.Data
         {
             return restService.GetItemAsync(barcode);
         }
+
+        public Task<Order> GetOrderAsync(string barcode)
+        {
+            return restService.GetOrderAsync(barcode);
+        }
+
+        public Task CheckoutOrder(long id)
+        {
+            return restService.CheckoutOrder(id);
+        }
     }
 }

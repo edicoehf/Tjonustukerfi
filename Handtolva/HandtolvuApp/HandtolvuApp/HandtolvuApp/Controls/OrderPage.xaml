@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="HandtolvuApp.Controls.OrderPage">
+  
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height=".3*"/>
+                <RowDefinition Height=".01*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+        <Button Text="Skrá út" Grid.Row="0"  Grid.Column="0"
+                Grid.ColumnSpan="2" Command="{Binding CheckoutCommand}" 
+                Margin="10, 10, 10, 10" BackgroundColor="DodgerBlue"
+                CornerRadius="20"/>
+
+        <CollectionView ItemsSource="{Binding Order.Items}" Grid.Row="2" Grid.ColumnSpan="5"
+                        SelectionMode="Single"
+                        SelectedItem="{Binding SelectedItem}"
+                        SelectionChangedCommand="{Binding SelectedItemChangedCommand}">
+            
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Padding="10, 10">
+                        <Frame>
+                            <Label Text="{Binding Category}" FontSize="Large" 
+                                   VerticalTextAlignment="Center" 
+                                   HorizontalTextAlignment="Center"/>
+                        </Frame>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+            
+        </Grid>
+</ContentPage>

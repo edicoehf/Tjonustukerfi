@@ -9,9 +9,9 @@ using Xamarin.Forms;
 
 namespace HandtolvuApp.ViewModels
 {
-    class InputViewModel : INotifyPropertyChanged
+    class ItemInputViewModel : INotifyPropertyChanged
     {
-        public InputViewModel()
+        public ItemInputViewModel()
         {
 
             Placeholder = "Sláðu inn vörunúmer";
@@ -24,7 +24,7 @@ namespace HandtolvuApp.ViewModels
                     if(item == null)
                     {
                         // handle that there is no item with this barcode
-                        MessagingCenter.Send<InputViewModel>(this, "Villa");
+                        MessagingCenter.Send<ItemInputViewModel>(this, "Villa");
                         Placeholder = "Vörunúmer er ekki til";
                     }
                     else
