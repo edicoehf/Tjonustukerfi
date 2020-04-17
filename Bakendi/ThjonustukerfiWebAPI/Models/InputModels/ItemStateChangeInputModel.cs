@@ -1,5 +1,6 @@
 namespace ThjonustukerfiWebAPI.Models.InputModels
 {
+    /// <summary>Input model used to change the state of an item by ID.</summary>
     public class ItemStateChangeInputModel
     {
         public long ItemId { get; set; }

@@ -37,5 +37,12 @@
                 Margin="5, 5, 5, 5"
                 Command="{Binding ItemCommand}"
                 CornerRadius="20" />
+
+        <Button Grid.Row="2" Grid.Column="1"
+                Grid.ColumnSpan="2" Text="TestStates"
+                BackgroundColor="Blue" TextColor="White"
+                Margin="5, 5, 5, 5"
+                Command="{Binding TestCommand}"
+                CornerRadius="20" />
     </Grid>
 </ContentView>

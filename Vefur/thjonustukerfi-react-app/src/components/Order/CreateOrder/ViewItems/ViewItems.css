@@ -1,0 +1,10 @@
+button.dlt-btn {
+    background-color: #d9534f;
+    color: white;
+}
+button.dlt-btn:hover {
+    background-color: #ee7773;
+}
+div.MuiPaper-root {
+    width: 50rem;
+}

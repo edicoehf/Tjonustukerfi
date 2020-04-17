@@ -4,6 +4,7 @@ using ThjonustukerfiWebAPI.Models.InputModels;
 
 namespace ThjonustukerfiWebAPI.Services.Interfaces
 {
+    /// <summary>Service functions for Orders.</summary>
     public interface IOrderService
     {
         /// <summary>Gets an order with the given ID.</summary>

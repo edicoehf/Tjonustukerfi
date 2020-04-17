@@ -254,5 +254,45 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             var retVal = response.Value as List<ItemStateChangeBarcodeInputModel>;
             Assert.AreEqual(invalidInputs.Count, retVal.Count);
         }
+
+        [TestMethod]
+        public void GetItemNextState_should_return_a_NextStatesDTO_when_searching_by_id()
+        {
+            long inpID = 1;
+            string inpString = "This a barcode, yes";
+            //* Arrange
+            var retList = new NextStatesDTO()
+            {
+                NextAvailableStates = new List<StateDTO>()
+            };
+
+            // Mock service
+            _itemServiceMock.Setup(method => method.GetItemNextStates(It.IsAny<long>())).Returns(retList);
+            _itemServiceMock.Setup(method => method.GetItemNextStatesByBarcode(It.IsAny<string>())).Returns(retList);
+
+            // Create controller
+            _itemController = new ItemController(_itemServiceMock.Object);
+
+            //* Act
+            var responseId =        _itemController.GetItemNextStates(inpID, null) as OkObjectResult;
+            var responseString =    _itemController.GetItemNextStates(null, inpString) as OkObjectResult;
+            var responseNull =      _itemController.GetItemNextStates(null, null) as BadRequestObjectResult;
+
+            //* Assert
+            // Assert ID call
+            Assert.IsNotNull(responseId);
+            Assert.AreEqual(StatusCodes.Status200OK, responseId.StatusCode);
+            Assert.IsInstanceOfType(responseId.Value as NextStatesDTO, typeof(NextStatesDTO));
+
+            // Assert barcode call
+            Assert.IsNotNull(responseString);
+            Assert.AreEqual(StatusCodes.Status200OK, responseString.StatusCode);
+            Assert.IsInstanceOfType(responseString.Value as NextStatesDTO, typeof(NextStatesDTO));
+
+            // Assert empty call
+            Assert.IsNotNull(responseNull);
+            Assert.AreEqual(StatusCodes.Status400BadRequest, responseNull.StatusCode);
+            Assert.IsInstanceOfType(responseNull.Value as string, typeof(string));  // make sure that the error response text was returned
+        }
     }
 }

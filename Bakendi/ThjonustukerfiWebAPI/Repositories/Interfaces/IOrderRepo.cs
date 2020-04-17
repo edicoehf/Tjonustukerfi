@@ -4,6 +4,7 @@ using ThjonustukerfiWebAPI.Models.InputModels;
 
 namespace ThjonustukerfiWebAPI.Repositories.Interfaces
 {
+    /// <summary>Repository for accessing the Database for Orders.</summary>
     public interface IOrderRepo
     {
         /// <summary>Gets an order with the given ID from the database.</summary>
