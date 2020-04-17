@@ -17,8 +17,10 @@ const getOrderById = (id) => {
 const createOrder = (order) => {
     return fetch(endpoint, {
         method: "POST",
+        body: JSON.stringify(order),
         headers: {
             crossDomain: true,
+            "Content-Type": "application/json",
         },
     })
         .then(handleErrors)
