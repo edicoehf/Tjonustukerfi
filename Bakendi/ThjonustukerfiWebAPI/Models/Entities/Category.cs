@@ -1,5 +1,6 @@
 namespace ThjonustukerfiWebAPI.Models.Entities
 {
+    /// <summary>Represents the type of produce, e.g. Cod</summary>
     public class Category
     {
         public long Id { get; set; }

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -149,6 +151,148 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             //* Assert
             Assert.IsNotNull(response);
             Assert.AreEqual(204, response.StatusCode);
+        }
+
+        [TestMethod]
+        public void ChangeItemStateById_should_return_an_OKresult()
+        {
+            //* Arrange
+            var emptyList = new List<ItemStateChangeInputModel>();
+            // Mock Service
+            _itemServiceMock.Setup(method => method.ChangeItemStateById(It.IsAny<List<ItemStateChangeInputModel>>())).Returns(emptyList).Verifiable();
+
+            // Create controller
+            _itemController = new ItemController(_itemServiceMock.Object);
+
+            //* Act
+            var response = _itemController.ChangeItemStateById(emptyList) as OkResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(200, response.StatusCode);
+        }
+
+        [TestMethod]
+        public void ChangeItemStateById_should_return_AcceptedResult_and_list_of_invalid_inputs()
+        {
+            //* Arrange
+            var input = new List<ItemStateChangeInputModel>()
+            {
+                new ItemStateChangeInputModel { ItemId = -1, StateChangeTo = -1 },
+                new ItemStateChangeInputModel { ItemId = 1, StateChangeTo = 2 }
+            };
+
+            var invalidInputs = new List<ItemStateChangeInputModel>()
+            {
+                new ItemStateChangeInputModel { ItemId = -1, StateChangeTo = -1 }
+            };
+
+            // Mock service
+            _itemServiceMock.Setup(method => method.ChangeItemStateById(input)).Returns(invalidInputs).Verifiable();
+
+            // Create controller
+            _itemController = new ItemController(_itemServiceMock.Object);
+
+            //* Act
+            var response = _itemController.ChangeItemStateById(input) as AcceptedResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(StatusCodes.Status202Accepted, response.StatusCode);
+            
+            var retVal = response.Value as List<ItemStateChangeInputModel>;
+            Assert.AreEqual(invalidInputs.Count, retVal.Count);
+        }
+
+        [TestMethod]
+        public void ChangeItemStateBarcode_should_return_an_OKresult()
+        {
+            //* Arrange
+            var emptyList = new List<ItemStateChangeBarcodeInputModel>();
+            // Mock Service
+            _itemServiceMock.Setup(method => method.ChangeItemStateBarcode(It.IsAny<List<ItemStateChangeBarcodeInputModel>>())).Returns(emptyList).Verifiable();
+
+            // Create controller
+            _itemController = new ItemController(_itemServiceMock.Object);
+
+            //* Act
+            var response = _itemController.ChangeItemStateBarcode(emptyList) as OkResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(200, response.StatusCode);
+        }
+
+        [TestMethod]
+        public void ChangeItemStateByBarcode_should_return_AcceptedResult_and_list_of_invalid_inputs()
+        {
+            //* Arrange
+            var input = new List<ItemStateChangeBarcodeInputModel>()
+            {
+                new ItemStateChangeBarcodeInputModel { Barcode = "-1", StateChangeTo = -1 },
+                new ItemStateChangeBarcodeInputModel { Barcode = "983764892374", StateChangeTo = 2 }
+            };
+            
+            var invalidInputs = new List<ItemStateChangeBarcodeInputModel>()
+            {
+                new ItemStateChangeBarcodeInputModel { Barcode = "-1", StateChangeTo = -1 }
+            };
+
+            // Mock service
+            _itemServiceMock.Setup(method => method.ChangeItemStateBarcode(input)).Returns(invalidInputs).Verifiable();
+
+            // Create controller
+            _itemController = new ItemController(_itemServiceMock.Object);
+
+            //* Act
+            var response = _itemController.ChangeItemStateBarcode(input) as AcceptedResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(StatusCodes.Status202Accepted, response.StatusCode);
+            
+            var retVal = response.Value as List<ItemStateChangeBarcodeInputModel>;
+            Assert.AreEqual(invalidInputs.Count, retVal.Count);
+        }
+
+        [TestMethod]
+        public void GetItemNextState_should_return_a_NextStatesDTO_when_searching_by_id()
+        {
+            long inpID = 1;
+            string inpString = "This a barcode, yes";
+            //* Arrange
+            var retList = new NextStatesDTO()
+            {
+                NextAvailableStates = new List<StateDTO>()
+            };
+
+            // Mock service
+            _itemServiceMock.Setup(method => method.GetItemNextStates(It.IsAny<long>())).Returns(retList);
+            _itemServiceMock.Setup(method => method.GetItemNextStatesByBarcode(It.IsAny<string>())).Returns(retList);
+
+            // Create controller
+            _itemController = new ItemController(_itemServiceMock.Object);
+
+            //* Act
+            var responseId =        _itemController.GetItemNextStates(inpID, null) as OkObjectResult;
+            var responseString =    _itemController.GetItemNextStates(null, inpString) as OkObjectResult;
+            var responseNull =      _itemController.GetItemNextStates(null, null) as BadRequestObjectResult;
+
+            //* Assert
+            // Assert ID call
+            Assert.IsNotNull(responseId);
+            Assert.AreEqual(StatusCodes.Status200OK, responseId.StatusCode);
+            Assert.IsInstanceOfType(responseId.Value as NextStatesDTO, typeof(NextStatesDTO));
+
+            // Assert barcode call
+            Assert.IsNotNull(responseString);
+            Assert.AreEqual(StatusCodes.Status200OK, responseString.StatusCode);
+            Assert.IsInstanceOfType(responseString.Value as NextStatesDTO, typeof(NextStatesDTO));
+
+            // Assert empty call
+            Assert.IsNotNull(responseNull);
+            Assert.AreEqual(StatusCodes.Status400BadRequest, responseNull.StatusCode);
+            Assert.IsInstanceOfType(responseNull.Value as string, typeof(string));  // make sure that the error response text was returned
         }
     }
 }

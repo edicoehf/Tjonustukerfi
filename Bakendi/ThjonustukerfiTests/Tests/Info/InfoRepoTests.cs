@@ -8,6 +8,8 @@ using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.Entities;
 using ThjonustukerfiWebAPI.Repositories.Implementations;
 using System.Linq;
+using ThjonustukerfiWebAPI.Repositories.Interfaces;
+using ThjonustukerfiWebAPI.Models.Exceptions;
 
 namespace ThjonustukerfiTests.Tests.Info
 {
@@ -167,6 +169,65 @@ namespace ThjonustukerfiTests.Tests.Info
             }
         }
 
+        [TestMethod]
+        public void GetStateById_should_return_a_valid_state()
+        {
+            //* Arrange
+            long validid = 1;
+
+            using(var mockContext = new DataContext(_options))
+            {
+                // setup repo
+                IInfoRepo infoRepo = new InfoRepo(mockContext, _mapper);
+
+                var correctState = _mapper.Map<StateDTO>(mockContext.State.FirstOrDefault(s => s.Id == validid));
+
+                //* Act
+                var value = infoRepo.GetStatebyId(validid);
+
+                //* Assert
+                Assert.IsNotNull(value);
+                Assert.IsInstanceOfType(value, typeof(StateDTO));
+                Assert.AreEqual(correctState, value);
+            }
+        }
+
+        [TestMethod]
+        public void GetStatebyId_should_throw_NotFoundException()
+        {
+            //* Arrange
+            long invalidId = -1;
+
+            using(var mockContext = new DataContext(_options))
+            {
+                //setup repo
+                IInfoRepo infoRepo = new InfoRepo(mockContext, _mapper);
+
+                //* Act and Assert
+                Assert.ThrowsException<NotFoundException>(() => infoRepo.GetStatebyId(invalidId));
+            }
+        }
+
+        [TestMethod]
+        public void GetNextStates_should_return_a_list_of_StateDTOs()
+        {
+            long validServiceID = 1;
+            long validStateID = 1;
+
+            using(var mockContext = new DataContext(_options))
+            {
+                // create repo
+                IInfoRepo infoRepo = new InfoRepo(mockContext, _mapper);
+
+                //* Act
+                var value = infoRepo.GetNextStates(validServiceID, validStateID);
+
+                //* Assert
+                Assert.IsNotNull(value);
+                Assert.IsInstanceOfType(value, typeof(List<StateDTO>));
+            }
+        }
+
         //**********     Helper functions     **********//
         private void FillDatabase(DataContext mockContext)
         {
@@ -194,10 +255,21 @@ namespace ThjonustukerfiTests.Tests.Info
                 new Category() {Name = "Lambakjöt", Id = 3}
             };
 
+            var serviceStates = new List<ServiceState>()
+            {
+                // Service state fyrir birkireykingu
+                new ServiceState() {Id = 1, ServiceId = 1, StateId = 1, Step = 1},
+                new ServiceState() {Id = 2, ServiceId = 1, StateId = 2, Step = 2},
+                new ServiceState() {Id = 3, ServiceId = 1, StateId = 3, Step = 2},
+                new ServiceState() {Id = 4, ServiceId = 1, StateId = 4, Step = 2},
+                new ServiceState() {Id = 5, ServiceId = 1, StateId = 5, Step = 3}
+            };
+
             // Adding services to the in memory database and saving it
             mockContext.Service.AddRange(services);
             mockContext.State.AddRange(states);
             mockContext.Category.AddRange(categories);
+            mockContext.ServiceState.AddRange(serviceStates);
             mockContext.SaveChanges();
         }
     }
