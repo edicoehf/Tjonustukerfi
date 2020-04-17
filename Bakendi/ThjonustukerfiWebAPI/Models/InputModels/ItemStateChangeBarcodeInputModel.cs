@@ -1,5 +1,6 @@
 namespace ThjonustukerfiWebAPI.Models.InputModels
 {
+    /// <summary>Input model used to change the state of an item by barcode.</summary>
     public class ItemStateChangeBarcodeInputModel
     {
         public string Barcode { get; set; }

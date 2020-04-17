@@ -6,6 +6,11 @@ using ThjonustukerfiWebAPI.Models;
 
 namespace ThjonustukerfiWebAPI.Extensions
 {
+    /// <summary>
+        ///     Extends the WebHost application with custom functionality.
+        ///     
+        ///     All functions take in the WebHost application as a parameter and always return it.
+        /// </summary>
     public static class WebhostExtension
     {
         // Maybe use later...

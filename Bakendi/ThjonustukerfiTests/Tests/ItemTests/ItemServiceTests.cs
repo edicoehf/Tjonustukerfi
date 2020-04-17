@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ThjonustukerfiWebAPI.Mappings;
 using ThjonustukerfiWebAPI.Models.DTOs;
+using ThjonustukerfiWebAPI.Models.Entities;
 using ThjonustukerfiWebAPI.Models.Exceptions;
 using ThjonustukerfiWebAPI.Models.InputModels;
 using ThjonustukerfiWebAPI.Repositories.Interfaces;
@@ -18,12 +19,14 @@ namespace ThjonustukerfiTests.Tests.ItemTests
     {
         private IItemService _itemService;
         private Mock<IItemRepo> _itemRepoMock;
+        private Mock<IInfoRepo> _infoRepoMock;
         private Mapper _mapper;
 
         [TestInitialize]
         public void Initialize()
         {
             _itemRepoMock = new Mock<IItemRepo>();
+            _infoRepoMock = new Mock<IInfoRepo>();
 
             // Setting up automapper
             var myProfile = new MappingProfile();   // Create a new profile like the one we implemented
@@ -49,7 +52,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             _itemRepoMock.Setup(method => method.GetItemById(itemID)).Returns(retDTO);
 
             // Create controller
-            _itemService = new ItemService(_itemRepoMock.Object, _mapper);
+            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
 
             //* Act
             var response = _itemService.SearchItem("someString");
@@ -77,7 +80,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             _itemRepoMock.Setup(method => method.GetItemById(itemID)).Returns(itemstate);
 
             // Create service
-            _itemService = new ItemService(_itemRepoMock.Object, _mapper);
+            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
 
             //* Act
             var retVal = _itemService.GetItemById(itemID);
@@ -111,7 +114,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 .Returns(new List<ItemStateChangeInputModel>());
 
             // create service
-            _itemService = new ItemService(_itemRepoMock.Object, _mapper);
+            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
 
             //* Act
             var retVal = _itemService.ChangeItemStateBarcode(input);
@@ -140,7 +143,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 .Returns(new List<ItemStateChangeInputModel>());
 
             // create service
-            _itemService = new ItemService(_itemRepoMock.Object, _mapper);
+            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
 
             //* Act
             var retVal = _itemService.ChangeItemStateBarcode(input);
@@ -167,7 +170,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 .Returns(new List<ItemStateChangeInputModel>());
 
             // create service
-            _itemService = new ItemService(_itemRepoMock.Object, _mapper);
+            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
 
             //* Act
             var retVal = _itemService.ChangeItemStateById(input);
@@ -175,6 +178,66 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             //* Assert
             Assert.IsNotNull(retVal);
             Assert.AreEqual(0, retVal.Count);
+        }
+
+        [TestMethod]
+        public void GetItemNextStates_should_return_NextStatesDTO()
+        {
+            //* Arrange
+            long itemId = 1;
+            var stateDTOs = new List<StateDTO>()
+            {
+                new StateDTO {Id = 2, Name = "fridge1"},
+                new StateDTO {Id = 3, Name = "fridge2"},
+                new StateDTO {Id = 4, Name = "freezer"},
+            };
+
+            // Mock repo
+            _itemRepoMock.Setup(method => method.GetItemEntity(itemId)).Returns(new Item() { StateId = 1, ServiceId = 1 });
+            _infoRepoMock.Setup(method => method.GetStatebyId(1)).Returns(new StateDTO() { Id = 1, Name = "production" });
+            _infoRepoMock.Setup(method => method.GetNextStates(1, 1)).Returns(stateDTOs);
+
+            // Create service
+            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
+
+            // * Act
+            var retVal = _itemService.GetItemNextStates(itemId);
+
+            //* Assert
+            Assert.IsNotNull(retVal);
+            Assert.IsInstanceOfType(retVal, typeof(NextStatesDTO));
+            Assert.AreEqual(stateDTOs.Count, retVal.NextAvailableStates.Count);
+        }
+
+        [TestMethod]
+        public void GetItemNextStatesByBarcode_should_return_NextStatesDTO()
+        {
+            //* Arrange
+            string barcode = "is this a barcode?";
+            long itemId = 1;
+            var stateDTOs = new List<StateDTO>()
+            {
+                new StateDTO {Id = 2, Name = "fridge1"},
+                new StateDTO {Id = 3, Name = "fridge2"},
+                new StateDTO {Id = 4, Name = "freezer"},
+            };
+
+            // Mock repo
+            _itemRepoMock.Setup(method => method.SearchItem(barcode)).Returns(itemId);
+            _itemRepoMock.Setup(method => method.GetItemEntity(itemId)).Returns(new Item() { StateId = 1, ServiceId = 1 });
+            _infoRepoMock.Setup(method => method.GetStatebyId(1)).Returns(new StateDTO() { Id = 1, Name = "production" });
+            _infoRepoMock.Setup(method => method.GetNextStates(1, 1)).Returns(stateDTOs);
+
+            // Create service
+            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
+
+            // * Act
+            var retVal = _itemService.GetItemNextStatesByBarcode(barcode);
+
+            //* Assert
+            Assert.IsNotNull(retVal);
+            Assert.IsInstanceOfType(retVal, typeof(NextStatesDTO));
+            Assert.AreEqual(stateDTOs.Count, retVal.NextAvailableStates.Count);
         }
     }
 }
