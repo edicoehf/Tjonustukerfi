@@ -3,16 +3,34 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import CheckIcon from "@material-ui/icons/Check";
 import ConfirmationDialog from "../../../ConfirmationDialog/ConfirmationDialog";
 
-const OrderActions = ({ createOrder }) => {
-    [openDialog, setOpenDialog] = React.useState(false);
+const OrderActions = ({ createOrder, cancelOrder }) => {
+    [openSendDialog, setOpenSendDialog] = React.useState(false);
+    [openCancelDialog, setOpenCancelDialog] = React.useState(false);
 
-    const handleAccept = () => {
+    const handleSend = () => {
         createOrder();
-        handleClose();
+        handleSendClose();
     };
 
-    const handleClose = () => {
-        setOpenDialog(false);
+    const handleSendClose = () => {
+        setOpenSendDialog(false);
+    };
+
+    const handleSendOpen = () => {
+        setOpenSendDialog(true);
+    };
+
+    const handleCancel = () => {
+        cancelOrder();
+        handleCancelClose();
+    };
+
+    const handleCancelClose = () => {
+        setOpenCancelDialog(false);
+    };
+
+    const handleCancelOpen = () => {
+        setOpenCancelDialog(true);
     };
 
     return (
@@ -33,16 +51,23 @@ const OrderActions = ({ createOrder }) => {
                 color="primary"
                 size="large"
                 startIcon={<CheckIcon />}
-                onClick={handleSubmit}
+                onClick={handleOpen}
             >
                 Senda inn pöntun
             </Button>
             <ConfirmationDialog
                 title="Senda inn pöntun"
                 description="Vinsamlegast staðfestu skráningu á nýrri pöntun"
-                handleAccept={handleAccept}
-                handleClose={handleClose}
-                open={openDialog}
+                handleAccept={handleSend}
+                handleClose={handleSendClose}
+                open={openSendDialog}
+            />
+            <ConfirmationDialog
+                title="Hætta við pöntun"
+                description="Viltu hætta við núverandi pöntun?"
+                handleAccept={handleCancel}
+                handleClose={handleCancelClose}
+                open={openCancelDialog}
             />
         </div>
     );
