@@ -13,13 +13,13 @@ describe("<OrderList />", () => {
         items: [
             {
                 id: 1,
-                type: "Test 4",
+                category: "Test 4",
                 service: "Birkireyking",
                 barcode: "50500001",
             },
             {
                 id: 2,
-                type: "Test 4",
+                category: "Test 4",
                 service: "Birkireyking",
                 barcode: "50500002",
             },
@@ -33,13 +33,13 @@ describe("<OrderList />", () => {
         items: [
             {
                 id: 1,
-                type: "Test 3",
+                category: "Test 3",
                 service: "Birkireyking",
                 barcode: "50500004",
             },
             {
                 id: 2,
-                type: "Test 4",
+                category: "Test 4",
                 service: "Birkireyking",
                 barcode: "50500005",
             },

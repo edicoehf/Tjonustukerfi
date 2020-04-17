@@ -7,19 +7,19 @@ describe("<OrderItemList />", () => {
     let testProps = [
         {
             id: 52,
-            type: "Lax",
+            category: "Lax",
             service: "Birkireyking",
             barcode: "50050001",
         },
         {
             id: 42,
-            type: "Bleikja",
+            category: "Bleikja",
             service: "Taðreyking",
             barcode: "50450001",
         },
         {
             id: 53,
-            type: "Sjófiskur",
+            category: "Sjófiskur",
             service: "Birkireyking",
             barcode: "52050001",
         },
