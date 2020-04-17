@@ -41,7 +41,10 @@ const CreateOrderView = () => {
 
     const createOrder = () => {};
 
-    const cancelOrder = () => {};
+    const cancelOrder = () => {
+        setCustomer(null);
+        setItems([]);
+    };
 
     return (
         <div className="create-order-view-container">
