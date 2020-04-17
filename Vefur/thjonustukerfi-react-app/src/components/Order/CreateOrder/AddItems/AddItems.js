@@ -9,8 +9,6 @@ import {
     Button,
 } from "@material-ui/core";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
-import useGetServices from "../../../../hooks/useGetServices";
-import useGetCategories from "../../../../hooks/useGetCategories";
 import useForm from "../../../../hooks/useForm";
 import itemValidate from "../ItemValidate/ItemValidate";
 import "./AddItems.css";
@@ -21,13 +19,11 @@ const initialState = {
     amount: 1,
 };
 
-const AddItems = ({ addItems }) => {
+const AddItems = ({ addItems, categories, services }) => {
     const submitHandler = (values) => {
         addItems(values, resetFields);
     };
 
-    const { services } = useGetServices();
-    const { categories } = useGetCategories();
     const { handleSubmit, handleChange, resetFields, values, errors } = useForm(
         initialState,
         itemValidate,
