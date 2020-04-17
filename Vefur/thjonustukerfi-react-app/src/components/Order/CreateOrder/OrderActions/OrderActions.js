@@ -1,8 +1,20 @@
 import React from "react";
 import CancelIcon from "@material-ui/icons/Cancel";
 import CheckIcon from "@material-ui/icons/Check";
+import ConfirmationDialog from "../../../ConfirmationDialog/ConfirmationDialog";
 
-const OrderActions = ({}) => {
+const OrderActions = ({ createOrder }) => {
+    [openDialog, setOpenDialog] = React.useState(false);
+
+    const handleAccept = () => {
+        createOrder();
+        handleClose();
+    };
+
+    const handleClose = () => {
+        setOpenDialog(false);
+    };
+
     return (
         <div className="order-actions">
             <Button
@@ -25,6 +37,13 @@ const OrderActions = ({}) => {
             >
                 Senda inn pöntun
             </Button>
+            <ConfirmationDialog
+                title="Senda inn pöntun"
+                description="Vinsamlegast staðfestu skráningu á nýrri pöntun"
+                handleAccept={handleAccept}
+                handleClose={handleClose}
+                open={openDialog}
+            />
         </div>
     );
 };
