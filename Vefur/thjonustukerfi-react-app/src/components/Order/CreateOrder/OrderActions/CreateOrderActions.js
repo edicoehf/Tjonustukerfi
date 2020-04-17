@@ -2,10 +2,12 @@ import React from "react";
 import CancelIcon from "@material-ui/icons/Cancel";
 import CheckIcon from "@material-ui/icons/Check";
 import ConfirmationDialog from "../../../ConfirmationDialog/ConfirmationDialog";
+import { Button } from "@material-ui/core";
+import "./CreateOrderActions.css";
 
-const OrderActions = ({ createOrder, cancelOrder }) => {
-    [openSendDialog, setOpenSendDialog] = React.useState(false);
-    [openCancelDialog, setOpenCancelDialog] = React.useState(false);
+const CreateOrderActions = ({ createOrder, cancelOrder }) => {
+    const [openSendDialog, setOpenSendDialog] = React.useState(false);
+    const [openCancelDialog, setOpenCancelDialog] = React.useState(false);
 
     const handleSend = () => {
         createOrder();
@@ -41,7 +43,7 @@ const OrderActions = ({ createOrder, cancelOrder }) => {
                 color="secondary"
                 size="large"
                 startIcon={<CancelIcon />}
-                onClick={handleSubmit}
+                onClick={handleCancelOpen}
             >
                 Hætta við
             </Button>
@@ -51,7 +53,7 @@ const OrderActions = ({ createOrder, cancelOrder }) => {
                 color="primary"
                 size="large"
                 startIcon={<CheckIcon />}
-                onClick={handleOpen}
+                onClick={handleSendOpen}
             >
                 Senda inn pöntun
             </Button>
@@ -73,4 +75,4 @@ const OrderActions = ({ createOrder, cancelOrder }) => {
     );
 };
 
-export default OrderActions;
+export default CreateOrderActions;

@@ -34,7 +34,7 @@ const ConfirmationDialog = ({
                     {declineText ? declineText : "Til baka"}
                 </Button>
                 <Button onClick={handleAccept} color="primary" autoFocus>
-                    {confirmText ? confirmtext : "Staðfesta"}
+                    {confirmText ? confirmText : "Staðfesta"}
                 </Button>
             </DialogActions>
         </Dialog>

@@ -5,6 +5,7 @@ import useGetServices from "../../../../hooks/useGetServices";
 import useGetCategories from "../../../../hooks/useGetCategories";
 import AddCustomer from "../AddCustomer/AddCustomer";
 import "./CreateOrderView.css";
+import CreateOrderActions from "../OrderActions/CreateOrderActions";
 
 const CreateOrderView = () => {
     const [items, setItems] = React.useState([]);
@@ -38,15 +39,25 @@ const CreateOrderView = () => {
         setCustomer(customer);
     };
 
+    const createOrder = () => {};
+
+    const cancelOrder = () => {};
+
     return (
-        <div className="create-order-view">
-            <AddItems
-                addItems={addItems}
-                categories={categories}
-                services={services}
+        <div className="create-order-view-container">
+            <div className="create-order-view">
+                <AddItems
+                    addItems={addItems}
+                    categories={categories}
+                    services={services}
+                />
+                <ViewItems items={items} remove={removeItem} />
+                <AddCustomer customer={customer} addCustomer={addCustomer} />
+            </div>
+            <CreateOrderActions
+                createOrder={createOrder}
+                cancelOrder={cancelOrder}
             />
-            <ViewItems items={items} remove={removeItem} />
-            <AddCustomer customer={customer} addCustomer={addCustomer} />
         </div>
     );
 };
