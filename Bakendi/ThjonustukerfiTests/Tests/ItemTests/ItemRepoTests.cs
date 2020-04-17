@@ -542,6 +542,45 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             }
         }
 
+        [TestMethod]
+        public void GetItemEntity_should_return_correct_entity()
+        {
+            //* Arrange
+            long validID = 2;
+
+            using(var mockContext = new DataContext(_options))
+            {
+                // Mock Repo
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                var correctEntity = mockContext.Item.FirstOrDefault(i => i.Id == validID);
+
+                //* Act
+                var value = itemRepo.GetItemEntity(validID);
+
+                //* Assert
+                Assert.IsNotNull(value);
+                Assert.IsInstanceOfType(value, typeof(Item));
+                Assert.AreEqual(correctEntity, value);
+            }
+        }
+
+        [TestMethod]
+        public void GetItemEntity_should_throw_NotFoundException()
+        {
+            //* Arrange
+            var invalidID = -1;
+
+            using(var mockContext = new DataContext(_options))
+            {
+                // Mock repo
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                //* Act and Assert
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.GetItemEntity(invalidID));
+            }
+        }
+
         //**********     Helper functions     **********//
         private void FillDatabase(DataContext mockContext)
         {

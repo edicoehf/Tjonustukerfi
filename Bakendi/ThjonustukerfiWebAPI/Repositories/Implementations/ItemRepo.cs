@@ -244,6 +244,16 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             return invalidInputs;
         }
 
+        public Item GetItemEntity(long id)
+        {
+            var entity = _dbContext.Item.FirstOrDefault(i => i.Id == id);
+            if(entity == null) { throw new NotFoundException($"Item with ID {id} was not found."); }
+
+            return entity;
+        }
+
+        //*     Helper functions     *//
+
         /// <summary>Sets all orders in list date completed, only if order is complete, else it sets it to null</summary>
         private void SetOrderCompleteStatus(List<long> orders)
         {

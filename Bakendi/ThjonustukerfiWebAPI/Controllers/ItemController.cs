@@ -134,5 +134,29 @@ namespace ThjonustukerfiWebAPI.Controllers
 
             return Ok();
         }
+
+        /// <summary>Gets the next states for the Item. Returns an empty list if the item is in its last state.</summary>
+        /// <param name="itemid">Use item ID to get next states</param>
+        /// <param name="barcode">Use item barcode to get next states</param>
+        /// <response code="200">States successfully retrieved.</response>
+        /// <response code="404">Item was not found.</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("nextstate")]
+        [HttpGet]
+        public IActionResult GetItemNextStates([FromQuery(Name = "itemid")] long? itemid, [FromQuery(Name = "barcode")] string barcode)
+        {
+            if (itemid != null)         // Check if searching via ID
+            {
+                return Ok(_itemService.GetItemNextStates((long)itemid));
+            }
+            else if(barcode != null)    // Check if searching via barcode
+            {
+                return Ok(_itemService.GetItemNextStatesByBarcode(barcode));
+            }
+            
+            // Search parameters are not correct or non existing
+            return BadRequest("You have to enter a valid itemid or barcode as a query parameter.");
+        }
     }
 }

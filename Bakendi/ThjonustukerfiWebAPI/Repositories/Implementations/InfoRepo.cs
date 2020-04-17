@@ -3,6 +3,7 @@ using System.Linq;
 using AutoMapper;
 using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Models.DTOs;
+using ThjonustukerfiWebAPI.Models.Exceptions;
 using ThjonustukerfiWebAPI.Repositories.Interfaces;
 
 namespace ThjonustukerfiWebAPI.Repositories.Implementations
@@ -29,6 +30,33 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
         public IEnumerable<CategoryDTO> GetCategories()
         {
             return _mapper.Map<IEnumerable<CategoryDTO>>(_dbContext.Category.ToList()); // Get list and map to DTO list
+        }
+
+        public StateDTO GetStatebyId(long id)
+        {
+            var state = _mapper.Map<StateDTO>(_dbContext.State.FirstOrDefault(s => s.Id == id));
+
+            if(state == null) { throw new NotFoundException($"Invalid state ID {id}"); }
+
+            return state;
+        }
+
+        public List<StateDTO> GetNextStates(long serviceId, long stateId)
+        {
+            // Get the current step
+            var currentStep = _dbContext.ServiceState.FirstOrDefault(ss => ss.ServiceId == serviceId && ss.StateId == stateId).Step;
+
+            // Get IDs of all next available states
+            var nextStateIDs = _dbContext.ServiceState.Where(ss => ss.ServiceId == serviceId && ss.Step == currentStep + 1).Select(s => s.StateId).ToList();
+
+            // Get all the next states available to the Item
+            var retVal = new List<StateDTO>();
+            foreach (var stateID in nextStateIDs)
+            {
+                retVal.Add(_mapper.Map<StateDTO>(_dbContext.State.FirstOrDefault(s => s.Id == stateID)));
+            }
+
+            return retVal;
         }
     }
 }
