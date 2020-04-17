@@ -10,3 +10,7 @@
     justify-content: center;
     margin-top: 2rem;
 }
+
+p.error {
+    text-align: center;
+}

@@ -10,8 +10,8 @@ const CreateOrderActions = ({ createOrder, cancelOrder }) => {
     const [openCancelDialog, setOpenCancelDialog] = React.useState(false);
 
     const handleSend = () => {
-        createOrder();
         handleSendClose();
+        createOrder();
     };
 
     const handleSendClose = () => {
@@ -23,8 +23,8 @@ const CreateOrderActions = ({ createOrder, cancelOrder }) => {
     };
 
     const handleCancel = () => {
-        cancelOrder();
         handleCancelClose();
+        cancelOrder();
     };
 
     const handleCancelClose = () => {
