@@ -1,0 +1,21 @@
+.modal-container {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    opacity: 75%;
+}
+.modal-text {
+    color: white;
+}
+.modal-buttons {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+.modal-button-text {
+    padding-left: 0.5em;
+    margin-top: 0.6em;
+}

@@ -25,6 +25,17 @@ const deleteCustomerById = (id) => {
         .catch((error) => Promise.reject(error));
 };
 
+const forceDeleteCustomerById = (id) => {
+    return fetch(endpoint + id + "/confirm", {
+        method: "DELETE",
+        headers: {
+            crossDomain: true,
+        },
+    })
+        .then(handleErrors)
+        .catch((error) => Promise.reject(error));
+};
+
 const createCustomer = (customer) => {
     return fetch(endpoint, {
         method: "POST",
@@ -69,4 +80,5 @@ export default {
     createCustomer,
     getCustomerById,
     updateCustomer,
+    forceDeleteCustomerById,
 };
