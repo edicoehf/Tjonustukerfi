@@ -8,8 +8,9 @@
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height=".1*"/>
-                <RowDefinition Height=".1*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".5*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -20,30 +21,15 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Label Text="Id"
-                   Grid.Row="0" Grid.Column="0"/>
-            <Label Text="{Binding Item.Id}"
-                   Grid.Row="1" Grid.Column="0"/>
+            <Button Text="Næsta staða" Command="{Binding NextStateCommand}"
+                    Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"
+                    Margin="10, 10, 10, 10" BackgroundColor="DodgerBlue"
+                    CornerRadius="20"/>
 
-            <Label Text="Order Id"
-                   Grid.Row="0" Grid.Column="1"/>
-            <Label Text="{Binding Item.OrderId}"
-                   Grid.Row="1" Grid.Column="1"/>
-
-            <Label Text="Category"
-                   Grid.Row="0" Grid.Column="2"/>
-            <Label Text="{Binding Item.Category}"
-                   Grid.Row="1" Grid.Column="2"/>
-
-            <Label Text="State"
-                   Grid.Row="0" Grid.Column="3"/>
-            <Label Text="{Binding Item.State}"
-                   Grid.Row="1" Grid.Column="3"/>
-
-            <Label Text="Date modified"
-                   Grid.Row="0" Grid.Column="4"/>
-            <Label Text="{Binding Item.DateModified}"
-                   Grid.Row="1" Grid.Column="4"/>
+            <Button Text="Skanna stöðu" Command="{Binding ScanStateCommand}"
+                    Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"
+                    Margin="10, 10, 10, 10" BackgroundColor="DodgerBlue"
+                    CornerRadius="20"/>
         </Grid>
         
     </ContentPage.Content>

@@ -15,6 +15,16 @@ namespace HandtolvuApp.ViewModels
         public ItemViewModel(Item i)
         {
             Item = i;
+
+            NextStateCommand = new Command(async () =>
+            {
+                // handle finding next command
+            });
+
+            ScanStateCommand = new Command(async () =>
+            {
+                // send user to scan site
+            });
         }
 
         Item item;
@@ -33,7 +43,9 @@ namespace HandtolvuApp.ViewModels
             }
         }
 
-        Command DismissCommand { get;  }
+        public Command NextStateCommand { get;  }
+
+        public Command ScanStateCommand { get;  }
 
     }
 }
