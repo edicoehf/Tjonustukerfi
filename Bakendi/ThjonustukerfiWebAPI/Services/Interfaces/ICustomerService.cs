@@ -5,6 +5,7 @@ using ThjonustukerfiWebAPI.Models.InputModels;
 
 namespace ThjonustukerfiWebAPI.Services.Interfaces
 {
+    /// <summary>Service functions for Customer.</summary>
     public interface ICustomerService
     {
         /// <summary>Creates a new customer.</summary>

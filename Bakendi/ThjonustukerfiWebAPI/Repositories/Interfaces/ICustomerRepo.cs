@@ -4,6 +4,7 @@ using ThjonustukerfiWebAPI.Models.InputModels;
 
 namespace ThjonustukerfiWebAPI.Repositories.Interfaces
 {
+    /// <summary>Repository for accessing the Database for Customers.</summary>
     public interface ICustomerRepo
     {
         /// <summary>Adds a new customer to the database.</summary>

@@ -3,6 +3,7 @@ using ThjonustukerfiWebAPI.Models.DTOs;
 
 namespace ThjonustukerfiWebAPI.Repositories.Interfaces
 {
+    /// <summary>Repository for accessing the Database for Information.</summary>
     public interface IInfoRepo
     {
         /// <summary>Gets all services available.</summary>

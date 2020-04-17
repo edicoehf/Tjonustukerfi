@@ -2,6 +2,7 @@ using System.Collections;
 
 namespace ThjonustukerfiWebAPI.Services.Interfaces
 {
+    /// <summary>Service functions for Information.</summary>
     public interface IInfoService 
     {
         /// <summary>Gets all services available.</summary>

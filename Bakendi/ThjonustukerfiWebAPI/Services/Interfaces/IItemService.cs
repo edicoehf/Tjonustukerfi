@@ -4,6 +4,7 @@ using ThjonustukerfiWebAPI.Models.InputModels;
 
 namespace ThjonustukerfiWebAPI.Services.Interfaces
 {
+    /// <summary>Service functions for Item.</summary>
     public interface IItemService
     {
         /// <summary>Searches for the given barcode.</summary>

@@ -5,6 +5,7 @@ using ThjonustukerfiWebAPI.Models.InputModels;
 
 namespace ThjonustukerfiWebAPI.Repositories.Interfaces
 {
+    /// <summary>Repository for accessing the Database for Items.</summary>
     public interface IItemRepo
     {
         /// <summary>Searches for the given barcode.</summary>
