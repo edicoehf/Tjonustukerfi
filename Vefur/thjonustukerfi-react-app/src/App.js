@@ -10,6 +10,7 @@ import OrderView from "./components/Order/OrderView/OrderView";
 import CustomerMain from "./components/Customer/CustomerMain/CustomerMain";
 import CreateOrderView from "./components/Order/CreateOrder/CreateOrderView/CreateOrderView";
 import OrderMain from "./components/Order/OrderMain/OrderMain";
+import ItemView from "./components/Item/ItemView/ItemView";
 
 function App() {
     return (
@@ -43,6 +44,7 @@ function App() {
                         component={CreateOrderView}
                     />
                     <Route exact path="/orders" component={OrderMain} />
+                    <Route exact path="/item/:id" component={ItemView} />
                 </Switch>
             </div>
         </div>
