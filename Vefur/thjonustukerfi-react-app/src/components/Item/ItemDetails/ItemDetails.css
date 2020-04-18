@@ -3,3 +3,8 @@
     padding: 0;
     margin-top: 1rem;
 }
+
+.item-order a {
+    color: #212529;
+    text-decoration: underline;
+}

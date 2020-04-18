@@ -7,8 +7,6 @@ import "./ItemDetails.css";
 const ItemDetails = ({ id }) => {
     const { item, error } = useGetItemById(id);
 
-    const itemProp = item ? [item] : [];
-
     return (
         <div className="item-details">
             {!error ? (
