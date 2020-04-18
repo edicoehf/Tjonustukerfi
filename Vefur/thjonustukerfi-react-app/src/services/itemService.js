@@ -15,7 +15,7 @@ const getItemById = (id) => {
 };
 
 const getNextStatesById = (id) => {
-    return fetch(endpoint + "nextstate&itemid=" + id, {
+    return fetch(endpoint + "nextstate?itemId=" + id, {
         method: "GET",
         headers: {
             crossDomain: true,
