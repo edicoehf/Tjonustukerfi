@@ -14,6 +14,19 @@ const getItemById = (id) => {
         .catch((error) => Promise.reject(error));
 };
 
+const getNextStateById = (id) => {
+    return fetch(endpoint + "nextstate&itemid=" + id, {
+        method: "GET",
+        headers: {
+            crossDomain: true,
+        },
+    })
+        .then(handleErrors)
+        .then(handleData)
+        .catch((error) => Promise.reject(error));
+};
+
 export default {
     getItemById,
+    getNextStateById,
 };
