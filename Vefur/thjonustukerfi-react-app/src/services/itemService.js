@@ -14,7 +14,7 @@ const getItemById = (id) => {
         .catch((error) => Promise.reject(error));
 };
 
-const getNextStateById = (id) => {
+const getNextStatesById = (id) => {
     return fetch(endpoint + "nextstate&itemid=" + id, {
         method: "GET",
         headers: {
@@ -28,5 +28,5 @@ const getNextStateById = (id) => {
 
 export default {
     getItemById,
-    getNextStateById,
+    getNextStatesById,
 };
