@@ -5,7 +5,7 @@ const useGetItemById = (id) => {
     const [item, setItem] = React.useState({});
     const [error, setError] = React.useState(null);
 
-    React.useEffect(() => {
+    const fetchItem = React.useCallback(() => {
         itemService
             .getItemById(id)
             .then((item) => {
@@ -14,7 +14,12 @@ const useGetItemById = (id) => {
             })
             .catch((error) => setError(error));
     }, [id]);
-    return { item, error };
+
+    React.useEffect(() => {
+        fetchItem();
+    }, [fetchItem]);
+
+    return { item, error, fetchItem };
 };
 
 export default useGetItemById;
