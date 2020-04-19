@@ -26,7 +26,23 @@ const getNextStatesById = (id) => {
         .catch((error) => Promise.reject(error));
 };
 
+const updateStateById = (id, state) => {
+    return fetch(endpoint + "statechangebyid", {
+        method: "PATCH",
+        headers: {
+            crossDomain: true,
+        },
+        body: {
+            itemId: id,
+            stateChangeTo: state,
+        },
+    })
+        .then(handleErrors)
+        .catch((error) => Promise.reject(error));
+};
+
 export default {
     getItemById,
     getNextStatesById,
+    updateStateById,
 };
