@@ -57,8 +57,4 @@ describe("<ItemDetails />", () => {
             testItem.state
         );
     });
-
-    it("Should display state graph for states", () => {
-        expect(wrapper.find(ItemStates)).toHaveLength(1);
-    });
 });
