@@ -10,13 +10,21 @@ import {
     ListItemText,
     Button,
 } from "@material-ui/core";
-
 import useGetNextStatesById from "../../../hooks/useGetNextStatesById";
 import useUpdateItemState from "../../../hooks/useUpdateItemState";
+import "./StateSelection.css";
 
-const StateSelection = ({ id }) => {
-    const { updateError, handleUpdate, isProcessing } = useUpdateItemState();
-    const { states, error } = useGetNextStatesById(id);
+const StateSelection = ({ id, hasUpdated }) => {
+    const { states, error, fetchNextStates } = useGetNextStatesById(id);
+
+    const handleStateUpdate = () => {
+        hasUpdated();
+        fetchNextStates();
+    };
+
+    const { updateError, handleUpdate, isProcessing } = useUpdateItemState(
+        handleStateUpdate
+    );
 
     const [nextStates, setNextStates] = React.useState([]);
 
@@ -41,20 +49,24 @@ const StateSelection = ({ id }) => {
         if (!isProcessing) {
             handleUpdate({ item: parseInt(id), state: stateId });
         }
+        handleClose();
     };
 
     return (
         <div className="state-selection">
             {!error ? (
                 <>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleOpen}
-                        disabled={nextStates.length === 0}
-                    >
-                        Færa í næstu stöðu
-                    </Button>
+                    {nextStates.length > 0 && (
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleOpen}
+                            disabled={nextStates.length === 0}
+                            className="state-btn"
+                        >
+                            Færa í næstu stöðu
+                        </Button>
+                    )}
                     <Dialog onClose={handleClose} open={openSelection}>
                         <DialogTitle id="state-dialog-title">
                             Veldu næstu stöðu
@@ -76,11 +88,13 @@ const StateSelection = ({ id }) => {
                             ))}
                         </List>
                     </Dialog>
+                    {updateError && (
+                        <p className="error">Gat ekki uppfært stöðu</p>
+                    )}
                 </>
             ) : (
                 <p className="error">Gat ekki sótt næstu stöður</p>
             )}
-            {updateError && <p className="error">Gat ekki uppfært stöðu</p>}
         </div>
     );
 };
