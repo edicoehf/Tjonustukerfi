@@ -5,7 +5,7 @@ const useGetNextStatesById = (id) => {
     const [states, setStates] = React.useState({});
     const [error, setError] = React.useState(null);
 
-    React.useEffect(() => {
+    const fetchNextStates = React.useCallback(() => {
         itemService
             .getNextStatesById(id)
             .then((states) => {
@@ -14,7 +14,11 @@ const useGetNextStatesById = (id) => {
             })
             .catch((error) => setError(error));
     }, [id]);
-    return { states, error };
+
+    React.useEffect(() => {
+        fetchNextStates();
+    }, [fetchNextStates]);
+    return { states, error, fetchNextStates };
 };
 
 export default useGetNextStatesById;
