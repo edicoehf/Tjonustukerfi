@@ -3,8 +3,13 @@ import useGetItemById from "../../../hooks/useGetItemById";
 import { Link } from "react-router-dom";
 import "./ItemDetails.css";
 
-const ItemDetails = ({ id }) => {
-    const { item, error } = useGetItemById(id);
+const ItemDetails = ({ id, updated, receivedUpdate }) => {
+    const { item, error, fetchItem } = useGetItemById(id);
+
+    if (updated) {
+        receivedUpdate();
+        fetchItem();
+    }
 
     return (
         <div className="item-details">
