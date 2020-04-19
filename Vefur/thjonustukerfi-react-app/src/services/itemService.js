@@ -26,7 +26,7 @@ const getNextStatesById = (id) => {
         .catch((error) => Promise.reject(error));
 };
 
-const updateStateById = (id, state) => {
+const updateItemState = ({ id, state }) => {
     return fetch(endpoint + "statechangebyid", {
         method: "PATCH",
         headers: {
@@ -44,5 +44,5 @@ const updateStateById = (id, state) => {
 export default {
     getItemById,
     getNextStatesById,
-    updateStateById,
+    updateItemState,
 };
