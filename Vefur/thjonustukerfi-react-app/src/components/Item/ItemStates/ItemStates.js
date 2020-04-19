@@ -8,21 +8,31 @@ const ItemStates = ({ id }) => {
         ? states.nextAvailableStates.sort((a, b) => a.id - b.id)
         : [];
 
-    console.log(nextStates);
     return (
         <div className="item-states">
-            <Stepper activeStep={0} alternativeLabel>
-                <Step>
-                    <StepLabel>
-                        {states.currentState && states.currentState.name}
-                    </StepLabel>
-                </Step>
-                {nextStates.map((state) => (
-                    <Step key={state.id}>
-                        <StepLabel>{state.name}</StepLabel>
-                    </Step>
-                ))}
-            </Stepper>
+            {!error ? (
+                <>
+                    {nextStates.length === 0 ? (
+                        <Stepper activeStep={0} alternativeLabel>
+                            <Step>
+                                <StepLabel>
+                                    {states.currentState &&
+                                        states.currentState.name}
+                                </StepLabel>
+                            </Step>
+                            {nextStates.map((state) => (
+                                <Step key={state.id}>
+                                    <StepLabel>{state.name}</StepLabel>
+                                </Step>
+                            ))}
+                        </Stepper>
+                    ) : (
+                        <p>Vara er í lokastöðu</p>
+                    )}
+                </>
+            ) : (
+                <p className="error">Gat ekki sótt næstu stöður vöru</p>
+            )}
         </div>
     );
 };
