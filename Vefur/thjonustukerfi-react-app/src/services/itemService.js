@@ -26,16 +26,29 @@ const getNextStatesById = (id) => {
         .catch((error) => Promise.reject(error));
 };
 
-const updateItemState = ({ id, state }) => {
+const updateItemState = ({ item, state }) => {
+    console.log(
+        JSON.stringify([
+            {
+                itemId: item,
+                barcode: null,
+                stateChangeTo: state,
+            },
+        ])
+    );
     return fetch(endpoint + "statechangebyid", {
         method: "PATCH",
         headers: {
             crossDomain: true,
+            "Content-Type": "application/json",
         },
-        body: {
-            itemId: id,
-            stateChangeTo: state,
-        },
+        body: JSON.stringify([
+            {
+                itemId: item,
+                barcode: null,
+                stateChangeTo: state,
+            },
+        ]),
     })
         .then(handleErrors)
         .catch((error) => Promise.reject(error));

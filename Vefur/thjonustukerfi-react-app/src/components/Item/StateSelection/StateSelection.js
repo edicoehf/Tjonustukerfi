@@ -11,6 +11,9 @@ import {
     Button,
 } from "@material-ui/core";
 
+import useGetNextStatesById from "../../../hooks/useGetNextStatesById";
+import useUpdateItemState from "../../../hooks/useUpdateItemState";
+
 const StateSelection = ({ id }) => {
     const { updateError, handleUpdate, isProcessing } = useUpdateItemState();
     const { states, error } = useGetNextStatesById(id);
@@ -36,9 +39,10 @@ const StateSelection = ({ id }) => {
 
     const handleSelection = (stateId) => {
         if (!isProcessing) {
-            handleUpdate({ itemId: id, stateChangeTo: stateId });
+            handleUpdate({ item: parseInt(id), state: stateId });
         }
     };
+
     return (
         <div className="state-selection">
             {!error ? (
@@ -47,22 +51,16 @@ const StateSelection = ({ id }) => {
                         variant="contained"
                         color="primary"
                         onClick={handleOpen}
-                        disabled={nextStates.length > 0}
+                        disabled={nextStates.length === 0}
                     >
                         Færa í næstu stöðu
                     </Button>
-                    <StateSelection
-                        handleClose={handleClose}
-                        handleSelection={handleSelection}
-                        open={openSelection}
-                        states={nextStates}
-                    />
-                    <Dialog onClose={handleClose} open={open}>
+                    <Dialog onClose={handleClose} open={openSelection}>
                         <DialogTitle id="state-dialog-title">
                             Veldu næstu stöðu
                         </DialogTitle>
                         <List>
-                            {states.map((state) => (
+                            {nextStates.map((state) => (
                                 <ListItem
                                     button
                                     onClick={() => handleSelection(state.id)}
