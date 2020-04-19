@@ -1,5 +1,4 @@
 import React from "react";
-import useGetNextStatesById from "../../../hooks/useGetNextStatesById";
 import { Step, Stepper, StepLabel } from "@material-ui/core/";
 
 const ItemStates = ({ id }) => {

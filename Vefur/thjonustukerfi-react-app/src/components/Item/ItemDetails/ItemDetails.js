@@ -1,6 +1,5 @@
 import React from "react";
 import useGetItemById from "../../../hooks/useGetItemById";
-import ItemStates from "../ItemStates/ItemStates";
 import { Link } from "react-router-dom";
 import "./ItemDetails.css";
 
@@ -19,10 +18,6 @@ const ItemDetails = ({ id }) => {
                         <Link to={`/customer/${item.orderId}`}>
                             Pöntun: {item.orderId}
                         </Link>
-                    </div>
-                    <div className="nextsteps">
-                        Næstu stöður:
-                        <ItemStates id={id} />
                     </div>
                 </>
             ) : (
