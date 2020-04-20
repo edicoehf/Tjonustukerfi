@@ -222,6 +222,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 var itemToAdd = _mapper.Map<Item>(item);
                 itemToAdd.Id = newItemId;
                 itemToAdd.Barcode = newItemBarcode.ToString();
+                itemToAdd.JSON = @"{location: ""Vinnslu""}";
                 _dbContext.Item.Add(itemToAdd);
 
                 // Create Timestamp

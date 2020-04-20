@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Newtonsoft.Json.Linq;
 using ThjonustukerfiWebAPI.Extensions;
 using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Models.DTOs;
@@ -204,10 +205,11 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // Gets invalid inputs if any
             foreach (var item in stateChanges)
             {
+                var stateName = item.StateChangeBarcode.Split("-").FirstOrDefault();    // gets the first part of the bracode (state name)
                 // check if all item IDs are valid
                 if(_dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId) == null) { invalidInputs.Add(item); }
                 // check if all state changes are valid
-                else if(_dbContext.State.FirstOrDefault(s => s.Id == item.StateChangeTo) == null) { invalidInputs.Add(item); }
+                else if(_dbContext.State.FirstOrDefault(s => s.Name == stateName) == null) { invalidInputs.Add(item); }
             }
 
             // Remove items that are invalid
@@ -223,9 +225,18 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 // get entity
                 var entity = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);
 
+                // parse the barcode - first item is state, second item is location
+                var parsedBarcode = item.StateChangeBarcode.Split("-");
+
                 // update the entity itself
-                entity.StateId = item.StateChangeTo;
+                entity.StateId = _dbContext.State.FirstOrDefault(s => s.Name == parsedBarcode[0]).Id;
                 entity.DateModified = DateTime.Now;
+
+                // Get the json object and change it and write it back (making sure only to change the location property if there are any other properties there)
+                JObject rss = JObject.Parse(entity.JSON);   // parse the entity
+                var prop = rss.Property("location").Value;  // get the location property
+                prop = parsedBarcode[1];                    // set the location
+                entity.JSON = prop.ToString();              // serialize back to string
 
                 // Update/create timestamp
                 var timeNow = DateTime.Now;
@@ -250,6 +261,14 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             if(entity == null) { throw new NotFoundException($"Item with ID {id} was not found."); }
 
             return entity;
+        }
+
+        public string GetItemBarcodeById(long id)
+        {
+            var entity = _dbContext.Item.FirstOrDefault(i => i.Id == id);
+            if(entity == null) { throw new NotFoundException($"Item with ID {id} was not found."); }
+
+            return entity.Barcode;
         }
 
         //*     Helper functions     *//
