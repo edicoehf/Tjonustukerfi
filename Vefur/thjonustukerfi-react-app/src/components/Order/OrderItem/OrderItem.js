@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const OrderItem = ({ type, service, barcode }) => {
+const OrderItem = ({ category, service, barcode }) => {
     return (
         <tr className="order-item">
-            <td className="order-item-type">{type}</td>
+            <td className="order-item-category">{category}</td>
             <td className="order-item-service">{service}</td>
             <td className="order-item-barcode">{barcode}</td>
         </tr>
@@ -12,7 +12,7 @@ const OrderItem = ({ type, service, barcode }) => {
 };
 
 OrderItem.propTypes = {
-    type: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
     service: PropTypes.string.isRequired,
     barcode: PropTypes.string.isRequired,
 };

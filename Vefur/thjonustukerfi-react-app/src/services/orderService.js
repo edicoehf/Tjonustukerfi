@@ -14,6 +14,19 @@ const getOrderById = (id) => {
         .catch((error) => Promise.reject(error));
 };
 
+const createOrder = (order) => {
+    return fetch(endpoint, {
+        method: "POST",
+        body: JSON.stringify(order),
+        headers: {
+            crossDomain: true,
+            "Content-Type": "application/json",
+        },
+    })
+        .then(handleErrors)
+        .catch((error) => Promise.reject(error));
+};
+
 const deleteOrderById = (id) => {
     return fetch(endpoint + id, {
         method: "DELETE",
@@ -39,6 +52,7 @@ const getAllOrders = () => {
 
 export default {
     getOrderById,
+    createOrder,
     getAllOrders,
     deleteOrderById,
 };

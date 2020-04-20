@@ -17,7 +17,7 @@ const OrderItemList = ({ items }) => {
                 {items.map((item) => (
                     <OrderItem
                         key={item.id}
-                        type={item.type}
+                        category={item.category}
                         service={item.service}
                         barcode={item.barcode}
                     />
@@ -31,7 +31,7 @@ OrderItemList.propTypes = {
     items: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.number.isRequired,
-            type: PropTypes.string.isRequired,
+            category: PropTypes.string.isRequired,
             service: PropTypes.string.isRequired,
             barcode: PropTypes.string.isRequired,
         })
