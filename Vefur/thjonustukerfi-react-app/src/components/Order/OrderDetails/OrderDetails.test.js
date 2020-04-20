@@ -16,13 +16,13 @@ describe("<OrderDetails />", () => {
         items: [
             {
                 id: 1,
-                type: "Lax",
+                category: "Lax",
                 service: "Birkireyking",
                 barcode: "50500001",
             },
             {
                 id: 2,
-                type: "Þorskur",
+                category: "Þorskur",
                 service: "Taðreyking",
                 barcode: "50503001",
             },

@@ -8,3 +8,7 @@ button.dlt-btn:hover {
 div.MuiPaper-root {
     width: 50rem;
 }
+.view-items {
+    width: 50rem;
+    margin: 0 5rem 0 5rem;
+}

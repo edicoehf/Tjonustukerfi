@@ -14,3 +14,7 @@ legend.MuiFormLabel-root {
     color: #3f51b5;
     font-weight: bold;
 }
+
+.add-items {
+    min-width: 15rem;
+}

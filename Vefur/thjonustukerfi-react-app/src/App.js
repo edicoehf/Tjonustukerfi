@@ -17,7 +17,7 @@ function App() {
             <div className="navbar-container">
                 <NavigationBar />
             </div>
-            <div className="container">
+            <div className="main-container">
                 <Switch>
                     <Route exact path="/" component={LandingPage} />
                     <Route
