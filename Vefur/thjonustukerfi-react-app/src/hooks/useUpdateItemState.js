@@ -1,7 +1,7 @@
 import React from "react";
-import customerService from "../services/customerService";
+import itemService from "../services/itemService";
 
-const useUpdateCustomer = () => {
+const useUpdateItemState = (cb) => {
     const [updateError, setError] = React.useState(null);
     const [isProcessing, setProcessing] = React.useState(false);
     const [values, setValues] = React.useState(null);
@@ -9,8 +9,8 @@ const useUpdateCustomer = () => {
     React.useEffect(() => {
         if (values && !isProcessing) {
             setProcessing(true);
-            customerService
-                .updateCustomer(values)
+            itemService
+                .updateItemState(values)
                 .then(() => {
                     setError(null);
                 })
@@ -18,9 +18,12 @@ const useUpdateCustomer = () => {
                 .finally(() => {
                     setValues(null);
                     setProcessing(false);
+                    if (cb) {
+                        cb();
+                    }
                 });
         }
-    }, [isProcessing, values]);
+    }, [isProcessing, values, cb]);
 
     const handleUpdate = (values) => {
         if (!isProcessing) {
@@ -31,4 +34,4 @@ const useUpdateCustomer = () => {
     return { updateError, handleUpdate, isProcessing };
 };
 
-export default useUpdateCustomer;
+export default useUpdateItemState;
