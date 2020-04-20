@@ -233,10 +233,13 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 entity.DateModified = DateTime.Now;
 
                 // Get the json object and change it and write it back (making sure only to change the location property if there are any other properties there)
-                JObject rss = JObject.Parse(entity.JSON);   // parse the entity
-                var prop = rss.Property("location").Value;  // get the location property
-                prop = parsedBarcode[1];                    // set the location
-                entity.JSON = prop.ToString();              // serialize back to string
+                if(entity.JSON != null)
+                {
+                    JObject rss = JObject.Parse(entity.JSON);   // parse the entity
+                    var prop = rss.Property("location").Value;  // get the location property
+                    prop = parsedBarcode[1];                    // set the location
+                    entity.JSON = prop.ToString();              // serialize back to string
+                }
 
                 // Update/create timestamp
                 var timeNow = DateTime.Now;
