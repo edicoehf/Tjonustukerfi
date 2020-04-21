@@ -178,13 +178,13 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             //* Arrange
             var input = new List<ItemStateChangeInputModel>()
             {
-                new ItemStateChangeInputModel { ItemId = -1, StateChangeTo = -1 },
-                new ItemStateChangeInputModel { ItemId = 1, StateChangeTo = 2 }
+                new ItemStateChangeInputModel { ItemId = -1, StateChangeBarcode = @"Í Vinnslu-{location:""hilla1A""}" },
+                new ItemStateChangeInputModel { ItemId = 1, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
             };
 
             var invalidInputs = new List<ItemStateChangeInputModel>()
             {
-                new ItemStateChangeInputModel { ItemId = -1, StateChangeTo = -1 }
+                new ItemStateChangeInputModel { ItemId = -1, StateChangeBarcode = @"Í Vinnslu-{location:""hilla1A""}" }
             };
 
             // Mock service
@@ -229,13 +229,13 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             //* Arrange
             var input = new List<ItemStateChangeBarcodeInputModel>()
             {
-                new ItemStateChangeBarcodeInputModel { Barcode = "-1", StateChangeTo = -1 },
-                new ItemStateChangeBarcodeInputModel { Barcode = "983764892374", StateChangeTo = 2 }
+                new ItemStateChangeBarcodeInputModel { ItemBarcode = "-1", StateChangeBarcode = @"Í Vinnslu-{location:""hilla1A""}" },
+                new ItemStateChangeBarcodeInputModel { ItemBarcode = "983764892374", StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
             };
             
             var invalidInputs = new List<ItemStateChangeBarcodeInputModel>()
             {
-                new ItemStateChangeBarcodeInputModel { Barcode = "-1", StateChangeTo = -1 }
+                new ItemStateChangeBarcodeInputModel { ItemBarcode = "-1", StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
             };
 
             // Mock service

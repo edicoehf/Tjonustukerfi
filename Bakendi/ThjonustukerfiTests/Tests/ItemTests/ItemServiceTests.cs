@@ -98,13 +98,13 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             //* Arrange
             var input = new List<ItemStateChangeBarcodeInputModel>()
             {
-                new ItemStateChangeBarcodeInputModel { Barcode = invalidbarcode, StateChangeTo = 1 },
-                new ItemStateChangeBarcodeInputModel { Barcode = validBarcode, StateChangeTo = 2 }
+                new ItemStateChangeBarcodeInputModel { ItemBarcode = invalidbarcode, StateChangeBarcode = @"Vinnslu-{location:""hilla1A""}" },
+                new ItemStateChangeBarcodeInputModel { ItemBarcode = validBarcode, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
             };
             
             var invalidInputs = new List<ItemStateChangeBarcodeInputModel>()
             {
-                new ItemStateChangeBarcodeInputModel { Barcode = invalidbarcode, StateChangeTo = 1 }
+                new ItemStateChangeBarcodeInputModel { ItemBarcode = invalidbarcode, StateChangeBarcode = @"Vinnslu-{location:""hilla1A""}" }
             };
 
             // Mock Repo
@@ -133,8 +133,8 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             //* Arrange
             var input = new List<ItemStateChangeBarcodeInputModel>()
             {
-                new ItemStateChangeBarcodeInputModel { Barcode = validBarcode, StateChangeTo = 1 },
-                new ItemStateChangeBarcodeInputModel { Barcode = validBarcode2, StateChangeTo = 2 }
+                new ItemStateChangeBarcodeInputModel { ItemBarcode = validBarcode, StateChangeBarcode = @"Vinnslu-{location:""hilla1A""}" },
+                new ItemStateChangeBarcodeInputModel { ItemBarcode = validBarcode2, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
             };
 
             // Mock Repo
@@ -161,8 +161,8 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             //* Arrange
             var input = new List<ItemStateChangeInputModel>()
             {
-                new ItemStateChangeInputModel { ItemId = validId, StateChangeTo = 1 },
-                new ItemStateChangeInputModel { ItemId = validId2, StateChangeTo = 2 }
+                new ItemStateChangeInputModel { ItemId = validId, StateChangeBarcode = @"Vinnslu-{location:""hilla1A""}" },
+                new ItemStateChangeInputModel { ItemId = validId2, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
             };
 
             // Mock Repo

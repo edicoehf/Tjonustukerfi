@@ -43,14 +43,13 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
                 // If barcode is invalid, add it to invalid list. Will not add to ID list if barcode is invalid
                 try 
                 {
-                    itemId = _itemRepo.SearchItem(change.Barcode);
+                    itemId = _itemRepo.SearchItem(change.ItemBarcode);
 
                     // add with correct ID
                     stateChangesWithId.Add(new ItemStateChangeInputModel
                     {
                         ItemId = itemId,
-                        Barcode = change.Barcode,
-                        StateChangeTo = change.StateChangeTo
+                        StateChangeBarcode = change.StateChangeBarcode
                     });
                 }
                 catch (NotFoundException) { invalidInputs.Add(change); }
@@ -59,8 +58,14 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             // update the items, returns any and all inputs that are not correct
             var invalidInputStates = _itemRepo.ChangeItemStateById(stateChangesWithId);
 
-            // Put the invalid inputs together
-            invalidInputs.AddRange(_mapper.Map<List<ItemStateChangeBarcodeInputModel>>(invalidInputStates));
+            // Put the invalid inputs together and get the correct barcode
+            foreach (var item in invalidInputStates)
+            {
+                var add = _mapper.Map<ItemStateChangeBarcodeInputModel>(item);
+                add.ItemBarcode = _itemRepo.GetItemBarcodeById((long)item.ItemId);  // get the barcode
+
+                invalidInputs.Add(add);
+            }
 
             return invalidInputs;
         }
