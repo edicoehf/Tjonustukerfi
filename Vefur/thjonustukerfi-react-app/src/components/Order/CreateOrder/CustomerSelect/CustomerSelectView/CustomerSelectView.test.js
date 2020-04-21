@@ -13,14 +13,17 @@ describe("<CustomerSelectView />", () => {
         {
             id: 1,
             name: "Viktor Sveinsson",
+            email: "viktor@sveins.is",
         },
         {
             id: 2,
             name: "Árni Magnússon",
+            email: "arni@sveins.is",
         },
         {
             id: 3,
             name: "Kári Stefánsson",
+            email: "kari@sveins.is",
         },
     ];
 

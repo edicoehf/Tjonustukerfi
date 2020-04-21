@@ -1,6 +1,7 @@
 import React from "react";
 import CustomerInputForm from "../../../Customer/CustomerInputForm/CustomerInputForm";
 import useCreateCustomer from "../../../../hooks/useCreateCustomer";
+import { handleCreateType, isProcessingType } from "../../../../types/index";
 
 const AddNewCustomer = () => {
     const { error, handleCreate, isProcessing } = useCreateCustomer();
@@ -15,6 +16,11 @@ const AddNewCustomer = () => {
             {error && <div>Gat ekki bætt við viðskiptavin</div>}
         </div>
     );
+};
+
+AddNewCustomer.propTypes = {
+    handleCreate: handleCreateType,
+    isProcessing: isProcessingType,
 };
 
 export default AddNewCustomer;

@@ -4,6 +4,7 @@ import useSearchBar from "../../../../../hooks/useSearchBar";
 import SearchBar from "../../../../SearchBar/SearchBar";
 import { List } from "@material-ui/core";
 import CustomerSelectListItem from "../CustomerSelectListItem/CustomerSelectListItem";
+import { addCustomerType } from "../../../../../types";
 
 const CustomerSelectView = ({ addCustomer }) => {
     const { customers, error, isLoading } = useGetAllCustomers();
@@ -50,6 +51,10 @@ const CustomerSelectView = ({ addCustomer }) => {
             )}
         </>
     );
+};
+
+CustomerSelectView.propTypes = {
+    addCustomer: addCustomerType,
 };
 
 export default CustomerSelectView;

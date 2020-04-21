@@ -4,6 +4,7 @@ import CheckIcon from "@material-ui/icons/Check";
 import ConfirmationDialog from "../../../ConfirmationDialog/ConfirmationDialog";
 import { Button } from "@material-ui/core";
 import "./CreateOrderActions.css";
+import { createOrderType, cancelOrderType } from "../../../../types/index";
 
 const CreateOrderActions = ({ createOrder, cancelOrder }) => {
     const [openSendDialog, setOpenSendDialog] = React.useState(false);
@@ -73,6 +74,11 @@ const CreateOrderActions = ({ createOrder, cancelOrder }) => {
             />
         </div>
     );
+};
+
+CreateOrderActions.propTypes = {
+    createOrder: createOrderType,
+    cancelOrder: cancelOrderType,
 };
 
 export default CreateOrderActions;

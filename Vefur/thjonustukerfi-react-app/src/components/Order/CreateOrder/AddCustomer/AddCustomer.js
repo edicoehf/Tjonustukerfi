@@ -5,6 +5,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import PickCustomerModal from "../PickCustomerModal/PickCustomerModal";
 import "./AddCustomer.css";
 import CustomerDetails from "../../../Customer/CustomerDetails/CustomerDetails";
+import { customerType, addCustomerType } from "../../../../types/index";
 
 const AddCustomer = ({ customer, addCustomer }) => {
     const [modalOpen, setModalOpen] = React.useState(false);
@@ -53,6 +54,11 @@ const AddCustomer = ({ customer, addCustomer }) => {
             />
         </>
     );
+};
+
+AddCustomer.propTypes = {
+    customer: customerType,
+    addCustomer: addCustomerType,
 };
 
 export default AddCustomer;

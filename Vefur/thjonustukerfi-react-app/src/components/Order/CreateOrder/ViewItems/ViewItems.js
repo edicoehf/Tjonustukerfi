@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import "./ViewItems.css";
+import { itemsType, removeType } from "../../../../types";
 
 const ViewItems = ({ items, remove }) => {
     return (
@@ -48,6 +49,11 @@ const ViewItems = ({ items, remove }) => {
             </TableContainer>
         </div>
     );
+};
+
+ViewItems.propTypes = {
+    items: itemsType,
+    remove: removeType,
 };
 
 export default ViewItems;
