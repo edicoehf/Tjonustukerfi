@@ -5,7 +5,7 @@ import validateForm from "../CustomerValidate/CustomerValidate";
 import useForm from "../../../hooks/useForm";
 import "./CustomerInputForm.css";
 import {
-    customerType,
+    existingCustomerType,
     isProcessingType,
     submitHandlerType,
 } from "../../../types/index";
@@ -108,7 +108,7 @@ const CustomerInputForm = ({
 };
 
 CustomerInputForm.propTypes = {
-    existingCustomer: customerType,
+    existingCustomer: existingCustomerType,
     isProcessing: isProcessingType,
     submitHandler: submitHandlerType,
 };

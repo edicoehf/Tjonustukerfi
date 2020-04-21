@@ -31,8 +31,8 @@ export const orderType = shape({
     customerId: idType.isRequired,
     barcode: string,
     items: itemsType.isRequired,
-    dateCreated: string.isRequired,
-    dateModified: string.isRequired,
+    dateCreated: string,
+    dateModified: string,
     dateCompleted: string,
 });
 
@@ -49,6 +49,15 @@ export const customerType = shape({
 });
 
 export const customersType = arrayOf(customerType);
+
+export const existingCustomerType = shape({
+    name: string,
+    ssn: string,
+    telephone: string,
+    email: string,
+    postalCode: string,
+    address: string,
+});
 
 export const removeType = func;
 export const handleCloseType = func;
