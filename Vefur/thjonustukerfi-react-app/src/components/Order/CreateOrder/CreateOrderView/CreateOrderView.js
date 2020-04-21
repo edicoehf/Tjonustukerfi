@@ -47,7 +47,6 @@ const CreateOrderView = () => {
         const err = orderValidate(customer, items);
         setErrors(err);
         if (!isProcessing && Object.keys(err).length === 0) {
-            console.log("INSIDE");
             let order = {
                 customerId: null,
                 items: [],
