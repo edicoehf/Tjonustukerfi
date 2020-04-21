@@ -1,10 +1,14 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace ThjonustukerfiWebAPI.Models.InputModels
 {
     /// <summary>Input model used to change the state of an item by barcode.</summary>
     public class ItemStateChangeBarcodeInputModel
     {
-        public string Barcode { get; set; }
-        public long StateChangeTo { get; set; }
+        [Required]
+        public string ItemBarcode { get; set; }
+        [Required]
+        public string StateChangeBarcode { get; set; }
 
         //*     Overrides     *//
         public static bool operator ==(ItemStateChangeBarcodeInputModel i1, ItemStateChangeBarcodeInputModel i2)
@@ -18,7 +22,7 @@ namespace ThjonustukerfiWebAPI.Models.InputModels
                 return false;
             }
 
-            return i1.Barcode == i2.Barcode && i1.StateChangeTo == i2.StateChangeTo;
+            return i1.ItemBarcode == i2.ItemBarcode && i1.StateChangeBarcode == i2.StateChangeBarcode;
         }
 
         public static bool operator !=(ItemStateChangeBarcodeInputModel i1, ItemStateChangeBarcodeInputModel i2)
@@ -29,11 +33,14 @@ namespace ThjonustukerfiWebAPI.Models.InputModels
         public override int GetHashCode()
         {
             int bc = 0;
-            foreach (char c in Barcode)
+            foreach (char c in ItemBarcode)
             {
                 bc += c.GetHashCode();
             }
-            bc += StateChangeTo.GetHashCode();
+            foreach (char c in StateChangeBarcode)
+            {
+                bc += c.GetHashCode();
+            }
             
             return bc;
         }
