@@ -4,6 +4,7 @@ import ItemForm from "../ItemForm/ItemForm";
 import useGetServices from "../../../hooks/useGetServices";
 import useGetCategories from "../../../hooks/useGetCategories";
 import useUpdateItem from "../../../hooks/useUpdateItem";
+import "./EditItem.css";
 
 const EditItem = ({ match }) => {
     const id = match.params.id;
