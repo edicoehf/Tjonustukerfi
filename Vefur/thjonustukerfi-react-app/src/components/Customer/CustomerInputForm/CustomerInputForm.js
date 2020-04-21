@@ -4,17 +4,26 @@ import Input from "../../Input/Input";
 import validateForm from "../CustomerValidate/CustomerValidate";
 import useForm from "../../../hooks/useForm";
 import "./CustomerInputForm.css";
+import {
+    existingCustomerType,
+    isProcessingType,
+    submitHandlerType,
+} from "../../../types/index";
 
 const initialState = {
     name: "",
     ssn: "",
-    telephone: "",
+    phone: "",
     email: "",
     postalCode: "",
     address: "",
 };
 
-const CustomerInputForm = ({ existingCustomer, submitHandler, processing }) => {
+const CustomerInputForm = ({
+    existingCustomer,
+    submitHandler,
+    isProcessing,
+}) => {
     const isExistingCustomer =
         existingCustomer && Object.keys(existingCustomer).length > 0;
     const state = isExistingCustomer ? existingCustomer : initialState;
@@ -49,11 +58,11 @@ const CustomerInputForm = ({ existingCustomer, submitHandler, processing }) => {
                 />
                 <Input
                     type="text"
-                    name="telephone"
-                    value={values.telephone}
-                    htmlId="telephone"
+                    name="phone"
+                    value={values.phone}
+                    htmlId="phone"
                     label="Símanúmer"
-                    errorMessage={errors.telephone}
+                    errorMessage={errors.phone}
                     onInput={handleChange}
                 />
                 <Input
@@ -84,7 +93,7 @@ const CustomerInputForm = ({ existingCustomer, submitHandler, processing }) => {
                     onInput={handleChange}
                 />
                 <input
-                    disabled={processing}
+                    disabled={isProcessing}
                     type="submit"
                     value={
                         isExistingCustomer
@@ -96,6 +105,12 @@ const CustomerInputForm = ({ existingCustomer, submitHandler, processing }) => {
             </Form>
         </div>
     );
+};
+
+CustomerInputForm.propTypes = {
+    existingCustomer: existingCustomerType,
+    isProcessing: isProcessingType,
+    submitHandler: submitHandlerType,
 };
 
 export default CustomerInputForm;

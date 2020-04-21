@@ -2,6 +2,7 @@ import React from "react";
 import CustomerProperty from "../CustomerProperty/CustomerProperty";
 import useGetCustomerById from "../../../hooks/useGetCustomerById";
 import "./CustomerDetails.css";
+import { idType } from "../../../types/index";
 
 const CustomerDetails = ({ id }) => {
     const { customer, error } = useGetCustomerById(id);
@@ -50,6 +51,10 @@ const CustomerDetails = ({ id }) => {
             )}
         </div>
     );
+};
+
+CustomerDetails.propTypes = {
+    id: idType,
 };
 
 export default CustomerDetails;

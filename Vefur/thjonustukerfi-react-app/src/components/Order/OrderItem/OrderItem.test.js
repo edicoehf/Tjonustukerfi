@@ -13,14 +13,7 @@ describe("<OrderItem />", () => {
 
     beforeEach(() => {
         wrapper = mount(
-            shallow(
-                <OrderItem
-                    key={testProps.id}
-                    category={testProps.category}
-                    service={testProps.service}
-                    barcode={testProps.barcode}
-                />
-            ).get(0)
+            shallow(<OrderItem key={testProps.id} item={testProps} />).get(0)
         );
     });
 

@@ -4,10 +4,15 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import CancelIcon from "@material-ui/icons/Cancel";
 
 import "./ForceDeleteCustomerAction.css";
+import {
+    openType,
+    handleDeleteType,
+    handleCloseType,
+} from "../../../../types/index";
 
-const ForceDeleteCustomerAction = ({ isOpen, handleDelete, handleClose }) => {
+const ForceDeleteCustomerAction = ({ open, handleDelete, handleClose }) => {
     return (
-        <Modal open={isOpen}>
+        <Modal open={open}>
             <div className="modal-container">
                 <div className="modal-text">
                     <h3>
@@ -37,4 +42,11 @@ const ForceDeleteCustomerAction = ({ isOpen, handleDelete, handleClose }) => {
         </Modal>
     );
 };
+
+ForceDeleteCustomerAction.propTypes = {
+    opne: openType,
+    handleDelete: handleDeleteType,
+    handleClose: handleCloseType,
+};
+
 export default ForceDeleteCustomerAction;

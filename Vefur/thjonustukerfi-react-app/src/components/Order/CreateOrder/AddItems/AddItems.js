@@ -15,4 +15,10 @@ const AddItems = ({ addItems, categories, services }) => {
     );
 };
 
+AddItems.propTypes = {
+    addItems: addItemsType,
+    categories: categoriesType,
+    services: servicesType,
+};
+
 export default AddItems;

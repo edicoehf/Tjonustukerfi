@@ -33,5 +33,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
         /// <summary>Gets the item entity by ID.</summary>
         /// <returns>Item entity.</returns>
         Item GetItemEntity(long id);
+
+        /// <summary>Gets the items barcode with given ID</summary>
+        /// <returns>Barcode in string format</returns>
+        string GetItemBarcodeById(long id);
     }
 }

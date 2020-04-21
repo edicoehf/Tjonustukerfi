@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
 import OrderItemList from "../OrderItemList/OrderItemList";
 import useGetOrderById from "../../../hooks/useGetOrderById";
 import moment from "moment";
 import "moment/locale/is";
 import "./OrderDetails.css";
+import { orderType } from "../../../types/index";
 
 const OrderDetails = ({ id }) => {
     const { order, error } = useGetOrderById(id);
@@ -50,23 +50,7 @@ const OrderDetails = ({ id }) => {
 };
 
 OrderDetails.propTypes = {
-    order: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        customer: PropTypes.string.isRequired,
-        customerId: PropTypes.string.isRequired,
-        barcode: PropTypes.string.isRequired,
-        items: PropTypes.arrayOf(
-            PropTypes.shape({
-                id: PropTypes.number.isRequired,
-                category: PropTypes.string.isRequired,
-                service: PropTypes.string.isRequired,
-                barcode: PropTypes.string.isRequired,
-            })
-        ),
-        dateCreated: PropTypes.string.isRequired,
-        dateModified: PropTypes.string.isRequired,
-        dateCompleted: PropTypes.string.isRequired,
-    }),
+    order: orderType,
 };
 
 export default OrderDetails;
