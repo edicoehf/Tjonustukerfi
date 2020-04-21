@@ -12,6 +12,7 @@ import {
     TextField,
     Button,
 } from "@material-ui/core";
+
 const initialState = {
     category: null,
     service: null,
@@ -19,8 +20,23 @@ const initialState = {
 };
 
 const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
+    const getExistingItemWithIds = (item) => {
+        let idItem = { ...item };
+        const s = services[services.findIndex((s) => s.name === item.service)];
+        const c =
+            categories[categories.findIndex((c) => c.name === item.category)];
+        if (s && c) {
+            idItem.service = s.id.toString();
+            idItem.category = c.id.toString();
+        }
+        return idItem;
+    };
+
     const isExistingItem = existingItem && Object.keys(existingItem).length > 0;
-    const state = isExistingItem ? existingItem : initialState;
+
+    const state = isExistingItem
+        ? getExistingItemWithIds(existingItem)
+        : initialState;
 
     const handleSubmitAndReset = (values) => {
         submitHandler(values, resetFields);
@@ -31,7 +47,6 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
         itemValidate,
         handleSubmitAndReset
     );
-
     return (
         <FormControl component="fieldset">
             <FormLabel component="legend">Tegund:</FormLabel>
