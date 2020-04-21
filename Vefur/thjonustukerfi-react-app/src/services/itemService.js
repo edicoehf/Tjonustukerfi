@@ -45,7 +45,7 @@ const updateItemState = ({ item, state }) => {
         .catch((error) => Promise.reject(error));
 };
 
-const UpdateItemById = (item) => {
+const updateItemById = (item) => {
     return fetch(endpoint + item.id, {
         method: "PATCH",
         body: JSON.stringify({
@@ -64,6 +64,6 @@ const UpdateItemById = (item) => {
 export default {
     getItemById,
     getNextStatesById,
-    editItemById,
+    updateItemById,
     updateItemState,
 };
