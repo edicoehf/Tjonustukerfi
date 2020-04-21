@@ -367,5 +367,10 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             
             return orders;
         }
+
+        public void ArchiveOrders()
+        {
+            
+        }
     }
 }

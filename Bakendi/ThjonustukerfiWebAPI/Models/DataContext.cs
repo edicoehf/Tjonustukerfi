@@ -17,6 +17,10 @@ namespace ThjonustukerfiWebAPI.Models
         public virtual DbSet<ServiceState> ServiceState { get; set; }
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<ItemTimestamp> ItemTimestamp { get; set; }
+        
+        //* Archives
+        public virtual DbSet<OrderArchive> OrderArchive { get; set; }
+        public virtual DbSet<ItemArchive> ItemArchive { get; set; }
 
         //* Error logs
         public virtual DbSet<Log> ExceptionLog { get; set; }
