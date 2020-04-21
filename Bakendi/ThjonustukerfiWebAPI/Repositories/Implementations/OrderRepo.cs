@@ -370,7 +370,61 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
         public void ArchiveOrders()
         {
-            
+            // input to handle archive input and all connections
+            var input = new List<OrderItemArchiveInput>();
+            var completeOrders = _dbContext.Order.Where(o => o.DateCompleted != null).ToList(); // Get all complete orders
+            var ordersToDelete = new List<long>();  // create a list of orderIDs to remove those that are archived
+            foreach (var order in completeOrders)
+            {
+                // get connections
+                var itemOrderConnections = _dbContext.ItemOrderConnection.Where(ioc => ioc.OrderId == order.Id).ToList();
+                
+                // Get all items in order
+                var itemList = new List<Item>();
+                foreach (var connection in itemOrderConnections)
+                {
+                    itemList.Add(_dbContext.Item.FirstOrDefault(i => i.Id == connection.ItemId));
+                }
+
+                // Set order and items to the input model
+                input.Add(new OrderItemArchiveInput() {
+                    Order = order,
+                    Items = itemList
+                });
+
+                // Add this order to delete list
+                ordersToDelete.Add(order.Id);
+            }
+
+            foreach (var order in input)
+            {
+                order.ArchivedOrder = _mapper.Map<OrderArchive>(order.Order);   // archive the order
+                _dbContext.OrderArchive.Add(order.ArchivedOrder);   // add each order to archive
+            }
+
+            _dbContext.SaveChanges();   // Save changes and get order archive IDs
+
+            foreach (var order in input)
+            {
+                order.ArchivedItems = new List<ItemArchive>();
+                foreach (var item in order.Items)
+                {
+                    var addItem = _mapper.Map<ItemArchive>(item);       // map Item to archive
+                    addItem.OrderArchiveId = order.ArchivedOrder.Id;    // set the archive order ID
+                    
+                    order.ArchivedItems.Add(addItem);   // set the archived items
+                }
+
+                _dbContext.ItemArchive.AddRange(order.ArchivedItems);   // set the archived items to db
+            }
+
+            _dbContext.SaveChanges();   // save the database
+
+            // all orders are stored to archive, remove them
+            foreach (var order in ordersToDelete)
+            {
+                DeleteByOrderId(order);
+            }
         }
     }
 }

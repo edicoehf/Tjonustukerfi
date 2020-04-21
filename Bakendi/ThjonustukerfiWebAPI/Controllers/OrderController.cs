@@ -135,5 +135,15 @@ namespace ThjonustukerfiWebAPI.Controllers
 
             return NoContent();
         }
+
+        //TODO: Remember to remove this! just for testing
+        [Route("testendpoint")]
+        [HttpPatch]
+        public IActionResult ArchiveOrders()
+        {
+            _orderService.ArchiveOrders();
+
+            return Ok();
+        }
     }
 }

@@ -33,5 +33,8 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
 
         /// <summary>Removes the order with the given barcode</summary>
         void RemoveOrderQuery(string barcode);
+
+        /// <summary>Function to archive orders that have been completed for 3 months or more</summary>
+        void ArchiveOrders();
     }
 }
