@@ -25,5 +25,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
         /// <summary>Gets the next available states with the service ID and the current state ID</summary>
         /// <returns>A list of StateDTOs. Empty list if item is in final state</returns>
         List<StateDTO> GetNextStates(long serviceId, long stateId);
+
+        /// <summary>Gets all Archived orders along with their Items</summary>
+        /// <returns>A list of all archived orders</returns>
+        List<ArchiveOrderDTO> GetArchivedOrders();
     }
 }

@@ -70,7 +70,6 @@ namespace ThjonustukerfiWebAPI.Mappings
                 {
                     timeStamps.Add(JsonConvert.SerializeObject(new TimestampArchiveInput()  // special input that does not include the timestamp ID (no need)
                     {
-                        ItemId = stamp.ItemId,
                         StateId = stamp.StateId,
                         TimeOfChange = stamp.TimeOfChange
                     }));
@@ -78,6 +77,9 @@ namespace ThjonustukerfiWebAPI.Mappings
 
                 dst.extraDataJSON = json.ToString();    // update the json file
             });
+
+            // Automapper for item archive to DTO
+            CreateMap<ItemArchive, ArchiveItemDTO>();
 
             //* Order Mappings
             // Automapper for OrderInputModel to Order entity
@@ -96,6 +98,10 @@ namespace ThjonustukerfiWebAPI.Mappings
                     dst.Customer = _dbContext.Customer.FirstOrDefault(c => c.Id == src.CustomerId).Name;        // get the customers name
                     dst.OrderSize = _dbContext.ItemOrderConnection.Where(ioc => ioc.OrderId == src.Id).Count(); // see the size of the order
                 });
+
+            // Automapper for archived orders to DTO
+            CreateMap<OrderArchive, ArchiveOrderDTO>()
+                .ForMember(src => src.Items, opt => opt.Ignore());
 
             //* Service Mappings
             // Automapper for Service to ServiceDTO
