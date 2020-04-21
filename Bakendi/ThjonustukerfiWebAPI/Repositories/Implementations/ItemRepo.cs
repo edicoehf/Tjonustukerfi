@@ -216,19 +216,23 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // If all inputs are invalid
             if(!stateChanges.Any()) { throw new NotFoundException("Input not valid, no changes made."); }
 
-            var ordersToCheck = new List<long>();
+            var ordersToCheck = new List<long>();   // All orders to check that are connected to the items being modified
 
             foreach (var item in stateChanges)
             {
+                var timeNow = DateTime.Now;
+
                 // get entity
                 var entity = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);
 
                 // update the entity itself
                 entity.StateId = item.StateChangeTo;
-                entity.DateModified = DateTime.Now;
+                entity.DateModified = timeNow;
+
+                //TODO: Change final state check, like others
+                if(entity.StateId == 5) { entity.DateCompleted = timeNow; }
 
                 // Update/create timestamp
-                var timeNow = DateTime.Now;
                 var timestamp = _dbContext.ItemTimestamp.FirstOrDefault(ts => ts.ItemId == entity.Id && ts.StateId == entity.StateId);
                 if(timestamp == null) { _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(entity)); }
                 else { timestamp.TimeOfChange = timeNow; }

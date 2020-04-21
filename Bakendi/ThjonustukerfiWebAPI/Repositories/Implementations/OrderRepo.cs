@@ -68,11 +68,6 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 newBarcode++;
                 orderToAdd.Barcode = newBarcode.ToString();
             }
-            
-            // long newOrderId = 1;
-            // // New ID will be 1 if no orders exist
-            // if(_dbContext.Order.Any()) { newOrderId = _dbContext.Order.Max(o => o.Id) + 1; }
-            // orderToAdd.Id = newOrderId;
 
             var entity = _dbContext.Order.Add(orderToAdd).Entity;
 
@@ -209,9 +204,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
         /// <summary>Used to add multiple items in order input</summary>
         private void AddMultipleItems(List<ItemInputModel> inpItems, long orderId)
         {
-            // // Sets the ID
-            // long newItemId = 1;
-            // if(_dbContext.Item.Any()) { newItemId = _dbContext.Item.Max(i => i.Id) + 1; }
+            // Get new barcode
             int newItemBarcode = int.Parse(GetItemBarcode());
 
             var addItems = new List<Item>();
@@ -235,6 +228,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 // Create Timestamp
                 _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(item));
                 
+                // Add connection
                 _dbContext.ItemOrderConnection.Add(new ItemOrderConnection
                 {
                     OrderId = orderId,
