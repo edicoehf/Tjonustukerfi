@@ -137,6 +137,7 @@ namespace ThjonustukerfiWebAPI.Controllers
         }
 
         //TODO: Remember to remove this! just for testing
+        //! You need to make this a 3 monthly check, also need to do tests for archive in repo, tests for get archived items and maybe get archived stuff by some search
         [Route("testendpoint")]
         [HttpPatch]
         public IActionResult ArchiveOrders()
