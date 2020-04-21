@@ -1,7 +1,7 @@
 import React from "react";
 import itemService from "../services/itemService";
 
-const useUpdateItem = () => {
+const useUpdateItem = (cb) => {
     const [updateError, setError] = React.useState(null);
     const [isProcessing, setProcessing] = React.useState(false);
     const [values, setValues] = React.useState(null);
@@ -10,7 +10,7 @@ const useUpdateItem = () => {
         if (values && !isProcessing) {
             setProcessing(true);
             itemService
-                .updateItem(values)
+                .updateItemById(values)
                 .then(() => {
                     setError(null);
                 })
@@ -18,9 +18,12 @@ const useUpdateItem = () => {
                 .finally(() => {
                     setValues(null);
                     setProcessing(false);
+                    if (cb) {
+                        cb();
+                    }
                 });
         }
-    }, [isProcessing, values]);
+    }, [isProcessing, values, cb]);
 
     const handleUpdate = (values) => {
         if (!isProcessing) {

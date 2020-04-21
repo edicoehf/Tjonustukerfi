@@ -6,17 +6,23 @@ import useGetCategories from "../../../hooks/useGetCategories";
 import useUpdateItem from "../../../hooks/useUpdateItem";
 import "./EditItem.css";
 
-const EditItem = ({ match }) => {
+const EditItem = ({ match, history }) => {
     const id = match.params.id;
     const { services } = useGetServices();
     const { categories } = useGetCategories();
-    const { item, error, fetchItem } = useGetItemById(id);
-    const { updateError, handleUpdate, isProcessing } = useUpdateItem();
+    const { item, error } = useGetItemById(id);
+    const redirect = () => {
+        history.push(`/item/${id}`);
+    };
+    const { updateError, handleUpdate, isProcessing } = useUpdateItem(redirect);
 
-    const editItem = (item, cb) => {
+    const editItem = (item) => {
         if (!isProcessing) {
-            handleUpdate(item);
-            cb();
+            handleUpdate({
+                id: item.id,
+                categoryId: parseInt(item.category),
+                serviceId: parseInt(item.service),
+            });
         }
     };
 
@@ -36,6 +42,7 @@ const EditItem = ({ match }) => {
                 />
             )}
             {error && <p className="error">Vara fannst ekki</p>}
+            {updateError && <p className="error">Gat ekki uppfært vöru</p>}
         </div>
     );
 };
