@@ -20,7 +20,6 @@ namespace ThjonustukerfiWebAPI.Configurations
         }
 
         // setup Service
-        //TODO: Add remove?
         public void Run()
         {
             var DB_Services = _dbContext.Set<Service>().ToList();
@@ -32,36 +31,48 @@ namespace ThjonustukerfiWebAPI.Configurations
             bool change = false;
 
             // empty or not with all data
-            if(DB_Services == null || DB_Services.Count == 0 || DB_Services.Count != _services.Count)
+            if(DB_Services == null || DB_Services.Count == 0 || !_services.ContainsSameElements(DB_Services))
             {
-                _services.RemoveExisting(DB_Services);
+                var removeItems = _services.GetNotSame(DB_Services);    // check if any services have been removed from the config
+                if(removeItems.Count > 0) { _dbContext.Service.RemoveRange(removeItems); }  // if so remove those services
+
+                _services.RemoveExisting(DB_Services);      // Removes all services that are the same so we only add new services
                 _dbContext.Service.AddRange(_services);
 
                 change = true;
             }
 
             // empty or not with all data
-            if(DB_ServiceStates == null || DB_ServiceStates.Count == 0 || DB_ServiceStates.Count != _serviceStates.Count)
+            if(DB_ServiceStates == null || DB_ServiceStates.Count == 0 || !_serviceStates.ContainsSameElements(DB_ServiceStates))
             {
-                _serviceStates.RemoveExisting(DB_ServiceStates);
+                var removeItems = _serviceStates.GetNotSame(DB_ServiceStates);  // check if any service states have been removed from the config
+                if(removeItems.Count > 0) { _dbContext.ServiceState.RemoveRange(removeItems); } // if so, remove them
+
+                _serviceStates.RemoveExisting(DB_ServiceStates);    // Removes all servicestates that are the same so we only add new service states
                 _dbContext.ServiceState.AddRange(_serviceStates);
 
                 change = true;
             }
             
             // empty or not with all data
-            if(DB_States == null || DB_States.Count == 0 || DB_States.Count != _states.Count)
+            if(DB_States == null || DB_States.Count == 0 || !_states.ContainsSameElements(DB_States))
             {
-                _states.RemoveExisting(DB_States);
+                var removeItems = _states.GetNotSame(DB_States);    // checks if any States have been removed from the config
+                if(removeItems.Count > 0) { _dbContext.State.RemoveRange(removeItems); }    // if so, remove them
+
+                _states.RemoveExisting(DB_States);  // Removes all states that are the same so we only add new service states
                 _dbContext.State.AddRange(_states);
 
                 change = true;
             }
 
             // empty or not with all data
-            if(DB_Categories == null || DB_Categories.Count == 0 || DB_Categories.Count != _states.Count)
+            if(DB_Categories == null || DB_Categories.Count == 0 || !_categories.ContainsSameElements(DB_Categories))
             {
-                _categories.RemoveExisting(DB_Categories);
+                var removeItems = _categories.GetNotSame(DB_Categories);    // checks if any categories have benn removed from the config
+                if(removeItems.Count > 0) { _dbContext.Category.RemoveRange(removeItems); } // if so, remove them
+
+                _categories.RemoveExisting(DB_Categories);  // Removes all categories that are the same so we only add new categories
                 _dbContext.Category.AddRange(_categories);
 
                 change = true;
@@ -119,9 +130,9 @@ namespace ThjonustukerfiWebAPI.Configurations
             _states = new List<State>()
             {
                 // states fyrir Reykofninn
-                new State() {Name = "Í vinnslu", Id = 1},
-                new State() {Name = "Kælir 1", Id = 2},
-                new State() {Name = "Kælir 2", Id = 3},
+                new State() {Name = "Vinnslu", Id = 1},
+                new State() {Name = "Kælir1", Id = 2},
+                new State() {Name = "Kælir2", Id = 3},
                 new State() {Name = "Frystir", Id = 4},
                 new State() {Name = "Sótt", Id = 5}
             };

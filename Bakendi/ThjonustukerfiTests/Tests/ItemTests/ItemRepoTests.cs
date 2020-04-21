@@ -368,21 +368,23 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         public void ChangeItemStateById_should_change_state_of_item_to_2_and_order_connected_to_it_should_not_have_completeDate()
         {
             //* Arrange
-            long itemId = 2;
-            long stateChange = 2;
-
-            var input = new List<ItemStateChangeInputModel>()
-            {
-                new ItemStateChangeInputModel
-                {
-                    ItemId = itemId,
-                    StateChangeTo = stateChange
-                }
-            };
-
-            // This item is the only Item in the order at this moment
             using(var mockContext = new DataContext(_options))
             {
+                // This item is the only Item in the order at this moment
+                long itemId = 2;
+                long statechangeID = 2;
+                // constructing the barcode string
+                string stateChange = $"{mockContext.State.FirstOrDefault(s => s.Id == statechangeID).Name}" + @"-{location:""hilla1A""}";
+
+                var input = new List<ItemStateChangeInputModel>()
+                {
+                    new ItemStateChangeInputModel
+                    {
+                        ItemId = itemId,
+                        StateChangeBarcode = stateChange
+                    }
+                };
+
                 IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
 
                 // Get old state
@@ -396,7 +398,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
                 Assert.IsNotNull(item);
                 Assert.AreNotEqual(oldItemState, item.StateId);
-                Assert.AreEqual(stateChange, item.StateId);
+                Assert.AreEqual(statechangeID, item.StateId);
 
                 // check order connected
                 var order = mockContext.Order.FirstOrDefault(o =>
@@ -411,21 +413,24 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         public void ChangeItemStateById_should_change_state_of_item_to_5_and_order_connected_to_it_should_have_completeDate()
         {
             //* Arrange
-            long itemId = 2;
-            long stateChange = 5;
 
-            var input = new List<ItemStateChangeInputModel>()
-            {
-                new ItemStateChangeInputModel
-                {
-                    ItemId = itemId,
-                    StateChangeTo = stateChange
-                }
-            };
-
-            // This item is the only Item in the order at this moment
             using(var mockContext = new DataContext(_options))
             {
+                // This item is the only Item in the order at this moment
+                long itemId = 2;
+                long statechangeID = 5;
+                // Create the barcode string
+                string stateChange = $"{mockContext.State.FirstOrDefault(s => s.Id == statechangeID).Name}" + @"-{location:""hilla1A""}";
+
+                var input = new List<ItemStateChangeInputModel>()
+                {
+                    new ItemStateChangeInputModel
+                    {
+                        ItemId = itemId,
+                        StateChangeBarcode = stateChange
+                    }
+                };
+
                 IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
 
                 // get old state
@@ -439,7 +444,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
                 Assert.IsNotNull(item);
                 Assert.AreNotEqual(oldItemState, item.StateId);
-                Assert.AreEqual(stateChange, item.StateId);
+                Assert.AreEqual(statechangeID, item.StateId);
 
                 // check order connected
                 var order = mockContext.Order.FirstOrDefault(o =>
@@ -455,23 +460,24 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         {
             //* Arrange
             long invalidId = -1;
-            long invalidState = -1;
+            string invalidState = @"Í Vinnslu-{location:""hilla1A""}";
+
             long validId = 2;
-            long validState = 5;
+            string validState = @"Sótt-{location:""hilla1A""}";
 
             // The input with valid and invalid variables
             var input = new List<ItemStateChangeInputModel>()
             {
-                new ItemStateChangeInputModel { ItemId = invalidId, StateChangeTo = validState },
-                new ItemStateChangeInputModel { ItemId = validId, StateChangeTo = invalidState },
-                new ItemStateChangeInputModel { ItemId = validId, StateChangeTo = validState }
+                new ItemStateChangeInputModel { ItemId = invalidId, StateChangeBarcode = validState },
+                new ItemStateChangeInputModel { ItemId = validId, StateChangeBarcode = invalidState },
+                new ItemStateChangeInputModel { ItemId = validId, StateChangeBarcode = validState }
             };
 
             // Expected return from the function
             var expectedReturn = new List<ItemStateChangeInputModel>()
             {
-                new ItemStateChangeInputModel { ItemId = invalidId, StateChangeTo = validState },
-                new ItemStateChangeInputModel { ItemId = validId, StateChangeTo = invalidState }
+                new ItemStateChangeInputModel { ItemId = invalidId, StateChangeBarcode = validState },
+                new ItemStateChangeInputModel { ItemId = validId, StateChangeBarcode = invalidState }
             };
 
             using(var mockContext = new DataContext(_options))
@@ -496,12 +502,12 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         {
             //* Arrange
             long validId = 2;
-            long validState = 5;
+            string validState = @"Sótt-{location:""hilla1A""}";
 
             // The input with valid and invalid variables
             var input = new List<ItemStateChangeInputModel>()
             {
-                new ItemStateChangeInputModel { ItemId = validId, StateChangeTo = validState }
+                new ItemStateChangeInputModel { ItemId = validId, StateChangeBarcode = validState }
             };
 
             using(var mockContext = new DataContext(_options))
@@ -523,11 +529,11 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             //* Arrange
             var input1 = new List<ItemStateChangeInputModel>()
             {
-                new ItemStateChangeInputModel { ItemId = -1, StateChangeTo = 2 }
+                new ItemStateChangeInputModel { ItemId = -1, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
             };
             var input2 = new List<ItemStateChangeInputModel>()
             {
-                new ItemStateChangeInputModel { ItemId = 2, StateChangeTo = -1 }
+                new ItemStateChangeInputModel { ItemId = 2, StateChangeBarcode = @"Í Vinnslu-{location:""hilla1A""}" }
             };
 
             using(var mockContext = new DataContext(_options))
@@ -672,6 +678,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                     StateId = 1,
                     ServiceId = 1,
                     Barcode = "50500001",
+                    JSON = @"{location:""Vinnslu""}",
                     DateCreated = DateTime.MinValue,
                     DateModified = DateTime.Now,
                     DateCompleted = DateTime.MaxValue
@@ -683,6 +690,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                     StateId = 1,
                     ServiceId = 1,
                     Barcode = "50500002",
+                    JSON = @"{location:""Vinnslu""}",
                     DateCreated = DateTime.MinValue,
                     DateModified = DateTime.Now,
                     DateCompleted = DateTime.MaxValue
@@ -756,9 +764,9 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             var states = new List<State>()
             {
                 // states fyrir Reykofninn
-                new State() {Name = "Í vinnslu", Id = 1},
-                new State() {Name = "Kælir 1", Id = 2},
-                new State() {Name = "Kælir 2", Id = 3},
+                new State() {Name = "Vinnslu", Id = 1},
+                new State() {Name = "Kælir1", Id = 2},
+                new State() {Name = "Kælir2", Id = 3},
                 new State() {Name = "Frystir", Id = 4},
                 new State() {Name = "Sótt", Id = 5}
             };

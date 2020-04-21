@@ -214,6 +214,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             {
                 var itemToAdd = _mapper.Map<Item>(item);
                 itemToAdd.Barcode = newItemBarcode.ToString();
+                itemToAdd.JSON = @"{location: ""Vinnslu""}";
                 addItems.Add(itemToAdd);
 
                 // Increment barcode
