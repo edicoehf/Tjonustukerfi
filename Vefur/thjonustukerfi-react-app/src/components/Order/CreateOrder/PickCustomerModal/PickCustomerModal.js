@@ -3,6 +3,11 @@ import { Modal, Backdrop, Fade, AppBar, Tabs, Tab } from "@material-ui/core";
 import CustomerSelectView from "../CustomerSelect/CustomerSelectView/CustomerSelectView";
 import "./PickCustomerModal.css";
 import AddNewCustomer from "../AddNewCustomer/AddNewCustomer";
+import {
+    openType,
+    handleCloseType,
+    addCustomerType,
+} from "../../../../types/index";
 
 const TabPanel = ({ value, index, children }) => {
     return <>{value === index && children}</>;
@@ -61,6 +66,12 @@ const PickCustomerModal = ({ open, handleClose, addCustomer }) => {
             </Fade>
         </Modal>
     );
+};
+
+PickCustomerModal.propTypes = {
+    open: openType,
+    handleClose: handleCloseType,
+    addCustomer: addCustomerType,
 };
 
 export default PickCustomerModal;

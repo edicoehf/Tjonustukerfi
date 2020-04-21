@@ -3,6 +3,7 @@ import { Button } from "react-bootstrap";
 import useDeleteCustomerById from "../../../../hooks/useDeleteCustomerById";
 import "./DeleteCustomerAction.css";
 import ForceDeleteCustomerAction from "../ForceDeleteCustomerAction/ForceDeleteCustomerAction";
+import { idType } from "../../../../types/index";
 
 const DeleteCustomerAction = ({ id }) => {
     const {
@@ -24,7 +25,7 @@ const DeleteCustomerAction = ({ id }) => {
                 Eyða
             </Button>
             <ForceDeleteCustomerAction
-                isOpen={modalIsOpen}
+                open={modalIsOpen}
                 handleDelete={handleForceDelete}
                 handleClose={handleClose}
             />
@@ -33,6 +34,10 @@ const DeleteCustomerAction = ({ id }) => {
             )}
         </div>
     );
+};
+
+DeleteCustomerAction.propTypes = {
+    id: idType,
 };
 
 export default DeleteCustomerAction;

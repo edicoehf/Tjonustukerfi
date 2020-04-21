@@ -1,7 +1,8 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { itemType } from "../../../types/index";
 
-const OrderItem = ({ category, service, barcode }) => {
+const OrderItem = ({ item }) => {
+    const { category, service, barcode } = item;
     return (
         <tr className="order-item">
             <td className="order-item-category">{category}</td>
@@ -12,9 +13,7 @@ const OrderItem = ({ category, service, barcode }) => {
 };
 
 OrderItem.propTypes = {
-    category: PropTypes.string.isRequired,
-    service: PropTypes.string.isRequired,
-    barcode: PropTypes.string.isRequired,
+    item: itemType,
 };
 
 export default OrderItem;

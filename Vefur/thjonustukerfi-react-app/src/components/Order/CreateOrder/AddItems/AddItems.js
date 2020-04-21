@@ -12,6 +12,7 @@ import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import useForm from "../../../../hooks/useForm";
 import itemValidate from "../ItemValidate/ItemValidate";
 import "./AddItems.css";
+import { addItemsType, categoriesType, servicesType } from "../../../../types";
 
 const initialState = {
     category: null,
@@ -98,6 +99,12 @@ const AddItems = ({ addItems, categories, services }) => {
             </FormControl>
         </div>
     );
+};
+
+AddItems.propTypes = {
+    addItems: addItemsType,
+    categories: categoriesType,
+    services: servicesType,
 };
 
 export default AddItems;
