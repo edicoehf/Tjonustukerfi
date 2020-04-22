@@ -6,3 +6,7 @@
 .app {
     background-color: var(--main-color);
 }
+
+.main-container {
+    margin: 3em;
+}
