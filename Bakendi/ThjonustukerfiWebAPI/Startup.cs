@@ -17,6 +17,8 @@ using ThjonustukerfiWebAPI.Services.Interfaces;
 using System.Reflection;
 using System.IO;
 using Microsoft.OpenApi.Models;
+using FluentScheduler;
+using ThjonustukerfiWebAPI.Schedules;
 
 namespace ThjonustukerfiWebAPI
 {
@@ -47,6 +49,8 @@ namespace ThjonustukerfiWebAPI
             {
                 connectionString = Configuration.GetConnectionString("DefaultConnection");
             }
+            Constants.DBConnection = connectionString;
+            
             services.AddDbContext<DataContext>(options => { options.UseNpgsql(connectionString); });
 
             // Adding automapper
@@ -93,6 +97,8 @@ namespace ThjonustukerfiWebAPI
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 opt.IncludeXmlComments(xmlPath);
             });
+
+            JobManager.Initialize(new Scheduler());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
