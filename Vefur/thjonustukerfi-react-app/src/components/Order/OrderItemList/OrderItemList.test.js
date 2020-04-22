@@ -1,6 +1,7 @@
 import React from "react";
 import { shallow, mount } from "enzyme";
 import OrderItemList from "./OrderItemList";
+jest.mock("react-router-dom");
 
 describe("<OrderItemList />", () => {
     let wrapper;
