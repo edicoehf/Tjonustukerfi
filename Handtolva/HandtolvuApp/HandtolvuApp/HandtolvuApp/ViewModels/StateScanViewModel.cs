@@ -18,9 +18,9 @@ namespace HandtolvuApp.ViewModels
 
             Placeholder = "Sláðu inn stöðu";
 
-            ClickCommand = new Command(async () =>
+            StateScan = new Command(async () =>
             {
-                // handle scanning
+                await App.ItemManager.StateChangeWithId(Item.Id, InputVariable);
             });
         }
 
@@ -40,7 +40,7 @@ namespace HandtolvuApp.ViewModels
             }
         }
 
-        public Command ClickCommand;
+        public Command StateScan { get; }
 
         string placeholder;
 

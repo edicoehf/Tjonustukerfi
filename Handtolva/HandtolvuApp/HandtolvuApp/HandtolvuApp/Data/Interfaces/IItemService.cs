@@ -11,5 +11,7 @@ namespace HandtolvuApp.Data.Interfaces
         Task<NextStates> GetNextStatesAsync(string barcode);
 
         Task<Item> GetItemAsync(string barcode);
+
+        Task StateChangeWithId(long itemId, string barcode);
     }
 }

@@ -69,5 +69,29 @@ namespace HandtolvuApp.Data.Implementations
 
             return nextStates;
         }
+
+        public async Task StateChangeWithId(long id, string barcode)
+        {
+            string stateUri = "http://10.0.2.2:5000/api/items/statechangebyid";
+            var item = new[] { new { itemId = id, stateChangeBarcode = barcode } };
+
+            try
+            {
+                var method = new HttpMethod("PATCH");
+                var request = new HttpRequestMessage(method, stateUri) { 
+                    Content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json") 
+                };
+                var response = await _client.SendAsync(request);
+
+                if(response.IsSuccessStatusCode)
+                {
+                    Debug.WriteLine(@"\tOrder successfully completed");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(@"\tERROR {0}", ex.Message);
+            }
+        }
     }
 }
