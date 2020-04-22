@@ -294,5 +294,56 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             Assert.AreEqual(StatusCodes.Status400BadRequest, responseNull.StatusCode);
             Assert.IsInstanceOfType(responseNull.Value as string, typeof(string));  // make sure that the error response text was returned
         }
+
+        [TestMethod]
+        public void ChangeItemState_should_return_an_OKresult()
+        {
+            //* Arrange
+            var emptyList = new List<ItemStateChangeInput>();
+            // Mock Service
+            _itemServiceMock.Setup(method => method.ChangeItemState(It.IsAny<List<ItemStateChangeInput>>())).Returns(emptyList).Verifiable();
+
+            // Create controller
+            _itemController = new ItemController(_itemServiceMock.Object);
+
+            //* Act
+            var response = _itemController.ChangeItemState(emptyList) as OkResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(200, response.StatusCode);
+        }
+
+        [TestMethod]
+        public void ChangeItemState_should_return_AcceptedResult_and_list_of_invalid_inputs()
+        {
+            //* Arrange
+            var input = new List<ItemStateChangeInput>()
+            {
+                new ItemStateChangeInput { ItemId = -1, StateChangeTo = 100, Location = "hilla1A" },
+                new ItemStateChangeInput { ItemId = 1, StateChangeTo = 1, Location = "hilla1A" }
+            };
+
+            var invalidInputs = new List<ItemStateChangeInput>()
+            {
+                new ItemStateChangeInput { ItemId = -1, StateChangeTo = 100, Location = "hilla1A" }
+            };
+
+            // Mock service
+            _itemServiceMock.Setup(method => method.ChangeItemState(input)).Returns(invalidInputs).Verifiable();
+
+            // Create controller
+            _itemController = new ItemController(_itemServiceMock.Object);
+
+            //* Act
+            var response = _itemController.ChangeItemState(input) as AcceptedResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(StatusCodes.Status202Accepted, response.StatusCode);
+            
+            var retVal = response.Value as List<ItemStateChangeInput>;
+            Assert.AreEqual(invalidInputs.Count, retVal.Count);
+        }
     }
 }
