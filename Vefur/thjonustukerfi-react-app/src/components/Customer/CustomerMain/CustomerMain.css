@@ -1,15 +1,11 @@
-.main {
+.customer-main {
     display: flex;
     flex-direction: column;
-    align-content: space-around;
+    margin-top: -5%;
 }
 
 .main-item {
     padding-bottom: 1em;
-}
-
-.header {
-    align-self: center;
 }
 
 .create-button {

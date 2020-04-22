@@ -9,6 +9,7 @@ import {
     isProcessingType,
     submitHandlerType,
 } from "../../../types/index";
+import CheckIcon from "@material-ui/icons/Check";
 
 const initialState = {
     name: "",
@@ -100,7 +101,7 @@ const CustomerInputForm = ({
                             ? "Uppfæra viðskiptavin"
                             : "Skrá nýjan viðskiptavin"
                     }
-                    className="btn btn-dark"
+                    className="btn submit-btn"
                 />
             </Form>
         </div>
