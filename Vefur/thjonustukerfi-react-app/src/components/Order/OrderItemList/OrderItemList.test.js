@@ -30,9 +30,9 @@ describe("<OrderItemList />", () => {
         wrapper = mount(shallow(<OrderItemList items={testProps} />).get(0));
     });
 
-    it("Should have 3 rows", () => {
+    it("Should have 4 columns", () => {
         expect(
             wrapper.find("tr.order-item").at(0).instance().children.length
-        ).toBe(3);
+        ).toBe(4);
     });
 });
