@@ -1,6 +1,11 @@
 import React from "react";
 import "./AddItems.css";
 import ItemForm from "../../../Item/ItemForm/ItemForm";
+import {
+    addItemsType,
+    categoriesType,
+    servicesType,
+} from "../../../../types/index";
 
 const AddItems = ({ addItems, categories, services }) => {
     return (
