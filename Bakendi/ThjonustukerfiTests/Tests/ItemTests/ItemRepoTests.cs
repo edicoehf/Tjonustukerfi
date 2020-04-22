@@ -587,6 +587,146 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             }
         }
 
+        [TestMethod]
+        public void ChangeItemState_should_change_state_of_item_to_4_and_order_connected_to_it_should_have_completeDate_as_null()
+        {
+            //* Arrange
+
+            using(var mockContext = new DataContext(_options))
+            {
+                // This item is the only Item in the order at this moment
+                long itemId = 2;
+                long statechangeID = 4;
+
+                var input = new List<ItemStateChangeInput>()
+                {
+                    new ItemStateChangeInput
+                    {
+                        ItemId = itemId,
+                        StateChangeTo = statechangeID,
+                        Location = "hilla1A"
+                    }
+                };
+
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                // get old state
+                var oldItemState = mockContext.Item.FirstOrDefault(i => i.Id == itemId).StateId;
+
+                //* Act
+                itemRepo.ChangeItemState(input);
+
+                //* Assert
+                var item = mockContext.Item.FirstOrDefault(i => i.Id == itemId);    // Get item to check
+
+                Assert.IsNotNull(item);
+                Assert.AreNotEqual(oldItemState, item.StateId);
+                Assert.AreEqual(statechangeID, item.StateId);
+
+                // check order connected
+                var order = mockContext.Order.FirstOrDefault(o =>
+                    o.Id == mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemId).OrderId);
+
+                Assert.IsNotNull(order);
+                Assert.IsNull(order.DateCompleted);  // now the order is not complete
+            }
+        }
+
+        [TestMethod]
+        public void ChangeItemState_should_return_an_invalid_list()
+        {
+            //* Arrange
+            long invalidId = -1;
+            long invalidState = 500;
+
+            long validId = 2;
+            long validState = 5;
+
+            string location = "hilla bara";
+
+            // The input with valid and invalid variables
+            var input = new List<ItemStateChangeInput>()
+            {
+                new ItemStateChangeInput { ItemId = invalidId, StateChangeTo = validState, Location = location },
+                new ItemStateChangeInput { ItemId = validId, StateChangeTo = invalidState, Location = location },
+                new ItemStateChangeInput { ItemId = validId, StateChangeTo = validState, Location = location }
+            };
+
+            // Expected return from the function
+            var expectedReturn = new List<ItemStateChangeInput>()
+            {
+                new ItemStateChangeInput { ItemId = invalidId, StateChangeTo = validState, Location = location },
+                new ItemStateChangeInput { ItemId = validId, StateChangeTo = invalidState, Location = location }
+            };
+
+            using(var mockContext = new DataContext(_options))
+            {
+                var itemRepo = new ItemRepo(mockContext, _mapper);
+
+                //* Act
+                var returnedValue = itemRepo.ChangeItemState(input);
+
+                //* Assert
+                Assert.IsNotNull(returnedValue);
+                Assert.AreEqual(expectedReturn.Count, returnedValue.Count);
+                foreach (var inp in returnedValue)
+                {
+                    Assert.IsTrue(expectedReturn.Contains(inp));
+                }
+            }
+        }
+
+        [TestMethod]
+        public void ChangeItemState_should_return_an_empty_list()
+        {
+            //* Arrange
+            long validId = 2;
+            long validState = 5;
+
+            // The input with valid and invalid variables
+            var input = new List<ItemStateChangeInput>()
+            {
+                new ItemStateChangeInput { ItemId = validId, StateChangeTo = validState, Location = "lost" }
+            };
+
+            using(var mockContext = new DataContext(_options))
+            {
+                var itemRepo = new ItemRepo(mockContext, _mapper);
+
+                //* Act
+                var returnedValue = itemRepo.ChangeItemState(input);
+
+                //* Assert
+                Assert.IsNotNull(returnedValue);
+                Assert.AreEqual(0, returnedValue.Count);
+            }
+        }
+
+        [TestMethod]
+        public void ChangeItemState_should_throw_correct_exceptions()
+        {
+            //* Arrange
+            var input1 = new List<ItemStateChangeInput>()
+            {
+                new ItemStateChangeInput { ItemId = -1, StateChangeTo = 2, Location = "some location" }
+            };
+            var input2 = new List<ItemStateChangeInput>()
+            {
+                new ItemStateChangeInput { ItemId = 2, StateChangeTo = 20000, Location = "some other location" }
+            };
+
+            using(var mockContext = new DataContext(_options))
+            {
+                // Mock repo
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                //* Act and Assert
+                // The exceptions are thrown because there is no valid inputs
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.ChangeItemState(input1));  // Invalid itemId
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.ChangeItemState(input2));  // Invalid StateID
+            }
+        }
+
         //**********     Helper functions     **********//
         private void FillDatabase(DataContext mockContext)
         {
