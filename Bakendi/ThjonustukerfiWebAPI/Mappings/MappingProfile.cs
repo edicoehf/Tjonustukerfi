@@ -14,6 +14,13 @@ namespace ThjonustukerfiWebAPI.Mappings
     public class MappingProfile : Profile
     {
         private DataContext _dbContext;
+
+        /// <summary>This is used for tests when setting the DbContext to mapper</summary>
+        public MappingProfile(DataContext context) : this()
+        {
+            _dbContext = context;
+        }
+
         /// <summary>Provides a profile to use with AutoMapper</summary>
         public MappingProfile(string connectionString = null)
         {
