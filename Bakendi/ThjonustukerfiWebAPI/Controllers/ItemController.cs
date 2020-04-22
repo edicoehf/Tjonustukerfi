@@ -148,7 +148,7 @@ namespace ThjonustukerfiWebAPI.Controllers
         /// <response code="404">Input was not valid, no changes were made.</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Route("statechangebyid")]
+        [Route("scanner/statechangebyid")]
         [HttpPatch]
         public IActionResult ChangeItemStateById([FromBody] List<ItemStateChangeInputIdScanner> stateChanges)
         {
@@ -165,7 +165,7 @@ namespace ThjonustukerfiWebAPI.Controllers
         /// <response code="404">Input was not valid, no changes were made.</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Route("statechangebybarcode")]
+        [Route("scanner/statechangebybarcode")]
         [HttpPatch]
         public IActionResult ChangeItemStateBarcode([FromBody] List<ItemStateChangeBarcodeScanner> stateChanges)
         {
