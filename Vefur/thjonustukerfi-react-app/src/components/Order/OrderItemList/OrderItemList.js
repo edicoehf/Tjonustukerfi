@@ -8,6 +8,7 @@ const OrderItemList = ({ items }) => {
         <Table className="order-item-list">
             <thead>
                 <tr>
+                    <th>Vörunúmer</th>
                     <th>Tegund</th>
                     <th>Þjónusta</th>
                     <th>Strikamerki</th>
