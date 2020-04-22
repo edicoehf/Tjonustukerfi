@@ -6,9 +6,6 @@
              mc:Ignorable="d"
              xmlns:local="clr-namespace:HandtolvuApp.ViewModels"
              x:Class="HandtolvuApp.Controls.ItemInputPage">
-    <ContentPage.BindingContext>
-        <local:ItemInputViewModel />
-    </ContentPage.BindingContext>
 
     <Grid>
         <Grid.RowDefinitions>

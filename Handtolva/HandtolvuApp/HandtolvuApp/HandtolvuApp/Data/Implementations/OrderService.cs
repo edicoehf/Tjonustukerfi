@@ -12,7 +12,7 @@ namespace HandtolvuApp.Data.Implementations
 {
     public class OrderService : IOrderService
     {
-        HttpClient _client;
+        readonly HttpClient _client;
 
         public Order Order { get; private set; }
 

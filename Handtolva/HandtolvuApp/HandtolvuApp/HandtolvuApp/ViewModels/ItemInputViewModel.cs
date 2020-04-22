@@ -1,4 +1,5 @@
 ﻿using HandtolvuApp.Controls;
+using HandtolvuApp.Data.Interfaces;
 using HandtolvuApp.Models;
 using System;
 using System.Collections.Generic;
@@ -9,18 +10,19 @@ using Xamarin.Forms;
 
 namespace HandtolvuApp.ViewModels
 {
-    class ItemInputViewModel : INotifyPropertyChanged
+    class ItemInputViewModel : ScannerViewModel
     {
-        public ItemInputViewModel()
+        public ItemInputViewModel(IScannerService scannerService) : base(scannerService)
         {
+            ScannedBarcodeText = "";
 
             Placeholder = "Sláðu inn vörunúmer";
 
             ClickCommand = new Command(async () =>
             {
-                if(InputVariable != null)
+                if(ScannedBarcodeText != null)
                 {
-                    Item item = await App.ItemManager.GetItemAsync(inputVariable);
+                    Item item = await App.ItemManager.GetItemAsync(ScannedBarcodeText);
                     if(item == null)
                     {
                         // handle that there is no item with this barcode
@@ -29,8 +31,8 @@ namespace HandtolvuApp.ViewModels
                     }
                     else
                     {
-                        NextStates n = await App.ItemManager.GetNextStatesAsync(inputVariable);
-                        item.Barcode = inputVariable;
+                        NextStates n = await App.ItemManager.GetNextStatesAsync(ScannedBarcodeText);
+                        item.Barcode = ScannedBarcodeText;
                         var itemVM = new ItemViewModel(item, n);
                         var itemPage = new ItemPage();
                         itemPage.BindingContext = itemVM;
@@ -42,24 +44,6 @@ namespace HandtolvuApp.ViewModels
                     Placeholder = "Vörunúmer verður að vera gefið";
                 }
             });
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        string inputVariable;
-
-        public string InputVariable
-        {
-            get => inputVariable;
-
-            set
-            {
-                inputVariable = value;
-
-                var args = new PropertyChangedEventArgs(nameof(InputVariable));
-
-                PropertyChanged?.Invoke(this, args);
-            }
         }
 
         public Command ClickCommand { get; }
@@ -76,7 +60,7 @@ namespace HandtolvuApp.ViewModels
 
                 var args = new PropertyChangedEventArgs(nameof(Placeholder));
 
-                PropertyChanged?.Invoke(this, args);
+               // PropertyChanged?.Invoke(this, args);
             }
         }
     }

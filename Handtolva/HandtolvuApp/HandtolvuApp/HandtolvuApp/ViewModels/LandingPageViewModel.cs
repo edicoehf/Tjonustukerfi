@@ -23,7 +23,7 @@ namespace HandtolvuApp.ViewModels
 
             ItemCommand = new Command(async () =>
             {
-                var itemInputVM = new ItemInputViewModel();
+                var itemInputVM = new ItemInputViewModel(App.Scanner);
                 var itemInputPage = new ItemInputPage();
                 itemInputPage.BindingContext = itemInputVM;
                 await App.Current.MainPage.Navigation.PushAsync(itemInputPage);

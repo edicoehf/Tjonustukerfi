@@ -1,5 +1,6 @@
 ﻿using HandtolvuApp.Data;
 using HandtolvuApp.Data.Implementations;
+using HandtolvuApp.Data.Interfaces;
 using HandtolvuApp.Data.Managers;
 using System;
 using Xamarin.Forms;
@@ -11,6 +12,7 @@ namespace HandtolvuApp
     {
         public static ItemManager ItemManager { get; private set; }
         public static OrderManager OrderManager { get; private set; }
+        public static IScannerService Scanner;
         public App()
         {
             InitializeComponent();
