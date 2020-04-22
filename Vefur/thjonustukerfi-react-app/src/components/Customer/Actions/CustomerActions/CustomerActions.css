@@ -1,4 +1,5 @@
 .customer-actions {
     display: flex;
     flex-direction: row;
+    margin-top: 2rem;
 }
