@@ -63,7 +63,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void GetItemById_should_return_a_single_itemstateDTO()
+        public void GetItemByIdScanner_should_return_a_single_itemstateDTO()
         {
             //* Arrange
             long itemID = 1;
@@ -91,7 +91,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void ChangeItemStateBarcode_should_return_invalid_list()
+        public void ChangeItemStateBarcodeScanner_should_return_invalid_list()
         {
             string validBarcode = "983764892374";
             string invalidbarcode = "-1";
@@ -126,7 +126,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void ChangeItemStateBarcode_should_return_empty_list()
+        public void ChangeItemStateBarcodeScanner_should_return_empty_list()
         {
             string validBarcode = "983764892374";
             string validBarcode2 = "983764892375";
@@ -154,7 +154,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void ChangeItemStateById_should_return_empty_list()
+        public void ChangeItemStateByIdScanner_should_return_empty_list()
         {
             long validId = 1;
             long validId2 = 2;

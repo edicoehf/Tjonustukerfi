@@ -154,7 +154,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void ChangeItemStateById_should_return_an_OKresult()
+        public void ChangeItemStateByIdScanner_should_return_an_OKresult()
         {
             //* Arrange
             var emptyList = new List<ItemStateChangeInputIdScanner>();
@@ -173,7 +173,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void ChangeItemStateById_should_return_AcceptedResult_and_list_of_invalid_inputs()
+        public void ChangeItemStateByIdScanner_should_return_AcceptedResult_and_list_of_invalid_inputs()
         {
             //* Arrange
             var input = new List<ItemStateChangeInputIdScanner>()
@@ -205,7 +205,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void ChangeItemStateBarcode_should_return_an_OKresult()
+        public void ChangeItemStateBarcodeScanner_should_return_an_OKresult()
         {
             //* Arrange
             var emptyList = new List<ItemStateChangeBarcodeScanner>();
@@ -224,7 +224,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void ChangeItemStateByBarcode_should_return_AcceptedResult_and_list_of_invalid_inputs()
+        public void ChangeItemStateByBarcodeScanner_should_return_AcceptedResult_and_list_of_invalid_inputs()
         {
             //* Arrange
             var input = new List<ItemStateChangeBarcodeScanner>()

@@ -365,7 +365,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void ChangeItemStateById_should_change_state_of_item_to_2_and_order_connected_to_it_should_not_have_completeDate()
+        public void ChangeItemStateByIdScanner_should_change_state_of_item_to_2_and_order_connected_to_it_should_not_have_completeDate()
         {
             //* Arrange
             using(var mockContext = new DataContext(_options))
@@ -410,7 +410,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void ChangeItemStateById_should_change_state_of_item_to_5_and_order_connected_to_it_should_have_completeDate()
+        public void ChangeItemStateByIdScanner_should_change_state_of_item_to_5_and_order_connected_to_it_should_have_completeDate()
         {
             //* Arrange
 
@@ -456,7 +456,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void ChangeItemStateById_should_return_an_invalid_list()
+        public void ChangeItemStateByIdScanner_should_return_an_invalid_list()
         {
             //* Arrange
             long invalidId = -1;
@@ -498,7 +498,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void ChangeItemStateById_should_return_an_empty_list()
+        public void ChangeItemStateByIdScanner_should_return_an_empty_list()
         {
             //* Arrange
             long validId = 2;
@@ -524,7 +524,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void ChangeItemStateById_should_throw_correct_exceptions()
+        public void ChangeItemStateByIdScanner_should_throw_correct_exceptions()
         {
             //* Arrange
             var input1 = new List<ItemStateChangeInputIdScanner>()
