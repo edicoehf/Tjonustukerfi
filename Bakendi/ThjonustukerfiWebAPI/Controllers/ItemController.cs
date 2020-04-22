@@ -109,7 +109,7 @@ namespace ThjonustukerfiWebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("statechange")]
         [HttpPatch]
-        public IActionResult ChangeItemState([FromBody] List<ItemStateChangeInputIdScanner> stateChanges)
+        public IActionResult ChangeItemState([FromBody] List<ItemStateChangeInput> stateChanges)
         {
             var invalidInput = _itemService.ChangeItemState(stateChanges);
 
@@ -142,7 +142,7 @@ namespace ThjonustukerfiWebAPI.Controllers
             return BadRequest("You have to enter a valid itemid or barcode as a query parameter.");
         }
 
-        /// <summary>Changes the state of all the items in the input. Takes in a list of ItemStateChangeInputModel.</summary>
+        /// <summary>Changes the state of all the items in the input. Takes in a list of ItemStateChangeInputIdScanner.</summary>
         /// <response code="200">All items have been updated</response>
         /// <response code="202">Partial success, some inputs are invalid. A list of invalid inputs are returned.</response>
         /// <response code="404">Input was not valid, no changes were made.</response>
@@ -159,7 +159,7 @@ namespace ThjonustukerfiWebAPI.Controllers
             return Ok();
         }
 
-        /// <summary>Changes the state of all the items in the input. Takes in a list of ItemStateChangeInputModel.</summary>
+        /// <summary>Changes the state of all the items in the input. Takes in a list of ItemStateChangeBarcodeScanner.</summary>
         /// <response code="200">All items have been updated.</response>
         /// <response code="202">Partial success, some inputs are invalid. A list of invalid inputs are returned.</response>
         /// <response code="404">Input was not valid, no changes were made.</response>

@@ -30,10 +30,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         public void CompleteItem(long id) => _itemRepo.CompleteItem(id);
         public void RemoveItem(long itemId) => _itemRepo.RemoveItem(itemId);
         public void RemoveItemQuery(string barcode) => _itemRepo.RemoveItem(_itemRepo.SearchItem(barcode));
-        public List<ItemStateChangeInputIdScanner> ChangeItemState(List<ItemStateChangeInputIdScanner> stateChanges)
-        {
-            return new List<ItemStateChangeInputIdScanner>(); //! are here
-        }
+        public List<ItemStateChangeInput> ChangeItemState(List<ItemStateChangeInput> stateChanges) => _itemRepo.ChangeItemState(stateChanges);
         public List<ItemStateChangeInputIdScanner> ChangeItemStateById(List<ItemStateChangeInputIdScanner> stateChanges) => _itemRepo.ChangeItemStateById(stateChanges);
         public List<ItemStateChangeBarcodeScanner> ChangeItemStateBarcode(List<ItemStateChangeBarcodeScanner> stateChanges)
         {

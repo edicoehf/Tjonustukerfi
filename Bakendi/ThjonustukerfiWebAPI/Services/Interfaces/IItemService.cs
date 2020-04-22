@@ -29,7 +29,7 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
 
         /// <summary>Changes the state of all items in the input with item ID or item barcode</summary>
         /// <returns>List of inputs that are not correct and did not update, if any.</returns>
-        List<ItemStateChangeInputIdScanner> ChangeItemState(List<ItemStateChangeInputIdScanner> stateChanges);
+        List<ItemStateChangeInput> ChangeItemState(List<ItemStateChangeInput> stateChanges);
 
         /// <summary>Changes the state of all items in the input with item ID.</summary>
         /// <returns>List of inputs that are not correct and did not update, if any.</returns>

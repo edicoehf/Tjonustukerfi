@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ThjonustukerfiWebAPI.Extensions;
 using ThjonustukerfiWebAPI.Models;
@@ -199,6 +200,43 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             if(orderId != -1) { SetOrderCompleteStatus(new List<long>() { orderId }); }
         }
 
+        public List<ItemStateChangeInput> ChangeItemState(List<ItemStateChangeInput> stateChanges)
+        {
+            var invalidInputs = new List<ItemStateChangeInput>();
+
+            // Gets invalid inputs if there are any
+            foreach (var item in stateChanges)
+            {
+                // Check that item IDs are valid
+                if(_dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId) == null) { invalidInputs.Add(item); }
+                // check if all state changes are valid
+                else if(_dbContext.State.FirstOrDefault(s => s.Id == item.StateChangeTo) == null) { invalidInputs.Add(item); }
+            }
+
+            // remove Items that are invalid
+            stateChanges.RemoveExisting(invalidInputs);
+
+            // if all inputs are invalid 
+            if(!stateChanges.Any()) { throw new NotFoundException($"Input not valid, no changes made."); }
+
+            var ordersToCheck = new List<long>();   // All orders to check that are connected to the items being modified
+
+            foreach (var item in stateChanges)
+            {
+                // change the state and check all things needed
+                changeState((long)item.ItemId, (long)item.StateChangeTo, item.Location);
+
+                // add order ID if it has not been added before
+                ordersToCheck.AddIfUnique(_dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == item.ItemId).OrderId);
+            }
+
+            _dbContext.SaveChanges();
+
+            SetOrderCompleteStatus(ordersToCheck);
+
+            return invalidInputs;
+        }
+
         public List<ItemStateChangeInputIdScanner> ChangeItemStateById(List<ItemStateChangeInputIdScanner> stateChanges)
         {
             var invalidInputs = new List<ItemStateChangeInputIdScanner>();
@@ -222,35 +260,11 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
             foreach (var item in stateChanges)
             {
-                var timeNow = DateTime.Now;
-
-                // get entity
-                var entity = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);
-
                 // parse the barcode - first item is state, second item is location
                 var parsedBarcode = item.StateChangeBarcode.Split("-");
 
-                // update the entity itself
-                entity.StateId = _dbContext.State.FirstOrDefault(s => s.Name == parsedBarcode[0]).Id;
-                entity.DateModified = DateTime.Now;
-
-                //TODO: Change final state check, like others
-                if(entity.StateId == 5) { entity.DateCompleted = timeNow; }
-                else { entity.DateCompleted = null; }
-
-                // Get the json object and change it and write it back (making sure only to change the location property if there are any other properties there)
-                if(entity.JSON != null)
-                {
-                    JObject rss = JObject.Parse(entity.JSON);   // parse the entity
-                    var prop = rss.Property("location").Value;  // get the location property
-                    prop = parsedBarcode[1];                    // set the location
-                    entity.JSON = prop.ToString();              // serialize back to string
-                }
-
-                // Update/create timestamp
-                var timestamp = _dbContext.ItemTimestamp.FirstOrDefault(ts => ts.ItemId == entity.Id && ts.StateId == entity.StateId);
-                if(timestamp == null) { _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(entity)); }
-                else { timestamp.TimeOfChange = timeNow; }
+                // change the state and check all things needed
+                changeState((long)item.ItemId, _dbContext.State.FirstOrDefault(s => s.Name == parsedBarcode[0]).Id, parsedBarcode[1]);
 
                 // add order ID if it has not been added before
                 ordersToCheck.AddIfUnique(_dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == item.ItemId).OrderId);
@@ -280,6 +294,36 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
         }
 
         //*     Helper functions     *//
+
+        private void changeState(long itemId, long stateId, string location = null)
+        {
+            var timeNow = DateTime.Now;
+
+            // get entity
+            var entity = _dbContext.Item.FirstOrDefault(i => i.Id == itemId);
+
+            // update the entity itself
+            entity.StateId = stateId;
+            entity.DateModified = DateTime.Now;
+
+            //TODO: Change final state check, like others
+            if(entity.StateId == 5) { entity.DateCompleted = timeNow; }
+            else { entity.DateCompleted = null; }
+
+            // Get the json object and change it and write it back (making sure only to change the location property if there are any other properties there)
+            if(entity.JSON != null && location != null)
+            {
+                JObject rss = JObject.Parse(entity.JSON);                   // parse the entity
+                var prop = rss.Property("location");                        // get the location property
+                prop.Value = location;                                      // set the location
+                entity.JSON = $"{{{prop.ToString()}}}";   // serialize back to string
+            }
+
+            // Update/create timestamp
+            var timestamp = _dbContext.ItemTimestamp.FirstOrDefault(ts => ts.ItemId == entity.Id && ts.StateId == entity.StateId);
+            if(timestamp == null) { _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(entity)); }
+            else { timestamp.TimeOfChange = timeNow; }
+        }
 
         /// <summary>Sets all orders in list date completed, only if order is complete, else it sets it to null</summary>
         private void SetOrderCompleteStatus(List<long> orders)
