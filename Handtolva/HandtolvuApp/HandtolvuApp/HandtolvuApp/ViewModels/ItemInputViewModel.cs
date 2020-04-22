@@ -29,7 +29,9 @@ namespace HandtolvuApp.ViewModels
                     }
                     else
                     {
-                        var itemVM = new ItemViewModel(item);
+                        NextStates n = await App.ItemManager.GetNextStatesAsync(inputVariable);
+                        item.Barcode = inputVariable;
+                        var itemVM = new ItemViewModel(item, n);
                         var itemPage = new ItemPage();
                         itemPage.BindingContext = itemVM;
                         await Application.Current.MainPage.Navigation.PushAsync(itemPage);

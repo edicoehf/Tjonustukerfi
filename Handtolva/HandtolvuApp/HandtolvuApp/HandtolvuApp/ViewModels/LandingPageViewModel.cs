@@ -29,6 +29,14 @@ namespace HandtolvuApp.ViewModels
                 await App.Current.MainPage.Navigation.PushAsync(itemInputPage);
             });
 
+            LocationCommand = new Command(async () =>
+            {
+                var locationScanVM = new LocationScanViewModel();
+                var locationScanPage = new LocationScanPage();
+                locationScanPage.BindingContext = locationScanVM;
+                await App.Current.MainPage.Navigation.PushAsync(locationScanPage);
+            });
+
             TestCommand = new Command(async () =>
             {
                 NextStates nextStates = await App.ItemManager.GetNextStatesAsync("50500004");
@@ -47,5 +55,7 @@ namespace HandtolvuApp.ViewModels
         public Command OrderCommand { get; }
         public Command ItemCommand { get; }
         public Command TestCommand { get; }
+
+        public Command LocationCommand { get; }
     }
 }

@@ -16,6 +16,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width=".5*" />
@@ -36,6 +37,13 @@
                 BackgroundColor="Blue" TextColor="White"
                 Margin="5, 5, 5, 5"
                 Command="{Binding ItemCommand}"
+                CornerRadius="20" />
+
+        <Button Grid.Row="2" Grid.Column="1"
+                Grid.ColumnSpan="2" Text="TestStates"
+                BackgroundColor="Blue" TextColor="White"
+                Margin="5, 5, 5, 5"
+                Command="{Binding LocationCommand}"
                 CornerRadius="20" />
 
         <Button Grid.Row="2" Grid.Column="1"

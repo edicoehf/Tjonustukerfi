@@ -18,8 +18,9 @@ namespace HandtolvuApp.ViewModels
 
             SelectedItemChangedCommand = new Command(async () =>
             {
+                NextStates n = await App.ItemManager.GetNextStatesAsync(SelectedItem.Barcode);
                 SelectedItem.OrderId = Order.Id;
-                var itemVM = new ItemViewModel(SelectedItem);
+                var itemVM = new ItemViewModel(SelectedItem, n);
                 var itemPage = new ItemPage();
                 itemPage.BindingContext = itemVM;
                 await App.Current.MainPage.Navigation.PushAsync(itemPage);
@@ -27,7 +28,7 @@ namespace HandtolvuApp.ViewModels
 
             CheckoutCommand = new Command(async () =>
             {
-                await App.ItemManager.CheckoutOrder(Order.Id);
+                await App.OrderManager.CheckoutOrder(Order.Id);
             });
         }
 

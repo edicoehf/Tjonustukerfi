@@ -18,7 +18,7 @@ namespace HandtolvuApp.ViewModels
             {
                 if(InputVariable != null)
                 {
-                    Order order = await App.ItemManager.GetOrderAsync(inputVariable);
+                    Order order = await App.OrderManager.GetOrderAsync(inputVariable);
                     if(order == null)
                     {
                         MessagingCenter.Send<OrderInputViewModel>(this, "NoOrder");

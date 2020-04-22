@@ -1,4 +1,5 @@
-﻿using HandtolvuApp.Models;
+﻿using HandtolvuApp.Data.Interfaces;
+using HandtolvuApp.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -7,41 +8,17 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HandtolvuApp.Data
+namespace HandtolvuApp.Data.Implementations
 {
-    public class RestService : IRestService
+    public class OrderService : IOrderService
     {
         HttpClient _client;
 
-        public Item Item { get; private set; }
         public Order Order { get; private set; }
 
-        public RestService()
+        public OrderService()
         {
             _client = new HttpClient();
-        }
-
-        public async Task<Item> GetItemAsync(string barcode)
-        {
-            //set Item to null for future use
-            Item = null;
-            // String for Api call, might want to change this to constant
-            string Uri = "http://10.0.2.2:5000/api/items/search?barcode=" + barcode;
-            try
-            {
-                var response = await _client.GetAsync(Uri);
-                if(response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    Item = JsonConvert.DeserializeObject<Item>(content);
-                }
-            }
-            catch(Exception ex)
-            {
-                Debug.WriteLine(@"\tERROR {0}", ex.Message);
-            }
-
-            return Item;
         }
 
         public async Task<Order> GetOrderAsync(string barcode)
@@ -52,13 +29,13 @@ namespace HandtolvuApp.Data
             try
             {
                 var response = await _client.GetAsync(Uri);
-                if(response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
                     Order = JsonConvert.DeserializeObject<Order>(content);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine(@"\tERROR {0}", ex.Message);
             }
@@ -77,8 +54,8 @@ namespace HandtolvuApp.Data
 
                 var request = new HttpRequestMessage(method, checkoutUri);
                 var response = await _client.SendAsync(request);
-                
-                if(response.IsSuccessStatusCode)
+
+                if (response.IsSuccessStatusCode)
                 {
                     Debug.WriteLine(@"\tOrder successfully completed");
                 }

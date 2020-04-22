@@ -10,9 +10,9 @@ using Xamarin.Forms.Xaml;
 namespace HandtolvuApp.Controls
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class StateScanPage : ContentPage
+    public partial class LocationScanPage : ContentPage
     {
-        public StateScanPage()
+        public LocationScanPage()
         {
             InitializeComponent();
         }

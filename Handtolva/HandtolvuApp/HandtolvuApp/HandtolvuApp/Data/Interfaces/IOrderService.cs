@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HandtolvuApp.Data
+namespace HandtolvuApp.Data.Interfaces
 {
-    public interface IRestService
+    public interface IOrderService
     {
-        Task<Item> GetItemAsync(string barcode);
         Task<Order> GetOrderAsync(string barcode);
         Task CheckoutOrder(long id);
     }

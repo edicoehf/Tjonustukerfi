@@ -10,28 +10,16 @@ namespace HandtolvuApp.Data
 {
     public class ItemManager
     {
-        IRestService restService;
         IItemService itemService;
         
-        public ItemManager(IRestService service, IItemService itemservice)
+        public ItemManager(IItemService service)
         {
-            restService = service;
-            this.itemService = itemservice;
+            itemService = service;
         }
 
         public Task<Item> GetItemAsync(string barcode)
         {
-            return restService.GetItemAsync(barcode);
-        }
-
-        public Task<Order> GetOrderAsync(string barcode)
-        {
-            return restService.GetOrderAsync(barcode);
-        }
-
-        public Task CheckoutOrder(long id)
-        {
-            return restService.CheckoutOrder(id);
+            return itemService.GetItemAsync(barcode);
         }
 
         public Task<NextStates> GetNextStatesAsync(string barcode)

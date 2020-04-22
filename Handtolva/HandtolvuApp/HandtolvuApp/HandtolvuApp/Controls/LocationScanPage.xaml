@@ -4,7 +4,8 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="HandtolvuApp.Controls.StateScanPage">
+             x:Class="HandtolvuApp.Controls.LocationScanPage">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -24,10 +25,10 @@
                Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" 
                Margin="0, 20, 0, 0"/>
 
-        <Label Text="Sláðu inn stöðu eða skannaðu strikamerki." FontSize="18"
+        <Label Text="Sláðu inn vörunúmer eða skannaðu strikamerki." FontSize="18"
                Grid.Row="1" Grid.ColumnSpan="4"
-               HorizontalTextAlignment="Center"
-               VerticalOptions="Center" 
+               HorizontalOptions="Center"
+               VerticalOptions="CenterAndExpand" 
                />
 
         <Editor Grid.Column="0" Grid.ColumnSpan="3"

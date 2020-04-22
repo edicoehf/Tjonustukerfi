@@ -1,10 +1,11 @@
-﻿using HandtolvuApp.Models;
+﻿using HandtolvuApp.Controls;
+using HandtolvuApp.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace HandtolvuApp.ViewModels
@@ -12,18 +13,21 @@ namespace HandtolvuApp.ViewModels
     public class ItemViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        public ItemViewModel(Item i)
+        public ItemViewModel(Item i, NextStates n)
         {
             Item = i;
 
-            NextStateCommand = new Command(async () =>
-            {
-                // handle finding next command
-            });
+            NextStates = n;
+
+            nextStates.NextAvailableStates.Reverse();
 
             ScanStateCommand = new Command(async () =>
             {
                 // send user to scan site
+                var scanPageVM = new StateScanViewModel(item);
+                var scanPage = new StateScanPage();
+                scanPage.BindingContext = scanPageVM;
+                await App.Current.MainPage.Navigation.PushAsync(scanPage);
             });
         }
 
@@ -43,7 +47,21 @@ namespace HandtolvuApp.ViewModels
             }
         }
 
-        public Command NextStateCommand { get;  }
+        NextStates nextStates;
+
+        public NextStates NextStates
+        {
+            get => nextStates;
+
+            set
+            {
+                nextStates = value;
+
+                var args = new PropertyChangedEventArgs(nameof(NextStates));
+
+                PropertyChanged?.Invoke(this, args);
+            }
+        }
 
         public Command ScanStateCommand { get;  }
 

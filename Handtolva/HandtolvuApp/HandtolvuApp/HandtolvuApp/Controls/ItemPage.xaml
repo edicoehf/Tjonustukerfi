@@ -8,10 +8,12 @@
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".7*"/>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height=".5*"/>
-                <RowDefinition Height=".5*"/>
-                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -21,15 +23,33 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Text="Næsta staða" Command="{Binding NextStateCommand}"
-                    Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"
+            <Label Text="Núverandi staða"  Grid.Row="0" Grid.Column="0"
+                   Grid.ColumnSpan="2"/>
+            <Frame Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                <Label Text="{Binding Item.State}" FontSize="Large"
+                       HorizontalTextAlignment="Center"/>
+            </Frame>
+
+            <Button Text="Skanna stöðu" Command="{Binding ScanStateCommand}"
+                    Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3"
                     Margin="10, 10, 10, 10" BackgroundColor="DodgerBlue"
                     CornerRadius="20"/>
 
-            <Button Text="Skanna stöðu" Command="{Binding ScanStateCommand}"
-                    Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"
-                    Margin="10, 10, 10, 10" BackgroundColor="DodgerBlue"
-                    CornerRadius="20"/>
+            <CollectionView ItemsSource="{Binding NextStates.NextAvailableStates}" Grid.Row="0" 
+                            Grid.RowSpan="4" Grid.Column="3" Grid.ColumnSpan="2">
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Padding="5, 5">
+                            <Frame>
+                                <Label Text="{Binding Name}" FontSize="Large" 
+                                   VerticalTextAlignment="Center" 
+                                   HorizontalTextAlignment="Center"/>
+                            </Frame>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </Grid>
         
     </ContentPage.Content>
