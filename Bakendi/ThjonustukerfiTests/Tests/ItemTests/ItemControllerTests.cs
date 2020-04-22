@@ -208,9 +208,9 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         public void ChangeItemStateBarcode_should_return_an_OKresult()
         {
             //* Arrange
-            var emptyList = new List<ItemStateChangeBarcodeInputModel>();
+            var emptyList = new List<ItemStateChangeBarcodeScanner>();
             // Mock Service
-            _itemServiceMock.Setup(method => method.ChangeItemStateBarcode(It.IsAny<List<ItemStateChangeBarcodeInputModel>>())).Returns(emptyList).Verifiable();
+            _itemServiceMock.Setup(method => method.ChangeItemStateBarcode(It.IsAny<List<ItemStateChangeBarcodeScanner>>())).Returns(emptyList).Verifiable();
 
             // Create controller
             _itemController = new ItemController(_itemServiceMock.Object);
@@ -227,15 +227,15 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         public void ChangeItemStateByBarcode_should_return_AcceptedResult_and_list_of_invalid_inputs()
         {
             //* Arrange
-            var input = new List<ItemStateChangeBarcodeInputModel>()
+            var input = new List<ItemStateChangeBarcodeScanner>()
             {
-                new ItemStateChangeBarcodeInputModel { ItemBarcode = "-1", StateChangeBarcode = @"Í Vinnslu-{location:""hilla1A""}" },
-                new ItemStateChangeBarcodeInputModel { ItemBarcode = "983764892374", StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
+                new ItemStateChangeBarcodeScanner { ItemBarcode = "-1", StateChangeBarcode = @"Í Vinnslu-{location:""hilla1A""}" },
+                new ItemStateChangeBarcodeScanner { ItemBarcode = "983764892374", StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
             };
             
-            var invalidInputs = new List<ItemStateChangeBarcodeInputModel>()
+            var invalidInputs = new List<ItemStateChangeBarcodeScanner>()
             {
-                new ItemStateChangeBarcodeInputModel { ItemBarcode = "-1", StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
+                new ItemStateChangeBarcodeScanner { ItemBarcode = "-1", StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
             };
 
             // Mock service
@@ -251,7 +251,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             Assert.IsNotNull(response);
             Assert.AreEqual(StatusCodes.Status202Accepted, response.StatusCode);
             
-            var retVal = response.Value as List<ItemStateChangeBarcodeInputModel>;
+            var retVal = response.Value as List<ItemStateChangeBarcodeScanner>;
             Assert.AreEqual(invalidInputs.Count, retVal.Count);
         }
 

@@ -128,7 +128,7 @@ namespace ThjonustukerfiWebAPI.Mappings
                 .AfterMap((src, dst) => { dst.ItemId = src.Id; });
 
             //* ItemstateInput Mappings
-            CreateMap<ItemStateChangeInputModel, ItemStateChangeBarcodeInputModel>();
+            CreateMap<ItemStateChangeInputModel, ItemStateChangeBarcodeScanner>();
         }
     }
 }

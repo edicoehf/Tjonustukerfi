@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 namespace ThjonustukerfiWebAPI.Models.InputModels
 {
     /// <summary>Input model used to change the state of an item by barcode.</summary>
-    public class ItemStateChangeBarcodeInputModel
+    public class ItemStateChangeBarcodeScanner
     {
         [Required]
         public string ItemBarcode { get; set; }
@@ -11,7 +11,7 @@ namespace ThjonustukerfiWebAPI.Models.InputModels
         public string StateChangeBarcode { get; set; }
 
         //*     Overrides     *//
-        public static bool operator ==(ItemStateChangeBarcodeInputModel i1, ItemStateChangeBarcodeInputModel i2)
+        public static bool operator ==(ItemStateChangeBarcodeScanner i1, ItemStateChangeBarcodeScanner i2)
         {
             if(object.ReferenceEquals(i1, i2))
             {
@@ -25,7 +25,7 @@ namespace ThjonustukerfiWebAPI.Models.InputModels
             return i1.ItemBarcode == i2.ItemBarcode && i1.StateChangeBarcode == i2.StateChangeBarcode;
         }
 
-        public static bool operator !=(ItemStateChangeBarcodeInputModel i1, ItemStateChangeBarcodeInputModel i2)
+        public static bool operator !=(ItemStateChangeBarcodeScanner i1, ItemStateChangeBarcodeScanner i2)
         {
             return !(i1 == i2);
         }
@@ -45,14 +45,14 @@ namespace ThjonustukerfiWebAPI.Models.InputModels
             return bc;
         }
 
-        public bool Equals(ItemStateChangeBarcodeInputModel other)
+        public bool Equals(ItemStateChangeBarcodeScanner other)
         {
             return this == other;
         }
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as ItemStateChangeBarcodeInputModel);
+            return Equals(obj as ItemStateChangeBarcodeScanner);
         }
     }
 }

@@ -96,15 +96,15 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             string validBarcode = "983764892374";
             string invalidbarcode = "-1";
             //* Arrange
-            var input = new List<ItemStateChangeBarcodeInputModel>()
+            var input = new List<ItemStateChangeBarcodeScanner>()
             {
-                new ItemStateChangeBarcodeInputModel { ItemBarcode = invalidbarcode, StateChangeBarcode = @"Vinnslu-{location:""hilla1A""}" },
-                new ItemStateChangeBarcodeInputModel { ItemBarcode = validBarcode, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
+                new ItemStateChangeBarcodeScanner { ItemBarcode = invalidbarcode, StateChangeBarcode = @"Vinnslu-{location:""hilla1A""}" },
+                new ItemStateChangeBarcodeScanner { ItemBarcode = validBarcode, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
             };
             
-            var invalidInputs = new List<ItemStateChangeBarcodeInputModel>()
+            var invalidInputs = new List<ItemStateChangeBarcodeScanner>()
             {
-                new ItemStateChangeBarcodeInputModel { ItemBarcode = invalidbarcode, StateChangeBarcode = @"Vinnslu-{location:""hilla1A""}" }
+                new ItemStateChangeBarcodeScanner { ItemBarcode = invalidbarcode, StateChangeBarcode = @"Vinnslu-{location:""hilla1A""}" }
             };
 
             // Mock Repo
@@ -131,10 +131,10 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             string validBarcode = "983764892374";
             string validBarcode2 = "983764892375";
             //* Arrange
-            var input = new List<ItemStateChangeBarcodeInputModel>()
+            var input = new List<ItemStateChangeBarcodeScanner>()
             {
-                new ItemStateChangeBarcodeInputModel { ItemBarcode = validBarcode, StateChangeBarcode = @"Vinnslu-{location:""hilla1A""}" },
-                new ItemStateChangeBarcodeInputModel { ItemBarcode = validBarcode2, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
+                new ItemStateChangeBarcodeScanner { ItemBarcode = validBarcode, StateChangeBarcode = @"Vinnslu-{location:""hilla1A""}" },
+                new ItemStateChangeBarcodeScanner { ItemBarcode = validBarcode2, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
             };
 
             // Mock Repo
