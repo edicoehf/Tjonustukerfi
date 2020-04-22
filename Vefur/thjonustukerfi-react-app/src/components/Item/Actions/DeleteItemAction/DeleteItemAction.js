@@ -1,8 +1,9 @@
 import React from "react";
 import { Button } from "@material-ui/core";
-import { Link } from "react-router-dom";
 import useDeleteItemById from "../../../../hooks/useDeleteItemById";
 import ConfirmationDialog from "../../../ConfirmationDialog/ConfirmationDialog";
+import DeleteIcon from "@material-ui/icons/Delete";
+import "./DeleteItemAction.css";
 
 const DeleteItemAction = ({ id }) => {
     const { error, handleDelete, isDeleting } = useDeleteItemById(id);
@@ -30,7 +31,8 @@ const DeleteItemAction = ({ id }) => {
                 disable={isDeleting}
                 onClick={handleOpen}
             >
-                Eyða
+                <DeleteIcon className="delete-icon" size="small" />
+                <b>Eyða</b>
             </Button>
             <ConfirmationDialog
                 title="Eyða vöru"
