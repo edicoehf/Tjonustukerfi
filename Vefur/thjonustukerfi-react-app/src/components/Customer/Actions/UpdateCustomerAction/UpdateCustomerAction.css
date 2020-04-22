@@ -1,0 +1,14 @@
+Button.update-button {
+    background-color: rgb(209, 209, 30);
+    color: black;
+}
+Button.update-button:hover {
+    background-color: rgb(138, 138, 20);
+}
+Button.update-button:hover b {
+    opacity: 0;
+}
+
+Button.update-button:hover .update-icon {
+    margin-left: 70%;
+}
