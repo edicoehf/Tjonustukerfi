@@ -14,7 +14,6 @@ namespace ThjonustukerfiWebAPI.Mappings
     public class MappingProfile : Profile
     {
         private DataContext _dbContext;
-        private IConfiguration Configuration { get; }
         /// <summary>Provides a profile to use with AutoMapper</summary>
         public MappingProfile(string connectionString = null)
         {
