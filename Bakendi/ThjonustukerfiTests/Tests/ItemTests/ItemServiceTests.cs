@@ -110,14 +110,14 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             // Mock Repo
             _itemRepoMock.Setup(method => method.SearchItem(invalidbarcode)).Throws(new NotFoundException("Some message"));
             _itemRepoMock.Setup(method => method.SearchItem(validBarcode)).Returns(1);
-            _itemRepoMock.Setup(method => method.ChangeItemStateById(It.IsAny<List<ItemStateChangeInputIdScanner>>()))
+            _itemRepoMock.Setup(method => method.ChangeItemStateByIdScanner(It.IsAny<List<ItemStateChangeInputIdScanner>>()))
                 .Returns(new List<ItemStateChangeInputIdScanner>());
 
             // create service
             _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
 
             //* Act
-            var retVal = _itemService.ChangeItemStateBarcode(input);
+            var retVal = _itemService.ChangeItemStateBarcodeScanner(input);
 
             //* Assert
             Assert.IsNotNull(retVal);
@@ -139,14 +139,14 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
             // Mock Repo
             _itemRepoMock.Setup(method => method.SearchItem(validBarcode)).Returns(1);
-            _itemRepoMock.Setup(method => method.ChangeItemStateById(It.IsAny<List<ItemStateChangeInputIdScanner>>()))
+            _itemRepoMock.Setup(method => method.ChangeItemStateByIdScanner(It.IsAny<List<ItemStateChangeInputIdScanner>>()))
                 .Returns(new List<ItemStateChangeInputIdScanner>());
 
             // create service
             _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
 
             //* Act
-            var retVal = _itemService.ChangeItemStateBarcode(input);
+            var retVal = _itemService.ChangeItemStateBarcodeScanner(input);
 
             //* Assert
             Assert.IsNotNull(retVal);
@@ -166,14 +166,14 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             };
 
             // Mock Repo
-            _itemRepoMock.Setup(method => method.ChangeItemStateById(It.IsAny<List<ItemStateChangeInputIdScanner>>()))
+            _itemRepoMock.Setup(method => method.ChangeItemStateByIdScanner(It.IsAny<List<ItemStateChangeInputIdScanner>>()))
                 .Returns(new List<ItemStateChangeInputIdScanner>());
 
             // create service
             _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
 
             //* Act
-            var retVal = _itemService.ChangeItemStateById(input);
+            var retVal = _itemService.ChangeItemStateByIdScanner(input);
 
             //* Assert
             Assert.IsNotNull(retVal);

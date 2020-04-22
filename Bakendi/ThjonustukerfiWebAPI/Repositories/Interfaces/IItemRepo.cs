@@ -32,7 +32,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
         List<ItemStateChangeInput> ChangeItemState(List<ItemStateChangeInput> stateChanges);
 
         /// <summary>Changes the state of all items in the input with item ID.</summary>
-        List<ItemStateChangeInputIdScanner> ChangeItemStateById(List<ItemStateChangeInputIdScanner> stateChanges);
+        List<ItemStateChangeInputIdScanner> ChangeItemStateByIdScanner(List<ItemStateChangeInputIdScanner> stateChanges);
 
         /// <summary>Gets the item entity by ID.</summary>
         /// <returns>Item entity.</returns>

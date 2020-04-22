@@ -391,7 +391,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 var oldItemState = mockContext.Item.FirstOrDefault(i => i.Id == itemId).StateId;
 
                 //* Act
-                itemRepo.ChangeItemStateById(input);
+                itemRepo.ChangeItemStateByIdScanner(input);
 
                 //* Assert
                 var item = mockContext.Item.FirstOrDefault(i => i.Id == itemId);    // get item to check
@@ -437,7 +437,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 var oldItemState = mockContext.Item.FirstOrDefault(i => i.Id == itemId).StateId;
 
                 //* Act
-                itemRepo.ChangeItemStateById(input);
+                itemRepo.ChangeItemStateByIdScanner(input);
 
                 //* Assert
                 var item = mockContext.Item.FirstOrDefault(i => i.Id == itemId);    // Get item to check
@@ -485,7 +485,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 var itemRepo = new ItemRepo(mockContext, _mapper);
 
                 //* Act
-                var returnedValue = itemRepo.ChangeItemStateById(input);
+                var returnedValue = itemRepo.ChangeItemStateByIdScanner(input);
 
                 //* Assert
                 Assert.IsNotNull(returnedValue);
@@ -515,7 +515,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 var itemRepo = new ItemRepo(mockContext, _mapper);
 
                 //* Act
-                var returnedValue = itemRepo.ChangeItemStateById(input);
+                var returnedValue = itemRepo.ChangeItemStateByIdScanner(input);
 
                 //* Assert
                 Assert.IsNotNull(returnedValue);
@@ -543,8 +543,8 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
                 //* Act and Assert
                 // The exceptions are thrown because there is no valid inputs
-                Assert.ThrowsException<NotFoundException>(() => itemRepo.ChangeItemStateById(input1));  // Invalid itemId
-                Assert.ThrowsException<NotFoundException>(() => itemRepo.ChangeItemStateById(input2));  // Invalid StateID
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.ChangeItemStateByIdScanner(input1));  // Invalid itemId
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.ChangeItemStateByIdScanner(input2));  // Invalid StateID
             }
         }
 

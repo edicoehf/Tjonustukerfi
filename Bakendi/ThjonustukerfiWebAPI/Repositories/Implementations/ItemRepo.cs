@@ -237,7 +237,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             return invalidInputs;
         }
 
-        public List<ItemStateChangeInputIdScanner> ChangeItemStateById(List<ItemStateChangeInputIdScanner> stateChanges)
+        public List<ItemStateChangeInputIdScanner> ChangeItemStateByIdScanner(List<ItemStateChangeInputIdScanner> stateChanges)
         {
             var invalidInputs = new List<ItemStateChangeInputIdScanner>();
             // Gets invalid inputs if any

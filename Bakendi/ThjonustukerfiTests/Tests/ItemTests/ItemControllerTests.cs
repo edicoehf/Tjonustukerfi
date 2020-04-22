@@ -159,13 +159,13 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             //* Arrange
             var emptyList = new List<ItemStateChangeInputIdScanner>();
             // Mock Service
-            _itemServiceMock.Setup(method => method.ChangeItemStateById(It.IsAny<List<ItemStateChangeInputIdScanner>>())).Returns(emptyList).Verifiable();
+            _itemServiceMock.Setup(method => method.ChangeItemStateByIdScanner(It.IsAny<List<ItemStateChangeInputIdScanner>>())).Returns(emptyList).Verifiable();
 
             // Create controller
             _itemController = new ItemController(_itemServiceMock.Object);
 
             //* Act
-            var response = _itemController.ChangeItemStateById(emptyList) as OkResult;
+            var response = _itemController.ChangeItemStateByIdScanner(emptyList) as OkResult;
 
             //* Assert
             Assert.IsNotNull(response);
@@ -188,13 +188,13 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             };
 
             // Mock service
-            _itemServiceMock.Setup(method => method.ChangeItemStateById(input)).Returns(invalidInputs).Verifiable();
+            _itemServiceMock.Setup(method => method.ChangeItemStateByIdScanner(input)).Returns(invalidInputs).Verifiable();
 
             // Create controller
             _itemController = new ItemController(_itemServiceMock.Object);
 
             //* Act
-            var response = _itemController.ChangeItemStateById(input) as AcceptedResult;
+            var response = _itemController.ChangeItemStateByIdScanner(input) as AcceptedResult;
 
             //* Assert
             Assert.IsNotNull(response);
@@ -210,13 +210,13 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             //* Arrange
             var emptyList = new List<ItemStateChangeBarcodeScanner>();
             // Mock Service
-            _itemServiceMock.Setup(method => method.ChangeItemStateBarcode(It.IsAny<List<ItemStateChangeBarcodeScanner>>())).Returns(emptyList).Verifiable();
+            _itemServiceMock.Setup(method => method.ChangeItemStateBarcodeScanner(It.IsAny<List<ItemStateChangeBarcodeScanner>>())).Returns(emptyList).Verifiable();
 
             // Create controller
             _itemController = new ItemController(_itemServiceMock.Object);
 
             //* Act
-            var response = _itemController.ChangeItemStateBarcode(emptyList) as OkResult;
+            var response = _itemController.ChangeItemStateBarcodeScanner(emptyList) as OkResult;
 
             //* Assert
             Assert.IsNotNull(response);
@@ -239,13 +239,13 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             };
 
             // Mock service
-            _itemServiceMock.Setup(method => method.ChangeItemStateBarcode(input)).Returns(invalidInputs).Verifiable();
+            _itemServiceMock.Setup(method => method.ChangeItemStateBarcodeScanner(input)).Returns(invalidInputs).Verifiable();
 
             // Create controller
             _itemController = new ItemController(_itemServiceMock.Object);
 
             //* Act
-            var response = _itemController.ChangeItemStateBarcode(input) as AcceptedResult;
+            var response = _itemController.ChangeItemStateBarcodeScanner(input) as AcceptedResult;
 
             //* Assert
             Assert.IsNotNull(response);

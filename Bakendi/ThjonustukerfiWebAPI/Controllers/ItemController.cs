@@ -150,9 +150,9 @@ namespace ThjonustukerfiWebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("scanner/statechangebyid")]
         [HttpPatch]
-        public IActionResult ChangeItemStateById([FromBody] List<ItemStateChangeInputIdScanner> stateChanges)
+        public IActionResult ChangeItemStateByIdScanner([FromBody] List<ItemStateChangeInputIdScanner> stateChanges)
         {
-            var invalidInput = _itemService.ChangeItemStateById(stateChanges);
+            var invalidInput = _itemService.ChangeItemStateByIdScanner(stateChanges);
 
             if(invalidInput.Any()) { return Accepted(invalidInput); }
 
@@ -167,9 +167,9 @@ namespace ThjonustukerfiWebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("scanner/statechangebybarcode")]
         [HttpPatch]
-        public IActionResult ChangeItemStateBarcode([FromBody] List<ItemStateChangeBarcodeScanner> stateChanges)
+        public IActionResult ChangeItemStateBarcodeScanner([FromBody] List<ItemStateChangeBarcodeScanner> stateChanges)
         {
-            var invalidInput = _itemService.ChangeItemStateBarcode(stateChanges);
+            var invalidInput = _itemService.ChangeItemStateBarcodeScanner(stateChanges);
 
             if(invalidInput.Any()) { return Accepted(invalidInput); }
 

@@ -31,8 +31,8 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         public void RemoveItem(long itemId) => _itemRepo.RemoveItem(itemId);
         public void RemoveItemQuery(string barcode) => _itemRepo.RemoveItem(_itemRepo.SearchItem(barcode));
         public List<ItemStateChangeInput> ChangeItemState(List<ItemStateChangeInput> stateChanges) => _itemRepo.ChangeItemState(stateChanges);
-        public List<ItemStateChangeInputIdScanner> ChangeItemStateById(List<ItemStateChangeInputIdScanner> stateChanges) => _itemRepo.ChangeItemStateById(stateChanges);
-        public List<ItemStateChangeBarcodeScanner> ChangeItemStateBarcode(List<ItemStateChangeBarcodeScanner> stateChanges)
+        public List<ItemStateChangeInputIdScanner> ChangeItemStateByIdScanner(List<ItemStateChangeInputIdScanner> stateChanges) => _itemRepo.ChangeItemStateByIdScanner(stateChanges);
+        public List<ItemStateChangeBarcodeScanner> ChangeItemStateBarcodeScanner(List<ItemStateChangeBarcodeScanner> stateChanges)
         {
             var invalidInputs = new List<ItemStateChangeBarcodeScanner>();
             // create list with IDs in stead of barcode
@@ -57,7 +57,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             }
 
             // update the items, returns any and all inputs that are not correct
-            var invalidInputStates = _itemRepo.ChangeItemStateById(stateChangesWithId);
+            var invalidInputStates = _itemRepo.ChangeItemStateByIdScanner(stateChangesWithId);
 
             // Put the invalid inputs together and get the correct barcode
             foreach (var item in invalidInputStates)
