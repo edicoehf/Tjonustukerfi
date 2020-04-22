@@ -373,8 +373,20 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // input to handle archive input and all connections
             var input = new List<OrderItemArchiveInput>();
             var completeOrders = _dbContext.Order.Where(o => o.DateCompleted != null).ToList(); // Get all complete orders
-            var ordersToDelete = new List<long>();  // create a list of orderIDs to remove those that are archived
+            
+            // Get all orders older than 3 months
+            var oldOrders = new List<Order>();
+            var dateNow = DateTime.Now;
             foreach (var order in completeOrders)
+            {
+                if(dateNow.Subtract((DateTime)order.DateCompleted).TotalDays > 90) { oldOrders.Add(order); }
+            }
+
+            // just return if there aren't any orders
+            if(!oldOrders.Any()) { return; }
+
+            var ordersToDelete = new List<long>();  // create a list of orderIDs to remove those that are archived
+            foreach (var order in oldOrders)
             {
                 // get connections
                 var itemOrderConnections = _dbContext.ItemOrderConnection.Where(ioc => ioc.OrderId == order.Id).ToList();
