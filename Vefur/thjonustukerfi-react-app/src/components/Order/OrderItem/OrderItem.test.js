@@ -1,6 +1,7 @@
 import React from "react";
 import { shallow, mount } from "enzyme";
 import OrderItem from "./OrderItem";
+jest.mock("react-router-dom");
 
 describe("<OrderItem />", () => {
     let wrapper;
@@ -17,10 +18,10 @@ describe("<OrderItem />", () => {
         );
     });
 
-    it("Should have 3 children", () => {
+    it("Should have 4 children", () => {
         expect(
             wrapper.find(".order-item").at(0).instance().children.length
-        ).toBe(3);
+        ).toBe(4);
     });
 
     it("Should display category correctly", () => {
