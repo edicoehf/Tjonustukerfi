@@ -797,7 +797,7 @@ namespace ThjonustukerfiTests.Tests
                 orderEntity.DateCompleted = DateTime.Now.AddYears(-1);  // make the order complete a year old (has to be more than 90 days)
 
                 //* Act
-                orderRepo.ArchiveOrders();
+                orderRepo.ArchiveOldOrders();
 
                 // Get stuff
                 var archivedOrder = mockContext.OrderArchive.First();

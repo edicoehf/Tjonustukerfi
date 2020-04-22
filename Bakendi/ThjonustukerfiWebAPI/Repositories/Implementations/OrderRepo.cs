@@ -368,10 +368,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             return orders;
         }
 
-        public void ArchiveOrders()
+        public void ArchiveOldOrders()
         {
-            // input to handle archive input and all connections
-            var input = new List<OrderItemArchiveInput>();
             var completeOrders = _dbContext.Order.Where(o => o.DateCompleted != null).ToList(); // Get all complete orders
             
             // Get all orders older than 3 months
@@ -382,11 +380,28 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 if(dateNow.Subtract((DateTime)order.DateCompleted).TotalDays > 90) { oldOrders.Add(order); }
             }
 
+            Archive(oldOrders);
+        }
+
+        public void ArchiveCompleteOrdersByCustomerId(long customerId)
+        {
+            var completeOrders = _dbContext.Order.Where(o => o.CustomerId == customerId && o.DateCompleted != null).ToList();  // Get all complete orders for this customer
+
+            // Archive the orders
+            Archive(completeOrders);
+        }
+
+        //*     Helper functions     *//
+        private void Archive(List<Order> toArchive)
+        {
+            // input to handle archive input and all connections
+            var input = new List<OrderItemArchiveInput>();
+
             // just return if there aren't any orders
-            if(!oldOrders.Any()) { return; }
+            if(!toArchive.Any()) { return; }
 
             var ordersToDelete = new List<long>();  // create a list of orderIDs to remove those that are archived
-            foreach (var order in oldOrders)
+            foreach (var order in toArchive)
             {
                 // get connections
                 var itemOrderConnections = _dbContext.ItemOrderConnection.Where(ioc => ioc.OrderId == order.Id).ToList();

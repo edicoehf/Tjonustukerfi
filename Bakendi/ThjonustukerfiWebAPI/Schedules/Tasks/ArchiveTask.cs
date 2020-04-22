@@ -40,7 +40,7 @@ namespace ThjonustukerfiWebAPI.Schedules.Tasks
         // Execution of the task
         public void Execute()
         {
-            _orderRepo.ArchiveOrders();
+            _orderRepo.ArchiveOldOrders();
         }
     }
 }

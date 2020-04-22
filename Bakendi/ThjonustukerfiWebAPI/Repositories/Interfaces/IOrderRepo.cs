@@ -37,6 +37,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
         List<OrderDTO> GetActiveOrdersByCustomerId(long customerID);
 
         /// <summary>Function to archive orders that have been completed for 3 months or more</summary>
-        void ArchiveOrders();
+        void ArchiveOldOrders();
+
+        /// <summary>Function to archive orders by ID that are complete</summary>
+        void ArchiveCompleteOrdersByCustomerId(long customerId);
     }
 }
