@@ -23,7 +23,7 @@ const useDeleteItemById = (id, cb) => {
                     }
                 });
         }
-    }, [id, isDeleting, isProcessing]);
+    }, [id, isDeleting, isProcessing, cb]);
 
     const handleDelete = () => {
         if (!isDeleting) {
