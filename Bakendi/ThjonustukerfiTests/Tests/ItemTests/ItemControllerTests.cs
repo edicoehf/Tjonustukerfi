@@ -157,9 +157,9 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         public void ChangeItemStateById_should_return_an_OKresult()
         {
             //* Arrange
-            var emptyList = new List<ItemStateChangeInputModel>();
+            var emptyList = new List<ItemStateChangeInputIdScanner>();
             // Mock Service
-            _itemServiceMock.Setup(method => method.ChangeItemStateById(It.IsAny<List<ItemStateChangeInputModel>>())).Returns(emptyList).Verifiable();
+            _itemServiceMock.Setup(method => method.ChangeItemStateById(It.IsAny<List<ItemStateChangeInputIdScanner>>())).Returns(emptyList).Verifiable();
 
             // Create controller
             _itemController = new ItemController(_itemServiceMock.Object);
@@ -176,15 +176,15 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         public void ChangeItemStateById_should_return_AcceptedResult_and_list_of_invalid_inputs()
         {
             //* Arrange
-            var input = new List<ItemStateChangeInputModel>()
+            var input = new List<ItemStateChangeInputIdScanner>()
             {
-                new ItemStateChangeInputModel { ItemId = -1, StateChangeBarcode = @"Í Vinnslu-{location:""hilla1A""}" },
-                new ItemStateChangeInputModel { ItemId = 1, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
+                new ItemStateChangeInputIdScanner { ItemId = -1, StateChangeBarcode = @"Í Vinnslu-{location:""hilla1A""}" },
+                new ItemStateChangeInputIdScanner { ItemId = 1, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
             };
 
-            var invalidInputs = new List<ItemStateChangeInputModel>()
+            var invalidInputs = new List<ItemStateChangeInputIdScanner>()
             {
-                new ItemStateChangeInputModel { ItemId = -1, StateChangeBarcode = @"Í Vinnslu-{location:""hilla1A""}" }
+                new ItemStateChangeInputIdScanner { ItemId = -1, StateChangeBarcode = @"Í Vinnslu-{location:""hilla1A""}" }
             };
 
             // Mock service
@@ -200,7 +200,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             Assert.IsNotNull(response);
             Assert.AreEqual(StatusCodes.Status202Accepted, response.StatusCode);
             
-            var retVal = response.Value as List<ItemStateChangeInputModel>;
+            var retVal = response.Value as List<ItemStateChangeInputIdScanner>;
             Assert.AreEqual(invalidInputs.Count, retVal.Count);
         }
 

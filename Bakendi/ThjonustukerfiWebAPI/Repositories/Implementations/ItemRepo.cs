@@ -199,9 +199,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             if(orderId != -1) { SetOrderCompleteStatus(new List<long>() { orderId }); }
         }
 
-        public List<ItemStateChangeInputModel> ChangeItemStateById(List<ItemStateChangeInputModel> stateChanges)
+        public List<ItemStateChangeInputIdScanner> ChangeItemStateById(List<ItemStateChangeInputIdScanner> stateChanges)
         {
-            var invalidInputs = new List<ItemStateChangeInputModel>();
+            var invalidInputs = new List<ItemStateChangeInputIdScanner>();
             // Gets invalid inputs if any
             foreach (var item in stateChanges)
             {

@@ -109,7 +109,7 @@ namespace ThjonustukerfiWebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("statechange")]
         [HttpPatch]
-        public IActionResult ChangeItemState([FromBody] List<ItemStateChangeInputModel> stateChanges)
+        public IActionResult ChangeItemState([FromBody] List<ItemStateChangeInputIdScanner> stateChanges)
         {
             var invalidInput = _itemService.ChangeItemState(stateChanges);
 
@@ -150,7 +150,7 @@ namespace ThjonustukerfiWebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("statechangebyid")]
         [HttpPatch]
-        public IActionResult ChangeItemStateById([FromBody] List<ItemStateChangeInputModel> stateChanges)
+        public IActionResult ChangeItemStateById([FromBody] List<ItemStateChangeInputIdScanner> stateChanges)
         {
             var invalidInput = _itemService.ChangeItemStateById(stateChanges);
 

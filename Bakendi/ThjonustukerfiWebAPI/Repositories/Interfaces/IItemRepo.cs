@@ -28,7 +28,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
         void RemoveItem(long itemId);
 
         /// <summary>Changes the state of all items in the input with item ID.</summary>
-        List<ItemStateChangeInputModel> ChangeItemStateById(List<ItemStateChangeInputModel> stateChanges);
+        List<ItemStateChangeInputIdScanner> ChangeItemStateById(List<ItemStateChangeInputIdScanner> stateChanges);
 
         /// <summary>Gets the item entity by ID.</summary>
         /// <returns>Item entity.</returns>

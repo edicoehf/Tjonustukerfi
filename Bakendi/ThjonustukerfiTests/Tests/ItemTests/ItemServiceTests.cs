@@ -110,8 +110,8 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             // Mock Repo
             _itemRepoMock.Setup(method => method.SearchItem(invalidbarcode)).Throws(new NotFoundException("Some message"));
             _itemRepoMock.Setup(method => method.SearchItem(validBarcode)).Returns(1);
-            _itemRepoMock.Setup(method => method.ChangeItemStateById(It.IsAny<List<ItemStateChangeInputModel>>()))
-                .Returns(new List<ItemStateChangeInputModel>());
+            _itemRepoMock.Setup(method => method.ChangeItemStateById(It.IsAny<List<ItemStateChangeInputIdScanner>>()))
+                .Returns(new List<ItemStateChangeInputIdScanner>());
 
             // create service
             _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
@@ -139,8 +139,8 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
             // Mock Repo
             _itemRepoMock.Setup(method => method.SearchItem(validBarcode)).Returns(1);
-            _itemRepoMock.Setup(method => method.ChangeItemStateById(It.IsAny<List<ItemStateChangeInputModel>>()))
-                .Returns(new List<ItemStateChangeInputModel>());
+            _itemRepoMock.Setup(method => method.ChangeItemStateById(It.IsAny<List<ItemStateChangeInputIdScanner>>()))
+                .Returns(new List<ItemStateChangeInputIdScanner>());
 
             // create service
             _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
@@ -159,15 +159,15 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             long validId = 1;
             long validId2 = 2;
             //* Arrange
-            var input = new List<ItemStateChangeInputModel>()
+            var input = new List<ItemStateChangeInputIdScanner>()
             {
-                new ItemStateChangeInputModel { ItemId = validId, StateChangeBarcode = @"Vinnslu-{location:""hilla1A""}" },
-                new ItemStateChangeInputModel { ItemId = validId2, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
+                new ItemStateChangeInputIdScanner { ItemId = validId, StateChangeBarcode = @"Vinnslu-{location:""hilla1A""}" },
+                new ItemStateChangeInputIdScanner { ItemId = validId2, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
             };
 
             // Mock Repo
-            _itemRepoMock.Setup(method => method.ChangeItemStateById(It.IsAny<List<ItemStateChangeInputModel>>()))
-                .Returns(new List<ItemStateChangeInputModel>());
+            _itemRepoMock.Setup(method => method.ChangeItemStateById(It.IsAny<List<ItemStateChangeInputIdScanner>>()))
+                .Returns(new List<ItemStateChangeInputIdScanner>());
 
             // create service
             _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);

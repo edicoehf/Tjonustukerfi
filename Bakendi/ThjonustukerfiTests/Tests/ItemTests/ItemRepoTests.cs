@@ -376,9 +376,9 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 // constructing the barcode string
                 string stateChange = $"{mockContext.State.FirstOrDefault(s => s.Id == statechangeID).Name}" + @"-{location:""hilla1A""}";
 
-                var input = new List<ItemStateChangeInputModel>()
+                var input = new List<ItemStateChangeInputIdScanner>()
                 {
-                    new ItemStateChangeInputModel
+                    new ItemStateChangeInputIdScanner
                     {
                         ItemId = itemId,
                         StateChangeBarcode = stateChange
@@ -422,9 +422,9 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 // Create the barcode string
                 string stateChange = $"{mockContext.State.FirstOrDefault(s => s.Id == statechangeID).Name}" + @"-{location:""hilla1A""}";
 
-                var input = new List<ItemStateChangeInputModel>()
+                var input = new List<ItemStateChangeInputIdScanner>()
                 {
-                    new ItemStateChangeInputModel
+                    new ItemStateChangeInputIdScanner
                     {
                         ItemId = itemId,
                         StateChangeBarcode = stateChange
@@ -466,18 +466,18 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             string validState = @"Sótt-{location:""hilla1A""}";
 
             // The input with valid and invalid variables
-            var input = new List<ItemStateChangeInputModel>()
+            var input = new List<ItemStateChangeInputIdScanner>()
             {
-                new ItemStateChangeInputModel { ItemId = invalidId, StateChangeBarcode = validState },
-                new ItemStateChangeInputModel { ItemId = validId, StateChangeBarcode = invalidState },
-                new ItemStateChangeInputModel { ItemId = validId, StateChangeBarcode = validState }
+                new ItemStateChangeInputIdScanner { ItemId = invalidId, StateChangeBarcode = validState },
+                new ItemStateChangeInputIdScanner { ItemId = validId, StateChangeBarcode = invalidState },
+                new ItemStateChangeInputIdScanner { ItemId = validId, StateChangeBarcode = validState }
             };
 
             // Expected return from the function
-            var expectedReturn = new List<ItemStateChangeInputModel>()
+            var expectedReturn = new List<ItemStateChangeInputIdScanner>()
             {
-                new ItemStateChangeInputModel { ItemId = invalidId, StateChangeBarcode = validState },
-                new ItemStateChangeInputModel { ItemId = validId, StateChangeBarcode = invalidState }
+                new ItemStateChangeInputIdScanner { ItemId = invalidId, StateChangeBarcode = validState },
+                new ItemStateChangeInputIdScanner { ItemId = validId, StateChangeBarcode = invalidState }
             };
 
             using(var mockContext = new DataContext(_options))
@@ -505,9 +505,9 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             string validState = @"Sótt-{location:""hilla1A""}";
 
             // The input with valid and invalid variables
-            var input = new List<ItemStateChangeInputModel>()
+            var input = new List<ItemStateChangeInputIdScanner>()
             {
-                new ItemStateChangeInputModel { ItemId = validId, StateChangeBarcode = validState }
+                new ItemStateChangeInputIdScanner { ItemId = validId, StateChangeBarcode = validState }
             };
 
             using(var mockContext = new DataContext(_options))
@@ -527,13 +527,13 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         public void ChangeItemStateById_should_throw_correct_exceptions()
         {
             //* Arrange
-            var input1 = new List<ItemStateChangeInputModel>()
+            var input1 = new List<ItemStateChangeInputIdScanner>()
             {
-                new ItemStateChangeInputModel { ItemId = -1, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
+                new ItemStateChangeInputIdScanner { ItemId = -1, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
             };
-            var input2 = new List<ItemStateChangeInputModel>()
+            var input2 = new List<ItemStateChangeInputIdScanner>()
             {
-                new ItemStateChangeInputModel { ItemId = 2, StateChangeBarcode = @"Í Vinnslu-{location:""hilla1A""}" }
+                new ItemStateChangeInputIdScanner { ItemId = 2, StateChangeBarcode = @"Í Vinnslu-{location:""hilla1A""}" }
             };
 
             using(var mockContext = new DataContext(_options))
