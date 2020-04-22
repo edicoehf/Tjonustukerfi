@@ -1,6 +1,7 @@
 import React from "react";
 import ItemDetails from "../ItemDetails/ItemDetails";
 import StateSelection from "../StateSelection/StateSelection";
+import ItemActions from "../Actions/ItemActions/ItemActions";
 import "./ItemView.css";
 
 const ItemView = ({ match }) => {
@@ -24,6 +25,7 @@ const ItemView = ({ match }) => {
                 receivedUpdate={receivedUpdate}
             />
             <StateSelection id={id} hasUpdated={hasUpdated} />
+            <ItemActions id={id} />
         </div>
     );
 };

@@ -11,6 +11,7 @@ import CustomerMain from "./components/Customer/CustomerMain/CustomerMain";
 import CreateOrderView from "./components/Order/CreateOrder/CreateOrderView/CreateOrderView";
 import OrderMain from "./components/Order/OrderMain/OrderMain";
 import ItemView from "./components/Item/ItemView/ItemView";
+import EditItem from "./components/Item/EditItem/EditItem";
 
 function App() {
     return (
@@ -45,6 +46,7 @@ function App() {
                     />
                     <Route exact path="/orders" component={OrderMain} />
                     <Route exact path="/item/:id" component={ItemView} />
+                    <Route exact path="/update-item/:id" component={EditItem} />
                 </Switch>
             </div>
         </div>

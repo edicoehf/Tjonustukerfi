@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow, mount } from "enzyme";
 import { fireEvent } from "@testing-library/react";
-import AddItems from "./AddItems";
+import ItemForm from "./ItemForm";
 import { RadioGroup, TextField } from "@material-ui/core";
 
 const findByName = (fields, name) => {
@@ -13,7 +13,7 @@ const findByName = (fields, name) => {
     return null;
 };
 
-describe("<AddItems />", () => {
+describe("<ItemForm />", () => {
     const categories = [
         {
             id: 0,
@@ -54,8 +54,8 @@ describe("<AddItems />", () => {
     useStateSpy.mockImplementation((init) => [init, setState]);
     checkWrapper = mount(
         shallow(
-            <AddItems
-                addItems={handler}
+            <ItemForm
+                submitHandler={handler}
                 categories={categories}
                 services={services}
             />
@@ -65,8 +65,8 @@ describe("<AddItems />", () => {
     beforeEach(() => {
         wrapper = mount(
             shallow(
-                <AddItems
-                    addItems={handler}
+                <ItemForm
+                    submitHandler={handler}
                     categories={categories}
                     services={services}
                 />

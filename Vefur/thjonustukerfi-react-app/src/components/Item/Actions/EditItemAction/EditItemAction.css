@@ -1,0 +1,16 @@
+button.edit-item-button {
+    background-color: #ffa000;
+    color: #fff;
+}
+
+button.edit-item-button:hover {
+    background-color: #ff8f00;
+}
+
+.edit-item a {
+    color: #fff;
+}
+
+.edit-item a {
+    text-decoration: none;
+}
