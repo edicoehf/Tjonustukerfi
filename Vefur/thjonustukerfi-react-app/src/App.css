@@ -2,6 +2,7 @@
     --main-color: #d9dcff;
     --error-color: #ba3f3f;
 }
+
 .app {
     background-color: var(--main-color);
 }

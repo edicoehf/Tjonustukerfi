@@ -20,7 +20,7 @@ describe("<CustomerInputForm />", () => {
         const setState = jest.fn();
         const useStateSpy = jest.spyOn(React, "useState");
         const handler = () => {};
-        useStateSpy.mockImplementation(init => [init, setState]);
+        useStateSpy.mockImplementation((init) => [init, setState]);
         checkWrapper = mount(
             shallow(
                 <CustomerInputForm
@@ -44,10 +44,10 @@ describe("<CustomerInputForm />", () => {
             testState = {
                 name: "",
                 ssn: "",
-                telephone: "",
+                phone: "",
                 email: "",
                 postalCode: "",
-                address: ""
+                address: "",
             };
             inputs = wrapper.find("input");
         });
@@ -108,29 +108,29 @@ describe("<CustomerInputForm />", () => {
             });
         });
 
-        describe("Telephone input", () => {
-            const fields = findByName(checkWrapper.find("input"), "telephone");
+        describe("phone input", () => {
+            const fields = findByName(checkWrapper.find("input"), "phone");
             if (!fields) {
                 return;
             }
             it("Should have length 0 at start", () => {
-                const telephone = findByName(inputs, "telephone");
-                expect(telephone.instance().value).toHaveLength(0);
+                const phone = findByName(inputs, "phone");
+                expect(phone.instance().value).toHaveLength(0);
             });
 
-            it("Should capture Telephone correctly onChange", () => {
-                const telephone = findByName(inputs, "telephone");
-                telephone.instance().value = "1234567";
-                testState.telephone = "1234567";
-                telephone.simulate("change");
+            it("Should capture phone correctly onChange", () => {
+                const phone = findByName(inputs, "phone");
+                phone.instance().value = "1234567";
+                testState.phone = "1234567";
+                phone.simulate("change");
                 expect(setState).toHaveBeenCalledWith(testState);
             });
 
-            it("Should capture Telephone incorrectly onChange", () => {
-                const telephone = findByName(inputs, "telephone");
-                telephone.instance().value = "1234567";
-                telephone.simulate("change");
-                expect(telephone.instance().value).not.toBe("7654321");
+            it("Should capture phone incorrectly onChange", () => {
+                const phone = findByName(inputs, "phone");
+                phone.instance().value = "1234567";
+                phone.simulate("change");
+                expect(phone.instance().value).not.toBe("7654321");
             });
         });
 
@@ -219,10 +219,10 @@ describe("<CustomerInputForm />", () => {
         const initialState = {
             name: "Siggi Viggi",
             ssn: "1205654059",
-            telephone: "5812345",
+            phone: "5812345",
             email: "siggi@viggi.is",
             postalCode: "800",
-            address: "Bakkabakki 2"
+            address: "Bakkabakki 2",
         };
         let testState;
         let inputs;
@@ -278,15 +278,15 @@ describe("<CustomerInputForm />", () => {
             });
         });
 
-        describe("Telephone input", () => {
-            const fields = findByName(checkWrapper.find("input"), "telephone");
+        describe("phone input", () => {
+            const fields = findByName(checkWrapper.find("input"), "phone");
             if (!fields) {
                 return;
             }
 
-            it("Should receive telephone from props", () => {
-                const telephone = findByName(inputs, "telephone");
-                expect(telephone.instance().value).toBe(initialState.telephone);
+            it("Should receive phone from props", () => {
+                const phone = findByName(inputs, "phone");
+                expect(phone.instance().value).toBe(initialState.phone);
             });
         });
 

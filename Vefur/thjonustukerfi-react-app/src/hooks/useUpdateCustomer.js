@@ -14,7 +14,7 @@ const useUpdateCustomer = () => {
                 .then(() => {
                     setError(null);
                 })
-                .catch(error => setError(error))
+                .catch((error) => setError(error))
                 .finally(() => {
                     setValues(null);
                     setProcessing(false);
@@ -22,7 +22,7 @@ const useUpdateCustomer = () => {
         }
     }, [isProcessing, values]);
 
-    const handleUpdate = values => {
+    const handleUpdate = (values) => {
         if (!isProcessing) {
             setValues(values);
         }

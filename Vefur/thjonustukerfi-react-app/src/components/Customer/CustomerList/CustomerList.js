@@ -2,6 +2,7 @@ import React from "react";
 import CustomerListItem from "../CustomerListItem/CustomerListItem";
 import { ListGroup } from "react-bootstrap";
 import "./CustomerList.css";
+import { customersType, isLoadingType } from "../../../types";
 
 const CustomerList = ({ customers, error, isLoading }) => {
     return (
@@ -34,4 +35,10 @@ const CustomerList = ({ customers, error, isLoading }) => {
         </div>
     );
 };
+
+CustomerList.propTypes = {
+    customers: customersType,
+    isLoading: isLoadingType,
+};
+
 export default CustomerList;

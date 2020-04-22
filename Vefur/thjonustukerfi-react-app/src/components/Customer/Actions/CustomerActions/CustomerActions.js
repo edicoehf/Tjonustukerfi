@@ -2,6 +2,7 @@ import React from "react";
 import DeleteCustomerAction from "../DeleteCustomerAction/DeleteCustomerAction";
 import UpdateCustomerAction from "../UpdateCustomerAction/UpdateCustomerAction";
 import "./CustomerActions.css";
+import { idType } from "../../../../types/index";
 
 const CustomerActions = ({ id }) => {
     return (
@@ -10,6 +11,10 @@ const CustomerActions = ({ id }) => {
             <UpdateCustomerAction id={id} />
         </div>
     );
+};
+
+CustomerActions.propTypes = {
+    id: idType,
 };
 
 export default CustomerActions;

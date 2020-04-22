@@ -6,21 +6,14 @@ describe("<OrderItem />", () => {
     let wrapper;
     let testProps = {
         id: 52,
-        type: "Lax",
+        category: "Lax",
         service: "Birkireyking",
         barcode: "50050001",
     };
 
     beforeEach(() => {
         wrapper = mount(
-            shallow(
-                <OrderItem
-                    key={testProps.id}
-                    type={testProps.type}
-                    service={testProps.service}
-                    barcode={testProps.barcode}
-                />
-            ).get(0)
+            shallow(<OrderItem key={testProps.id} item={testProps} />).get(0)
         );
     });
 
@@ -30,13 +23,13 @@ describe("<OrderItem />", () => {
         ).toBe(3);
     });
 
-    it("Should display type correctly", () => {
-        expect(wrapper.find(".order-item-type").at(0).childAt(0).text()).toBe(
-            testProps.type
-        );
+    it("Should display category correctly", () => {
+        expect(
+            wrapper.find(".order-item-category").at(0).childAt(0).text()
+        ).toBe(testProps.category);
     });
 
-    it("Should service type correctly", () => {
+    it("Should display service correctly", () => {
         expect(
             wrapper.find(".order-item-service").at(0).childAt(0).text()
         ).toBe(testProps.service);

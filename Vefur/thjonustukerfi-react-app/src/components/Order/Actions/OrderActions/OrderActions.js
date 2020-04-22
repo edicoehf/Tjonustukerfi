@@ -1,5 +1,6 @@
 import React from "react";
 import DeleteOrderAction from "../DeleteOrderAction/DeleteOrderAction";
+import { idType } from "../../../../types";
 
 const OrderActions = ({ id }) => {
     return (
@@ -7,6 +8,10 @@ const OrderActions = ({ id }) => {
             <DeleteOrderAction id={id} />
         </div>
     );
+};
+
+OrderActions.propTypes = {
+    id: idType,
 };
 
 export default OrderActions;

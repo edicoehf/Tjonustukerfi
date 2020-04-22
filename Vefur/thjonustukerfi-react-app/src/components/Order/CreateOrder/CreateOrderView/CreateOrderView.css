@@ -1,0 +1,16 @@
+.create-order-view-container {
+    min-width: 80rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.create-order-view {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+p.error {
+    text-align: center;
+}

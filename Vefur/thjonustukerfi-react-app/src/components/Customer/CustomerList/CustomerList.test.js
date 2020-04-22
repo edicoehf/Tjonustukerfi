@@ -6,7 +6,7 @@ jest.mock("react-router-dom");
 describe("<CustomerList />", () => {
     describe("CustomerList renders properly", () => {
         let wrapper;
-        const testCustomer = { id: "1", name: "arni" };
+        const testCustomer = { id: "1", name: "arni", email: "arni@arni.is" };
         beforeEach(() => {
             wrapper = mount(
                 shallow(
@@ -114,9 +114,17 @@ describe("<CustomerList />", () => {
     describe("CustomerList props", () => {
         let wrapper;
         let customerList;
-        const testCustomer1 = { id: "1", name: "arni" };
-        const testCustomer2 = { id: "2", name: "halli" };
-        const testCustomer3 = { id: "3", name: "balli" };
+        const testCustomer1 = { id: "1", name: "arni", email: "arni@arni.is" };
+        const testCustomer2 = {
+            id: "2",
+            name: "halli",
+            email: "bjarni@bjarni.is",
+        };
+        const testCustomer3 = {
+            id: "3",
+            name: "balli",
+            email: "sjarni@sjarni.is",
+        };
         const CustomerListComponent = (
             <CustomerList
                 customers={[testCustomer1, testCustomer2, testCustomer3]}
