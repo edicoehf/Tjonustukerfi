@@ -2,6 +2,7 @@ import React from "react";
 import { ListGroup } from "react-bootstrap";
 import OrderListItem from "../OrderListItem/OrderListItem";
 import "./OrderList.css";
+import { ordersType, isLoadingType } from "../../../types";
 
 const OrderList = ({ orders, isLoading, error }) => {
     return (
@@ -33,6 +34,11 @@ const OrderList = ({ orders, isLoading, error }) => {
             )}
         </div>
     );
+};
+
+OrderList.propTypes = {
+    orders: ordersType,
+    isLoading: isLoadingType,
 };
 
 export default OrderList;

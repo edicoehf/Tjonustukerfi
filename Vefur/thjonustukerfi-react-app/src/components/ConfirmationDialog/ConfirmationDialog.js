@@ -7,6 +7,15 @@ import {
     DialogActions,
     Button,
 } from "@material-ui/core";
+import {
+    titleType,
+    descriptionType,
+    handleAcceptType,
+    declineTextType,
+    confirmTextType,
+    handleCloseType,
+    openType,
+} from "../../types/index";
 
 const ConfirmationDialog = ({
     title,
@@ -39,6 +48,16 @@ const ConfirmationDialog = ({
             </DialogActions>
         </Dialog>
     );
+};
+
+ConfirmationDialog.propTypes = {
+    title: titleType,
+    description: descriptionType,
+    handleAccept: handleAcceptType,
+    handleClose: handleCloseType,
+    open: openType,
+    declineText: declineTextType,
+    confirmText: confirmTextType,
 };
 
 export default ConfirmationDialog;

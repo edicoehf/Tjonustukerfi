@@ -1,3 +1,5 @@
 .customer-view {
-  margin-top: 4em;
+  margin: 4em auto 0 auto;
+  display: grid;
+  width: 50rem;
 }

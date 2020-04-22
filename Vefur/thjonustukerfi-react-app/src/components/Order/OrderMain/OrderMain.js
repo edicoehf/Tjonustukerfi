@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import useGetAllOrders from "../../../hooks/useGetAllOrders";
 import OrderList from "../OrderList/OrderList";
 import "./OrderMain.css";
+import { ordersType, isLoadingType } from "../../../types";
 
 const OrderMain = () => {
     const { orders, error, isLoading } = useGetAllOrders();
@@ -27,6 +28,11 @@ const OrderMain = () => {
             </div>
         </div>
     );
+};
+
+OrderMain.propTypes = {
+    orders: ordersType,
+    isLoading: isLoadingType,
 };
 
 export default OrderMain;

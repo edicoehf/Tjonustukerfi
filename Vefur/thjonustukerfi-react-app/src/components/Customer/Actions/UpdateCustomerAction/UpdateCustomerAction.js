@@ -1,15 +1,29 @@
 import React from "react";
-import { Button } from "react-bootstrap";
+import { Button } from "@material-ui/core";
+import EditIcon from "@material-ui/icons/Edit";
 import { Link } from "react-router-dom";
+import { idType } from "../../../../types/index";
+import "./UpdateCustomerAction.css";
 
 const UpdateCustomerAction = ({ id }) => {
     return (
         <div className="update-customer">
             <Link to={`/update-customer/${id}`}>
-                <Button variant="warning">Breyta</Button>
+                <Button
+                    className="update-button"
+                    size="medium"
+                    variant="contained"
+                >
+                    <EditIcon className="update-icon" size="small" />
+                    <b>Breyta</b>
+                </Button>
             </Link>
         </div>
     );
+};
+
+UpdateCustomerAction.propTypes = {
+    id: idType,
 };
 
 export default UpdateCustomerAction;

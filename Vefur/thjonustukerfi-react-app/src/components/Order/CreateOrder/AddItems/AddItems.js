@@ -1,103 +1,29 @@
 import React from "react";
-import {
-    Radio,
-    RadioGroup,
-    FormControlLabel,
-    FormControl,
-    FormLabel,
-    TextField,
-    Button,
-} from "@material-ui/core";
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
-import useForm from "../../../../hooks/useForm";
-import itemValidate from "../ItemValidate/ItemValidate";
 import "./AddItems.css";
-
-const initialState = {
-    category: null,
-    service: null,
-    amount: 1,
-};
+import ItemForm from "../../../Item/ItemForm/ItemForm";
+import {
+    addItemsType,
+    categoriesType,
+    servicesType,
+} from "../../../../types/index";
 
 const AddItems = ({ addItems, categories, services }) => {
-    const submitHandler = (values) => {
-        addItems(values, resetFields);
-    };
-
-    const { handleSubmit, handleChange, resetFields, values, errors } = useForm(
-        initialState,
-        itemValidate,
-        submitHandler
-    );
-
     return (
         <div className="add-items">
             <h3>Bæta við vöru</h3>
-            <FormControl component="fieldset">
-                <FormLabel component="legend">Tegund:</FormLabel>
-                <RadioGroup
-                    name="category"
-                    className="select"
-                    value={values.category}
-                    onChange={handleChange}
-                >
-                    {errors.category && (
-                        <p className="error">{errors.category}</p>
-                    )}
-                    {categories.map((cat) => (
-                        <FormControlLabel
-                            key={cat.id}
-                            value={`${cat.id}`}
-                            control={<Radio />}
-                            label={cat.name}
-                        />
-                    ))}
-                </RadioGroup>
-                <FormLabel component="legend">Þjónusta:</FormLabel>
-                <RadioGroup
-                    name="service"
-                    className="select"
-                    value={values.service}
-                    onChange={handleChange}
-                >
-                    {errors.service && (
-                        <p className="error">{errors.service}</p>
-                    )}
-                    {services.map((serv) => (
-                        <FormControlLabel
-                            key={serv.id}
-                            value={`${serv.id}`}
-                            control={<Radio />}
-                            label={serv.name}
-                        />
-                    ))}
-                </RadioGroup>
-                <FormLabel component="legend">Fjöldi:</FormLabel>
-                {errors.amount && <p className="error">{errors.amount}</p>}
-                <TextField
-                    name="amount"
-                    className="select"
-                    value={values.amount}
-                    type="number"
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    variant="standard"
-                    onChange={handleChange}
-                />
-                <Button
-                    className="sbm-btn"
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                    startIcon={<AddShoppingCartIcon />}
-                    onClick={handleSubmit}
-                >
-                    Bæta við pöntun
-                </Button>
-            </FormControl>
+            <ItemForm
+                categories={categories}
+                services={services}
+                submitHandler={addItems}
+            />
         </div>
     );
+};
+
+AddItems.propTypes = {
+    addItems: addItemsType,
+    categories: categoriesType,
+    services: servicesType,
 };
 
 export default AddItems;

@@ -1,9 +1,9 @@
 import React from "react";
 import { ListGroup } from "react-bootstrap";
 import "./OrderListItem.css";
+import { orderType } from "../../../types/index";
 
-const OrderListItem = (props) => {
-    const { order } = props;
+const OrderListItem = ({ order }) => {
     return (
         <>
             <ListGroup.Item
@@ -33,4 +33,9 @@ const OrderListItem = (props) => {
         </>
     );
 };
+
+OrderListItem.propTypes = {
+    order: orderType,
+};
+
 export default OrderListItem;

@@ -2,9 +2,9 @@ import React from "react";
 import { ListGroup } from "react-bootstrap";
 import CustomerActions from "../Actions/CustomerActions/CustomerActions";
 import "./CustomerListItem.css";
+import { customerType } from "../../../types/index";
 
-const CustomerListItem = (props) => {
-    const { customer } = props;
+const CustomerListItem = ({ customer }) => {
     return (
         <>
             <ListGroup.Item
@@ -20,4 +20,9 @@ const CustomerListItem = (props) => {
         </>
     );
 };
+
+CustomerListItem.propTypes = {
+    customer: customerType,
+};
+
 export default CustomerListItem;

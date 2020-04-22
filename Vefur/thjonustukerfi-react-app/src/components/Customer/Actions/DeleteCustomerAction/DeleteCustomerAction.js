@@ -1,8 +1,10 @@
 import React from "react";
-import { Button } from "react-bootstrap";
+import { Button } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
 import useDeleteCustomerById from "../../../../hooks/useDeleteCustomerById";
 import "./DeleteCustomerAction.css";
 import ForceDeleteCustomerAction from "../ForceDeleteCustomerAction/ForceDeleteCustomerAction";
+import { idType } from "../../../../types/index";
 
 const DeleteCustomerAction = ({ id }) => {
     const {
@@ -17,14 +19,18 @@ const DeleteCustomerAction = ({ id }) => {
     return (
         <div className="delete-customer">
             <Button
-                variant="danger"
+                className="delete-button"
+                size="medium"
+                color="secondary"
+                variant="contained"
                 disabled={isDeleting}
                 onClick={handleDelete}
             >
-                Eyða
+                <DeleteIcon className="delete-icon" size="small" />
+                <b>Eyða</b>
             </Button>
             <ForceDeleteCustomerAction
-                isOpen={modalIsOpen}
+                open={modalIsOpen}
                 handleDelete={handleForceDelete}
                 handleClose={handleClose}
             />
@@ -33,6 +39,10 @@ const DeleteCustomerAction = ({ id }) => {
             )}
         </div>
     );
+};
+
+DeleteCustomerAction.propTypes = {
+    id: idType,
 };
 
 export default DeleteCustomerAction;

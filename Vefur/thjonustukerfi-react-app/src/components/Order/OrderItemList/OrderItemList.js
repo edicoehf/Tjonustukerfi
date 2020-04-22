@@ -1,13 +1,14 @@
 import React from "react";
 import OrderItem from "../OrderItem/OrderItem";
-import PropTypes from "prop-types";
 import { Table } from "react-bootstrap";
+import { itemsType } from "../../../types";
 
 const OrderItemList = ({ items }) => {
     return (
         <Table className="order-item-list">
             <thead>
                 <tr>
+                    <th>Vörunúmer</th>
                     <th>Tegund</th>
                     <th>Þjónusta</th>
                     <th>Strikamerki</th>
@@ -15,12 +16,7 @@ const OrderItemList = ({ items }) => {
             </thead>
             <tbody>
                 {items.map((item) => (
-                    <OrderItem
-                        key={item.id}
-                        category={item.category}
-                        service={item.service}
-                        barcode={item.barcode}
-                    />
+                    <OrderItem key={item.id} item={item} />
                 ))}
             </tbody>
         </Table>
@@ -28,14 +24,7 @@ const OrderItemList = ({ items }) => {
 };
 
 OrderItemList.propTypes = {
-    items: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.number.isRequired,
-            category: PropTypes.string.isRequired,
-            service: PropTypes.string.isRequired,
-            barcode: PropTypes.string.isRequired,
-        })
-    ),
+    items: itemsType,
 };
 
 export default OrderItemList;
