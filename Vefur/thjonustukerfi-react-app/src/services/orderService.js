@@ -50,9 +50,23 @@ const getAllOrders = () => {
         .catch((error) => Promise.reject(error));
 };
 
+const updateOrderById = (order) => {
+    return fetch(endpoint, {
+        method: "PATCH",
+        body: JSON.stringify(order),
+        headers: {
+            crossDomain: true,
+            "Content-Type": "application/json",
+        },
+    })
+        .then(handleErrors)
+        .catch((error) => Promise.reject(error));
+};
+
 export default {
     getOrderById,
     createOrder,
     getAllOrders,
     deleteOrderById,
+    updateOrderById,
 };
