@@ -21,7 +21,7 @@ function App() {
             </div>
             <div className="main-container">
                 <Switch>
-                    <Route exact path="/" component={LandingPage} />
+                    <Route exact path="/" component={CreateOrderView} />
                     <Route
                         exact
                         path="/new-customer"
