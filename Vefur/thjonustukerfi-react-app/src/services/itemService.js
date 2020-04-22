@@ -62,7 +62,7 @@ const updateItemById = (item) => {
 };
 
 const deleteItemById = (id) => {
-    return fetch(endpoint + item.id, {
+    return fetch(endpoint + id, {
         method: "DELETE",
         headers: {
             crossDomain: true,

@@ -1,7 +1,7 @@
 import React from "react";
 import itemService from "../services/itemService";
 
-const useDeleteItemById = (id) => {
+const useDeleteItemById = (id, cb) => {
     const [error, setError] = React.useState(null);
     const [isProcessing, setProcessing] = React.useState(false);
     const [isDeleting, setDeleting] = React.useState(false);
@@ -18,6 +18,9 @@ const useDeleteItemById = (id) => {
                 .finally(() => {
                     setDeleting(false);
                     setProcessing(false);
+                    if (cb) {
+                        cb();
+                    }
                 });
         }
     }, [id, isDeleting, isProcessing]);
