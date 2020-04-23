@@ -27,8 +27,8 @@ const useForm = (initialState, validate, submitHandler) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const validationErrors = validate(values);
-        setSubmitting(true);
         setErrors(validationErrors);
+        setSubmitting(true);
     };
 
     const resetFields = () => {
