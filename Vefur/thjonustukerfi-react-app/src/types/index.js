@@ -59,6 +59,25 @@ export const existingCustomerType = shape({
     address: string,
 });
 
+export const orderItemType = shape({
+    category: string,
+    service: string,
+    amount: number,
+    categoryName: string,
+    serviceName: string,
+});
+
+export const orderFormValuesType = shape({
+    items: arrayOf(orderItemType),
+    customer: customerType,
+});
+
+export const orderFormFunctionsType = shape({
+    addItems: func,
+    removeItem: func,
+    addCustomer: func,
+});
+
 export const removeType = func;
 export const handleCloseType = func;
 export const handleCreateType = func;
