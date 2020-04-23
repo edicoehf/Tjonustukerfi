@@ -13,22 +13,12 @@ const CreateOrderView = () => {
     const [items, setItems] = React.useState([]);
     const [customer, setCustomer] = React.useState(null);
     const [errors, setErrors] = React.useState({});
-
     const { services } = useGetServices();
     const { categories } = useGetCategories();
+
     const { error: sendError, handleCreate, isProcessing } = useCreateOrder();
 
     const addItems = (newItem, cb) => {
-        newItem.serviceName =
-            services[
-                services.findIndex((s) => s.id.toString() === newItem.service)
-            ].name;
-        newItem.categoryName =
-            categories[
-                categories.findIndex(
-                    (c) => c.id.toString() === newItem.category
-                )
-            ].name;
         const ids = items.map((item) => item.id);
         newItem.id = ids.reduce((acc, curr) => Math.max(acc, curr), 0) + 1;
         setItems([...items, newItem]);
@@ -61,16 +51,7 @@ const CreateOrderView = () => {
                     });
                 }
             });
-            console.log(order);
-            handleCreate({
-                customerId: 14,
-                items: [
-                    {
-                        categoryId: 3,
-                        serviceId: 2,
-                    },
-                ],
-            });
+            handleCreate(order);
             if (!sendError) {
                 setCustomer(null);
                 setItems([]);
