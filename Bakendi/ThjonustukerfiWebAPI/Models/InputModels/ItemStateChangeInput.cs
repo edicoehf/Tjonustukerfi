@@ -2,16 +2,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ThjonustukerfiWebAPI.Models.InputModels
 {
-    /// <summary>Input model to add new Item to the database.</summary>
-    public class ItemInputModel
+    public class ItemStateChangeInput
     {
         [Required]
-        public long? CategoryId { get; set; }
+        public long? ItemId { get; set; }
         [Required]
-        public long? ServiceId { get; set; }
+        public long? StateChangeTo { get; set; }
+        public string Location { get; set; }
 
         //*     Overrides     *//
-        public static bool operator ==(ItemInputModel i1, ItemInputModel i2)
+        public static bool operator ==(ItemStateChangeInput i1, ItemStateChangeInput i2)
         {
             if(object.ReferenceEquals(i1, i2))
             {
@@ -22,10 +22,10 @@ namespace ThjonustukerfiWebAPI.Models.InputModels
                 return false;
             }
 
-            return i1.CategoryId == i2.CategoryId && i1.ServiceId == i2.ServiceId;
+            return i1.ItemId == i2.ItemId && i1.StateChangeTo == i2.StateChangeTo && i1.Location == i2.Location;
         }
 
-        public static bool operator !=(ItemInputModel i1, ItemInputModel i2)
+        public static bool operator !=(ItemStateChangeInput i1, ItemStateChangeInput i2)
         {
             return !(i1 == i2);
         }
@@ -33,21 +33,21 @@ namespace ThjonustukerfiWebAPI.Models.InputModels
         public override int GetHashCode()
         {
             int bc = 0;
-
-            bc += CategoryId.GetHashCode();
-            bc += ServiceId.GetHashCode();
+            
+            bc += StateChangeTo.GetHashCode();
+            bc += ItemId.GetHashCode();
             
             return bc;
         }
 
-        public bool Equals(ItemInputModel other)
+        public bool Equals(ItemStateChangeInput other)
         {
             return this == other;
         }
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as ItemInputModel);
+            return Equals(obj as ItemStateChangeInput);
         }
     }
 }

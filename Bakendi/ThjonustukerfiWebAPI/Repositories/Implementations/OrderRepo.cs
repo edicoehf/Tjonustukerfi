@@ -68,18 +68,13 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 newBarcode++;
                 orderToAdd.Barcode = newBarcode.ToString();
             }
-            
-            long newOrderId = 1;
-            // New ID will be 1 if no orders exist
-            if(_dbContext.Order.Any()) { newOrderId = _dbContext.Order.Max(o => o.Id) + 1; }
-            orderToAdd.Id = newOrderId;
 
             var entity = _dbContext.Order.Add(orderToAdd).Entity;
 
-            // Add items toDatabase
-            AddMultipleItems(order.Items, newOrderId);
+            _dbContext.SaveChanges();   // Save and get order ID
 
-            _dbContext.SaveChanges();
+            // Add items toDatabase
+            AddMultipleItems(order.Items, entity.Id);
 
             return entity.Id;
         }
@@ -206,38 +201,43 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
         }
 
-        //! Doesn't do SaveChanges(), remember to use save changes after calling this function
         /// <summary>Used to add multiple items in order input</summary>
         private void AddMultipleItems(List<ItemInputModel> inpItems, long orderId)
         {
-            // Sets the ID
-            long newItemId = 1;
-            if(_dbContext.Item.Any()) { newItemId = _dbContext.Item.Max(i => i.Id) + 1; }
+            // Get new barcode
             int newItemBarcode = int.Parse(GetItemBarcode());
 
-            // Add items toDatabase
+            var addItems = new List<Item>();
+
+            // Ready Items for DB input
             foreach(var item in inpItems)
             {
-                // Creates a custom ID to make sure everything is connected correctly
                 var itemToAdd = _mapper.Map<Item>(item);
-                itemToAdd.Id = newItemId;
                 itemToAdd.Barcode = newItemBarcode.ToString();
                 itemToAdd.JSON = @"{location: ""Vinnslu""}";
-                _dbContext.Item.Add(itemToAdd);
+                addItems.Add(itemToAdd);
 
-                // Create Timestamp
-                _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(itemToAdd));
-
-                var itemOrderConnection = new ItemOrderConnection {
-                    OrderId = orderId,
-                    ItemId = newItemId
-                };
-                
-                // Increment itemId for next Item
-                newItemId++;
+                // Increment barcode
                 newItemBarcode++;
-                _dbContext.ItemOrderConnection.Add(itemOrderConnection);
             }
+
+            _dbContext.Item.AddRange(addItems);
+            _dbContext.SaveChanges();   // Save changes and get Item IDs
+
+            foreach (var item in addItems)
+            {
+                // Create Timestamp
+                _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(item));
+                
+                // Add connection
+                _dbContext.ItemOrderConnection.Add(new ItemOrderConnection
+                {
+                    OrderId = orderId,
+                    ItemId = item.Id
+                });
+            }
+
+            _dbContext.SaveChanges();   // Save changes to ItemOrderConnections and Timestamp
         }
 
         public void DeleteByOrderId(long id)
@@ -366,6 +366,92 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             }
             
             return orders;
+        }
+
+        public void ArchiveOldOrders()
+        {
+            var completeOrders = _dbContext.Order.Where(o => o.DateCompleted != null).ToList(); // Get all complete orders
+            
+            // Get all orders older than 3 months
+            var oldOrders = new List<Order>();
+            var dateNow = DateTime.Now;
+            foreach (var order in completeOrders)
+            {
+                if(dateNow.Subtract((DateTime)order.DateCompleted).TotalDays > 90) { oldOrders.Add(order); }
+            }
+
+            Archive(oldOrders);
+        }
+
+        public void ArchiveCompleteOrdersByCustomerId(long customerId)
+        {
+            var completeOrders = _dbContext.Order.Where(o => o.CustomerId == customerId && o.DateCompleted != null).ToList();  // Get all complete orders for this customer
+
+            // Archive the orders
+            Archive(completeOrders);
+        }
+
+        //*     Helper functions     *//
+        private void Archive(List<Order> toArchive)
+        {
+            // input to handle archive input and all connections
+            var input = new List<OrderItemArchiveInput>();
+
+            // just return if there aren't any orders
+            if(!toArchive.Any()) { return; }
+
+            var ordersToDelete = new List<long>();  // create a list of orderIDs to remove those that are archived
+            foreach (var order in toArchive)
+            {
+                // get connections
+                var itemOrderConnections = _dbContext.ItemOrderConnection.Where(ioc => ioc.OrderId == order.Id).ToList();
+                
+                // Get all items in order
+                var itemList = new List<Item>();
+                foreach (var connection in itemOrderConnections)
+                {
+                    itemList.Add(_dbContext.Item.FirstOrDefault(i => i.Id == connection.ItemId));
+                }
+
+                // Set order and items to the input model
+                input.Add(new OrderItemArchiveInput() {
+                    Order = order,
+                    Items = itemList
+                });
+
+                // Add this order to delete list
+                ordersToDelete.Add(order.Id);
+            }
+
+            foreach (var order in input)
+            {
+                order.ArchivedOrder = _mapper.Map<OrderArchive>(order.Order);   // archive the order
+                _dbContext.OrderArchive.Add(order.ArchivedOrder);   // add each order to archive
+            }
+
+            _dbContext.SaveChanges();   // Save changes and get order archive IDs
+
+            foreach (var order in input)
+            {
+                order.ArchivedItems = new List<ItemArchive>();
+                foreach (var item in order.Items)
+                {
+                    var addItem = _mapper.Map<ItemArchive>(item);       // map Item to archive
+                    addItem.OrderArchiveId = order.ArchivedOrder.Id;    // set the archive order ID
+                    
+                    order.ArchivedItems.Add(addItem);   // set the archived items
+                }
+
+                _dbContext.ItemArchive.AddRange(order.ArchivedItems);   // set the archived items to db
+            }
+
+            _dbContext.SaveChanges();   // save the database
+
+            // all orders are stored to archive, remove them
+            foreach (var order in ordersToDelete)
+            {
+                DeleteByOrderId(order);
+            }
         }
     }
 }
