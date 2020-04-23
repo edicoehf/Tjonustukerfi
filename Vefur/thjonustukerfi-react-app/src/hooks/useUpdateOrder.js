@@ -5,7 +5,6 @@ const useUpdateOrder = (id) => {
     const [updateError, setError] = React.useState(null);
     const [isProcessing, setProcessing] = React.useState(false);
     const [values, setValues] = React.useState(null);
-    const [cb, setCb] = React.useState();
     const [hasUpdated, setHasUpdated] = React.useState(false);
 
     React.useEffect(() => {
@@ -23,7 +22,7 @@ const useUpdateOrder = (id) => {
                     setHasUpdated(true);
                 });
         }
-    }, [isProcessing, values, id, cb]);
+    }, [isProcessing, values, id]);
 
     const handleUpdate = (values) => {
         if (!isProcessing) {
