@@ -72,6 +72,9 @@ const useOrderForm = (initialState, validate, submitHandler) => {
         addCustomer,
         handleSubmit,
         resetFields,
+        items,
+        customer,
+        errors,
     };
 };
 
