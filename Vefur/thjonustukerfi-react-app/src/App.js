@@ -12,6 +12,7 @@ import CreateOrderView from "./components/Order/CreateOrder/CreateOrderView/Crea
 import OrderMain from "./components/Order/OrderMain/OrderMain";
 import ItemView from "./components/Item/ItemView/ItemView";
 import EditItem from "./components/Item/EditItem/EditItem";
+import UpdateOrderView from "./components/Order/CreateOrder/UpdateOrderView/UpdateOrderView";
 
 function App() {
     return (
@@ -43,6 +44,11 @@ function App() {
                         exact
                         path="/new-order"
                         component={CreateOrderView}
+                    />
+                    <Route
+                        exact
+                        path="/update-order/:id"
+                        component={UpdateOrderView}
                     />
                     <Route exact path="/orders" component={OrderMain} />
                     <Route exact path="/item/:id" component={ItemView} />
