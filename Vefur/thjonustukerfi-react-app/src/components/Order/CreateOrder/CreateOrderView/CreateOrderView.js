@@ -1,10 +1,10 @@
 import React from "react";
-import CreateOrderActions from "../OrderActions/CreateOrderActions";
+import CreateOrderActions from "../CreateOrderActions/CreateOrderActions";
 import useCreateOrder from "../../../../hooks/useCreateOrder";
 import orderValidate from "../OrderValidate/OrderValidate";
 import useOrderForm from "../../../../hooks/useOrderForm";
-import "./CreateOrderView.css";
 import OrderForm from "../OrderForm/OrderForm";
+import "./CreateOrderView.css";
 
 const initialState = {
     customer: null,
@@ -32,6 +32,7 @@ const CreateOrderView = () => {
 
     return (
         <div className="create-order-view">
+            <h1>Ný pöntun</h1>
             <OrderForm
                 values={{ items, customer }}
                 functions={{ addItems, removeItem, addCustomer }}
