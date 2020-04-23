@@ -59,7 +59,6 @@ const UpdateOrder = ({ order, categories, services }) => {
         removeItem,
         addCustomer,
         handleSubmit,
-        resetFields,
         items,
         customer,
         errors,

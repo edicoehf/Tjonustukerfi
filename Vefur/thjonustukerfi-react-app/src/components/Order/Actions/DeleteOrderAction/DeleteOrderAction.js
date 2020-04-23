@@ -6,6 +6,7 @@ import {
     handleDeleteType,
     isDeletingType,
 } from "../../../../types/index";
+import "./DeleteOrderAction.css";
 
 const DeleteOrderAction = ({ id }) => {
     const { error, handleDelete, isDeleting } = useDeleteOrderById(id);

@@ -37,7 +37,7 @@ const UpdateOrderActions = ({ updateOrder, cancelUpdate }) => {
     };
 
     return (
-        <div className="order-actions">
+        <div className="update-order-actions">
             <Button
                 className="cancel-btn"
                 variant="contained"
