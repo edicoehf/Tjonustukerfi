@@ -18,8 +18,11 @@ const CustomerList = ({ customers, error, isLoading }) => {
                         <ListItem className="item action-item">
                             <h5 className="actions">Aðgerðir</h5>
                         </ListItem>
-                        {customers.map((item) => (
-                            <CustomerListItem customer={item} key={item.id} />
+                        {customers.map((customer) => (
+                            <CustomerListItem
+                                customer={customer}
+                                key={customer.id}
+                            />
                         ))}
                     </List>
                 )

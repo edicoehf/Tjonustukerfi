@@ -1,7 +1,6 @@
 .customer-main {
     display: flex;
     flex-direction: column;
-    margin-top: -5%;
 }
 
 .main-item {

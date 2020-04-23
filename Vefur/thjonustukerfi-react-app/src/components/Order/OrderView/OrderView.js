@@ -8,7 +8,7 @@ const OrderView = ({ match }) => {
 
     return (
         <div className="order-view">
-            <h1>Upplýsingar um pöntun</h1>
+            <h1 className="order-detail-header">Upplýsingar um pöntun</h1>
             <OrderDetails id={id} />
             <OrderActions id={id} />
         </div>

@@ -9,7 +9,6 @@ import {
     isProcessingType,
     submitHandlerType,
 } from "../../../types/index";
-import CheckIcon from "@material-ui/icons/Check";
 
 const initialState = {
     name: "",
