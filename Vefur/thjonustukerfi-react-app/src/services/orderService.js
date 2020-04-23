@@ -50,8 +50,8 @@ const getAllOrders = () => {
         .catch((error) => Promise.reject(error));
 };
 
-const updateOrderById = (order) => {
-    return fetch(endpoint, {
+const updateOrderById = (order, id) => {
+    return fetch(endpoint + id, {
         method: "PATCH",
         body: JSON.stringify(order),
         headers: {
