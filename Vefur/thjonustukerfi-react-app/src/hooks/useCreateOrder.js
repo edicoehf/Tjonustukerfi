@@ -1,10 +1,11 @@
 import React from "react";
 import orderService from "../services/orderService";
 
-const useCreateOrder = () => {
+const useCreateOrder = (initCb) => {
     const [error, setError] = React.useState(null);
     const [isProcessing, setProcessing] = React.useState(false);
     const [order, setOrder] = React.useState(null);
+    const [cb, setCb] = React.useState(initCb);
 
     React.useEffect(() => {
         if (order && !isProcessing) {
@@ -18,11 +19,17 @@ const useCreateOrder = () => {
                 .finally(() => {
                     setOrder(null);
                     setProcessing(false);
+                    if (cb) {
+                        cb();
+                    }
                 });
         }
-    }, [isProcessing, order]);
+    }, [isProcessing, order, cb]);
 
-    const handleCreate = (order) => {
+    const handleCreate = (order, paraCb) => {
+        if (paraCb) {
+            setCb(paraCb);
+        }
         if (!isProcessing) {
             setOrder(order);
         }
