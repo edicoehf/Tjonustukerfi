@@ -1,17 +1,18 @@
 import React from "react";
 import orderService from "../services/orderService";
 
-const useUpdateOrder = (initCb) => {
+const useUpdateOrder = (id) => {
     const [updateError, setError] = React.useState(null);
     const [isProcessing, setProcessing] = React.useState(false);
     const [values, setValues] = React.useState(null);
-    const [cb, setCb] = React.useState(initCb);
+    const [cb, setCb] = React.useState();
+    const [hasUpdated, setHasUpdated] = React.useState(false);
 
     React.useEffect(() => {
         if (values && !isProcessing) {
             setProcessing(true);
             orderService
-                .updateOrderById(values)
+                .updateOrderById(values, id)
                 .then(() => {
                     setError(null);
                 })
@@ -19,23 +20,20 @@ const useUpdateOrder = (initCb) => {
                 .finally(() => {
                     setValues(null);
                     setProcessing(false);
-                    if (cb) {
-                        cb();
-                    }
+                    setHasUpdated(true);
                 });
         }
-    }, [isProcessing, values, cb]);
+    }, [isProcessing, values, id, cb]);
 
-    const handleUpdate = (values, paraCb) => {
+    const handleUpdate = (values) => {
         if (!isProcessing) {
-            if (paraCb) {
-                setCb(paraCb);
-            }
+            setHasUpdated(false);
+
             setValues(values);
         }
     };
 
-    return { updateError, handleUpdate, isProcessing };
+    return { updateError, handleUpdate, isProcessing, hasUpdated };
 };
 
 export default useUpdateOrder;
