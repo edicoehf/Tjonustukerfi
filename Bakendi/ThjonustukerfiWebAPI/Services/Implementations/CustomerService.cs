@@ -25,8 +25,11 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         {
             List<OrderDTO> activeOrders = _orderRepo.GetActiveOrdersByCustomerId(id);   // doesn't need to throw any exception, will just return an empty list if none is found
 
-            //TODO: Archive orders that are done, but not archived yet before deleting customer connection
-            if(!activeOrders.Any()) { _customerRepo.DeleteCustomerById(id); }
+            if(!activeOrders.Any()) 
+            {
+                _orderRepo.ArchiveCompleteOrdersByCustomerId(id);
+                _customerRepo.DeleteCustomerById(id);
+            }
 
             return activeOrders;
         }

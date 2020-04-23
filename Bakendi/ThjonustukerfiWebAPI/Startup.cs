@@ -17,6 +17,8 @@ using ThjonustukerfiWebAPI.Services.Interfaces;
 using System.Reflection;
 using System.IO;
 using Microsoft.OpenApi.Models;
+using FluentScheduler;
+using ThjonustukerfiWebAPI.Schedules;
 
 namespace ThjonustukerfiWebAPI
 {
@@ -43,20 +45,17 @@ namespace ThjonustukerfiWebAPI
 
             // Adding database connection
             var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
-            services.AddDbContext<DataContext>(options => {
-                if (connectionString != null)
-                {
-                    options.UseNpgsql(connectionString);
-                }
-                else
-                {
-                    options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
-                }
-            });
+            if(connectionString == null)
+            {
+                connectionString = Configuration.GetConnectionString("DefaultConnection");
+            }
+            Constants.DBConnection = connectionString;
+            
+            services.AddDbContext<DataContext>(options => { options.UseNpgsql(connectionString); });
 
             // Adding automapper
             var mappingProfile = new MapperConfiguration(mc => {
-                mc.AddProfile(new MappingProfile());
+                mc.AddProfile(new MappingProfile(connectionString));
             });
             var mapper = mappingProfile.CreateMapper();
             services.AddSingleton(mapper);
@@ -98,6 +97,8 @@ namespace ThjonustukerfiWebAPI
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 opt.IncludeXmlComments(xmlPath);
             });
+
+            JobManager.Initialize(new Scheduler());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

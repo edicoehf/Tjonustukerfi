@@ -762,6 +762,72 @@ namespace ThjonustukerfiTests.Tests
             }
         }
 
+        [TestMethod]
+        public void ArchiveOrder_should_archive_order()
+        {
+            //* Arrange
+            // input for create order
+            var orderInput = new OrderInputModel()
+            {
+                CustomerId = 50,
+                Items = new List<ItemInputModel>()
+                {
+                    new ItemInputModel() { CategoryId = 1, ServiceId = 1, },
+                    new ItemInputModel() { CategoryId = 2, ServiceId = 2, },
+                    new ItemInputModel() { CategoryId = 1, ServiceId = 3, },
+                    new ItemInputModel() { CategoryId = 2, ServiceId = 4, },
+                    new ItemInputModel() { CategoryId = 1, ServiceId = 3, },
+                    new ItemInputModel() { CategoryId = 2, ServiceId = 2, }
+                }
+            };
+
+            using(var mockContext = new DataContext(_options))
+            {
+                // This needs a seperate mapper with the current context
+                var myProfile = new MappingProfile(mockContext);   // Create a new profile like the one we implemented
+                var myConfig = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));   // Setup a configuration with our profile
+                var localMapper = new Mapper(myConfig); // Create a new mapper with our profile
+
+                // craeate repo
+                IOrderRepo orderRepo = new OrderRepo(mockContext, localMapper);
+
+                var orderId = orderRepo.CreateOrder(orderInput);        // Add new order
+                orderRepo.CompleteOrder(orderId);                       // complete the order
+                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderId);   // get order entity
+                orderEntity.DateCompleted = DateTime.Now.AddYears(-1);  // make the order complete a year old (has to be more than 90 days)
+
+                //* Act
+                orderRepo.ArchiveOldOrders();
+
+                // Get stuff
+                var archivedOrder = mockContext.OrderArchive.First();
+                var archivedItems = mockContext.ItemArchive.ToList();
+                var customerName = mockContext.Customer.FirstOrDefault(c => c.Id == orderInput.CustomerId).Name;
+
+                //* Assert
+                Assert.IsNotNull(archivedOrder);
+                Assert.IsNotNull(archivedItems);
+
+                Assert.AreEqual(orderInput.CustomerId, archivedOrder.CustomerId);
+                Assert.AreEqual(customerName, archivedOrder.Customer);
+
+                Assert.AreEqual(orderInput.Items.Count, archivedItems.Count);
+                foreach (var item in archivedItems)
+                {
+                    // use this to check if the correct information was passed
+                    var check = new ItemInputModel() { CategoryId = item.CategoryId, ServiceId = item.ServiceId };
+                    Assert.IsTrue(orderInput.Items.Contains(check));    // uses the equals override
+
+                    // Making sure that service and category where correctly put in archive
+                    var category = mockContext.Category.FirstOrDefault(c => c.Id == item.CategoryId).Name;
+                    var service = mockContext.Service.FirstOrDefault(s => s.Id == item.ServiceId).Name;
+
+                    Assert.AreEqual(category, item.Category);
+                    Assert.AreEqual(service, item.Service);
+                }
+            }
+        }
+
         //**********     Helper functions     **********//
         private void FillDatabase(DataContext mockContext)
         {
@@ -867,6 +933,7 @@ namespace ThjonustukerfiTests.Tests
                 .TheRest()
                 .With(o => o.Barcode = "30200001")
                 .With(o => o.CustomerId = 2)
+                .With(o => o.DateCompleted = null)
                 .Build();
 
             // Build a list of size 20, make it queryable for the database mock
