@@ -7,17 +7,34 @@ const useOrderForm = (initialState, validate, submitHandler) => {
     const [isSubmitting, setSubmitting] = React.useState(false);
 
     React.useEffect(() => {
+        const constructOrder = () => {
+            let order = {
+                customerId: null,
+                items: [],
+            };
+            order.customerId = customer.id;
+            items.forEach((item) => {
+                for (var i = 0; i < item.amount; i++) {
+                    order.items.push({
+                        categoryId: parseInt(item.category),
+                        serviceId: parseInt(item.service),
+                    });
+                }
+            });
+            return order;
+        };
+
         if (isSubmitting) {
             const noErrors = Object.keys(errors).length === 0;
             if (noErrors) {
                 const order = constructOrder();
-                submitHandler(order);
+                submitHandler(order, resetFields);
                 setSubmitting(false);
             } else {
                 setSubmitting(false);
             }
         }
-    }, []);
+    }, [errors, isSubmitting, submitHandler, items, customer]);
 
     const addItems = (newItem, cb) => {
         const ids = items.map((item) => item.id);
@@ -37,33 +54,17 @@ const useOrderForm = (initialState, validate, submitHandler) => {
     };
 
     const handleSubmit = () => {
-        const validationErrors = validate(items, customer);
+        console.log(customer);
+        console.log(items);
+        const validationErrors = validate(customer, items);
         setErrors(validationErrors);
         setSubmitting(true);
     };
 
     const resetFields = () => {
         setItems([]);
-        setCustomer([]);
+        setCustomer(null);
         setErrors({});
-    };
-
-    const constructOrder = () => {
-        let order = {
-            customerId: null,
-            items: [],
-        };
-        order.customerId = customer.id;
-        items.forEach((item) => {
-            for (var i = 0; i < item.amount; i++) {
-                console.log(item);
-                order.items.push({
-                    categoryId: item.category,
-                    serviceId: item.service,
-                });
-            }
-        });
-        return order;
     };
 
     return {
