@@ -27,10 +27,10 @@ const useCreateOrder = (initCb) => {
     }, [isProcessing, order, cb]);
 
     const handleCreate = (order, paraCb) => {
-        if (paraCb) {
-            setCb(paraCb);
-        }
         if (!isProcessing) {
+            if (paraCb) {
+                setCb(paraCb);
+            }
             setOrder(order);
         }
     };
