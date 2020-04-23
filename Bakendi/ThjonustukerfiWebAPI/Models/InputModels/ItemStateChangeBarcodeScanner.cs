@@ -2,16 +2,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ThjonustukerfiWebAPI.Models.InputModels
 {
-    /// <summary>Input model used to change the state of an item by ID.</summary>
-    public class ItemStateChangeInputModel
+    /// <summary>Input model used to change the state of an item by barcode.</summary>
+    public class ItemStateChangeBarcodeScanner
     {
         [Required]
-        public long? ItemId { get; set; }
+        public string ItemBarcode { get; set; }
         [Required]
         public string StateChangeBarcode { get; set; }
 
         //*     Overrides     *//
-        public static bool operator ==(ItemStateChangeInputModel i1, ItemStateChangeInputModel i2)
+        public static bool operator ==(ItemStateChangeBarcodeScanner i1, ItemStateChangeBarcodeScanner i2)
         {
             if(object.ReferenceEquals(i1, i2))
             {
@@ -22,10 +22,10 @@ namespace ThjonustukerfiWebAPI.Models.InputModels
                 return false;
             }
 
-            return i1.StateChangeBarcode == i2.StateChangeBarcode && i1.ItemId == i2.ItemId;
+            return i1.ItemBarcode == i2.ItemBarcode && i1.StateChangeBarcode == i2.StateChangeBarcode;
         }
 
-        public static bool operator !=(ItemStateChangeInputModel i1, ItemStateChangeInputModel i2)
+        public static bool operator !=(ItemStateChangeBarcodeScanner i1, ItemStateChangeBarcodeScanner i2)
         {
             return !(i1 == i2);
         }
@@ -33,23 +33,26 @@ namespace ThjonustukerfiWebAPI.Models.InputModels
         public override int GetHashCode()
         {
             int bc = 0;
+            foreach (char c in ItemBarcode)
+            {
+                bc += c.GetHashCode();
+            }
             foreach (char c in StateChangeBarcode)
             {
                 bc += c.GetHashCode();
             }
-            bc += ItemId.GetHashCode();
             
             return bc;
         }
 
-        public bool Equals(ItemStateChangeInputModel other)
+        public bool Equals(ItemStateChangeBarcodeScanner other)
         {
             return this == other;
         }
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as ItemStateChangeInputModel);
+            return Equals(obj as ItemStateChangeBarcodeScanner);
         }
     }
 }
