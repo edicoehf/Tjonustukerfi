@@ -15,9 +15,16 @@ import {
 } from "../../../../types";
 import useGetCustomerById from "../../../../hooks/useGetCustomerById";
 import { Redirect } from "react-router-dom";
+import "./UpdateOrderView.css";
 
 const UpdateOrder = ({ order, categories, services }) => {
     const { customer: fetchedCustomer } = useGetCustomerById(order.customerId);
+
+    const [cancel, setCancel] = React.useState(false);
+    const handleCancel = () => {
+        setCancel(true);
+    };
+
     const getServiceId = (service) => {
         return services[services.findIndex((s) => s.name === service)].id;
     };
@@ -71,7 +78,7 @@ const UpdateOrder = ({ order, categories, services }) => {
     };
 
     const renderRedirect = () => {
-        if (hasUpdated) {
+        if (hasUpdated || cancel) {
             return <Redirect to={`/order/${order.id}`} />;
         }
     };
@@ -88,7 +95,7 @@ const UpdateOrder = ({ order, categories, services }) => {
             {errors.items && <p className="error">{errors.items}</p>}
             <UpdateOrderActions
                 updateOrder={updateOrder}
-                cancelUpdate={resetFields}
+                cancelUpdate={handleCancel}
             />
         </>
     );
