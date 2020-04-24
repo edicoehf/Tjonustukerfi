@@ -19,9 +19,7 @@ describe("<OrderItem />", () => {
     });
 
     it("Should have 4 children", () => {
-        expect(
-            wrapper.find(".order-item").at(0).instance().children.length
-        ).toBe(4);
+        expect(wrapper.find("tr").at(0).instance().children.length).toBe(4);
     });
 
     it("Should display category correctly", () => {

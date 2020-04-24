@@ -1,35 +1,23 @@
 import React from "react";
-import { ListGroup } from "react-bootstrap";
+import { ListItem } from "@material-ui/core";
 import "./OrderListItem.css";
 import { orderType } from "../../../types/index";
+import ListItemLink from "../../ListItemLink/ListItemLink";
+import DeleteOrderAction from "../Actions/DeleteOrderAction/DeleteOrderAction";
 
 const OrderListItem = ({ order }) => {
     return (
         <>
-            <ListGroup.Item
-                className="item"
-                variant="light"
-                action
-                href={"/order/" + order.id}
-            >
-                {order.id}
-            </ListGroup.Item>
-            <ListGroup.Item
-                className="item"
-                variant="light"
-                action
-                href={"/order/" + order.id}
-            >
-                {order.customer}
-            </ListGroup.Item>
-            <ListGroup.Item
-                className="item"
-                variant="light"
-                action
-                href={"/order/" + order.id}
-            >
+            <ListItemLink href={"/order/" + order.id}>{order.id}</ListItemLink>
+            <ListItemLink href={"/order/" + order.id}>
+                {order.customer + " og mail?"}
+            </ListItemLink>
+            <ListItemLink href={"/order/" + order.id}>
                 {order.items.length}
-            </ListGroup.Item>
+            </ListItemLink>
+            <ListItem className="order-button-area">
+                <DeleteOrderAction />
+            </ListItem>
         </>
     );
 };

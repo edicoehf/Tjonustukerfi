@@ -1,19 +1,14 @@
 .order-list {
     display: grid;
-    grid-template-columns: 20% 60% 20%;
+    grid-template-columns: 20% 40% 20% 20%;
 }
-.item {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+li.order-item {
     width: 100%;
+    height: 100%;
+    background-color: rgb(238, 238, 238);
+    border-bottom: 0.1px solid rgb(187, 187, 187);
+    border-right: 0.1px solid rgb(187, 187, 187);
 }
-.actions {
-    padding-right: 5%;
-}
-.actions-item {
-    justify-content: center;
-}
-.buttons {
+li.order-action-item {
     justify-content: center;
 }

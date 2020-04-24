@@ -1,0 +1,25 @@
+Button.delete-order-button {
+    display: flex;
+    justify-content: center;
+    color: black;
+    width: 15em;
+    height: 3em;
+}
+Button.delete-order-button:hover {
+    background-color: rgb(165, 3, 57);
+}
+Button.delete-order-button:hover b {
+    opacity: 0;
+}
+Button.delete-order-button:hover .delete-order-icon {
+    opacity: 1;
+    margin-left: 45%;
+    margin-bottom: 10%;
+}
+Button.delete-order-button b {
+    margin-right: 10%;
+    opacity: 1;
+}
+Button.delete-order-button .delete-order-icon {
+    opacity: 0;
+}

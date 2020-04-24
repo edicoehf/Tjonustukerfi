@@ -1,24 +1,39 @@
 import React from "react";
 import OrderItem from "../OrderItem/OrderItem";
-import { Table } from "react-bootstrap";
+import {
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody,
+} from "@material-ui/core";
 import { itemsType } from "../../../types";
+import "./OrderItemList.css";
 
 const OrderItemList = ({ items }) => {
     return (
         <Table className="order-item-list">
-            <thead>
-                <tr>
-                    <th>Vörunúmer</th>
-                    <th>Tegund</th>
-                    <th>Þjónusta</th>
-                    <th>Strikamerki</th>
-                </tr>
-            </thead>
-            <tbody>
+            <TableHead>
+                <TableRow>
+                    <TableCell>
+                        <b>Vörunúmer</b>
+                    </TableCell>
+                    <TableCell>
+                        <b>Tegund</b>
+                    </TableCell>
+                    <TableCell>
+                        <b>Þjónusta</b>
+                    </TableCell>
+                    <TableCell>
+                        <b>Strikamerki</b>
+                    </TableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
                 {items.map((item) => (
                     <OrderItem key={item.id} item={item} />
                 ))}
-            </tbody>
+            </TableBody>
         </Table>
     );
 };

@@ -1,0 +1,16 @@
+.navbar-items {
+    display: flex;
+    flex-direction: row;
+}
+.navbar-item {
+    margin-left: 2em;
+    font-size: 1.1em;
+    color: white;
+}
+.navbar-item:hover {
+    color: rgb(194, 194, 194);
+    text-decoration: none;
+}
+li.Mui-selected {
+    color: pink;
+}

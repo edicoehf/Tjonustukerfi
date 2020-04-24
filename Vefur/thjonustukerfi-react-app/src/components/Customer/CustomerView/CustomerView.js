@@ -8,9 +8,13 @@ const CustomerView = ({ match }) => {
 
     return (
         <div className="customer-view">
-            <h1>Upplýsingar um viðskiptavin</h1>
+            <h1 className="customer-detail-header">
+                Upplýsingar um viðskiptavin
+            </h1>
             <CustomerDetails id={id} />
-            <CustomerActions id={id} />
+            <div className="customer-detail-action">
+                <CustomerActions id={id} />
+            </div>
         </div>
     );
 };

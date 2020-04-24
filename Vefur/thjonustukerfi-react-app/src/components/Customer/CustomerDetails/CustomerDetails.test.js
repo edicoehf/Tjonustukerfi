@@ -21,7 +21,7 @@ describe("<CustomerDetails />", () => {
     let error;
     const setState = jest.fn();
     const useStateSpy = jest.spyOn(React, "useState");
-    useStateSpy.mockImplementation(init => [init, setState]);
+    useStateSpy.mockImplementation((init) => [init, setState]);
 
     beforeEach(() => {
         testCustomer = {
@@ -30,7 +30,7 @@ describe("<CustomerDetails />", () => {
             telephone: "",
             email: "",
             postalCode: "",
-            address: ""
+            address: "",
         };
     });
 
@@ -42,7 +42,7 @@ describe("<CustomerDetails />", () => {
         it("Should not render any rows before fetch", () => {
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
-                error: null
+                error: null,
             });
             wrapper = mount(shallow(<CustomerDetails id="2" />).get(0));
             const fields = wrapper.find("tr");
@@ -54,7 +54,7 @@ describe("<CustomerDetails />", () => {
             testCustomer.email = "siggi@viggi.is";
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
-                error: null
+                error: null,
             });
             wrapper = mount(shallow(<CustomerDetails id="2" />).get(0));
             const fields = wrapper.find("tr");
@@ -67,7 +67,7 @@ describe("<CustomerDetails />", () => {
             testCustomer.name = "Siggi Viggi";
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
-                error: null
+                error: null,
             });
             wrapper = mount(shallow(<CustomerDetails id="2" />).get(0));
             const fields = wrapper.find(".error");
@@ -77,7 +77,7 @@ describe("<CustomerDetails />", () => {
         it("Should  render error when fetch is unsuccessful", () => {
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
-                error: "FAILED"
+                error: "FAILED",
             });
             wrapper = mount(shallow(<CustomerDetails id="2" />).get(0));
             const fields = wrapper.find(".error");
@@ -89,7 +89,7 @@ describe("<CustomerDetails />", () => {
         it("Should not render before fetch", () => {
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
-                error: null
+                error: null,
             });
             wrapper = mount(shallow(<CustomerDetails id="2" />).get(0));
             const fields = findByName(wrapper.find("tr"), "name");
@@ -100,7 +100,7 @@ describe("<CustomerDetails />", () => {
             testCustomer.email = "email@email.com";
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
-                error: null
+                error: null,
             });
             wrapper = mount(shallow(<CustomerDetails id="2" />).get(0));
             const fields = findByName(wrapper.find("tr"), "name");
@@ -111,7 +111,7 @@ describe("<CustomerDetails />", () => {
             testCustomer.name = "Viggi Siggi";
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
-                error: null
+                error: null,
             });
             wrapper = mount(shallow(<CustomerDetails id="2" />).get(0));
             const fields = findByName(wrapper.find("tr"), "name");
@@ -123,7 +123,7 @@ describe("<CustomerDetails />", () => {
         it("Should not render before fetch", () => {
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
-                error: null
+                error: null,
             });
             wrapper = mount(shallow(<CustomerDetails id="2" />).get(0));
             const fields = findByName(wrapper.find("tr"), "ssn");
@@ -134,7 +134,7 @@ describe("<CustomerDetails />", () => {
             testCustomer.email = "email@email.com";
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
-                error: null
+                error: null,
             });
             wrapper = mount(shallow(<CustomerDetails id="2" />).get(0));
             const fields = findByName(wrapper.find("tr"), "ssn");
@@ -145,7 +145,7 @@ describe("<CustomerDetails />", () => {
             testCustomer.ssn = "1304873579";
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
-                error: null
+                error: null,
             });
             wrapper = mount(shallow(<CustomerDetails id="2" />).get(0));
             const fields = findByName(wrapper.find("tr"), "ssn");
@@ -157,7 +157,7 @@ describe("<CustomerDetails />", () => {
         it("Should not render before fetch", () => {
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
-                error: null
+                error: null,
             });
             wrapper = mount(shallow(<CustomerDetails id="2" />).get(0));
             const fields = findByName(wrapper.find("tr"), "telephone");
@@ -168,7 +168,7 @@ describe("<CustomerDetails />", () => {
             testCustomer.email = "email@email.com";
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
-                error: null
+                error: null,
             });
             wrapper = mount(shallow(<CustomerDetails id="2" />).get(0));
             const fields = findByName(wrapper.find("tr"), "telephone");
@@ -179,7 +179,7 @@ describe("<CustomerDetails />", () => {
             testCustomer.telephone = "5812345";
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
-                error: null
+                error: null,
             });
             wrapper = mount(shallow(<CustomerDetails id="2" />).get(0));
             const fields = findByName(wrapper.find("tr"), "telephone");
@@ -191,7 +191,7 @@ describe("<CustomerDetails />", () => {
         it("Should not render before fetch", () => {
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
-                error: null
+                error: null,
             });
             wrapper = mount(shallow(<CustomerDetails id="2" />).get(0));
             const fields = findByName(wrapper.find("tr"), "email");
@@ -202,7 +202,7 @@ describe("<CustomerDetails />", () => {
             testCustomer.name = "Siggi Viggi";
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
-                error: null
+                error: null,
             });
             wrapper = mount(shallow(<CustomerDetails id="2" />).get(0));
             const fields = findByName(wrapper.find("tr"), "email");
@@ -213,7 +213,7 @@ describe("<CustomerDetails />", () => {
             testCustomer.email = "siggi@viggi.is";
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
-                error: null
+                error: null,
             });
             wrapper = mount(shallow(<CustomerDetails id="2" />).get(0));
             const fields = findByName(wrapper.find("tr"), "email");
@@ -225,7 +225,7 @@ describe("<CustomerDetails />", () => {
         it("Should not render before fetch", () => {
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
-                error: null
+                error: null,
             });
             wrapper = mount(shallow(<CustomerDetails id="2" />).get(0));
             const fields = findByName(wrapper.find("tr"), "address");
@@ -236,7 +236,7 @@ describe("<CustomerDetails />", () => {
             testCustomer.name = "Siggi Viggi";
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
-                error: null
+                error: null,
             });
             wrapper = mount(shallow(<CustomerDetails id="2" />).get(0));
             const fields = findByName(wrapper.find("tr"), "address");
@@ -247,7 +247,7 @@ describe("<CustomerDetails />", () => {
             testCustomer.address = "Bakkabakki 2";
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
-                error: null
+                error: null,
             });
             wrapper = mount(shallow(<CustomerDetails id="2" />).get(0));
             const fields = findByName(wrapper.find("tr"), "address");
@@ -259,7 +259,7 @@ describe("<CustomerDetails />", () => {
         it("Should not render before fetch", () => {
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
-                error: null
+                error: null,
             });
             wrapper = mount(shallow(<CustomerDetails id="2" />).get(0));
             const fields = findByName(wrapper.find("tr"), "postalcode");
@@ -270,7 +270,7 @@ describe("<CustomerDetails />", () => {
             testCustomer.name = "Siggi Viggi";
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
-                error: null
+                error: null,
             });
             wrapper = mount(shallow(<CustomerDetails id="2" />).get(0));
             const fields = findByName(wrapper.find("tr"), "postalcode");
@@ -281,7 +281,7 @@ describe("<CustomerDetails />", () => {
             testCustomer.postalCode = "800";
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
-                error: null
+                error: null,
             });
             wrapper = mount(shallow(<CustomerDetails id="2" />).get(0));
             const fields = findByName(wrapper.find("tr"), "postalcode");

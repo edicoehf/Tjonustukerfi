@@ -1,0 +1,21 @@
+Button.create-button {
+    background-color: rgb(27, 207, 4);
+    color: black;
+}
+Button.create-button:hover {
+    background-color: rgb(31, 131, 0);
+}
+Button.create-button b {
+    opacity: 1;
+    margin-right: 10%;
+}
+Button.create-button:hover b {
+    opacity: 0;
+}
+Button.create-button:hover .create-icon {
+    opacity: 1;
+    margin-left: 60%;
+}
+Button.create-button .create-icon {
+    opacity: 0;
+}

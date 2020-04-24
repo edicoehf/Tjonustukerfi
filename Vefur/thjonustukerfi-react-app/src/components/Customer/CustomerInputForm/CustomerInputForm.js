@@ -100,7 +100,7 @@ const CustomerInputForm = ({
                             ? "Uppfæra viðskiptavin"
                             : "Skrá nýjan viðskiptavin"
                     }
-                    className="btn btn-dark"
+                    className="btn submit-btn"
                 />
             </Form>
         </div>
