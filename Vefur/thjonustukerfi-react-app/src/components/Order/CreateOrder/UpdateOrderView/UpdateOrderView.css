@@ -1,4 +1,4 @@
-.create-order-view {
+.update-order-view {
     min-width: 80rem;
     display: flex;
     flex-direction: column;
@@ -9,6 +9,6 @@ p.error {
     text-align: center;
 }
 
-.create-order-view h1 {
+.update-order-view h1 {
     text-align: center;
 }
