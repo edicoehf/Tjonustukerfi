@@ -16,6 +16,7 @@ using HandtolvuApp.Data.Interfaces;
 using HandtolvuApp.Models;
 using Symbol.XamarinEMDK.Barcode;
 
+
 [assembly: Dependency(typeof(ScannerService))]
 
 namespace HandtolvuApp.Droid.Services
@@ -80,7 +81,7 @@ namespace HandtolvuApp.Droid.Services
             }
             catch (Exception ex)
             {
-
+                System.Console.WriteLine(@"\tERROR", ex.Message);
             }
         }
 
@@ -105,8 +106,9 @@ namespace HandtolvuApp.Droid.Services
                         _scanner.Status -= _scanner_Status;
                         _scanner.Disable();
                     }
-                    catch (ScannerException e)
+                    catch (ScannerException ex)
                     {
+                        System.Console.WriteLine(@"\tERROR", ex.Message);
 
                     }
                 }
@@ -157,7 +159,7 @@ namespace HandtolvuApp.Droid.Services
                 }
                 catch (Exception ex)
                 {
-
+                    System.Console.WriteLine(@"\tERROR", ex.Message);
                 }
             }
         }

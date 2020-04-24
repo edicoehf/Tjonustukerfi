@@ -31,7 +31,7 @@ namespace HandtolvuApp.ViewModels
 
             LocationCommand = new Command(async () =>
             {
-                var locationScanVM = new LocationScanViewModel();
+                var locationScanVM = new LocationScanViewModel(App.Scanner);
                 var locationScanPage = new LocationScanPage();
                 locationScanPage.BindingContext = locationScanVM;
                 await App.Current.MainPage.Navigation.PushAsync(locationScanPage);
