@@ -20,6 +20,8 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         private IItemService _itemService;
         private Mock<IItemRepo> _itemRepoMock;
         private Mock<IInfoRepo> _infoRepoMock;
+        private Mock<IOrderRepo> _orderRepo;
+        private Mock<ICustomerRepo> _customerRepo;
         private Mapper _mapper;
 
         [TestInitialize]
@@ -27,6 +29,8 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         {
             _itemRepoMock = new Mock<IItemRepo>();
             _infoRepoMock = new Mock<IInfoRepo>();
+            _orderRepo = new Mock<IOrderRepo>();
+            _customerRepo = new Mock<ICustomerRepo>();
 
             // Setting up automapper
             var myProfile = new MappingProfile();   // Create a new profile like the one we implemented
@@ -52,7 +56,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             _itemRepoMock.Setup(method => method.GetItemById(itemID)).Returns(retDTO);
 
             // Create controller
-            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
+            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _orderRepo.Object, _customerRepo.Object, _mapper);
 
             //* Act
             var response = _itemService.SearchItem("someString");
@@ -80,7 +84,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             _itemRepoMock.Setup(method => method.GetItemById(itemID)).Returns(itemstate);
 
             // Create service
-            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
+            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _orderRepo.Object, _customerRepo.Object, _mapper);
 
             //* Act
             var retVal = _itemService.GetItemById(itemID);
@@ -114,7 +118,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 .Returns(new List<ItemStateChangeInputIdScanner>());
 
             // create service
-            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
+            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _orderRepo.Object, _customerRepo.Object, _mapper);
 
             //* Act
             var retVal = _itemService.ChangeItemStateBarcodeScanner(input);
@@ -143,7 +147,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 .Returns(new List<ItemStateChangeInputIdScanner>());
 
             // create service
-            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
+            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _orderRepo.Object, _customerRepo.Object, _mapper);
 
             //* Act
             var retVal = _itemService.ChangeItemStateBarcodeScanner(input);
@@ -170,7 +174,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 .Returns(new List<ItemStateChangeInputIdScanner>());
 
             // create service
-            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
+            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _orderRepo.Object, _customerRepo.Object, _mapper);
 
             //* Act
             var retVal = _itemService.ChangeItemStateByIdScanner(input);
@@ -198,7 +202,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             _infoRepoMock.Setup(method => method.GetNextStates(1, 1)).Returns(stateDTOs);
 
             // Create service
-            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
+            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _orderRepo.Object, _customerRepo.Object, _mapper);
 
             // * Act
             var retVal = _itemService.GetItemNextStates(itemId);
@@ -229,7 +233,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             _infoRepoMock.Setup(method => method.GetNextStates(1, 1)).Returns(stateDTOs);
 
             // Create service
-            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
+            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _orderRepo.Object, _customerRepo.Object, _mapper);
 
             // * Act
             var retVal = _itemService.GetItemNextStatesByBarcode(barcode);

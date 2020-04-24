@@ -227,6 +227,9 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
             using(var mockContext = new DataContext(_options))
             {
+                // Needs an updated automapper that has access to the current instance of db context
+                UpdateMapper(mockContext);
+
                 IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
 
                 var oldStateId = mockContext.Item.FirstOrDefault(i => i.Id == itemID).StateId;
@@ -431,6 +434,9 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                     }
                 };
 
+                // Needs an updated automapper that has access to the current instance of db context
+                UpdateMapper(mockContext);
+
                 IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
 
                 // get old state
@@ -482,6 +488,9 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
             using(var mockContext = new DataContext(_options))
             {
+                // Needs an updated automapper that has access to the current instance of db context
+                UpdateMapper(mockContext);
+
                 var itemRepo = new ItemRepo(mockContext, _mapper);
 
                 //* Act
@@ -512,6 +521,9 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
             using(var mockContext = new DataContext(_options))
             {
+                // Needs an updated automapper that has access to the current instance of db context
+                UpdateMapper(mockContext);
+
                 var itemRepo = new ItemRepo(mockContext, _mapper);
 
                 //* Act
@@ -661,6 +673,9 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
             using(var mockContext = new DataContext(_options))
             {
+                // Needs an updated automapper that has access to the current instance of db context
+                UpdateMapper(mockContext);
+
                 var itemRepo = new ItemRepo(mockContext, _mapper);
 
                 //* Act
@@ -691,6 +706,9 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
             using(var mockContext = new DataContext(_options))
             {
+                // Needs an updated automapper that has access to the current instance of db context
+                UpdateMapper(mockContext);
+
                 var itemRepo = new ItemRepo(mockContext, _mapper);
 
                 //* Act
@@ -930,6 +948,15 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             mockContext.Category.AddRange(categories);
             mockContext.SaveChanges();
             //! Building DB done
+        }
+
+        /// <summary>Updates the private mapper to have the current mock data context</summary>
+        private void UpdateMapper(DataContext context)
+        {
+            // Needs a seperete automapper that has access to the current instance of db context
+            var myProfile = new MappingProfile(context);   // Create a new profile like the one we implemented
+            var myConfig = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));   // Setup a configuration with our profile
+            _mapper = new Mapper(myConfig); // Create a new mapper with our profile
         }
     }
 }

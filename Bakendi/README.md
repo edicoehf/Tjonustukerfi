@@ -44,8 +44,9 @@ Test are run using MS tests.<br />
 Automapper  - version: 9.0.0<br />
 NpgSql.EntityFrameworkCore.Design --version: 3.1.1<br />
 Newtonsoft.Json --version: 12.0.3<br />
-Npgsql.EntityFrameworkCore.PostgreSQL --version 2.1.0 <br />
-Swashbuckle.AspNetCore - version: 5.2.1
+Npgsql.EntityFrameworkCore.PostgreSQL --version: 2.1.0 <br />
+Swashbuckle.AspNetCore --version: 5.2.1<br />
+FluentScheduler --version: 5.3.0
 ### <p>Test Project</p>
 coverlet.collector --version: 1.0.1<br />
 Microsoft.EntityFrameworkCore.Design --version: 3.1.1<br />

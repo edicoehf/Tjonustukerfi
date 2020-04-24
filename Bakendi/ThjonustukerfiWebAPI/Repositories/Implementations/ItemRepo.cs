@@ -11,6 +11,7 @@ using ThjonustukerfiWebAPI.Models.Entities;
 using ThjonustukerfiWebAPI.Models.Exceptions;
 using ThjonustukerfiWebAPI.Models.InputModels;
 using ThjonustukerfiWebAPI.Repositories.Interfaces;
+using ThjonustukerfiWebAPI.Services.Implementations;
 
 namespace ThjonustukerfiWebAPI.Repositories.Implementations
 {
@@ -165,7 +166,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             SetOrderCompleteStatus(new List<long>() { orderId });
         }
 
-        public void RemoveItem(long itemId)
+        public long RemoveItem(long itemId)
         {
             // Get entity
             var entity = _dbContext.Item.FirstOrDefault(i => i.Id == itemId);
@@ -198,6 +199,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
             // Check if the order is complete
             if(orderId != -1) { SetOrderCompleteStatus(new List<long>() { orderId }); }
+
+            return orderId;
         }
 
         public List<ItemStateChangeInput> ChangeItemState(List<ItemStateChangeInput> stateChanges)
@@ -293,6 +296,14 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             return entity.Barcode;
         }
 
+        public long GetOrderIdWithItemId(long itemId)
+        {
+            var IoConnection = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemId);
+            if(IoConnection == null) { throw new NotFoundException($"Can't find order connected to the item with item ID {itemId}."); }
+
+            return IoConnection.OrderId;
+        }
+
         //*     Helper functions     *//
 
         private void changeState(long itemId, long stateId, string location = null)
@@ -332,6 +343,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             foreach (var order in orders)
             {
                 var entity = _dbContext.Order.FirstOrDefault(o => o.Id == order);
+
                 if (IsOrderComplete(entity.Id)) { entity.DateCompleted = DateTime.Now; }
                 else { entity.DateCompleted = null; }
             }

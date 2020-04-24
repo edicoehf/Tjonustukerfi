@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using ThjonustukerfiWebAPI.Configurations;
+using ThjonustukerfiWebAPI.Extensions;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.Exceptions;
 using ThjonustukerfiWebAPI.Models.InputModels;
@@ -13,11 +15,15 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
     {
         private IItemRepo _itemRepo;
         private IInfoRepo _infoRepo;
+        private IOrderRepo _orderRepo;
+        private ICustomerRepo _customerRepo;
         private IMapper _mapper;
-        public ItemService(IItemRepo itemRepo, IInfoRepo infoRepo, IMapper mapper)
+        public ItemService(IItemRepo itemRepo, IInfoRepo infoRepo, IOrderRepo orderRepo, ICustomerRepo customerRepo, IMapper mapper)
         {
             _itemRepo = itemRepo;
             _infoRepo = infoRepo;
+            _orderRepo = orderRepo;
+            _customerRepo = customerRepo;
             _mapper = mapper;
         }
         public ItemStateDTO GetItemById(long itemId) => _itemRepo.GetItemById(itemId);
@@ -25,13 +31,71 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         {
             return _itemRepo.CreateItem(item);
         }
-        public void EditItem(EditItemInput input, long itemId) => _itemRepo.EditItem(input, itemId);
+        public void EditItem(EditItemInput input, long itemId)
+        {
+            _itemRepo.EditItem(input, itemId);  // edit item
+            checkOrderPickupAndSend(_itemRepo.GetOrderIdWithItemId(itemId));  // send Notification if order is ready
+        }
         public ItemStateDTO SearchItem(string search) => _itemRepo.GetItemById(_itemRepo.SearchItem(search));
-        public void CompleteItem(long id) => _itemRepo.CompleteItem(id);
-        public void RemoveItem(long itemId) => _itemRepo.RemoveItem(itemId);
-        public void RemoveItemQuery(string barcode) => _itemRepo.RemoveItem(_itemRepo.SearchItem(barcode));
-        public List<ItemStateChangeInput> ChangeItemState(List<ItemStateChangeInput> stateChanges) => _itemRepo.ChangeItemState(stateChanges);
-        public List<ItemStateChangeInputIdScanner> ChangeItemStateByIdScanner(List<ItemStateChangeInputIdScanner> stateChanges) => _itemRepo.ChangeItemStateByIdScanner(stateChanges);
+        public void CompleteItem(long id)
+        {
+            _itemRepo.CompleteItem(id);
+            checkOrderPickupAndSend(_itemRepo.GetOrderIdWithItemId(id));  // send Notification if order is ready
+        }
+        public void RemoveItem(long itemId)
+        {
+            var orderId = _itemRepo.RemoveItem(itemId);
+            checkOrderPickupAndSend(orderId);  // send Notification if order is ready
+        }
+        public void RemoveItemQuery(string barcode)
+        {
+            var orderId = _itemRepo.RemoveItem(_itemRepo.SearchItem(barcode));
+            checkOrderPickupAndSend(orderId);  // send Notification if order is ready
+        }
+        public List<ItemStateChangeInput> ChangeItemState(List<ItemStateChangeInput> stateChanges)
+        {
+            var invalidInputs = _itemRepo.ChangeItemState(stateChanges);
+
+            // remove invalid inputs from the list
+            stateChanges.RemoveExisting(invalidInputs);
+
+            // Only check each order once, don't want to send a notification for each item
+            var ordersToCheck = new List<long>();
+            foreach (var item in stateChanges)
+            {
+                ordersToCheck.AddIfUnique(_itemRepo.GetOrderIdWithItemId((long)item.ItemId));
+            }
+
+            // check all valid orders
+            foreach (var orderId in ordersToCheck)
+            {
+                checkOrderPickupAndSend(orderId);  // send Notification if order is ready
+            }
+
+            return invalidInputs;
+        }
+        public List<ItemStateChangeInputIdScanner> ChangeItemStateByIdScanner(List<ItemStateChangeInputIdScanner> stateChanges)
+        {
+            var invalidInputs = _itemRepo.ChangeItemStateByIdScanner(stateChanges);
+
+            // remove invalidInputes from the list
+            stateChanges.RemoveExisting(invalidInputs);
+
+            // only check each order once, do not send a notification for each item
+            var ordersToCheck = new List<long>();
+            foreach (var item in stateChanges)
+            {
+                ordersToCheck.AddIfUnique(_itemRepo.GetOrderIdWithItemId((long)item.ItemId));
+            }
+
+            // check all valid orders
+            foreach (var orderId in ordersToCheck)
+            {
+                checkOrderPickupAndSend(orderId);  // send Notification if order is ready
+            }
+
+            return invalidInputs;
+        }
         public List<ItemStateChangeBarcodeScanner> ChangeItemStateBarcodeScanner(List<ItemStateChangeBarcodeScanner> stateChanges)
         {
             var invalidInputs = new List<ItemStateChangeBarcodeScanner>();
@@ -56,8 +120,8 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
                 catch (NotFoundException) { invalidInputs.Add(change); }
             }
 
-            // update the items, returns any and all inputs that are not correct
-            var invalidInputStates = _itemRepo.ChangeItemStateByIdScanner(stateChangesWithId);
+            // update the items, returns any and all inputs that are not correct. This function will send notifications to orders ready to be picked up
+            var invalidInputStates = ChangeItemStateByIdScanner(stateChangesWithId);
 
             // Put the invalid inputs together and get the correct barcode
             foreach (var item in invalidInputStates)
@@ -87,6 +151,21 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         {
             // Get the ID and use get by ID
             return GetItemNextStates(_itemRepo.SearchItem(barcode));
+        }
+
+        //*        Helper Functions        *//
+        /// <summary>Checks if the order connected to Item is ready for pickup and sends a notification to the customer</summary>
+        private void checkOrderPickupAndSend(long orderId)
+        {
+            if (_orderRepo.OrderPickupReady(orderId))
+            {
+                var order = _orderRepo.GetOrderbyId(orderId);   // get order
+                var customer = _customerRepo.GetCustomerById(order.CustomerId); // get customer
+
+                if(Constants.sendEmail) { MailService.sendOrderComplete(order, customer); }
+                else if(Constants.sendSMS) { /* send SMS */ }
+                
+            }
         }
     }
 }

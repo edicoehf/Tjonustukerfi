@@ -96,6 +96,9 @@ namespace ThjonustukerfiTests.Tests
                 string OrderBarCode = "20200001";
                 DateTime modifiedDate = mockContext.Order.FirstOrDefault(o => o.Id == orderId).DateModified;
 
+                // Needs an updated automapper that has access to the current instance of db context
+                UpdateMapper(mockContext);
+
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
                 // Create a list that should be the same as the list returned in OrderDTO
@@ -262,6 +265,9 @@ namespace ThjonustukerfiTests.Tests
             // This order was created in the build database test. This person should only have this one order
             using(var mockContext = new DataContext(_options))
             {
+                // Needs an updated automapper that has access to the current instance of db context
+                UpdateMapper(mockContext);
+
                 IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
 
                 //* Act
@@ -578,6 +584,9 @@ namespace ThjonustukerfiTests.Tests
 
             using(var mockContext = new DataContext(_options))
             {
+                // Needs an updated automapper that has access to the current instance of db context
+                UpdateMapper(mockContext);
+
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
                 var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
@@ -750,6 +759,9 @@ namespace ThjonustukerfiTests.Tests
             //* Arrange
             using (var mockContext = new DataContext(_options))
             {
+                // Needs an updated automapper that has access to the current instance of db context
+                UpdateMapper(mockContext);
+
                 var orderRepo = new OrderRepo(mockContext, _mapper);
                 var DbSize = mockContext.Order.Count();
 
@@ -978,6 +990,15 @@ namespace ThjonustukerfiTests.Tests
             mockContext.Category.AddRange(categories);
             mockContext.SaveChanges();
             //! Building DB done
+        }
+
+        /// <summary>Updates the private mapper to have the current mock data context</summary>
+        private void UpdateMapper(DataContext context)
+        {
+            // Needs a seperete automapper that has access to the current instance of db context
+            var myProfile = new MappingProfile(context);   // Create a new profile like the one we implemented
+            var myConfig = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));   // Setup a configuration with our profile
+            _mapper = new Mapper(myConfig); // Create a new mapper with our profile
         }
     }
 }

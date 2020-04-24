@@ -24,8 +24,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
         /// <summary>Sets an item to complete state.</summary>
         void CompleteItem(long id);
 
-         /// <summary>Removes Item with the given ID.</summary>
-        void RemoveItem(long itemId);
+        /// <summary>Removes Item with the given ID.</summary>
+        /// <returns>Returns the ID of the order that the item was removed from</returns>
+        long RemoveItem(long itemId);
 
         /// <summary>Changes the state of all items in the input</summary>
         /// <returns>An list of invalid inputs</returns>
@@ -41,5 +42,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
         /// <summary>Gets the items barcode with given ID</summary>
         /// <returns>Barcode in string format</returns>
         string GetItemBarcodeById(long id);
+
+        /// <summary>Gets orderId with itemId</summary>
+        /// <returns>OrderId (long)</returns>
+        long GetOrderIdWithItemId(long itemId);
     }
 }

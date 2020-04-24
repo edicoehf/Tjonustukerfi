@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -14,21 +15,26 @@ namespace ThjonustukerfiWebAPI.Mappings
     public class MappingProfile : Profile
     {
         private DataContext _dbContext;
+        private string _connectionString;
+        private bool _runningTests = false;
 
         /// <summary>This is used for tests when setting the DbContext to mapper</summary>
         public MappingProfile(DataContext context) : this()
         {
             _dbContext = context;
+            _runningTests = true;
         }
 
-        /// <summary>Provides a profile to use with AutoMapper</summary>
+        /// <summary>
+        ///     Provides a profile to use with AutoMapper. Automapper is a setup as a singleton and therefor  
+        ///     if you are using db context you must create it in every map that will use it.
+        /// </summary>
         public MappingProfile(string connectionString = null)
         {
             //* Setup DB connection
             if(connectionString != null)
             {
-                var options = new DbContextOptionsBuilder<DataContext>().UseNpgsql(connectionString).Options;
-                _dbContext = new DataContext(options);
+                _connectionString = connectionString;
             }
 
             //* Customer Mappings
@@ -60,6 +66,8 @@ namespace ThjonustukerfiWebAPI.Mappings
             .ForMember(src => src.Id, opt => opt.Ignore())
             .AfterMap((src, dst) =>
             {
+                DatabaseBuilder();  // create a db instance
+
                 dst.extraDataJSON = src.JSON;   // get the json data
                 dst.Category = _dbContext.Category.FirstOrDefault(c => c.Id == src.CategoryId).Name;    // Get category name
                 dst.Service = _dbContext.Service.FirstOrDefault(s => s.Id == src.ServiceId).Name;       // Get service name
@@ -82,6 +90,8 @@ namespace ThjonustukerfiWebAPI.Mappings
                 }
 
                 dst.extraDataJSON = json.ToString();    // update the json file
+
+                DestroyDatabase();  // remove the instance so it can be removed from the memory
             });
 
             // Automapper for item archive to DTO
@@ -91,18 +101,50 @@ namespace ThjonustukerfiWebAPI.Mappings
             // Automapper for OrderInputModel to Order entity
             CreateMap<OrderInputModel, Order>()
                 .ForMember(src => src.DateCreated, opt => opt.MapFrom(src => DateTime.Now))
-                .ForMember(src => src.DateModified, opt => opt.MapFrom(src => DateTime.Now));
+                .ForMember(src => src.DateModified, opt => opt.MapFrom(src => DateTime.Now))
+                .ForMember(src => src.NotificationCount, opt => opt.MapFrom(src => 0));
 
             // Automapper for Order entity to Order DTO
-            CreateMap<Order, OrderDTO>();
+            CreateMap<Order, OrderDTO>()
+                .AfterMap((src, dst) =>
+                {
+                    DatabaseBuilder();  // build instance of db
+
+                    dst.Customer = _dbContext.Customer.FirstOrDefault(c => c.Id == src.CustomerId).Name;
+
+                    // Loop through all items in the order and add them to the DTO
+                    var itemList = _dbContext.ItemOrderConnection.Where(c => c.OrderId == src.Id).ToList();
+                    dst.Items = new List<ItemDTO>();
+                    foreach (var item in itemList)
+                    {
+                        var itemEntity = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);                  // get item entity
+                        var add = new ItemDTO()
+                        {
+                            Id = itemEntity.Id,
+                            Category = _dbContext.Category.FirstOrDefault(c => c.Id == itemEntity.CategoryId).Name, // Find category name
+                            Service = _dbContext.Service.FirstOrDefault(s => s.Id == itemEntity.ServiceId).Name,    // Find Service name
+                            State = _dbContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name,          // Find state name
+                            Barcode = itemEntity.Barcode,
+                            JSON = itemEntity.JSON
+                        };
+
+                        dst.Items.Add(add);     // Add the itemDTO to the orderDTO
+                    }
+
+                    DestroyDatabase();  // remove the instance so it can be removed from the memory
+                });
                 
             // Automapper for mapping order to order archive
             CreateMap<Order, OrderArchive>()
                 .ForMember(src => src.Id, opt => opt.Ignore())
                 .AfterMap((src, dst) =>
                 {
+                    DatabaseBuilder();  // Create the db instance
+
                     dst.Customer = _dbContext.Customer.FirstOrDefault(c => c.Id == src.CustomerId).Name;        // get the customers name
                     dst.OrderSize = _dbContext.ItemOrderConnection.Where(ioc => ioc.OrderId == src.Id).Count(); // see the size of the order
+
+                    DestroyDatabase();  // remove the instance so it can be removed from the memory
                 });
 
             // Automapper for archived orders to DTO
@@ -129,6 +171,23 @@ namespace ThjonustukerfiWebAPI.Mappings
 
             //* ItemstateInput Mappings
             CreateMap<ItemStateChangeInputIdScanner, ItemStateChangeBarcodeScanner>();
+        }
+
+        private void DatabaseBuilder()
+        {
+            if(_connectionString != null)
+            {
+                var options = new DbContextOptionsBuilder<DataContext>().UseNpgsql(_connectionString).Options;
+                _dbContext = new DataContext(options);
+            }
+        }
+
+        private void DestroyDatabase()
+        {
+            if(!_runningTests)
+            {
+                _dbContext = null;
+            }
         }
     }
 }

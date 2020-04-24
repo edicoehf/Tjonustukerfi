@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ThjonustukerfiWebAPI.Services.Implementations;
 using ThjonustukerfiWebAPI.Services.Interfaces;
 
 namespace ThjonustukerfiWebAPI.Controllers
