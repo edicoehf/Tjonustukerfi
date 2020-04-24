@@ -1,6 +1,7 @@
-.order-actions {
+.create-order-actions {
     margin-top: 4rem;
     display: flex;
+    flex-direction: row;
     justify-content: center;
 }
 

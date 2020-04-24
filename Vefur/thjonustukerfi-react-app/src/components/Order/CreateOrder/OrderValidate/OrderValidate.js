@@ -5,10 +5,10 @@ const orderValidate = (customer, items) => {
         !customer.hasOwnProperty("id") ||
         customer.id === null
     ) {
-        errors.category = "Viðskiptavin vantar";
+        errors.customer = "Viðskiptavin vantar";
     }
     if (items.length === 0) {
-        errors.service = "Vörur vantar";
+        errors.items = "Vörur vantar";
     }
     return errors;
 };

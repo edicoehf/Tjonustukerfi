@@ -1,0 +1,13 @@
+.update-order-actions {
+    margin-top: 4rem;
+    display: flex;
+    justify-content: center;
+}
+
+button.confirm-btn {
+    margin-left: 4rem;
+}
+
+button.cancel-btn {
+    margin-right: 4rem;
+}
