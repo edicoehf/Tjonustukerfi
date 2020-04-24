@@ -13,9 +13,15 @@ namespace ThjonustukerfiWebAPI.Extensions
         /// </summary>
         public static void RemoveExisting<T>(this IList<T> self, IEnumerable<T> other)
         {
+            var toRemove = new List<T>();
             foreach(var item in other)
             {
-                if(self.Contains(item)) { self.Remove(item); }
+                if(self.Contains(item)) { toRemove.Add(item); }
+            }
+
+            foreach (var item in toRemove)
+            {
+                self.Remove(item);
             }
         }
 

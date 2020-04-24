@@ -34,15 +34,6 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         {
             var order = _orderRepo.CompleteOrder(orderId);  // get order
             var customer = _customerRepo.GetCustomerById(order.CustomerId); // get customer
-
-            if(Constants.sendEmail)
-            {
-                MailService.sendOrderComplete(order, customer); // send the email
-            }
-            else if(Constants.sendSMS)
-            {
-                // send sms
-            }
         }
 
         public OrderDTO SearchOrder(string barcode)

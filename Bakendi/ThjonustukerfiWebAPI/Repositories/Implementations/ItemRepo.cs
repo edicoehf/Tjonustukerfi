@@ -166,7 +166,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             SetOrderCompleteStatus(new List<long>() { orderId });
         }
 
-        public void RemoveItem(long itemId)
+        public long RemoveItem(long itemId)
         {
             // Get entity
             var entity = _dbContext.Item.FirstOrDefault(i => i.Id == itemId);
@@ -199,6 +199,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
             // Check if the order is complete
             if(orderId != -1) { SetOrderCompleteStatus(new List<long>() { orderId }); }
+
+            return orderId;
         }
 
         public List<ItemStateChangeInput> ChangeItemState(List<ItemStateChangeInput> stateChanges)
@@ -294,6 +296,37 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             return entity.Barcode;
         }
 
+        public bool OrderPickupReady(long orderId)
+        {
+            var order = _dbContext.Order.FirstOrDefault(o => o.Id == orderId);  // get order
+            if(order == null) { throw new NotFoundException($"Order with ID {orderId} was not found."); }
+
+            var itemOrderConnections = _dbContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderId).ToList();
+
+            foreach (var itemConnection in itemOrderConnections)
+            {
+                // get item
+                var item = _dbContext.Item.FirstOrDefault(i => i.Id == itemConnection.ItemId);
+                // get max step (ready for delivery is max step minus 1)
+                var lastStep = _dbContext.ServiceState.Where(ss => ss.ServiceId == item.ServiceId).Max(s => s.Step);
+                // get items current step
+                var itemStep = _dbContext.ServiceState.FirstOrDefault(ss => ss.ServiceId == item.ServiceId && ss.StateId == item.StateId).Step;
+
+                // if the item is not in the next to last step it is not ready to be picked up
+                if(itemStep != (lastStep - 1)) { return false; }
+            }
+
+            return true;
+        }
+
+        public long GetOrderIdWithItemId(long itemId)
+        {
+            var IoConnection = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemId);
+            if(IoConnection == null) { throw new NotFoundException($"Can't find order connected to the item with item ID {itemId}."); }
+
+            return IoConnection.OrderId;
+        }
+
         //*     Helper functions     *//
 
         private void changeState(long itemId, long stateId, string location = null)
@@ -333,12 +366,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             foreach (var order in orders)
             {
                 var entity = _dbContext.Order.FirstOrDefault(o => o.Id == order);
-                if (IsOrderComplete(entity.Id))
-                {
-                    entity.DateCompleted = DateTime.Now;
-                    // sending orderDTO and customerDTO for mail service
-                    MailService.sendOrderComplete(_mapper.Map<OrderDTO>(entity), _mapper.Map<CustomerDetailsDTO>(_dbContext.Customer.FirstOrDefault(c => c .Id == entity.CustomerId)));
-                }
+
+                if (IsOrderComplete(entity.Id)) { entity.DateCompleted = DateTime.Now; }
                 else { entity.DateCompleted = null; }
             }
 

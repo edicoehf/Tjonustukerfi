@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using RestSharp;
 using RestSharp.Authenticators;
 using ThjonustukerfiWebAPI.Models.DTOs;
@@ -16,7 +18,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             body += $"Pöntunin þín (nr. {order.Id}) er tilbúin til afhendingar.\nPöntun:\n";
             foreach (var item in order.Items)
             {
-                body += $"\t\u2022 {item.Category} - {item.Service}\n";
+                body += $"\t\u2022 {item.Category} - {item.Service} - staða: {item.State}\n";
             }
 
             body += "Kær kveðja reykofninn";
