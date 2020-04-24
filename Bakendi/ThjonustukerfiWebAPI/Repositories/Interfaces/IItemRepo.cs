@@ -43,10 +43,6 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
         /// <returns>Barcode in string format</returns>
         string GetItemBarcodeById(long id);
 
-        /// <summary>Checks if an order is ready to be picked up</summary>
-        /// <returns>True if order is ready to be picked up, else false</returns>
-        bool OrderPickupReady(long orderId);
-
         /// <summary>Gets orderId with itemId</summary>
         /// <returns>OrderId (long)</returns>
         long GetOrderIdWithItemId(long itemId);

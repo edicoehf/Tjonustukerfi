@@ -157,7 +157,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         /// <summary>Checks if the order connected to Item is ready for pickup and sends a notification to the customer</summary>
         private void checkOrderPickupAndSend(long orderId)
         {
-            if (_itemRepo.OrderPickupReady(orderId))
+            if (_orderRepo.OrderPickupReady(orderId))
             {
                 var order = _orderRepo.GetOrderbyId(orderId);   // get order
                 var customer = _customerRepo.GetCustomerById(order.CustomerId); // get customer

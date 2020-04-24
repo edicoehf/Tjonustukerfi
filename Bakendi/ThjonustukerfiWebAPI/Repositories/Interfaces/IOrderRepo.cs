@@ -42,5 +42,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
 
         /// <summary>Function to archive orders by ID that are complete</summary>
         void ArchiveCompleteOrdersByCustomerId(long customerId);
+
+        /// <summary>Checks if an order is ready to be picked up</summary>
+        /// <returns>True if order is ready to be picked up, else false</returns>
+        bool OrderPickupReady(long orderId);
     }
 }
