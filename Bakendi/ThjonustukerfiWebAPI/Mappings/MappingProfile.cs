@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -94,7 +95,30 @@ namespace ThjonustukerfiWebAPI.Mappings
                 .ForMember(src => src.DateModified, opt => opt.MapFrom(src => DateTime.Now));
 
             // Automapper for Order entity to Order DTO
-            CreateMap<Order, OrderDTO>();
+            CreateMap<Order, OrderDTO>()
+                .AfterMap((src, dst) =>
+                {
+                    dst.Customer = _dbContext.Customer.FirstOrDefault(c => c.Id == src.CustomerId).Name;
+
+                    // Loop through all items in the order and add them to the DTO
+                    var itemList = _dbContext.ItemOrderConnection.Where(c => c.OrderId == src.Id).ToList();
+                    dst.Items = new List<ItemDTO>();
+                    foreach (var item in itemList)
+                    {
+                        var itemEntity = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);                  // get item entity
+                        var add = new ItemDTO()
+                        {
+                            Id = itemEntity.Id,
+                            Category = _dbContext.Category.FirstOrDefault(c => c.Id == itemEntity.CategoryId).Name, // Find category name
+                            Service = _dbContext.Service.FirstOrDefault(s => s.Id == itemEntity.ServiceId).Name,    // Find Service name
+                            State = _dbContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name,          // Find state name
+                            Barcode = itemEntity.Barcode,
+                            JSON = itemEntity.JSON
+                        };
+                        
+                        dst.Items.Add(add);     // Add the itemDTO to the orderDTO
+                    }
+                });
                 
             // Automapper for mapping order to order archive
             CreateMap<Order, OrderArchive>()

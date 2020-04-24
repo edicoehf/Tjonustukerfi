@@ -28,24 +28,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // Check if order exists
             if(entity == null) { throw new NotFoundException($"Order with id {id} was not found."); }
 
-            //! many calls to DB :(, suggestion: add order ID in Item, then only need to search id DB once to get all items
-            var dto = _mapper.Map<OrderDTO>(entity);
-            dto.Customer = _dbContext.Customer.FirstOrDefault(c => c.Id == entity.CustomerId).Name; // get customer name
-
-            // Loop through a list of item order connections where all elements in list have this order ID
-            var itemList = _dbContext.ItemOrderConnection.Where(c => c.OrderId == id).ToList();
-            dto.Items = new List<ItemDTO>();
-            foreach (var item in itemList)
-            {
-                var itemEntity = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);                  // get item entity
-                var add = _mapper.Map<ItemDTO>(itemEntity);                                                 // map to DTO
-                add.Service = _dbContext.Service.FirstOrDefault(s => s.Id == itemEntity.ServiceId).Name;    // Find service name
-                add.State = _dbContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;          // Find state name
-                add.Category = _dbContext.Category.FirstOrDefault(c => c.Id == itemEntity.CategoryId).Name; // Find category name 
-                dto.Items.Add(add);     // add item DTO to orderDTO item list
-            }
-
-            return dto;
+            return _mapper.Map<OrderDTO>(entity);
         }
 
         public long CreateOrder(OrderInputModel order)
@@ -304,6 +287,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             }
 
             _dbContext.SaveChanges();
+
+            //!#########################################################    was here    #######################################################!//
+            // send email
         }
 
         public long SearchOrder(string barcode)
@@ -346,23 +332,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // Loop through all orders
             foreach (var order in ordersEntity)
             {
-                var dto = _mapper.Map<OrderDTO>(order);
-                dto.Customer = _dbContext.Customer.FirstOrDefault(c => c.Id == order.CustomerId).Name; // get customer name
-                
-                // Loop through all items in the order and add them to the DTO
-                var itemList = _dbContext.ItemOrderConnection.Where(c => c.OrderId == order.Id).ToList();
-                dto.Items = new List<ItemDTO>();
-                foreach (var item in itemList)
-                {
-                    var itemEntity = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);                  // get item entity
-                    var add = _mapper.Map<ItemDTO>(itemEntity);                                                 // map to DTO
-                    add.Service = _dbContext.Service.FirstOrDefault(s => s.Id == itemEntity.ServiceId).Name;    // Find Service name
-                    add.State = _dbContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;          // Find state name
-                    add.Category = _dbContext.Category.FirstOrDefault(c => c.Id == itemEntity.CategoryId).Name; // Find category name
-                    dto.Items.Add(add);     // Add the itemDTO to the orderDTO
-                }
-
-                orders.Add(dto);
+                orders.Add(_mapper.Map<OrderDTO>(order));
             }
             
             return orders;
