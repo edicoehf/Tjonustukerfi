@@ -10,7 +10,7 @@ const CreateOrderActions = () => {
             <Link to={`/new-order`}>
                 <Button
                     className="create-order-button"
-                    size="Large"
+                    size="large"
                     variant="contained"
                 >
                     <AddCircleIcon className="create-order-icon" />

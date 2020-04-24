@@ -1,0 +1,10 @@
+.app-bar {
+    background-color: black;
+}
+.logo {
+    color: white;
+}
+.logo:hover {
+    color: white;
+    text-decoration: none;
+}
