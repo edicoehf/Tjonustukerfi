@@ -260,7 +260,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             return GetOrderDTOwithOrderList(ordersEntity);
         }
 
-        public void CompleteOrder(long orderId)
+        public OrderDTO CompleteOrder(long orderId)
         {
             var orderEntity = _dbContext.Order.FirstOrDefault(o => o.Id == orderId);    // find entity
             if(orderEntity == null) { throw new NotFoundException($"Order with ID {orderId} was not found."); }
@@ -288,8 +288,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
             _dbContext.SaveChanges();
 
-            //!#########################################################    was here    #######################################################!//
-            // send email
+            return _mapper.Map<OrderDTO>(orderEntity);
         }
 
         public long SearchOrder(string barcode)

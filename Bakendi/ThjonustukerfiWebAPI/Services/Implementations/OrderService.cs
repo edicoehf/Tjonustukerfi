@@ -4,6 +4,7 @@ using ThjonustukerfiWebAPI.Repositories.Interfaces;
 using ThjonustukerfiWebAPI.Services.Interfaces;
 using ThjonustukerfiWebAPI.Models.Exceptions;
 using System.Collections;
+using ThjonustukerfiWebAPI.Configurations;
 
 namespace ThjonustukerfiWebAPI.Services.Implementations
 {
@@ -29,7 +30,20 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         public void DeleteByOrderId(long id) => _orderRepo.DeleteByOrderId(id);
         public IEnumerable GetAllOrders() => _orderRepo.GetAllOrders();
 
-        public void CompleteOrder(long orderId) => _orderRepo.CompleteOrder(orderId);
+        public void CompleteOrder(long orderId)
+        {
+            var order = _orderRepo.CompleteOrder(orderId);  // get order
+            var customer = _customerRepo.GetCustomerById(order.CustomerId); // get customer
+
+            if(Constants.sendEmail)
+            {
+                MailService.sendOrderComplete(order, customer); // send the email
+            }
+            else if(Constants.sendSMS)
+            {
+                // send sms
+            }
+        }
 
         public OrderDTO SearchOrder(string barcode)
         {
