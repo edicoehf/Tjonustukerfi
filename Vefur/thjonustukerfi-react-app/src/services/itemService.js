@@ -61,9 +61,21 @@ const updateItemById = (item) => {
         .catch((error) => Promise.reject(error));
 };
 
+const deleteItemById = (id) => {
+    return fetch(endpoint + id, {
+        method: "DELETE",
+        headers: {
+            crossDomain: true,
+        },
+    })
+        .then(handleErrors)
+        .catch((error) => Promise.reject(error));
+};
+
 export default {
     getItemById,
     getNextStatesById,
     updateItemById,
     updateItemState,
+    deleteItemById,
 };

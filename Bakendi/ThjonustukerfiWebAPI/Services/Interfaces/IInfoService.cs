@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using ThjonustukerfiWebAPI.Models.DTOs;
 
 namespace ThjonustukerfiWebAPI.Services.Interfaces
 {
@@ -16,5 +18,9 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
         /// <summary>Gets all categories of items</summary>
         /// <returns>A list of all categories</returns>
         IEnumerable GetCategories();
+
+        /// <summary>Gets all Archived orders along with their Items</summary>
+        /// <returns>A list of all archived orders</returns>
+        List<ArchiveOrderDTO> GetArchivedOrders();
     }
 }
