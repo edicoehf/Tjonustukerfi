@@ -3,6 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <Version>0.0.1</Version>
+    <PackageId>Thjonustukerfi</PackageId>
+    <Authors>Árni Magnússon, Daníel Már Bonilla, Viktor Sveinsson &amp; Jón Einar Jóhannsson</Authors>
+    <Company>Edico ehf.</Company>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

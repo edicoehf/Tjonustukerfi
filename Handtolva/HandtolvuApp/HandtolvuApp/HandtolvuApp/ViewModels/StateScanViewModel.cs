@@ -1,4 +1,5 @@
-﻿using HandtolvuApp.Models;
+﻿using HandtolvuApp.Data.Interfaces;
+using HandtolvuApp.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,56 +8,25 @@ using Xamarin.Forms;
 
 namespace HandtolvuApp.ViewModels
 {
-    class StateScanViewModel : INotifyPropertyChanged
+    class StateScanViewModel : ScannerViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        public StateScanViewModel(Item i)
+        public StateScanViewModel(IScannerService scannerService, Item i) : base(scannerService)
         {
 
             Item = i;
 
             Placeholder = "Sláðu inn stöðu";
 
+            ScannedBarcodeText = "";
+
             StateScan = new Command(async () =>
             {
-                await App.ItemManager.StateChangeWithId(Item.Id, InputVariable);
+                await App.ItemManager.StateChangeWithId(Item.Id, ScannedBarcodeText);
             });
         }
 
-        string inputVariable;
-
-        public string InputVariable
-        {
-            get => inputVariable;
-
-            set
-            {
-                inputVariable = value;
-
-                var args = new PropertyChangedEventArgs(nameof(InputVariable));
-
-                PropertyChanged?.Invoke(this, args);
-            }
-        }
-
         public Command StateScan { get; }
-
-        string placeholder;
-
-        public string Placeholder
-        {
-            get => placeholder;
-
-            set
-            {
-                placeholder = value;
-
-                var args = new PropertyChangedEventArgs(nameof(Placeholder));
-
-                PropertyChanged?.Invoke(this, args);
-            }
-        }
 
         Item item;
 
@@ -68,9 +38,7 @@ namespace HandtolvuApp.ViewModels
             {
                 item = value;
 
-                var args = new PropertyChangedEventArgs(nameof(Item));
-
-                PropertyChanged?.Invoke(this, args);
+                NotifyPropertyChanged(nameof(Item));
             }
         }
     }

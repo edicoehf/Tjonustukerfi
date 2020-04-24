@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HandtolvuApp.Data.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
@@ -6,13 +7,14 @@ using Xamarin.Forms;
 
 namespace HandtolvuApp.ViewModels
 {
-    class LocationScanViewModel : INotifyPropertyChanged
+    class LocationScanViewModel : ScannerViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        public LocationScanViewModel()
+        public LocationScanViewModel(IScannerService scannerService) : base(scannerService) 
         {
             Placeholder = "Sláðu inn vörunúmer";
+
+            ScannedBarcodeText = "";
 
             ClickCommand = new Command(async () =>
             {
@@ -20,38 +22,6 @@ namespace HandtolvuApp.ViewModels
             });
         }
 
-        string inputVariable;
-
-        public string InputVariable
-        {
-            get => inputVariable;
-
-            set
-            {
-                inputVariable = value;
-
-                var args = new PropertyChangedEventArgs(nameof(InputVariable));
-
-                PropertyChanged?.Invoke(this, args);
-            }
-        }
-
         public Command ClickCommand { get; }
-
-        string placeholder;
-
-        public string Placeholder
-        {
-            get => placeholder;
-
-            set
-            {
-                placeholder = value;
-
-                var args = new PropertyChangedEventArgs(nameof(Placeholder));
-
-                PropertyChanged?.Invoke(this, args);
-            }
-        }
     }
 }

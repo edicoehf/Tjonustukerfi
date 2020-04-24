@@ -28,6 +28,7 @@ namespace HandtolvuApp.ViewModels
                         // handle that there is no item with this barcode
                         MessagingCenter.Send<ItemInputViewModel>(this, "Villa");
                         Placeholder = "Vörunúmer er ekki til";
+                        ScannedBarcodeText = "";
                     }
                     else
                     {
@@ -48,20 +49,5 @@ namespace HandtolvuApp.ViewModels
 
         public Command ClickCommand { get; }
 
-        string placeholder;
-
-        public string Placeholder
-        {
-            get => placeholder;
-
-            set 
-            {
-                placeholder = value;
-
-                var args = new PropertyChangedEventArgs(nameof(Placeholder));
-
-               // PropertyChanged?.Invoke(this, args);
-            }
-        }
     }
 }

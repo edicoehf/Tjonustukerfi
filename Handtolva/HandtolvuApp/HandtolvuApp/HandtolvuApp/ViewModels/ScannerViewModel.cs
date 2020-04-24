@@ -20,6 +20,20 @@ namespace HandtolvuApp.ViewModels
             }
         }
 
+        string _placeholder;
+
+        public string Placeholder
+        {
+            get => _placeholder;
+
+            set
+            {
+                _placeholder = value;
+
+                NotifyPropertyChanged(nameof(Placeholder));
+            }
+        }
+
         public IScannerService _scannerService;
 
         public ScannerViewModel(IScannerService scannerService)

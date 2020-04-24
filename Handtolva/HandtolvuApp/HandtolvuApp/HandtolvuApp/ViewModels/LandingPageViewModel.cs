@@ -15,7 +15,7 @@ namespace HandtolvuApp.ViewModels
         {
             OrderCommand = new Command(async () =>
             {
-                var orderInputVM = new OrderInputViewModel();
+                var orderInputVM = new OrderInputViewModel(App.Scanner);
                 var orderInputPage = new OrderInputPage();
                 orderInputPage.BindingContext = orderInputVM;
                 await Application.Current.MainPage.Navigation.PushAsync(orderInputPage);

@@ -24,7 +24,7 @@ namespace HandtolvuApp.ViewModels
             ScanStateCommand = new Command(async () =>
             {
                 // send user to scan site
-                var scanPageVM = new StateScanViewModel(item);
+                var scanPageVM = new StateScanViewModel(App.Scanner, item);
                 var scanPage = new StateScanPage();
                 scanPage.BindingContext = scanPageVM;
                 await App.Current.MainPage.Navigation.PushAsync(scanPage);
