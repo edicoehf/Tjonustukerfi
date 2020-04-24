@@ -1,5 +1,5 @@
 import React from "react";
-import { ListGroup } from "react-bootstrap";
+import { List, ListItem } from "@material-ui/core";
 import OrderListItem from "../OrderListItem/OrderListItem";
 import "./OrderList.css";
 import { ordersType, isLoadingType } from "../../../types";
@@ -11,23 +11,23 @@ const OrderList = ({ orders, isLoading, error }) => {
                 isLoading ? (
                     <p> Sæki Pantanir </p>
                 ) : (
-                    <ListGroup className="order-list">
-                        <ListGroup.Item className="item" variant="dark">
+                    <List className="order-list">
+                        <ListItem className="order-item" variant="dark">
                             <h5>Pantananúmer</h5>
-                        </ListGroup.Item>
-                        <ListGroup.Item className="item" variant="dark">
+                        </ListItem>
+                        <ListItem className="order-item" variant="dark">
                             <h5>Eigandi Pöntunar</h5>
-                        </ListGroup.Item>
-                        <ListGroup.Item
-                            className="item actions-item"
-                            variant="dark"
-                        >
+                        </ListItem>
+                        <ListItem className="order-item" variant="dark">
                             <h5 className="item">Fjöldi Vara</h5>
-                        </ListGroup.Item>
+                        </ListItem>
+                        <ListItem className="order-item order-action-item">
+                            <h5>Aðgerðir</h5>
+                        </ListItem>
                         {orders.map((item) => (
                             <OrderListItem order={item} key={item.id} />
                         ))}
-                    </ListGroup>
+                    </List>
                 )
             ) : (
                 <p className="error"> Villa kom upp: Gat ekki sótt pantanir</p>

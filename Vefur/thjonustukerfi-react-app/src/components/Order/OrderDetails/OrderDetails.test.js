@@ -55,13 +55,13 @@ describe("<OrderDetails />", () => {
     });
 
     it("Should display order barcode correctly", () => {
-        expect(wrapper.find(".order-barcode").at(0).childAt(1).text()).toBe(
+        expect(wrapper.find(".order-barcode").at(2).childAt(2).text()).toBe(
             testOrder.barcode
         );
     });
 
     it("Should display order creation date correctly", () => {
-        expect(wrapper.find(".order-date").at(0).childAt(1).text()).toBe(
+        expect(wrapper.find(".order-date").at(2).childAt(2).text()).toBe(
             "2. apr 2020 kl. 13:56"
         );
     });
@@ -76,7 +76,7 @@ describe("<OrderDetails />", () => {
         expect(wrapper.find(OrderItemList)).toHaveLength(1);
     });
 
-    it("Should display 2 rows items", () => {
-        expect(wrapper.find("tbody").at(0).instance().children).toHaveLength(2);
+    it("Should display 3 rows items", () => {
+        expect(wrapper.find("tr").at(0).instance().children).toHaveLength(3);
     });
 });

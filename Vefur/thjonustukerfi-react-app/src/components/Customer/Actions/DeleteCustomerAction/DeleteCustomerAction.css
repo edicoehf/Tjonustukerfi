@@ -4,9 +4,20 @@
 Button.delete-button {
     color: black;
 }
+Button.delete-button:hover {
+    background-color: rgb(165, 3, 57);
+}
 Button.delete-button:hover b {
     opacity: 0;
 }
 Button.delete-button:hover .delete-icon {
-    margin-left: 60%;
+    opacity: 1;
+    margin-left: 85%;
+}
+Button.delete-button b {
+    opacity: 1;
+    margin-right: 25%;
+}
+Button.delete-button .delete-icon {
+    opacity: 0;
 }

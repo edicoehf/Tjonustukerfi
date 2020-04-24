@@ -1,0 +1,25 @@
+Button.create-order-button {
+    background-color: rgb(27, 207, 4);
+    color: black;
+}
+.create-order-button a {
+    height: 100%;
+}
+Button.create-order-button:hover {
+    background-color: rgb(31, 131, 0);
+}
+Button.create-order-button b {
+    opacity: 1;
+    margin-right: 10%;
+    max-height: 3.4em;
+}
+Button.create-order-button:hover b {
+    opacity: 0;
+}
+Button.create-order-button:hover .create-order-icon {
+    opacity: 1;
+    margin-left: 55%;
+}
+Button.create-order-button .create-order-icon {
+    opacity: 0;
+}
