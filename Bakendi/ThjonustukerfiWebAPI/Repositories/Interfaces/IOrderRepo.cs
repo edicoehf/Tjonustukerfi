@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ThjonustukerfiWebAPI.Models.DTOs;
+using ThjonustukerfiWebAPI.Models.Entities;
 using ThjonustukerfiWebAPI.Models.InputModels;
 
 namespace ThjonustukerfiWebAPI.Repositories.Interfaces
@@ -46,5 +47,12 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
         /// <summary>Checks if an order is ready to be picked up</summary>
         /// <returns>True if order is ready to be picked up, else false</returns>
         bool OrderPickupReady(long orderId);
+
+        /// <summary>Gets all order Entities that are ready for pickup</summary>
+        /// <returns>List of Order</returns>
+        List<Order> GetOrdersReadyForPickup();
+
+        /// <summary>Increments order notifaction count by one given the order ID</summary>
+        void IncrementNotification(long orderId);
     }
 }

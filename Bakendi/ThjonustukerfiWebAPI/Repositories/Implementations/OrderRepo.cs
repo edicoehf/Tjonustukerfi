@@ -362,6 +362,53 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             Archive(completeOrders);
         }
 
+        public bool OrderPickupReady(long orderId)
+        {
+            var order = _dbContext.Order.FirstOrDefault(o => o.Id == orderId);  // get order
+            if(order == null) { throw new NotFoundException($"Order with ID {orderId} was not found."); }
+
+            var itemOrderConnections = _dbContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderId).ToList();
+
+            foreach (var itemConnection in itemOrderConnections)
+            {
+                // get item
+                var item = _dbContext.Item.FirstOrDefault(i => i.Id == itemConnection.ItemId);
+                // get max step (ready for delivery is max step minus 1)
+                var lastStep = _dbContext.ServiceState.Where(ss => ss.ServiceId == item.ServiceId).Max(s => s.Step);
+                // get items current step
+                var itemStep = _dbContext.ServiceState.FirstOrDefault(ss => ss.ServiceId == item.ServiceId && ss.StateId == item.StateId).Step;
+
+                // if the item is not in the next to last step it is not ready to be picked up
+                if(itemStep != (lastStep - 1)) { return false; }
+            }
+
+            return true;
+        }
+
+        public List<Order> GetOrdersReadyForPickup()
+        {
+            // Get all orders that are ready for pickup
+            var orders = _dbContext.Order.ToList();
+            var readyOrders = new List<Order>();
+            foreach (var order in orders)
+            {
+                if(OrderPickupReady(order.Id)) { readyOrders.Add(order); }
+            }
+
+            return readyOrders; // return the DTO of all these orders
+        }
+
+        public void IncrementNotification(long orderId)
+        {
+            var order = _dbContext.Order.FirstOrDefault(o => o.Id == orderId);
+            if(order != null)
+            {
+                order.NotificationCount++;
+
+                _dbContext.SaveChanges();
+            }
+        }
+
         //*     Helper functions     *//
         private void Archive(List<Order> toArchive)
         {
@@ -423,29 +470,6 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             {
                 DeleteByOrderId(order);
             }
-        }
-
-        public bool OrderPickupReady(long orderId)
-        {
-            var order = _dbContext.Order.FirstOrDefault(o => o.Id == orderId);  // get order
-            if(order == null) { throw new NotFoundException($"Order with ID {orderId} was not found."); }
-
-            var itemOrderConnections = _dbContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderId).ToList();
-
-            foreach (var itemConnection in itemOrderConnections)
-            {
-                // get item
-                var item = _dbContext.Item.FirstOrDefault(i => i.Id == itemConnection.ItemId);
-                // get max step (ready for delivery is max step minus 1)
-                var lastStep = _dbContext.ServiceState.Where(ss => ss.ServiceId == item.ServiceId).Max(s => s.Step);
-                // get items current step
-                var itemStep = _dbContext.ServiceState.FirstOrDefault(ss => ss.ServiceId == item.ServiceId && ss.StateId == item.StateId).Step;
-
-                // if the item is not in the next to last step it is not ready to be picked up
-                if(itemStep != (lastStep - 1)) { return false; }
-            }
-
-            return true;
         }
     }
 }

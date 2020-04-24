@@ -9,6 +9,22 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
 {
     public static class MailService
     {
+        public static void SendOrderNotification(OrderDTO order, CustomerDetailsDTO customer, double weeksSinceReady)
+        {
+            var emailAddress = customer.Email;
+            var subject = "Reykofninn - Áminning fyrir tilbúna pöntun";
+            var body = $"Góðan daginn {order.Customer}\n";
+            body += $"Þetta er áminning um að þú eigir ósótta pöntun (nr. {order.Id}) sem kláraðist fyrir {weeksSinceReady} vikum.\nPöntun:\n";
+            foreach (var item in order.Items)
+            {
+                body += $"\t\u2022 {item.Category} - {item.Service} - staða: {item.State}\n";
+            }
+
+            body += "\nKær kveðja Reykofninn";
+
+            MailService.Sendmail(emailAddress, subject, body);
+        }
+
         public static void sendOrderComplete(OrderDTO order, CustomerDetailsDTO customer)
         {
             var emailAddress = customer.Email;
@@ -21,7 +37,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
                 body += $"\t\u2022 {item.Category} - {item.Service} - staða: {item.State}\n";
             }
 
-            body += "Kær kveðja reykofninn";
+            body += "Kær kveðja Reykofninn";
             
             MailService.Sendmail(emailAddress, subject, body);
         }
