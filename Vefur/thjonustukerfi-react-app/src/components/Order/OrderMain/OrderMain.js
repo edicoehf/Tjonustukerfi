@@ -1,23 +1,20 @@
 import React from "react";
-import { Link } from "react-router-dom";
-
 import useGetAllOrders from "../../../hooks/useGetAllOrders";
 import OrderList from "../OrderList/OrderList";
 import "./OrderMain.css";
 import { ordersType, isLoadingType } from "../../../types";
+import CreateOrderActions from "../Actions/CreateOrderAction/CreateOrderAction";
 
 const OrderMain = () => {
     const { orders, error, isLoading } = useGetAllOrders();
 
     return (
-        <div className="main">
+        <div className="main-container">
             <div className="main-item header">
                 <h1>Pantanir</h1>
             </div>
             <div className="main-item create-button">
-                <Link to="/new-order" className="btn btn-lg btn-success">
-                    Bæta við pöntun
-                </Link>
+                <CreateOrderActions />
             </div>
             <div className="main-item">
                 <OrderList

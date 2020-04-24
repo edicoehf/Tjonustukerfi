@@ -1,0 +1,8 @@
+.submit-btn {
+    background-color: rgb(51, 50, 50);
+    color: white;
+}
+.submit-btn:hover {
+    background-color: rgb(17, 17, 17);
+    color: white;
+}

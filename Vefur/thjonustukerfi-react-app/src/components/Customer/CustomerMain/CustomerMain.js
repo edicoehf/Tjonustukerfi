@@ -1,11 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
-
 import CustomerList from "../CustomerList/CustomerList";
 import "./CustomerMain.css";
 import SearchBar from "../../SearchBar/SearchBar";
 import useGetAllCustomers from "../../../hooks/useGetAllCustomers";
 import useSearchBar from "../../../hooks/useSearchBar";
+import CreateCustomerAction from "../Actions/CreateCustomerAction/CreateCustomerAction";
 
 const CustomerMain = () => {
     const { customers, error, isLoading } = useGetAllCustomers();
@@ -14,14 +13,12 @@ const CustomerMain = () => {
     const searchBarPlaceHolder = "Má bjóða þér að leita eftir nafni?";
 
     return (
-        <div className="main">
+        <div className="customer-main">
             <div className="main-item header">
                 <h1>Viðskiptavinir</h1>
             </div>
             <div className="main-item create-button">
-                <Link to="/new-customer" className="btn btn-lg btn-success">
-                    Bæta við viðskiptavin
-                </Link>
+                <CreateCustomerAction />
             </div>
             {!customers.length > 0 ? (
                 <>

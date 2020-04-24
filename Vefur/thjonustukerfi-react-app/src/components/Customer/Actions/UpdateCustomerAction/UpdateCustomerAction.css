@@ -5,10 +5,17 @@ Button.update-button {
 Button.update-button:hover {
     background-color: rgb(138, 138, 20);
 }
+Button.update-button b {
+    opacity: 1;
+    margin-right: 25%;
+}
 Button.update-button:hover b {
     opacity: 0;
 }
-
 Button.update-button:hover .update-icon {
-    margin-left: 70%;
+    margin-left: 95%;
+    opacity: 1;
+}
+Button.update-button .update-icon {
+    opacity: 0;
 }

@@ -1,22 +1,19 @@
 import React from "react";
-import { ListGroup } from "react-bootstrap";
 import CustomerActions from "../Actions/CustomerActions/CustomerActions";
 import "./CustomerListItem.css";
 import { customerType } from "../../../types/index";
+import ListItemLink from "../../ListItemLink/ListItemLink";
+import { ListItem } from "@material-ui/core";
 
 const CustomerListItem = ({ customer }) => {
     return (
         <>
-            <ListGroup.Item
-                variant="light"
-                action
-                href={"/customer/" + customer.id}
-            >
+            <ListItemLink href={"/customer/" + customer.id}>
                 {customer.name} - {customer.email}
-            </ListGroup.Item>
-            <ListGroup.Item className="buttons">
+            </ListItemLink>
+            <ListItem className="button-area">
                 <CustomerActions id={customer.id} />
-            </ListGroup.Item>
+            </ListItem>
         </>
     );
 };

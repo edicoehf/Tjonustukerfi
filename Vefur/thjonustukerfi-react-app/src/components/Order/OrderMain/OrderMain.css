@@ -1,7 +1,8 @@
-.main {
+.main-container {
     display: flex;
     flex-direction: column;
     align-content: space-around;
+    margin-top: 0%;
 }
 .main-item {
     padding-bottom: 1em;
