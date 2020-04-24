@@ -11,6 +11,7 @@ using ThjonustukerfiWebAPI.Models.Entities;
 using ThjonustukerfiWebAPI.Models.Exceptions;
 using ThjonustukerfiWebAPI.Models.InputModels;
 using ThjonustukerfiWebAPI.Repositories.Interfaces;
+using ThjonustukerfiWebAPI.Services.Implementations;
 
 namespace ThjonustukerfiWebAPI.Repositories.Implementations
 {
@@ -332,7 +333,12 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             foreach (var order in orders)
             {
                 var entity = _dbContext.Order.FirstOrDefault(o => o.Id == order);
-                if (IsOrderComplete(entity.Id)) { entity.DateCompleted = DateTime.Now; }
+                if (IsOrderComplete(entity.Id))
+                {
+                    entity.DateCompleted = DateTime.Now;
+                    // sending orderDTO and customerDTO for mail service
+                    MailService.sendOrderComplete(_mapper.Map<OrderDTO>(entity), _mapper.Map<CustomerDetailsDTO>(_dbContext.Customer.FirstOrDefault(c => c .Id == entity.CustomerId)));
+                }
                 else { entity.DateCompleted = null; }
             }
 

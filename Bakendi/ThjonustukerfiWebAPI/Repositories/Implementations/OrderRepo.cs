@@ -102,6 +102,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             else if(items.Count == 0 && order.Items.Count > 0)      // if the list in the database is empty, just add the new ones
             {
                 AddMultipleItems(order.Items, entity.Id);
+                entity.DateCompleted = null;    // if adding items then the order is not complete
             }
             else if(items.Count < order.Items.Count)    // if adding more items and/or updating to existing list
             {
@@ -123,6 +124,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
                 // Add the rest of the items
                 AddMultipleItems(tmpList, entity.Id);
+                entity.DateCompleted = null;    // if adding items then the order is not complete
             }
             else if(items.Count > order.Items.Count)    // if some items are removed from the list
             {
