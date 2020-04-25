@@ -1,26 +1,37 @@
 .order-details {
     margin-top: 4em;
 }
+
 .order-title {
     display: flex;
     justify-content: center;
     margin-top: 1em;
 }
+
 .customer-link {
     color: #212529;
     text-decoration: underline;
 }
+
 .customer-link:hover {
     color: #1a692b;
     text-decoration: underline;
 }
+
 .order-items {
     margin-top: 2em;
 }
+
 .order-table-item {
     display: flex;
 }
+
 .error {
     color: var(--error-color);
     font-weight: bold;
+}
+
+.order-details .MuiPaper-root {
+    width: inherit;
+    min-width: 55rem;
 }
