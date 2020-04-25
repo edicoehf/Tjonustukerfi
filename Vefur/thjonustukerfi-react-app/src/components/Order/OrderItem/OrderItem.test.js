@@ -10,6 +10,7 @@ describe("<OrderItem />", () => {
         category: "Lax",
         service: "Birkireyking",
         barcode: "50050001",
+        state: "Vinnslu",
     };
 
     beforeEach(() => {
@@ -18,8 +19,8 @@ describe("<OrderItem />", () => {
         );
     });
 
-    it("Should have 4 children", () => {
-        expect(wrapper.find("tr").at(0).instance().children.length).toBe(4);
+    it("Should have 5 children", () => {
+        expect(wrapper.find("tr").at(0).instance().children.length).toBe(5);
     });
 
     it("Should display category correctly", () => {
@@ -38,5 +39,11 @@ describe("<OrderItem />", () => {
         expect(
             wrapper.find(".order-item-barcode").at(0).childAt(0).text()
         ).toBe(testProps.barcode);
+    });
+
+    it("Should display state correctly", () => {
+        expect(wrapper.find(".order-item-state").at(0).childAt(0).text()).toBe(
+            testProps.state
+        );
     });
 });

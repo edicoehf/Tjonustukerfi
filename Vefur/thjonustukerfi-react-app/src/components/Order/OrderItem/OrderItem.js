@@ -13,7 +13,7 @@ const OrderItem = ({ item }) => {
             <TableCell className="order-item-category">{category}</TableCell>
             <TableCell className="order-item-service">{service}</TableCell>
             <TableCell className="order-item-barcode">{barcode}</TableCell>
-            <TableCell className="order-item-barcode">{state}</TableCell>
+            <TableCell className="order-item-state">{state}</TableCell>
         </TableRow>
     );
 };

@@ -11,18 +11,21 @@ describe("<OrderItemList />", () => {
             category: "Lax",
             service: "Birkireyking",
             barcode: "50050001",
+            state: "Vinnslu",
         },
         {
             id: 42,
             category: "Bleikja",
             service: "Taðreyking",
             barcode: "50450001",
+            state: "Kælir1",
         },
         {
             id: 53,
             category: "Sjófiskur",
             service: "Birkireyking",
             barcode: "52050001",
+            state: "Vinnslu",
         },
     ];
 
@@ -30,9 +33,9 @@ describe("<OrderItemList />", () => {
         wrapper = mount(shallow(<OrderItemList items={testProps} />).get(0));
     });
 
-    it("Should have 4 columns", () => {
+    it("Should have 5 columns", () => {
         expect(
             wrapper.find("tr.order-item").at(0).instance().children.length
-        ).toBe(4);
+        ).toBe(5);
     });
 });
