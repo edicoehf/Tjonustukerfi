@@ -19,8 +19,8 @@ describe("<OrderItem />", () => {
         );
     });
 
-    it("Should have 5 children", () => {
-        expect(wrapper.find("tr").at(0).instance().children.length).toBe(5);
+    it("Should have 6 children", () => {
+        expect(wrapper.find("tr").at(0).instance().children.length).toBe(6);
     });
 
     it("Should display category correctly", () => {
