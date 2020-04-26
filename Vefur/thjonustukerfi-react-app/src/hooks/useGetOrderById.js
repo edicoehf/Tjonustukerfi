@@ -20,6 +20,7 @@ const useGetOrderById = (id) => {
         orderService
             .getOrderById(id)
             .then((order) => {
+                order.items = parseItemJsonForItems(order.items);
                 setOrder(order);
                 setError(null);
             })
@@ -31,6 +32,14 @@ const useGetOrderById = (id) => {
     }, [fetchOrder]);
 
     return { order, error, fetchOrder };
+};
+
+const parseItemJsonForItems = (items) => {
+    for (var i = 0; i < items.length; i++) {
+        console.log(items[i].json);
+        items[i].json = JSON.parse(items[i].json);
+    }
+    return items;
 };
 
 export default useGetOrderById;

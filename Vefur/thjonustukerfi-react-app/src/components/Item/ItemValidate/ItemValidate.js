@@ -1,5 +1,5 @@
 const itemValidate = (values) => {
-    const { category, service, amount } = values;
+    const { category, service, amount, slices } = values;
     const errors = {};
     if (category === null) {
         errors.category = "Tegund vantar";
@@ -11,6 +11,9 @@ const itemValidate = (values) => {
         errors.amount = "Fjölda vantar";
     } else if (amount < 1) {
         errors.amount = "Fjöldi verður að vera stærri en 0";
+    }
+    if (slices === "") {
+        errors.slices = "Tilgreining á skurði vantar";
     }
     return errors;
 };

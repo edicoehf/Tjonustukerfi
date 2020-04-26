@@ -11,6 +11,7 @@ describe("<OrderItemList />", () => {
             category: "Lax",
             service: "Birkireyking",
             barcode: "50050001",
+            json: { location: "none", slices: "1 biti" },
             state: "Vinnslu",
         },
         {
@@ -18,6 +19,7 @@ describe("<OrderItemList />", () => {
             category: "Bleikja",
             service: "Taðreyking",
             barcode: "50450001",
+            json: { location: "none", slices: "1 biti" },
             state: "Kælir1",
         },
         {
@@ -25,6 +27,7 @@ describe("<OrderItemList />", () => {
             category: "Sjófiskur",
             service: "Birkireyking",
             barcode: "52050001",
+            json: { location: "none", slices: "1 biti" },
             state: "Vinnslu",
         },
     ];
@@ -33,9 +36,9 @@ describe("<OrderItemList />", () => {
         wrapper = mount(shallow(<OrderItemList items={testProps} />).get(0));
     });
 
-    it("Should have 5 columns", () => {
+    it("Should have 6 columns", () => {
         expect(
             wrapper.find("tr.order-item").at(0).instance().children.length
-        ).toBe(5);
+        ).toBe(6);
     });
 });
