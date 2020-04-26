@@ -63,10 +63,23 @@ const updateOrderById = (order, id) => {
         .catch((error) => Promise.reject(error));
 };
 
+const checkoutOrderById = (id) => {
+    return fetch(endpoint + id + "/complete", {
+        method: "PATCH",
+        headers: {
+            crossDomain: true,
+            "Content-Type": "application/json",
+        },
+    })
+        .then(handleErrors)
+        .catch((error) => Promise.reject(error));
+};
+
 export default {
     getOrderById,
     createOrder,
     getAllOrders,
     deleteOrderById,
     updateOrderById,
+    checkoutOrderById,
 };
