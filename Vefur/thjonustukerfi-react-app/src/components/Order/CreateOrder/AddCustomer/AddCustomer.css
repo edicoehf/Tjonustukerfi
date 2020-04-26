@@ -13,3 +13,7 @@ div.customer-details {
 button.edt-btn {
     margin-top: 2rem;
 }
+
+.add-customer .customer-details div.MuiPaper-root {
+    width: inherit;
+}
