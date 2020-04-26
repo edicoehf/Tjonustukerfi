@@ -36,10 +36,13 @@ namespace HandtolvuApp.ViewModels
 
         public IScannerService _scannerService;
 
-        public ScannerViewModel(IScannerService scannerService)
+        public ScannerViewModel()
         {
-            _scannerService = scannerService;
-            _scannerService.OnBarcodeScanned += _scannerService_OnBarcodeScanned;
+            if(App.Scanner != null)
+            {
+                _scannerService = App.Scanner;
+                _scannerService.OnBarcodeScanned += _scannerService_OnBarcodeScanned;
+            }
         }
 
         void _scannerService_OnBarcodeScanned(object sender, Models.OnBarcodeScannedEventArgs e)

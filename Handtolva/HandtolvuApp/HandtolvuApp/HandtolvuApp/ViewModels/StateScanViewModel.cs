@@ -11,7 +11,7 @@ namespace HandtolvuApp.ViewModels
     class StateScanViewModel : ScannerViewModel
     {
 
-        public StateScanViewModel(IScannerService scannerService, Item i) : base(scannerService)
+        public StateScanViewModel(Item i) : base()
         {
 
             Item = i;

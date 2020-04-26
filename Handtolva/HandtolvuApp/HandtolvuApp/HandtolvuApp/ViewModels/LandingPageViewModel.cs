@@ -15,7 +15,8 @@ namespace HandtolvuApp.ViewModels
         {
             OrderCommand = new Command(async () =>
             {
-                var orderInputVM = new OrderInputViewModel(App.Scanner);
+
+                var orderInputVM = new OrderInputViewModel();
                 var orderInputPage = new OrderInputPage();
                 orderInputPage.BindingContext = orderInputVM;
                 await Application.Current.MainPage.Navigation.PushAsync(orderInputPage);
@@ -23,7 +24,8 @@ namespace HandtolvuApp.ViewModels
 
             ItemCommand = new Command(async () =>
             {
-                var itemInputVM = new ItemInputViewModel(App.Scanner);
+                
+                var itemInputVM = new ItemInputViewModel();  
                 var itemInputPage = new ItemInputPage();
                 itemInputPage.BindingContext = itemInputVM;
                 await App.Current.MainPage.Navigation.PushAsync(itemInputPage);
@@ -31,7 +33,7 @@ namespace HandtolvuApp.ViewModels
 
             LocationCommand = new Command(async () =>
             {
-                var locationScanVM = new LocationScanViewModel(App.Scanner);
+                var locationScanVM = new LocationScanViewModel();
                 var locationScanPage = new LocationScanPage();
                 locationScanPage.BindingContext = locationScanVM;
                 await App.Current.MainPage.Navigation.PushAsync(locationScanPage);

@@ -11,7 +11,7 @@ namespace HandtolvuApp.ViewModels
 {
     class OrderInputViewModel : ScannerViewModel
     {
-        public OrderInputViewModel(IScannerService scannerService) : base(scannerService)
+        public OrderInputViewModel() : base()
         {
             Placeholder = "Sláðu inn pöntunarnúmer";
 

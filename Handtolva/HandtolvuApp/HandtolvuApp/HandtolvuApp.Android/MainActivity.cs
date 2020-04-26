@@ -26,9 +26,19 @@ namespace HandtolvuApp.Droid
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
-            Scanner = DependencyService.Get<ScannerService>();
-            EMDKManager.GetEMDKManager(Android.App.Application.Context, Scanner);
-            App.Scanner = Scanner;
+            if(Build.Manufacturer.Contains("Zebra Technologies") || Build.Manufacturer.Contains("Motorola Solutions"))
+            {
+                Scanner = DependencyService.Get<ScannerService>();
+                EMDKManager.GetEMDKManager(Android.App.Application.Context, Scanner);
+                App.Scanner = Scanner;
+            }
+            else
+            {
+                App.Scanner = null;
+                Toast.MakeText(Android.App.Application.Context, "No zebra device", ToastLength.Long).Show();
+            }
+
+
             LoadApplication(new App());
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
@@ -41,19 +51,28 @@ namespace HandtolvuApp.Droid
         protected override void OnResume()
         {
             base.OnResume();
-            Scanner.InitScanner();
+            if (Build.Manufacturer.Contains("Zebra Technologies") || Build.Manufacturer.Contains("Motorola Solutions"))
+            {
+                Scanner.InitScanner();
+            }
         }
 
         protected override void OnPause()
         {
             base.OnPause();
-            Scanner.DeinitScanner();
+            if (Build.Manufacturer.Contains("Zebra Technologies") || Build.Manufacturer.Contains("Motorola Solutions"))
+            {
+                Scanner.DeinitScanner();
+            }
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            Scanner.Destroy();
+            if (Build.Manufacturer.Contains("Zebra Technologies") || Build.Manufacturer.Contains("Motorola Solutions"))
+            {
+                Scanner.Destroy();
+            }
         }
     }
 }

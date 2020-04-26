@@ -10,9 +10,8 @@ using Xamarin.Forms;
 
 namespace HandtolvuApp.ViewModels
 {
-    public class ItemViewModel : INotifyPropertyChanged
+    public class ItemViewModel : BaseViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
         public ItemViewModel(Item i, NextStates n)
         {
             Item = i;
@@ -24,7 +23,7 @@ namespace HandtolvuApp.ViewModels
             ScanStateCommand = new Command(async () =>
             {
                 // send user to scan site
-                var scanPageVM = new StateScanViewModel(App.Scanner, item);
+                var scanPageVM = new StateScanViewModel(item);
                 var scanPage = new StateScanPage();
                 scanPage.BindingContext = scanPageVM;
                 await App.Current.MainPage.Navigation.PushAsync(scanPage);
@@ -41,9 +40,7 @@ namespace HandtolvuApp.ViewModels
             {
                 item = value;
 
-                var args = new PropertyChangedEventArgs(nameof(Item));
-
-                PropertyChanged?.Invoke(this, args);
+                NotifyPropertyChanged(nameof(Item));
             }
         }
 
@@ -57,9 +54,7 @@ namespace HandtolvuApp.ViewModels
             {
                 nextStates = value;
 
-                var args = new PropertyChangedEventArgs(nameof(NextStates));
-
-                PropertyChanged?.Invoke(this, args);
+                NotifyPropertyChanged(nameof(NextStates));
             }
         }
 

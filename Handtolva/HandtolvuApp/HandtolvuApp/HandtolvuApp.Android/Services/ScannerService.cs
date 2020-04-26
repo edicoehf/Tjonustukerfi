@@ -140,9 +140,6 @@ namespace HandtolvuApp.Droid.Services
 
                 this.OnBarcodeScanned?.Invoke(this, new OnBarcodeScannedEventArgs(scannedBarcodes));
             }
-
-
-
         }
 
         private void _scanner_Status(object sender, Scanner.StatusEventArgs e)

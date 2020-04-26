@@ -10,7 +10,7 @@ namespace HandtolvuApp.ViewModels
     class LocationScanViewModel : ScannerViewModel
     {
 
-        public LocationScanViewModel(IScannerService scannerService) : base(scannerService) 
+        public LocationScanViewModel() : base() 
         {
             Placeholder = "Sláðu inn vörunúmer";
 

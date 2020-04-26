@@ -12,7 +12,7 @@ namespace HandtolvuApp.ViewModels
 {
     class ItemInputViewModel : ScannerViewModel
     {
-        public ItemInputViewModel(IScannerService scannerService) : base(scannerService)
+        public ItemInputViewModel() : base()
         {
             ScannedBarcodeText = "";
 

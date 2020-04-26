@@ -8,10 +8,8 @@ using Xamarin.Forms;
 
 namespace HandtolvuApp.ViewModels
 {
-    class OrderPageViewModel : INotifyPropertyChanged
+    class OrderPageViewModel : BaseViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public OrderPageViewModel(Order o)
         {
             Order = o;
@@ -42,9 +40,7 @@ namespace HandtolvuApp.ViewModels
             {
                 selectedItem = value;
 
-                var args = new PropertyChangedEventArgs(nameof(SelectedItem));
-
-                PropertyChanged?.Invoke(this, args);
+                NotifyPropertyChanged(nameof(SelectedItem));
             }
         }
 
@@ -62,9 +58,7 @@ namespace HandtolvuApp.ViewModels
             {
                 order = value;
 
-                var args = new PropertyChangedEventArgs(nameof(Order));
-
-                PropertyChanged?.Invoke(this, args);
+                NotifyPropertyChanged(nameof(Order));
             }
         }
     }
