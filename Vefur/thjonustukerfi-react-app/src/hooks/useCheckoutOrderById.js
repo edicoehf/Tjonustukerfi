@@ -1,7 +1,7 @@
 import React from "react";
 import orderService from "../services/orderService";
 
-const useCheckoutOrderById = (id) => {
+const useCheckoutOrderById = (id, cb) => {
     const [error, setError] = React.useState(null);
     const [isProcessing, setProcessing] = React.useState(false);
     const [isCheckingOut, setCheckingOut] = React.useState(false);
@@ -10,7 +10,7 @@ const useCheckoutOrderById = (id) => {
         if (isCheckingOut && !isProcessing) {
             setProcessing(true);
             orderService
-                .deleteOrderById(id)
+                .checkoutOrderById(id)
                 .then(() => {
                     setError(null);
                 })
@@ -18,9 +18,12 @@ const useCheckoutOrderById = (id) => {
                 .finally(() => {
                     setCheckingOut(false);
                     setProcessing(false);
+                    if (cb) {
+                        cb();
+                    }
                 });
         }
-    }, [id, isCheckingOut, isProcessing]);
+    }, [id, isCheckingOut, isProcessing, cb]);
 
     const handleCheckout = () => {
         if (!isCheckingOut) {

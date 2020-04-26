@@ -64,10 +64,11 @@ const updateOrderById = (order, id) => {
 };
 
 const checkoutOrderById = (id) => {
-    return fetch(endpoint + id, {
+    return fetch(endpoint + id + "/complete", {
         method: "PATCH",
         headers: {
             crossDomain: true,
+            "Content-Type": "application/json",
         },
     })
         .then(handleErrors)

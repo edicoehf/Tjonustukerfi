@@ -5,8 +5,11 @@ import "./CheckoutOrderAction.css";
 import useCheckoutOrderById from "../../../../hooks/useCheckoutOrderById";
 import ConfirmationDialog from "../../../ConfirmationDialog/ConfirmationDialog";
 
-const CheckoutOrderAction = ({ id }) => {
-    const { error, handleCheckout, isCheckingOut } = useCheckoutOrderById(id);
+const CheckoutOrderAction = ({ id, hasUpdated }) => {
+    const { error, handleCheckout, isCheckingOut } = useCheckoutOrderById(
+        id,
+        hasUpdated
+    );
     const [open, setOpen] = React.useState(false);
 
     const handleOpen = () => {
