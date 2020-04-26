@@ -112,6 +112,42 @@ namespace ThjonustukerfiWebAPI.Migrations
                     b.ToTable("Item");
                 });
 
+            modelBuilder.Entity("ThjonustukerfiWebAPI.Models.Entities.ItemArchive", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Category")
+                        .HasColumnType("text");
+
+                    b.Property<long?>("CategoryId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("DateCompleted")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<long>("OrderArchiveId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Service")
+                        .HasColumnType("text");
+
+                    b.Property<long?>("ServiceId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("extraDataJSON")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ItemArchive");
+                });
+
             modelBuilder.Entity("ThjonustukerfiWebAPI.Models.Entities.ItemOrderConnection", b =>
                 {
                     b.Property<long>("Id")
@@ -200,9 +236,42 @@ namespace ThjonustukerfiWebAPI.Migrations
                     b.Property<string>("JSON")
                         .HasColumnType("text");
 
+                    b.Property<int>("NotificationCount")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.ToTable("Order");
+                });
+
+            modelBuilder.Entity("ThjonustukerfiWebAPI.Models.Entities.OrderArchive", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Customer")
+                        .HasColumnType("text");
+
+                    b.Property<long?>("CustomerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("DateCompleted")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("JSON")
+                        .HasColumnType("text");
+
+                    b.Property<int>("OrderSize")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OrderArchive");
                 });
 
             modelBuilder.Entity("ThjonustukerfiWebAPI.Models.Entities.Service", b =>

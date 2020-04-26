@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Repositories.Interfaces;
 using ThjonustukerfiWebAPI.Services.Interfaces;
 
@@ -16,5 +18,6 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         public IEnumerable GetStates() => _infoRepo.GetStates();
 
         public IEnumerable GetCategories() => _infoRepo.GetCategories();
+        public List<ArchiveOrderDTO> GetArchivedOrders() => _infoRepo.GetArchivedOrders();
     }
 }

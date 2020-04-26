@@ -4,6 +4,7 @@ const useForm = (initialState, validate, submitHandler) => {
     const [values, setValues] = React.useState(initialState);
     const [errors, setErrors] = React.useState({});
     const [isSubmitting, setSubmitting] = React.useState(false);
+
     React.useEffect(() => {
         if (isSubmitting) {
             const noErrors = Object.keys(errors).length === 0;
@@ -26,8 +27,8 @@ const useForm = (initialState, validate, submitHandler) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const validationErrors = validate(values);
-        setSubmitting(true);
         setErrors(validationErrors);
+        setSubmitting(true);
     };
 
     const resetFields = () => {

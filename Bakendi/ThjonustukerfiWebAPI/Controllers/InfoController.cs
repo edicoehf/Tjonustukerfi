@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ThjonustukerfiWebAPI.Services.Implementations;
 using ThjonustukerfiWebAPI.Services.Interfaces;
 
 namespace ThjonustukerfiWebAPI.Controllers
@@ -47,6 +48,17 @@ namespace ThjonustukerfiWebAPI.Controllers
         public IActionResult GetCategories()
         {
             return Ok(_infoService.GetCategories());
+        }
+
+        /// <summary>Gets all archived orders</summary>
+        /// <returns>List of orders and their Items</returns>
+        /// <response code="200">Returns a list of all orders in the archive</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Route("orderarchives")]
+        [HttpGet]
+        public IActionResult GetArchivedOrders()
+        {
+            return Ok(_infoService.GetArchivedOrders());
         }
     }
 }

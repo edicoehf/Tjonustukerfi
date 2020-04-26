@@ -6,9 +6,22 @@ import moment from "moment";
 import "moment/locale/is";
 import "./OrderDetails.css";
 import { orderType } from "../../../types/index";
+import {
+    TableContainer,
+    Table,
+    Paper,
+    TableRow,
+    TableCell,
+    TableBody,
+} from "@material-ui/core";
 
-const OrderDetails = ({ id }) => {
-    const { order, error } = useGetOrderById(id);
+const OrderDetails = ({ id, update, receivedUpdate }) => {
+    const { order, error, fetchOrder } = useGetOrderById(id);
+
+    if (update && receivedUpdate) {
+        receivedUpdate();
+        fetchOrder();
+    }
 
     // Icelandic human readable format, e.g. 4. sep, 2020 08:
     const dateFormat = (date) => {
@@ -18,30 +31,38 @@ const OrderDetails = ({ id }) => {
     return (
         <div className="order-details">
             {!error ? (
-                <>
-                    <div className="order-title">Pöntun {order.id}</div>
-                    <div className="order-barcode">
-                        Strikamerki: {order.barcode}
-                    </div>
-                    <div className="order-date">
-                        Dagsetning: {dateFormat(order.dateCreated)}
-                    </div>
-                    {order.dateCompleted && (
-                        <div className="order-completed">
-                            Sótt: {dateFormat(order.dateCompleted)}
-                        </div>
-                    )}
-                    <div className="order-customer">
-                        Viðskiptavinur:{" "}
-                        <Link to={`/customer/${order.customerId}`}>
-                            {order.customer}
-                        </Link>
-                    </div>
-                    <div className="order-items">
-                        <div className="order-items-title">Vörur:</div>
-                        <OrderItemList items={order.items} />
-                    </div>
-                </>
+                <TableContainer component={Paper}>
+                    <h3 className="order-title">Pöntun {order.id}</h3>
+                    <Table>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell className="order-barcode">
+                                    <b>Strikamerki:</b> {order.barcode}
+                                </TableCell>
+                                <TableCell className="order-date">
+                                    <b>Dagsetning:</b>{" "}
+                                    {dateFormat(order.dateCreated)}
+                                </TableCell>
+                                {order.dateCompleted && (
+                                    <TableCell>
+                                        <b>Sótt:</b>{" "}
+                                        {dateFormat(order.dateCompleted)}
+                                    </TableCell>
+                                )}
+                                <TableCell>
+                                    <b>Viðskiptavinur: </b>
+                                    <Link
+                                        className="customer-link"
+                                        to={`/customer/${order.customerId}`}
+                                    >
+                                        {order.customer}
+                                    </Link>
+                                </TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                    <OrderItemList items={order.items} />
+                </TableContainer>
             ) : (
                 <p className="error">Villa kom upp: Gat ekki sótt pöntun</p>
             )}

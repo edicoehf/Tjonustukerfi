@@ -1,0 +1,14 @@
+.update-order-view {
+    min-width: 80rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+p.error {
+    text-align: center;
+}
+
+.update-order-view h1 {
+    text-align: center;
+}

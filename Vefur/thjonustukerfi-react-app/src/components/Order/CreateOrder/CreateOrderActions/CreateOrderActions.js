@@ -3,8 +3,8 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import CheckIcon from "@material-ui/icons/Check";
 import ConfirmationDialog from "../../../ConfirmationDialog/ConfirmationDialog";
 import { Button } from "@material-ui/core";
-import "./CreateOrderActions.css";
 import { createOrderType, cancelOrderType } from "../../../../types/index";
+import "./CreateOrderActions.css";
 
 const CreateOrderActions = ({ createOrder, cancelOrder }) => {
     const [openSendDialog, setOpenSendDialog] = React.useState(false);
@@ -37,7 +37,7 @@ const CreateOrderActions = ({ createOrder, cancelOrder }) => {
     };
 
     return (
-        <div className="order-actions">
+        <div className="create-order-actions">
             <Button
                 className="cancel-btn"
                 variant="contained"

@@ -1,21 +1,39 @@
 import React from "react";
-import { Nav, NavDropdown } from "react-bootstrap";
+import { useLocation } from "react-router-dom";
+import { MenuList, MenuItem } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import "./NavigationLinks.css";
 
 const NavigationLinks = () => {
+    const router = useLocation();
     return (
-        <>
-            <Nav className="mr-auto">
-                <Nav.Link href="#pricing">Pantanir</Nav.Link>
-                <NavDropdown
-                    title="Vidskiptavinir"
-                    id="collasible-nav-dropdown"
-                >
-                    <NavDropdown.Item href="/new-customer">
-                        Skra nyjan vidskiptavin
-                    </NavDropdown.Item>
-                </NavDropdown>
-            </Nav>
-        </>
+        <MenuList className="navbar-items">
+            <Link className="navbar-item" to="/orders">
+                <MenuItem selected={router.pathname === "/orders"}>
+                    Pantanir
+                </MenuItem>
+            </Link>
+            <Link className="navbar-item" to="/new-order">
+                <MenuItem selected={router.pathname === "/new-order"}>
+                    Ný Pöntun
+                </MenuItem>
+            </Link>
+            <Link className="navbar-item" to="/customers">
+                <MenuItem selected={router.pathname === "/customers"}>
+                    Viðskiptavinir
+                </MenuItem>
+            </Link>
+            <Link className="navbar-item" to="/new-customer">
+                <MenuItem selected={router.pathname === "/new-customer"}>
+                    Nýr Viðskiptavinur
+                </MenuItem>
+            </Link>
+            <Link className="navbar-item" to="/statistics">
+                <MenuItem selected={router.pathname === "/statistics"}>
+                    Tölfræði Upplýsingar
+                </MenuItem>
+            </Link>
+        </MenuList>
     );
 };
 

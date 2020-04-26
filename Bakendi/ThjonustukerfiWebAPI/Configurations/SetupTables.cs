@@ -22,6 +22,10 @@ namespace ThjonustukerfiWebAPI.Configurations
         // setup Service
         public void Run()
         {
+            //TODO: for config, maybe put in another class
+            Constants.sendEmail = true;
+            Constants.sendSMS = false;
+
             var DB_Services = _dbContext.Set<Service>().ToList();
             var DB_ServiceStates = _dbContext.Set<ServiceState>().ToList();
             var DB_States = _dbContext.Set<State>().ToList();

@@ -154,18 +154,18 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void ChangeItemStateById_should_return_an_OKresult()
+        public void ChangeItemStateByIdScanner_should_return_an_OKresult()
         {
             //* Arrange
-            var emptyList = new List<ItemStateChangeInputModel>();
+            var emptyList = new List<ItemStateChangeInputIdScanner>();
             // Mock Service
-            _itemServiceMock.Setup(method => method.ChangeItemStateById(It.IsAny<List<ItemStateChangeInputModel>>())).Returns(emptyList).Verifiable();
+            _itemServiceMock.Setup(method => method.ChangeItemStateByIdScanner(It.IsAny<List<ItemStateChangeInputIdScanner>>())).Returns(emptyList).Verifiable();
 
             // Create controller
             _itemController = new ItemController(_itemServiceMock.Object);
 
             //* Act
-            var response = _itemController.ChangeItemStateById(emptyList) as OkResult;
+            var response = _itemController.ChangeItemStateByIdScanner(emptyList) as OkResult;
 
             //* Assert
             Assert.IsNotNull(response);
@@ -173,50 +173,50 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void ChangeItemStateById_should_return_AcceptedResult_and_list_of_invalid_inputs()
+        public void ChangeItemStateByIdScanner_should_return_AcceptedResult_and_list_of_invalid_inputs()
         {
             //* Arrange
-            var input = new List<ItemStateChangeInputModel>()
+            var input = new List<ItemStateChangeInputIdScanner>()
             {
-                new ItemStateChangeInputModel { ItemId = -1, StateChangeBarcode = @"Í Vinnslu-{location:""hilla1A""}" },
-                new ItemStateChangeInputModel { ItemId = 1, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
+                new ItemStateChangeInputIdScanner { ItemId = -1, StateChangeBarcode = @"Í Vinnslu-{location:""hilla1A""}" },
+                new ItemStateChangeInputIdScanner { ItemId = 1, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
             };
 
-            var invalidInputs = new List<ItemStateChangeInputModel>()
+            var invalidInputs = new List<ItemStateChangeInputIdScanner>()
             {
-                new ItemStateChangeInputModel { ItemId = -1, StateChangeBarcode = @"Í Vinnslu-{location:""hilla1A""}" }
+                new ItemStateChangeInputIdScanner { ItemId = -1, StateChangeBarcode = @"Í Vinnslu-{location:""hilla1A""}" }
             };
 
             // Mock service
-            _itemServiceMock.Setup(method => method.ChangeItemStateById(input)).Returns(invalidInputs).Verifiable();
+            _itemServiceMock.Setup(method => method.ChangeItemStateByIdScanner(input)).Returns(invalidInputs).Verifiable();
 
             // Create controller
             _itemController = new ItemController(_itemServiceMock.Object);
 
             //* Act
-            var response = _itemController.ChangeItemStateById(input) as AcceptedResult;
+            var response = _itemController.ChangeItemStateByIdScanner(input) as AcceptedResult;
 
             //* Assert
             Assert.IsNotNull(response);
             Assert.AreEqual(StatusCodes.Status202Accepted, response.StatusCode);
             
-            var retVal = response.Value as List<ItemStateChangeInputModel>;
+            var retVal = response.Value as List<ItemStateChangeInputIdScanner>;
             Assert.AreEqual(invalidInputs.Count, retVal.Count);
         }
 
         [TestMethod]
-        public void ChangeItemStateBarcode_should_return_an_OKresult()
+        public void ChangeItemStateBarcodeScanner_should_return_an_OKresult()
         {
             //* Arrange
-            var emptyList = new List<ItemStateChangeBarcodeInputModel>();
+            var emptyList = new List<ItemStateChangeBarcodeScanner>();
             // Mock Service
-            _itemServiceMock.Setup(method => method.ChangeItemStateBarcode(It.IsAny<List<ItemStateChangeBarcodeInputModel>>())).Returns(emptyList).Verifiable();
+            _itemServiceMock.Setup(method => method.ChangeItemStateBarcodeScanner(It.IsAny<List<ItemStateChangeBarcodeScanner>>())).Returns(emptyList).Verifiable();
 
             // Create controller
             _itemController = new ItemController(_itemServiceMock.Object);
 
             //* Act
-            var response = _itemController.ChangeItemStateBarcode(emptyList) as OkResult;
+            var response = _itemController.ChangeItemStateBarcodeScanner(emptyList) as OkResult;
 
             //* Assert
             Assert.IsNotNull(response);
@@ -224,34 +224,34 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void ChangeItemStateByBarcode_should_return_AcceptedResult_and_list_of_invalid_inputs()
+        public void ChangeItemStateByBarcodeScanner_should_return_AcceptedResult_and_list_of_invalid_inputs()
         {
             //* Arrange
-            var input = new List<ItemStateChangeBarcodeInputModel>()
+            var input = new List<ItemStateChangeBarcodeScanner>()
             {
-                new ItemStateChangeBarcodeInputModel { ItemBarcode = "-1", StateChangeBarcode = @"Í Vinnslu-{location:""hilla1A""}" },
-                new ItemStateChangeBarcodeInputModel { ItemBarcode = "983764892374", StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
+                new ItemStateChangeBarcodeScanner { ItemBarcode = "-1", StateChangeBarcode = @"Í Vinnslu-{location:""hilla1A""}" },
+                new ItemStateChangeBarcodeScanner { ItemBarcode = "983764892374", StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
             };
             
-            var invalidInputs = new List<ItemStateChangeBarcodeInputModel>()
+            var invalidInputs = new List<ItemStateChangeBarcodeScanner>()
             {
-                new ItemStateChangeBarcodeInputModel { ItemBarcode = "-1", StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
+                new ItemStateChangeBarcodeScanner { ItemBarcode = "-1", StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
             };
 
             // Mock service
-            _itemServiceMock.Setup(method => method.ChangeItemStateBarcode(input)).Returns(invalidInputs).Verifiable();
+            _itemServiceMock.Setup(method => method.ChangeItemStateBarcodeScanner(input)).Returns(invalidInputs).Verifiable();
 
             // Create controller
             _itemController = new ItemController(_itemServiceMock.Object);
 
             //* Act
-            var response = _itemController.ChangeItemStateBarcode(input) as AcceptedResult;
+            var response = _itemController.ChangeItemStateBarcodeScanner(input) as AcceptedResult;
 
             //* Assert
             Assert.IsNotNull(response);
             Assert.AreEqual(StatusCodes.Status202Accepted, response.StatusCode);
             
-            var retVal = response.Value as List<ItemStateChangeBarcodeInputModel>;
+            var retVal = response.Value as List<ItemStateChangeBarcodeScanner>;
             Assert.AreEqual(invalidInputs.Count, retVal.Count);
         }
 
@@ -293,6 +293,57 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             Assert.IsNotNull(responseNull);
             Assert.AreEqual(StatusCodes.Status400BadRequest, responseNull.StatusCode);
             Assert.IsInstanceOfType(responseNull.Value as string, typeof(string));  // make sure that the error response text was returned
+        }
+
+        [TestMethod]
+        public void ChangeItemState_should_return_an_OKresult()
+        {
+            //* Arrange
+            var emptyList = new List<ItemStateChangeInput>();
+            // Mock Service
+            _itemServiceMock.Setup(method => method.ChangeItemState(It.IsAny<List<ItemStateChangeInput>>())).Returns(emptyList).Verifiable();
+
+            // Create controller
+            _itemController = new ItemController(_itemServiceMock.Object);
+
+            //* Act
+            var response = _itemController.ChangeItemState(emptyList) as OkResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(200, response.StatusCode);
+        }
+
+        [TestMethod]
+        public void ChangeItemState_should_return_AcceptedResult_and_list_of_invalid_inputs()
+        {
+            //* Arrange
+            var input = new List<ItemStateChangeInput>()
+            {
+                new ItemStateChangeInput { ItemId = -1, StateChangeTo = 100, Location = "hilla1A" },
+                new ItemStateChangeInput { ItemId = 1, StateChangeTo = 1, Location = "hilla1A" }
+            };
+
+            var invalidInputs = new List<ItemStateChangeInput>()
+            {
+                new ItemStateChangeInput { ItemId = -1, StateChangeTo = 100, Location = "hilla1A" }
+            };
+
+            // Mock service
+            _itemServiceMock.Setup(method => method.ChangeItemState(input)).Returns(invalidInputs).Verifiable();
+
+            // Create controller
+            _itemController = new ItemController(_itemServiceMock.Object);
+
+            //* Act
+            var response = _itemController.ChangeItemState(input) as AcceptedResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(StatusCodes.Status202Accepted, response.StatusCode);
+            
+            var retVal = response.Value as List<ItemStateChangeInput>;
+            Assert.AreEqual(invalidInputs.Count, retVal.Count);
         }
     }
 }

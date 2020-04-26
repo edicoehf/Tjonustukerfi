@@ -20,6 +20,8 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         private IItemService _itemService;
         private Mock<IItemRepo> _itemRepoMock;
         private Mock<IInfoRepo> _infoRepoMock;
+        private Mock<IOrderRepo> _orderRepo;
+        private Mock<ICustomerRepo> _customerRepo;
         private Mapper _mapper;
 
         [TestInitialize]
@@ -27,6 +29,8 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         {
             _itemRepoMock = new Mock<IItemRepo>();
             _infoRepoMock = new Mock<IInfoRepo>();
+            _orderRepo = new Mock<IOrderRepo>();
+            _customerRepo = new Mock<ICustomerRepo>();
 
             // Setting up automapper
             var myProfile = new MappingProfile();   // Create a new profile like the one we implemented
@@ -52,7 +56,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             _itemRepoMock.Setup(method => method.GetItemById(itemID)).Returns(retDTO);
 
             // Create controller
-            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
+            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _orderRepo.Object, _customerRepo.Object, _mapper);
 
             //* Act
             var response = _itemService.SearchItem("someString");
@@ -63,7 +67,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void GetItemById_should_return_a_single_itemstateDTO()
+        public void GetItemByIdScanner_should_return_a_single_itemstateDTO()
         {
             //* Arrange
             long itemID = 1;
@@ -80,7 +84,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             _itemRepoMock.Setup(method => method.GetItemById(itemID)).Returns(itemstate);
 
             // Create service
-            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
+            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _orderRepo.Object, _customerRepo.Object, _mapper);
 
             //* Act
             var retVal = _itemService.GetItemById(itemID);
@@ -91,33 +95,33 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void ChangeItemStateBarcode_should_return_invalid_list()
+        public void ChangeItemStateBarcodeScanner_should_return_invalid_list()
         {
             string validBarcode = "983764892374";
             string invalidbarcode = "-1";
             //* Arrange
-            var input = new List<ItemStateChangeBarcodeInputModel>()
+            var input = new List<ItemStateChangeBarcodeScanner>()
             {
-                new ItemStateChangeBarcodeInputModel { ItemBarcode = invalidbarcode, StateChangeBarcode = @"Vinnslu-{location:""hilla1A""}" },
-                new ItemStateChangeBarcodeInputModel { ItemBarcode = validBarcode, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
+                new ItemStateChangeBarcodeScanner { ItemBarcode = invalidbarcode, StateChangeBarcode = @"Vinnslu-{location:""hilla1A""}" },
+                new ItemStateChangeBarcodeScanner { ItemBarcode = validBarcode, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
             };
             
-            var invalidInputs = new List<ItemStateChangeBarcodeInputModel>()
+            var invalidInputs = new List<ItemStateChangeBarcodeScanner>()
             {
-                new ItemStateChangeBarcodeInputModel { ItemBarcode = invalidbarcode, StateChangeBarcode = @"Vinnslu-{location:""hilla1A""}" }
+                new ItemStateChangeBarcodeScanner { ItemBarcode = invalidbarcode, StateChangeBarcode = @"Vinnslu-{location:""hilla1A""}" }
             };
 
             // Mock Repo
             _itemRepoMock.Setup(method => method.SearchItem(invalidbarcode)).Throws(new NotFoundException("Some message"));
             _itemRepoMock.Setup(method => method.SearchItem(validBarcode)).Returns(1);
-            _itemRepoMock.Setup(method => method.ChangeItemStateById(It.IsAny<List<ItemStateChangeInputModel>>()))
-                .Returns(new List<ItemStateChangeInputModel>());
+            _itemRepoMock.Setup(method => method.ChangeItemStateByIdScanner(It.IsAny<List<ItemStateChangeInputIdScanner>>()))
+                .Returns(new List<ItemStateChangeInputIdScanner>());
 
             // create service
-            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
+            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _orderRepo.Object, _customerRepo.Object, _mapper);
 
             //* Act
-            var retVal = _itemService.ChangeItemStateBarcode(input);
+            var retVal = _itemService.ChangeItemStateBarcodeScanner(input);
 
             //* Assert
             Assert.IsNotNull(retVal);
@@ -126,27 +130,27 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void ChangeItemStateBarcode_should_return_empty_list()
+        public void ChangeItemStateBarcodeScanner_should_return_empty_list()
         {
             string validBarcode = "983764892374";
             string validBarcode2 = "983764892375";
             //* Arrange
-            var input = new List<ItemStateChangeBarcodeInputModel>()
+            var input = new List<ItemStateChangeBarcodeScanner>()
             {
-                new ItemStateChangeBarcodeInputModel { ItemBarcode = validBarcode, StateChangeBarcode = @"Vinnslu-{location:""hilla1A""}" },
-                new ItemStateChangeBarcodeInputModel { ItemBarcode = validBarcode2, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
+                new ItemStateChangeBarcodeScanner { ItemBarcode = validBarcode, StateChangeBarcode = @"Vinnslu-{location:""hilla1A""}" },
+                new ItemStateChangeBarcodeScanner { ItemBarcode = validBarcode2, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
             };
 
             // Mock Repo
             _itemRepoMock.Setup(method => method.SearchItem(validBarcode)).Returns(1);
-            _itemRepoMock.Setup(method => method.ChangeItemStateById(It.IsAny<List<ItemStateChangeInputModel>>()))
-                .Returns(new List<ItemStateChangeInputModel>());
+            _itemRepoMock.Setup(method => method.ChangeItemStateByIdScanner(It.IsAny<List<ItemStateChangeInputIdScanner>>()))
+                .Returns(new List<ItemStateChangeInputIdScanner>());
 
             // create service
-            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
+            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _orderRepo.Object, _customerRepo.Object, _mapper);
 
             //* Act
-            var retVal = _itemService.ChangeItemStateBarcode(input);
+            var retVal = _itemService.ChangeItemStateBarcodeScanner(input);
 
             //* Assert
             Assert.IsNotNull(retVal);
@@ -154,26 +158,26 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void ChangeItemStateById_should_return_empty_list()
+        public void ChangeItemStateByIdScanner_should_return_empty_list()
         {
             long validId = 1;
             long validId2 = 2;
             //* Arrange
-            var input = new List<ItemStateChangeInputModel>()
+            var input = new List<ItemStateChangeInputIdScanner>()
             {
-                new ItemStateChangeInputModel { ItemId = validId, StateChangeBarcode = @"Vinnslu-{location:""hilla1A""}" },
-                new ItemStateChangeInputModel { ItemId = validId2, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
+                new ItemStateChangeInputIdScanner { ItemId = validId, StateChangeBarcode = @"Vinnslu-{location:""hilla1A""}" },
+                new ItemStateChangeInputIdScanner { ItemId = validId2, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
             };
 
             // Mock Repo
-            _itemRepoMock.Setup(method => method.ChangeItemStateById(It.IsAny<List<ItemStateChangeInputModel>>()))
-                .Returns(new List<ItemStateChangeInputModel>());
+            _itemRepoMock.Setup(method => method.ChangeItemStateByIdScanner(It.IsAny<List<ItemStateChangeInputIdScanner>>()))
+                .Returns(new List<ItemStateChangeInputIdScanner>());
 
             // create service
-            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
+            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _orderRepo.Object, _customerRepo.Object, _mapper);
 
             //* Act
-            var retVal = _itemService.ChangeItemStateById(input);
+            var retVal = _itemService.ChangeItemStateByIdScanner(input);
 
             //* Assert
             Assert.IsNotNull(retVal);
@@ -198,7 +202,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             _infoRepoMock.Setup(method => method.GetNextStates(1, 1)).Returns(stateDTOs);
 
             // Create service
-            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
+            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _orderRepo.Object, _customerRepo.Object, _mapper);
 
             // * Act
             var retVal = _itemService.GetItemNextStates(itemId);
@@ -229,7 +233,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             _infoRepoMock.Setup(method => method.GetNextStates(1, 1)).Returns(stateDTOs);
 
             // Create service
-            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _mapper);
+            _itemService = new ItemService(_itemRepoMock.Object, _infoRepoMock.Object, _orderRepo.Object, _customerRepo.Object, _mapper);
 
             // * Act
             var retVal = _itemService.GetItemNextStatesByBarcode(barcode);

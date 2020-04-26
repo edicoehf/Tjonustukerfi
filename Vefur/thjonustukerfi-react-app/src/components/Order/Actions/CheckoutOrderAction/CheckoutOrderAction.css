@@ -1,0 +1,26 @@
+Button.checkout-order-button {
+    display: flex;
+    justify-content: center;
+    color: black;
+    width: 15em;
+    height: 3em;
+}
+
+Button.checkout-order-button:hover b {
+    opacity: 0;
+}
+
+Button.checkout-order-button:hover .checkout-icon {
+    opacity: 1;
+    margin-left: 45%;
+    margin-bottom: 10%;
+}
+
+Button.checkout-order-button b {
+    margin-right: 10%;
+    opacity: 1;
+}
+
+Button.checkout-order-button .checkout-icon {
+    opacity: 0;
+}

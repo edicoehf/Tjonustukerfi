@@ -1,6 +1,6 @@
 import React from "react";
 import CustomerListItem from "../CustomerListItem/CustomerListItem";
-import { ListGroup } from "react-bootstrap";
+import { List, ListItem } from "@material-ui/core";
 import "./CustomerList.css";
 import { customersType, isLoadingType } from "../../../types";
 
@@ -11,20 +11,20 @@ const CustomerList = ({ customers, error, isLoading }) => {
                 isLoading ? (
                     <p> Sæki viðskiptavini </p>
                 ) : (
-                    <ListGroup className="customer-list">
-                        <ListGroup.Item className="item" variant="dark">
+                    <List className="customer-list">
+                        <ListItem className="item">
                             <h5>Nafn</h5>
-                        </ListGroup.Item>
-                        <ListGroup.Item
-                            className="item actions-item"
-                            variant="dark"
-                        >
+                        </ListItem>
+                        <ListItem className="item action-item">
                             <h5 className="actions">Aðgerðir</h5>
-                        </ListGroup.Item>
-                        {customers.map((item) => (
-                            <CustomerListItem customer={item} key={item.id} />
+                        </ListItem>
+                        {customers.map((customer) => (
+                            <CustomerListItem
+                                customer={customer}
+                                key={customer.id}
+                            />
                         ))}
-                    </ListGroup>
+                    </List>
                 )
             ) : (
                 <p className="error">

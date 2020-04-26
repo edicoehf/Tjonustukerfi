@@ -28,24 +28,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // Check if order exists
             if(entity == null) { throw new NotFoundException($"Order with id {id} was not found."); }
 
-            //! many calls to DB :(, suggestion: add order ID in Item, then only need to search id DB once to get all items
-            var dto = _mapper.Map<OrderDTO>(entity);
-            dto.Customer = _dbContext.Customer.FirstOrDefault(c => c.Id == entity.CustomerId).Name; // get customer name
-
-            // Loop through a list of item order connections where all elements in list have this order ID
-            var itemList = _dbContext.ItemOrderConnection.Where(c => c.OrderId == id).ToList();
-            dto.Items = new List<ItemDTO>();
-            foreach (var item in itemList)
-            {
-                var itemEntity = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);                  // get item entity
-                var add = _mapper.Map<ItemDTO>(itemEntity);                                                 // map to DTO
-                add.Service = _dbContext.Service.FirstOrDefault(s => s.Id == itemEntity.ServiceId).Name;    // Find service name
-                add.State = _dbContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;          // Find state name
-                add.Category = _dbContext.Category.FirstOrDefault(c => c.Id == itemEntity.CategoryId).Name; // Find category name 
-                dto.Items.Add(add);     // add item DTO to orderDTO item list
-            }
-
-            return dto;
+            return _mapper.Map<OrderDTO>(entity);
         }
 
         public long CreateOrder(OrderInputModel order)
@@ -68,18 +51,13 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 newBarcode++;
                 orderToAdd.Barcode = newBarcode.ToString();
             }
-            
-            long newOrderId = 1;
-            // New ID will be 1 if no orders exist
-            if(_dbContext.Order.Any()) { newOrderId = _dbContext.Order.Max(o => o.Id) + 1; }
-            orderToAdd.Id = newOrderId;
 
             var entity = _dbContext.Order.Add(orderToAdd).Entity;
 
-            // Add items toDatabase
-            AddMultipleItems(order.Items, newOrderId);
+            _dbContext.SaveChanges();   // Save and get order ID
 
-            _dbContext.SaveChanges();
+            // Add items toDatabase
+            AddMultipleItems(order.Items, entity.Id);
 
             return entity.Id;
         }
@@ -124,6 +102,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             else if(items.Count == 0 && order.Items.Count > 0)      // if the list in the database is empty, just add the new ones
             {
                 AddMultipleItems(order.Items, entity.Id);
+                entity.DateCompleted = null;    // if adding items then the order is not complete
             }
             else if(items.Count < order.Items.Count)    // if adding more items and/or updating to existing list
             {
@@ -145,6 +124,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
                 // Add the rest of the items
                 AddMultipleItems(tmpList, entity.Id);
+                entity.DateCompleted = null;    // if adding items then the order is not complete
             }
             else if(items.Count > order.Items.Count)    // if some items are removed from the list
             {
@@ -206,38 +186,43 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
         }
 
-        //! Doesn't do SaveChanges(), remember to use save changes after calling this function
         /// <summary>Used to add multiple items in order input</summary>
         private void AddMultipleItems(List<ItemInputModel> inpItems, long orderId)
         {
-            // Sets the ID
-            long newItemId = 1;
-            if(_dbContext.Item.Any()) { newItemId = _dbContext.Item.Max(i => i.Id) + 1; }
+            // Get new barcode
             int newItemBarcode = int.Parse(GetItemBarcode());
 
-            // Add items toDatabase
+            var addItems = new List<Item>();
+
+            // Ready Items for DB input
             foreach(var item in inpItems)
             {
-                // Creates a custom ID to make sure everything is connected correctly
                 var itemToAdd = _mapper.Map<Item>(item);
-                itemToAdd.Id = newItemId;
                 itemToAdd.Barcode = newItemBarcode.ToString();
                 itemToAdd.JSON = @"{location: ""Vinnslu""}";
-                _dbContext.Item.Add(itemToAdd);
+                addItems.Add(itemToAdd);
 
-                // Create Timestamp
-                _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(itemToAdd));
-
-                var itemOrderConnection = new ItemOrderConnection {
-                    OrderId = orderId,
-                    ItemId = newItemId
-                };
-                
-                // Increment itemId for next Item
-                newItemId++;
+                // Increment barcode
                 newItemBarcode++;
-                _dbContext.ItemOrderConnection.Add(itemOrderConnection);
             }
+
+            _dbContext.Item.AddRange(addItems);
+            _dbContext.SaveChanges();   // Save changes and get Item IDs
+
+            foreach (var item in addItems)
+            {
+                // Create Timestamp
+                _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(item));
+                
+                // Add connection
+                _dbContext.ItemOrderConnection.Add(new ItemOrderConnection
+                {
+                    OrderId = orderId,
+                    ItemId = item.Id
+                });
+            }
+
+            _dbContext.SaveChanges();   // Save changes to ItemOrderConnections and Timestamp
         }
 
         public void DeleteByOrderId(long id)
@@ -277,7 +262,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             return GetOrderDTOwithOrderList(ordersEntity);
         }
 
-        public void CompleteOrder(long orderId)
+        public OrderDTO CompleteOrder(long orderId)
         {
             var orderEntity = _dbContext.Order.FirstOrDefault(o => o.Id == orderId);    // find entity
             if(orderEntity == null) { throw new NotFoundException($"Order with ID {orderId} was not found."); }
@@ -304,6 +289,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             }
 
             _dbContext.SaveChanges();
+
+            return _mapper.Map<OrderDTO>(orderEntity);
         }
 
         public long SearchOrder(string barcode)
@@ -346,26 +333,143 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // Loop through all orders
             foreach (var order in ordersEntity)
             {
-                var dto = _mapper.Map<OrderDTO>(order);
-                dto.Customer = _dbContext.Customer.FirstOrDefault(c => c.Id == order.CustomerId).Name; // get customer name
-                
-                // Loop through all items in the order and add them to the DTO
-                var itemList = _dbContext.ItemOrderConnection.Where(c => c.OrderId == order.Id).ToList();
-                dto.Items = new List<ItemDTO>();
-                foreach (var item in itemList)
-                {
-                    var itemEntity = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);                  // get item entity
-                    var add = _mapper.Map<ItemDTO>(itemEntity);                                                 // map to DTO
-                    add.Service = _dbContext.Service.FirstOrDefault(s => s.Id == itemEntity.ServiceId).Name;    // Find Service name
-                    add.State = _dbContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;          // Find state name
-                    add.Category = _dbContext.Category.FirstOrDefault(c => c.Id == itemEntity.CategoryId).Name; // Find category name
-                    dto.Items.Add(add);     // Add the itemDTO to the orderDTO
-                }
-
-                orders.Add(dto);
+                orders.Add(_mapper.Map<OrderDTO>(order));
             }
             
             return orders;
+        }
+
+        public void ArchiveOldOrders()
+        {
+            var completeOrders = _dbContext.Order.Where(o => o.DateCompleted != null).ToList(); // Get all complete orders
+            
+            // Get all orders older than 3 months
+            var oldOrders = new List<Order>();
+            var dateNow = DateTime.Now;
+            foreach (var order in completeOrders)
+            {
+                if(dateNow.Subtract((DateTime)order.DateCompleted).TotalDays > 90) { oldOrders.Add(order); }
+            }
+
+            Archive(oldOrders);
+        }
+
+        public void ArchiveCompleteOrdersByCustomerId(long customerId)
+        {
+            var completeOrders = _dbContext.Order.Where(o => o.CustomerId == customerId && o.DateCompleted != null).ToList();  // Get all complete orders for this customer
+
+            // Archive the orders
+            Archive(completeOrders);
+        }
+
+        public bool OrderPickupReady(long orderId)
+        {
+            var order = _dbContext.Order.FirstOrDefault(o => o.Id == orderId);  // get order
+            if(order == null) { throw new NotFoundException($"Order with ID {orderId} was not found."); }
+
+            var itemOrderConnections = _dbContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderId).ToList();
+
+            foreach (var itemConnection in itemOrderConnections)
+            {
+                // get item
+                var item = _dbContext.Item.FirstOrDefault(i => i.Id == itemConnection.ItemId);
+                // get max step (ready for delivery is max step minus 1)
+                var lastStep = _dbContext.ServiceState.Where(ss => ss.ServiceId == item.ServiceId).Max(s => s.Step);
+                // get items current step
+                var itemStep = _dbContext.ServiceState.FirstOrDefault(ss => ss.ServiceId == item.ServiceId && ss.StateId == item.StateId).Step;
+
+                // if the item is not in the next to last step it is not ready to be picked up
+                if(itemStep != (lastStep - 1)) { return false; }
+            }
+
+            return true;
+        }
+
+        public List<Order> GetOrdersReadyForPickup()
+        {
+            // Get all orders that are ready for pickup
+            var orders = _dbContext.Order.ToList();
+            var readyOrders = new List<Order>();
+            foreach (var order in orders)
+            {
+                if(OrderPickupReady(order.Id)) { readyOrders.Add(order); }
+            }
+
+            return readyOrders; // return the DTO of all these orders
+        }
+
+        public void IncrementNotification(long orderId)
+        {
+            var order = _dbContext.Order.FirstOrDefault(o => o.Id == orderId);
+            if(order != null)
+            {
+                order.NotificationCount++;
+
+                _dbContext.SaveChanges();
+            }
+        }
+
+        //*     Helper functions     *//
+        private void Archive(List<Order> toArchive)
+        {
+            // input to handle archive input and all connections
+            var input = new List<OrderItemArchiveInput>();
+
+            // just return if there aren't any orders
+            if(!toArchive.Any()) { return; }
+
+            var ordersToDelete = new List<long>();  // create a list of orderIDs to remove those that are archived
+            foreach (var order in toArchive)
+            {
+                // get connections
+                var itemOrderConnections = _dbContext.ItemOrderConnection.Where(ioc => ioc.OrderId == order.Id).ToList();
+                
+                // Get all items in order
+                var itemList = new List<Item>();
+                foreach (var connection in itemOrderConnections)
+                {
+                    itemList.Add(_dbContext.Item.FirstOrDefault(i => i.Id == connection.ItemId));
+                }
+
+                // Set order and items to the input model
+                input.Add(new OrderItemArchiveInput() {
+                    Order = order,
+                    Items = itemList
+                });
+
+                // Add this order to delete list
+                ordersToDelete.Add(order.Id);
+            }
+
+            foreach (var order in input)
+            {
+                order.ArchivedOrder = _mapper.Map<OrderArchive>(order.Order);   // archive the order
+                _dbContext.OrderArchive.Add(order.ArchivedOrder);   // add each order to archive
+            }
+
+            _dbContext.SaveChanges();   // Save changes and get order archive IDs
+
+            foreach (var order in input)
+            {
+                order.ArchivedItems = new List<ItemArchive>();
+                foreach (var item in order.Items)
+                {
+                    var addItem = _mapper.Map<ItemArchive>(item);       // map Item to archive
+                    addItem.OrderArchiveId = order.ArchivedOrder.Id;    // set the archive order ID
+                    
+                    order.ArchivedItems.Add(addItem);   // set the archived items
+                }
+
+                _dbContext.ItemArchive.AddRange(order.ArchivedItems);   // set the archived items to db
+            }
+
+            _dbContext.SaveChanges();   // save the database
+
+            // all orders are stored to archive, remove them
+            foreach (var order in ordersToDelete)
+            {
+                DeleteByOrderId(order);
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ThjonustukerfiWebAPI.Models.DTOs;
+using ThjonustukerfiWebAPI.Models.Entities;
 using ThjonustukerfiWebAPI.Models.InputModels;
 
 namespace ThjonustukerfiWebAPI.Repositories.Interfaces
@@ -26,7 +27,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
         IEnumerable<OrderDTO> GetAllOrders();
 
         /// <summary>Sets all items to complete in order</summary>
-        void CompleteOrder(long orderId);
+        /// <returns>OrderDTO of the order set to complete</returns>
+        OrderDTO CompleteOrder(long orderId);
 
         /// <summary>Finds ID of order with the given barcode.</summary>
         /// <returns>The orders ID</returns>
@@ -35,5 +37,22 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
         /// <summary>Gets a list of all active orders with the customer</summary>
         /// <returns>A list of active orders, empty if no orders exist that are active</returns>
         List<OrderDTO> GetActiveOrdersByCustomerId(long customerID);
+
+        /// <summary>Function to archive orders that have been completed for 3 months or more</summary>
+        void ArchiveOldOrders();
+
+        /// <summary>Function to archive orders by ID that are complete</summary>
+        void ArchiveCompleteOrdersByCustomerId(long customerId);
+
+        /// <summary>Checks if an order is ready to be picked up</summary>
+        /// <returns>True if order is ready to be picked up, else false</returns>
+        bool OrderPickupReady(long orderId);
+
+        /// <summary>Gets all order Entities that are ready for pickup</summary>
+        /// <returns>List of Order</returns>
+        List<Order> GetOrdersReadyForPickup();
+
+        /// <summary>Increments order notifaction count by one given the order ID</summary>
+        void IncrementNotification(long orderId);
     }
 }

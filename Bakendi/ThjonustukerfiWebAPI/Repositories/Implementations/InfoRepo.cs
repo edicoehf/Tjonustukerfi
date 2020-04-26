@@ -58,5 +58,17 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
             return retVal;
         }
+
+        public List<ArchiveOrderDTO> GetArchivedOrders()
+        {
+            var orders = _mapper.Map<List<ArchiveOrderDTO>>(_dbContext.OrderArchive.ToList());
+
+            foreach (var order in orders)
+            {
+                order.Items = _mapper.Map<List<ArchiveItemDTO>>(_dbContext.ItemArchive.Where(ia => ia.OrderArchiveId == order.Id).ToList());
+            }
+
+            return orders;
+        }
     }
 }

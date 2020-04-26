@@ -5,12 +5,26 @@ import OrderActions from "../Actions/OrderActions/OrderActions";
 import "./OrderView.css";
 const OrderView = ({ match }) => {
     const id = match.params.id;
+    const [update, setUpdate] = React.useState(false);
+
+    const hasUpdated = () => {
+        setUpdate(true);
+    };
+
+    const receivedUpdate = () => {
+        console.log("rec");
+        setUpdate(false);
+    };
 
     return (
         <div className="order-view">
-            <h1>Upplýsingar um pöntun</h1>
-            <OrderDetails id={id} />
-            <OrderActions id={id} />
+            <h1 className="order-detail-header">Upplýsingar um pöntun</h1>
+            <OrderDetails
+                id={id}
+                update={update}
+                receivedUpdate={receivedUpdate}
+            />
+            <OrderActions id={id} hasUpdated={hasUpdated} />
         </div>
     );
 };

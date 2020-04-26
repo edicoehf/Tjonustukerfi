@@ -27,15 +27,6 @@ const getNextStatesById = (id) => {
 };
 
 const updateItemState = ({ item, state }) => {
-    console.log(
-        JSON.stringify([
-            {
-                itemId: item,
-                barcode: null,
-                stateChangeTo: state,
-            },
-        ])
-    );
     return fetch(endpoint + "statechangebyid", {
         method: "PATCH",
         headers: {
@@ -54,8 +45,37 @@ const updateItemState = ({ item, state }) => {
         .catch((error) => Promise.reject(error));
 };
 
+const updateItemById = (item) => {
+    return fetch(endpoint + item.id, {
+        method: "PATCH",
+        body: JSON.stringify({
+            categoryId: item.categoryId,
+            serviceId: item.serviceId,
+        }),
+        headers: {
+            "Content-Type": "application/json",
+            crossDomain: true,
+        },
+    })
+        .then(handleErrors)
+        .catch((error) => Promise.reject(error));
+};
+
+const deleteItemById = (id) => {
+    return fetch(endpoint + id, {
+        method: "DELETE",
+        headers: {
+            crossDomain: true,
+        },
+    })
+        .then(handleErrors)
+        .catch((error) => Promise.reject(error));
+};
+
 export default {
     getItemById,
     getNextStatesById,
+    updateItemById,
     updateItemState,
+    deleteItemById,
 };

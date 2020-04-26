@@ -227,6 +227,9 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
             using(var mockContext = new DataContext(_options))
             {
+                // Needs an updated automapper that has access to the current instance of db context
+                UpdateMapper(mockContext);
+
                 IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
 
                 var oldStateId = mockContext.Item.FirstOrDefault(i => i.Id == itemID).StateId;
@@ -365,7 +368,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void ChangeItemStateById_should_change_state_of_item_to_2_and_order_connected_to_it_should_not_have_completeDate()
+        public void ChangeItemStateByIdScanner_should_change_state_of_item_to_2_and_order_connected_to_it_should_not_have_completeDate()
         {
             //* Arrange
             using(var mockContext = new DataContext(_options))
@@ -376,9 +379,9 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 // constructing the barcode string
                 string stateChange = $"{mockContext.State.FirstOrDefault(s => s.Id == statechangeID).Name}" + @"-{location:""hilla1A""}";
 
-                var input = new List<ItemStateChangeInputModel>()
+                var input = new List<ItemStateChangeInputIdScanner>()
                 {
-                    new ItemStateChangeInputModel
+                    new ItemStateChangeInputIdScanner
                     {
                         ItemId = itemId,
                         StateChangeBarcode = stateChange
@@ -391,7 +394,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 var oldItemState = mockContext.Item.FirstOrDefault(i => i.Id == itemId).StateId;
 
                 //* Act
-                itemRepo.ChangeItemStateById(input);
+                itemRepo.ChangeItemStateByIdScanner(input);
 
                 //* Assert
                 var item = mockContext.Item.FirstOrDefault(i => i.Id == itemId);    // get item to check
@@ -410,7 +413,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void ChangeItemStateById_should_change_state_of_item_to_5_and_order_connected_to_it_should_have_completeDate()
+        public void ChangeItemStateByIdScanner_should_change_state_of_item_to_5_and_order_connected_to_it_should_have_completeDate()
         {
             //* Arrange
 
@@ -422,14 +425,17 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 // Create the barcode string
                 string stateChange = $"{mockContext.State.FirstOrDefault(s => s.Id == statechangeID).Name}" + @"-{location:""hilla1A""}";
 
-                var input = new List<ItemStateChangeInputModel>()
+                var input = new List<ItemStateChangeInputIdScanner>()
                 {
-                    new ItemStateChangeInputModel
+                    new ItemStateChangeInputIdScanner
                     {
                         ItemId = itemId,
                         StateChangeBarcode = stateChange
                     }
                 };
+
+                // Needs an updated automapper that has access to the current instance of db context
+                UpdateMapper(mockContext);
 
                 IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
 
@@ -437,7 +443,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 var oldItemState = mockContext.Item.FirstOrDefault(i => i.Id == itemId).StateId;
 
                 //* Act
-                itemRepo.ChangeItemStateById(input);
+                itemRepo.ChangeItemStateByIdScanner(input);
 
                 //* Assert
                 var item = mockContext.Item.FirstOrDefault(i => i.Id == itemId);    // Get item to check
@@ -456,7 +462,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void ChangeItemStateById_should_return_an_invalid_list()
+        public void ChangeItemStateByIdScanner_should_return_an_invalid_list()
         {
             //* Arrange
             long invalidId = -1;
@@ -466,26 +472,29 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             string validState = @"Sótt-{location:""hilla1A""}";
 
             // The input with valid and invalid variables
-            var input = new List<ItemStateChangeInputModel>()
+            var input = new List<ItemStateChangeInputIdScanner>()
             {
-                new ItemStateChangeInputModel { ItemId = invalidId, StateChangeBarcode = validState },
-                new ItemStateChangeInputModel { ItemId = validId, StateChangeBarcode = invalidState },
-                new ItemStateChangeInputModel { ItemId = validId, StateChangeBarcode = validState }
+                new ItemStateChangeInputIdScanner { ItemId = invalidId, StateChangeBarcode = validState },
+                new ItemStateChangeInputIdScanner { ItemId = validId, StateChangeBarcode = invalidState },
+                new ItemStateChangeInputIdScanner { ItemId = validId, StateChangeBarcode = validState }
             };
 
             // Expected return from the function
-            var expectedReturn = new List<ItemStateChangeInputModel>()
+            var expectedReturn = new List<ItemStateChangeInputIdScanner>()
             {
-                new ItemStateChangeInputModel { ItemId = invalidId, StateChangeBarcode = validState },
-                new ItemStateChangeInputModel { ItemId = validId, StateChangeBarcode = invalidState }
+                new ItemStateChangeInputIdScanner { ItemId = invalidId, StateChangeBarcode = validState },
+                new ItemStateChangeInputIdScanner { ItemId = validId, StateChangeBarcode = invalidState }
             };
 
             using(var mockContext = new DataContext(_options))
             {
+                // Needs an updated automapper that has access to the current instance of db context
+                UpdateMapper(mockContext);
+
                 var itemRepo = new ItemRepo(mockContext, _mapper);
 
                 //* Act
-                var returnedValue = itemRepo.ChangeItemStateById(input);
+                var returnedValue = itemRepo.ChangeItemStateByIdScanner(input);
 
                 //* Assert
                 Assert.IsNotNull(returnedValue);
@@ -498,24 +507,27 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void ChangeItemStateById_should_return_an_empty_list()
+        public void ChangeItemStateByIdScanner_should_return_an_empty_list()
         {
             //* Arrange
             long validId = 2;
             string validState = @"Sótt-{location:""hilla1A""}";
 
             // The input with valid and invalid variables
-            var input = new List<ItemStateChangeInputModel>()
+            var input = new List<ItemStateChangeInputIdScanner>()
             {
-                new ItemStateChangeInputModel { ItemId = validId, StateChangeBarcode = validState }
+                new ItemStateChangeInputIdScanner { ItemId = validId, StateChangeBarcode = validState }
             };
 
             using(var mockContext = new DataContext(_options))
             {
+                // Needs an updated automapper that has access to the current instance of db context
+                UpdateMapper(mockContext);
+
                 var itemRepo = new ItemRepo(mockContext, _mapper);
 
                 //* Act
-                var returnedValue = itemRepo.ChangeItemStateById(input);
+                var returnedValue = itemRepo.ChangeItemStateByIdScanner(input);
 
                 //* Assert
                 Assert.IsNotNull(returnedValue);
@@ -524,16 +536,16 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         [TestMethod]
-        public void ChangeItemStateById_should_throw_correct_exceptions()
+        public void ChangeItemStateByIdScanner_should_throw_correct_exceptions()
         {
             //* Arrange
-            var input1 = new List<ItemStateChangeInputModel>()
+            var input1 = new List<ItemStateChangeInputIdScanner>()
             {
-                new ItemStateChangeInputModel { ItemId = -1, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
+                new ItemStateChangeInputIdScanner { ItemId = -1, StateChangeBarcode = @"Kælir1-{location:""hilla1A""}" }
             };
-            var input2 = new List<ItemStateChangeInputModel>()
+            var input2 = new List<ItemStateChangeInputIdScanner>()
             {
-                new ItemStateChangeInputModel { ItemId = 2, StateChangeBarcode = @"Í Vinnslu-{location:""hilla1A""}" }
+                new ItemStateChangeInputIdScanner { ItemId = 2, StateChangeBarcode = @"Í Vinnslu-{location:""hilla1A""}" }
             };
 
             using(var mockContext = new DataContext(_options))
@@ -543,8 +555,8 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
                 //* Act and Assert
                 // The exceptions are thrown because there is no valid inputs
-                Assert.ThrowsException<NotFoundException>(() => itemRepo.ChangeItemStateById(input1));  // Invalid itemId
-                Assert.ThrowsException<NotFoundException>(() => itemRepo.ChangeItemStateById(input2));  // Invalid StateID
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.ChangeItemStateByIdScanner(input1));  // Invalid itemId
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.ChangeItemStateByIdScanner(input2));  // Invalid StateID
             }
         }
 
@@ -584,6 +596,152 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
                 //* Act and Assert
                 Assert.ThrowsException<NotFoundException>(() => itemRepo.GetItemEntity(invalidID));
+            }
+        }
+
+        [TestMethod]
+        public void ChangeItemState_should_change_state_of_item_to_4_and_order_connected_to_it_should_have_completeDate_as_null()
+        {
+            //* Arrange
+
+            using(var mockContext = new DataContext(_options))
+            {
+                // This item is the only Item in the order at this moment
+                long itemId = 2;
+                long statechangeID = 4;
+
+                var input = new List<ItemStateChangeInput>()
+                {
+                    new ItemStateChangeInput
+                    {
+                        ItemId = itemId,
+                        StateChangeTo = statechangeID,
+                        Location = "hilla1A"
+                    }
+                };
+
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                // get old state
+                var oldItemState = mockContext.Item.FirstOrDefault(i => i.Id == itemId).StateId;
+
+                //* Act
+                itemRepo.ChangeItemState(input);
+
+                //* Assert
+                var item = mockContext.Item.FirstOrDefault(i => i.Id == itemId);    // Get item to check
+
+                Assert.IsNotNull(item);
+                Assert.AreNotEqual(oldItemState, item.StateId);
+                Assert.AreEqual(statechangeID, item.StateId);
+
+                // check order connected
+                var order = mockContext.Order.FirstOrDefault(o =>
+                    o.Id == mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemId).OrderId);
+
+                Assert.IsNotNull(order);
+                Assert.IsNull(order.DateCompleted);  // now the order is not complete
+            }
+        }
+
+        [TestMethod]
+        public void ChangeItemState_should_return_an_invalid_list()
+        {
+            //* Arrange
+            long invalidId = -1;
+            long invalidState = 500;
+
+            long validId = 2;
+            long validState = 5;
+
+            string location = "hilla bara";
+
+            // The input with valid and invalid variables
+            var input = new List<ItemStateChangeInput>()
+            {
+                new ItemStateChangeInput { ItemId = invalidId, StateChangeTo = validState, Location = location },
+                new ItemStateChangeInput { ItemId = validId, StateChangeTo = invalidState, Location = location },
+                new ItemStateChangeInput { ItemId = validId, StateChangeTo = validState, Location = location }
+            };
+
+            // Expected return from the function
+            var expectedReturn = new List<ItemStateChangeInput>()
+            {
+                new ItemStateChangeInput { ItemId = invalidId, StateChangeTo = validState, Location = location },
+                new ItemStateChangeInput { ItemId = validId, StateChangeTo = invalidState, Location = location }
+            };
+
+            using(var mockContext = new DataContext(_options))
+            {
+                // Needs an updated automapper that has access to the current instance of db context
+                UpdateMapper(mockContext);
+
+                var itemRepo = new ItemRepo(mockContext, _mapper);
+
+                //* Act
+                var returnedValue = itemRepo.ChangeItemState(input);
+
+                //* Assert
+                Assert.IsNotNull(returnedValue);
+                Assert.AreEqual(expectedReturn.Count, returnedValue.Count);
+                foreach (var inp in returnedValue)
+                {
+                    Assert.IsTrue(expectedReturn.Contains(inp));
+                }
+            }
+        }
+
+        [TestMethod]
+        public void ChangeItemState_should_return_an_empty_list()
+        {
+            //* Arrange
+            long validId = 2;
+            long validState = 5;
+
+            // The input with valid and invalid variables
+            var input = new List<ItemStateChangeInput>()
+            {
+                new ItemStateChangeInput { ItemId = validId, StateChangeTo = validState, Location = "lost" }
+            };
+
+            using(var mockContext = new DataContext(_options))
+            {
+                // Needs an updated automapper that has access to the current instance of db context
+                UpdateMapper(mockContext);
+
+                var itemRepo = new ItemRepo(mockContext, _mapper);
+
+                //* Act
+                var returnedValue = itemRepo.ChangeItemState(input);
+
+                //* Assert
+                Assert.IsNotNull(returnedValue);
+                Assert.AreEqual(0, returnedValue.Count);
+            }
+        }
+
+        [TestMethod]
+        public void ChangeItemState_should_throw_correct_exceptions()
+        {
+            //* Arrange
+            var input1 = new List<ItemStateChangeInput>()
+            {
+                new ItemStateChangeInput { ItemId = -1, StateChangeTo = 2, Location = "some location" }
+            };
+            var input2 = new List<ItemStateChangeInput>()
+            {
+                new ItemStateChangeInput { ItemId = 2, StateChangeTo = 20000, Location = "some other location" }
+            };
+
+            using(var mockContext = new DataContext(_options))
+            {
+                // Mock repo
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                //* Act and Assert
+                // The exceptions are thrown because there is no valid inputs
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.ChangeItemState(input1));  // Invalid itemId
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.ChangeItemState(input2));  // Invalid StateID
             }
         }
 
@@ -790,6 +948,15 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             mockContext.Category.AddRange(categories);
             mockContext.SaveChanges();
             //! Building DB done
+        }
+
+        /// <summary>Updates the private mapper to have the current mock data context</summary>
+        private void UpdateMapper(DataContext context)
+        {
+            // Needs a seperete automapper that has access to the current instance of db context
+            var myProfile = new MappingProfile(context);   // Create a new profile like the one we implemented
+            var myConfig = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));   // Setup a configuration with our profile
+            _mapper = new Mapper(myConfig); // Create a new mapper with our profile
         }
     }
 }

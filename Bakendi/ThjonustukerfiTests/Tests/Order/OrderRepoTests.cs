@@ -96,6 +96,9 @@ namespace ThjonustukerfiTests.Tests
                 string OrderBarCode = "20200001";
                 DateTime modifiedDate = mockContext.Order.FirstOrDefault(o => o.Id == orderId).DateModified;
 
+                // Needs an updated automapper that has access to the current instance of db context
+                UpdateMapper(mockContext);
+
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
                 // Create a list that should be the same as the list returned in OrderDTO
@@ -262,6 +265,9 @@ namespace ThjonustukerfiTests.Tests
             // This order was created in the build database test. This person should only have this one order
             using(var mockContext = new DataContext(_options))
             {
+                // Needs an updated automapper that has access to the current instance of db context
+                UpdateMapper(mockContext);
+
                 IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
 
                 //* Act
@@ -578,6 +584,9 @@ namespace ThjonustukerfiTests.Tests
 
             using(var mockContext = new DataContext(_options))
             {
+                // Needs an updated automapper that has access to the current instance of db context
+                UpdateMapper(mockContext);
+
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
                 var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
@@ -750,6 +759,9 @@ namespace ThjonustukerfiTests.Tests
             //* Arrange
             using (var mockContext = new DataContext(_options))
             {
+                // Needs an updated automapper that has access to the current instance of db context
+                UpdateMapper(mockContext);
+
                 var orderRepo = new OrderRepo(mockContext, _mapper);
                 var DbSize = mockContext.Order.Count();
 
@@ -759,6 +771,72 @@ namespace ThjonustukerfiTests.Tests
                 //* Assert
                 Assert.IsNotNull(result);
                 Assert.AreEqual(DbSize, result.Count());
+            }
+        }
+
+        [TestMethod]
+        public void ArchiveOrder_should_archive_order()
+        {
+            //* Arrange
+            // input for create order
+            var orderInput = new OrderInputModel()
+            {
+                CustomerId = 50,
+                Items = new List<ItemInputModel>()
+                {
+                    new ItemInputModel() { CategoryId = 1, ServiceId = 1, },
+                    new ItemInputModel() { CategoryId = 2, ServiceId = 2, },
+                    new ItemInputModel() { CategoryId = 1, ServiceId = 3, },
+                    new ItemInputModel() { CategoryId = 2, ServiceId = 4, },
+                    new ItemInputModel() { CategoryId = 1, ServiceId = 3, },
+                    new ItemInputModel() { CategoryId = 2, ServiceId = 2, }
+                }
+            };
+
+            using(var mockContext = new DataContext(_options))
+            {
+                // This needs a seperate mapper with the current context
+                var myProfile = new MappingProfile(mockContext);   // Create a new profile like the one we implemented
+                var myConfig = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));   // Setup a configuration with our profile
+                var localMapper = new Mapper(myConfig); // Create a new mapper with our profile
+
+                // craeate repo
+                IOrderRepo orderRepo = new OrderRepo(mockContext, localMapper);
+
+                var orderId = orderRepo.CreateOrder(orderInput);        // Add new order
+                orderRepo.CompleteOrder(orderId);                       // complete the order
+                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderId);   // get order entity
+                orderEntity.DateCompleted = DateTime.Now.AddYears(-1);  // make the order complete a year old (has to be more than 90 days)
+
+                //* Act
+                orderRepo.ArchiveOldOrders();
+
+                // Get stuff
+                var archivedOrder = mockContext.OrderArchive.First();
+                var archivedItems = mockContext.ItemArchive.ToList();
+                var customerName = mockContext.Customer.FirstOrDefault(c => c.Id == orderInput.CustomerId).Name;
+
+                //* Assert
+                Assert.IsNotNull(archivedOrder);
+                Assert.IsNotNull(archivedItems);
+
+                Assert.AreEqual(orderInput.CustomerId, archivedOrder.CustomerId);
+                Assert.AreEqual(customerName, archivedOrder.Customer);
+
+                Assert.AreEqual(orderInput.Items.Count, archivedItems.Count);
+                foreach (var item in archivedItems)
+                {
+                    // use this to check if the correct information was passed
+                    var check = new ItemInputModel() { CategoryId = item.CategoryId, ServiceId = item.ServiceId };
+                    Assert.IsTrue(orderInput.Items.Contains(check));    // uses the equals override
+
+                    // Making sure that service and category where correctly put in archive
+                    var category = mockContext.Category.FirstOrDefault(c => c.Id == item.CategoryId).Name;
+                    var service = mockContext.Service.FirstOrDefault(s => s.Id == item.ServiceId).Name;
+
+                    Assert.AreEqual(category, item.Category);
+                    Assert.AreEqual(service, item.Service);
+                }
             }
         }
 
@@ -867,6 +945,7 @@ namespace ThjonustukerfiTests.Tests
                 .TheRest()
                 .With(o => o.Barcode = "30200001")
                 .With(o => o.CustomerId = 2)
+                .With(o => o.DateCompleted = null)
                 .Build();
 
             // Build a list of size 20, make it queryable for the database mock
@@ -911,6 +990,15 @@ namespace ThjonustukerfiTests.Tests
             mockContext.Category.AddRange(categories);
             mockContext.SaveChanges();
             //! Building DB done
+        }
+
+        /// <summary>Updates the private mapper to have the current mock data context</summary>
+        private void UpdateMapper(DataContext context)
+        {
+            // Needs a seperete automapper that has access to the current instance of db context
+            var myProfile = new MappingProfile(context);   // Create a new profile like the one we implemented
+            var myConfig = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));   // Setup a configuration with our profile
+            _mapper = new Mapper(myConfig); // Create a new mapper with our profile
         }
     }
 }
