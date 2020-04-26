@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { TableRow, TableCell } from "@material-ui/core";
 
 const OrderItem = ({ item }) => {
-    const { id, category, service, barcode } = item;
+    const { id, category, service, barcode, state } = item;
     return (
         <TableRow className="order-item">
             <TableCell className="order-item-id">
@@ -13,6 +13,7 @@ const OrderItem = ({ item }) => {
             <TableCell className="order-item-category">{category}</TableCell>
             <TableCell className="order-item-service">{service}</TableCell>
             <TableCell className="order-item-barcode">{barcode}</TableCell>
+            <TableCell className="order-item-state">{state}</TableCell>
         </TableRow>
     );
 };

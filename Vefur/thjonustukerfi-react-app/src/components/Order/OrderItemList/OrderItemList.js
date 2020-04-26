@@ -27,6 +27,9 @@ const OrderItemList = ({ items }) => {
                     <TableCell>
                         <b>Strikamerki</b>
                     </TableCell>
+                    <TableCell>
+                        <b>Staða</b>
+                    </TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>

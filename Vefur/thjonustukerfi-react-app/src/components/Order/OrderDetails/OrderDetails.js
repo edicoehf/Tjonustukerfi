@@ -15,8 +15,13 @@ import {
     TableBody,
 } from "@material-ui/core";
 
-const OrderDetails = ({ id }) => {
-    const { order, error } = useGetOrderById(id);
+const OrderDetails = ({ id, update, receivedUpdate }) => {
+    const { order, error, fetchOrder } = useGetOrderById(id);
+
+    if (update && receivedUpdate) {
+        receivedUpdate();
+        fetchOrder();
+    }
 
     // Icelandic human readable format, e.g. 4. sep, 2020 08:
     const dateFormat = (date) => {

@@ -28,7 +28,7 @@ const DeleteItemAction = ({ id }) => {
                 className="delete-item-button"
                 variant="contained"
                 color="secondary"
-                disable={isDeleting}
+                disabled={isDeleting}
                 onClick={handleOpen}
             >
                 <DeleteIcon className="delete-icon" size="small" />
