@@ -1,5 +1,7 @@
 ﻿using HandtolvuApp.Controls;
 using HandtolvuApp.Models;
+using HandtolvuApp.Models.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,6 +18,8 @@ namespace HandtolvuApp.ViewModels
         {
             Item = i;
 
+            ItemJson = JsonConvert.DeserializeObject<ItemJson>(i.Json);
+
             NextStates = n;
 
             nextStates.NextAvailableStates.Reverse();
@@ -28,6 +32,20 @@ namespace HandtolvuApp.ViewModels
                 scanPage.BindingContext = scanPageVM;
                 await App.Current.MainPage.Navigation.PushAsync(scanPage);
             });
+        }
+
+        ItemJson itemJson;
+
+        public ItemJson ItemJson
+        {
+            get => itemJson;
+
+            set
+            {
+                itemJson = value;
+
+                NotifyPropertyChanged(nameof(ItemJson));
+            }
         }
 
         Item item;
