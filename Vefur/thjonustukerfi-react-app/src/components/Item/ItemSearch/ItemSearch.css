@@ -1,0 +1,31 @@
+.item-search h1 {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.item-search-bars .form {
+    display: flex;
+    justify-content: center;
+}
+
+.item-search .MuiFormControl-root {
+    margin: 0 2em;
+}
+
+.item-search-results {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 3em;
+}
+
+.item-search-result-info .item-order {
+    margin-bottom: 2em;
+}
+
+.item-not-found {
+    margin-top: 2em;
+    text-align: center;
+    color: var(--error-color);
+    font-weight: bold;
+}
