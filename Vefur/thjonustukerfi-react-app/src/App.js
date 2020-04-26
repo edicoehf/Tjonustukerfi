@@ -13,6 +13,7 @@ import OrderMain from "./components/Order/OrderMain/OrderMain";
 import ItemView from "./components/Item/ItemView/ItemView";
 import EditItem from "./components/Item/EditItem/EditItem";
 import UpdateOrderView from "./components/Order/CreateOrder/UpdateOrderView/UpdateOrderView";
+import ItemSearch from "./components/Item/ItemSearch/ItemSearch";
 
 function App() {
     return (
@@ -53,6 +54,7 @@ function App() {
                     <Route exact path="/orders" component={OrderMain} />
                     <Route exact path="/item/:id" component={ItemView} />
                     <Route exact path="/update-item/:id" component={EditItem} />
+                    <Route exact path="/item-search" component={ItemSearch} />
                 </Switch>
             </div>
         </div>
