@@ -15,6 +15,7 @@ describe("<ItemDetails />", () => {
         category: "Lambakjöt",
         state: "Í vinnslu",
         dateModified: "2020-04-17T22:50:05.146677",
+        json: { location: "none", slices: "1 biti" },
     };
 
     const setState = jest.fn();
