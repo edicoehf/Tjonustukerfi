@@ -11,6 +11,7 @@ describe("<OrderItem />", () => {
         service: "Birkireyking",
         barcode: "50050001",
         json: { location: "none", slices: "1 biti" },
+        state: "Vinnslu",
     };
 
     beforeEach(() => {
@@ -39,5 +40,11 @@ describe("<OrderItem />", () => {
         expect(
             wrapper.find(".order-item-barcode").at(0).childAt(0).text()
         ).toBe(testProps.barcode);
+    });
+
+    it("Should display state correctly", () => {
+        expect(wrapper.find(".order-item-state").at(0).childAt(0).text()).toBe(
+            testProps.state
+        );
     });
 });

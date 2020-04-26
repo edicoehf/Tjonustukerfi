@@ -16,7 +16,7 @@ const useGetOrderById = (id) => {
     const [order, setOrder] = React.useState(initState);
     const [error, setError] = React.useState(null);
 
-    React.useEffect(() => {
+    const fetchOrder = React.useCallback(() => {
         orderService
             .getOrderById(id)
             .then((order) => {
@@ -26,7 +26,12 @@ const useGetOrderById = (id) => {
             })
             .catch((error) => setError(error));
     }, [id]);
-    return { order, error };
+
+    React.useEffect(() => {
+        fetchOrder();
+    }, [fetchOrder]);
+
+    return { order, error, fetchOrder };
 };
 
 const parseItemJsonForItems = (items) => {

@@ -12,6 +12,7 @@ describe("<OrderItemList />", () => {
             service: "Birkireyking",
             barcode: "50050001",
             json: { location: "none", slices: "1 biti" },
+            state: "Vinnslu",
         },
         {
             id: 42,
@@ -19,6 +20,7 @@ describe("<OrderItemList />", () => {
             service: "Taðreyking",
             barcode: "50450001",
             json: { location: "none", slices: "1 biti" },
+            state: "Kælir1",
         },
         {
             id: 53,
@@ -26,6 +28,7 @@ describe("<OrderItemList />", () => {
             service: "Birkireyking",
             barcode: "52050001",
             json: { location: "none", slices: "1 biti" },
+            state: "Vinnslu",
         },
     ];
 
