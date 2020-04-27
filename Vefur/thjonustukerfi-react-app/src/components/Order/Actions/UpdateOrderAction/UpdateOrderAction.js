@@ -1,7 +1,7 @@
 import React from "react";
 import { idType } from "../../../../types/index";
 import EditIcon from "@material-ui/icons/Edit";
-import { Link, Button } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import "./UpdateOrderAction.css";
 
 const UpdateOrderAction = ({ id }) => {
