@@ -3,6 +3,7 @@ import useForm from "../../../hooks/useForm";
 import EditIcon from "@material-ui/icons/Edit";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import itemValidate from "../ItemValidate/ItemValidate";
+import "./ItemForm.css";
 import {
     FormControl,
     FormLabel,
@@ -17,6 +18,7 @@ const initialState = {
     category: null,
     service: null,
     amount: 1,
+    slices: "",
 };
 
 const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
@@ -92,6 +94,23 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
                         className="select"
                         value={values.amount}
                         type="number"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        variant="standard"
+                        onChange={handleChange}
+                    />
+                </>
+            )}
+            {!isExistingItem && (
+                <>
+                    <FormLabel component="legend">Skurður:</FormLabel>
+                    {errors.slices && <p className="error">{errors.slices}</p>}
+                    <TextField
+                        name="slices"
+                        className="select"
+                        value={values.slices}
+                        type="text"
                         InputLabelProps={{
                             shrink: true,
                         }}

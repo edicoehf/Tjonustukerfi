@@ -10,6 +10,7 @@ describe("<OrderItem />", () => {
         category: "Lax",
         service: "Birkireyking",
         barcode: "50050001",
+        json: { location: "none", slices: "1 biti" },
         state: "Vinnslu",
     };
 
@@ -19,8 +20,8 @@ describe("<OrderItem />", () => {
         );
     });
 
-    it("Should have 5 children", () => {
-        expect(wrapper.find("tr").at(0).instance().children.length).toBe(5);
+    it("Should have 6 children", () => {
+        expect(wrapper.find("tr").at(0).instance().children.length).toBe(6);
     });
 
     it("Should display category correctly", () => {
