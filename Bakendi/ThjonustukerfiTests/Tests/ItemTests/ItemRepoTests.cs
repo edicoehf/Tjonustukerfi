@@ -953,44 +953,17 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
                 // Build a list of size 20, make it queryable for the database mock
                 var orders = Builder<Order>.CreateListOfSize(20)
-                    .TheFirst(1)
-                    .With(o => o.Id = mockOrder.Id)
-                    .With(o => o.CustomerId = mockOrder.CustomerId)
-                    .With(o => o.Barcode = mockOrder.Barcode)
-                    .With(o => o.DateCreated = mockOrder.DateCreated)
-                    .With(o => o.DateModified = mockOrder.DateModified)
-                    .With(o => o.DateCompleted = mockOrder.DateCompleted)
-                    .TheNext(1)
-                    .With(o => o.Id = mockOrder2.Id)
-                    .With(o => o.CustomerId = mockOrder2.CustomerId)
-                    .With(o => o.Barcode = mockOrder2.Barcode)
-                    .With(o => o.DateCreated = mockOrder2.DateCreated)
-                    .With(o => o.DateModified = mockOrder2.DateModified)
-                    .With(o => o.DateCompleted = mockOrder2.DateCompleted)
-                    .TheRest()
+                    .All()
                     .With(o => o.Barcode = "30200001")
                     .With(o => o.CustomerId = 2)
                     .Build();
+                orders.Add(mockOrder);
+                orders.Add(mockOrder2);
 
                 // Build a list of size 20, make it queryable for the database mock
-                var customers = Builder<Customer>.CreateListOfSize(20)
-                    .TheFirst(1)
-                    .With(c => c.Id = mockCustomer.Id)
-                    .With(c => c.Name = mockCustomer.Name)
-                    .With(c => c.SSN = mockCustomer.SSN)
-                    .With(c => c.Email = mockCustomer.Email)
-                    .With(c => c.Phone = mockCustomer.Phone)
-                    .With(c => c.Address = mockCustomer.Address)
-                    .With(c => c.PostalCode = mockCustomer.PostalCode)
-                    .TheNext(1)
-                    .With(c => c.Id = mockCustomer2.Id)
-                    .With(c => c.Name = mockCustomer2.Name)
-                    .With(c => c.SSN = mockCustomer2.SSN)
-                    .With(c => c.Email = mockCustomer2.Email)
-                    .With(c => c.Phone = mockCustomer2.Phone)
-                    .With(c => c.Address = mockCustomer2.Address)
-                    .With(c => c.PostalCode = mockCustomer2.PostalCode)
-                    .Build();
+                var customers = Builder<Customer>.CreateListOfSize(20).Build();
+                customers.Add(mockCustomer);
+                customers.Add(mockCustomer2);
 
                 // Adding states for lookup
                 var states = new List<State>()

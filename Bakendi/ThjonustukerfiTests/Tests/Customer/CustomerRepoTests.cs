@@ -290,18 +290,9 @@ namespace ThjonustukerfiTests.Tests
                     PostalCode = "800"
                 };
 
-                //! Add only ONCE! Unless appending changes
                 // Build a list of size 20, make it queryable for the database mock
-                var customers = Builder<Customer>.CreateListOfSize(20)
-                    .TheFirst(1)
-                    .With(c => c.Id = mockCustomer.Id)
-                    .With(c => c.Name = mockCustomer.Name)
-                    .With(c => c.SSN = mockCustomer.SSN)
-                    .With(c => c.Email = mockCustomer.Email)
-                    .With(c => c.Phone = mockCustomer.Phone)
-                    .With(c => c.Address = mockCustomer.Address)
-                    .With(c => c.PostalCode = mockCustomer.PostalCode)
-                    .Build();
+                var customers = Builder<Customer>.CreateListOfSize(20).Build();
+                customers.Add(mockCustomer);
 
                 mockContext.Customer.AddRange(customers);
                 mockContext.SaveChanges();
