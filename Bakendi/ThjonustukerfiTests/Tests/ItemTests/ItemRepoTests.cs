@@ -748,6 +748,73 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             }
         }
 
+        [TestMethod]
+        public void GetItemBarcodeById_should_return_correct_barcode()
+        {
+            //* Arrange
+            using(var mockContext = new DataContext(_options))
+            {
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                var item = mockContext.Item.FirstOrDefault();
+                var expectedBarcode = item.Barcode;
+
+                //* Act
+                var barcode = itemRepo.GetItemBarcodeById(item.Id);
+
+                Assert.IsNotNull(barcode);
+                Assert.AreEqual(expectedBarcode, barcode);
+            }
+        }
+
+        [TestMethod]
+        public void GetItemBarcodeById_should_throw_NotFoundException()
+        {
+            //* Arrange
+            using(var mockContext = new DataContext(_options))
+            {
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                //* Act and Assert
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.GetItemBarcodeById(-100));
+            }
+        }
+
+        [TestMethod]
+        public void GetOrderIdWithItemId_should_return_the_correct_orderId()
+        {
+            long itemID = 1;
+
+            //* Arrange
+            using(var mockContext = new DataContext(_options))
+            {
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                // Get correct order ID
+                var correctOrderID = mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemID).OrderId;
+
+                //* Act
+                var returnedID = itemRepo.GetOrderIdWithItemId(itemID);
+
+                //* Assert
+                Assert.IsNotNull(returnedID);
+                Assert.AreEqual(correctOrderID, returnedID);
+            }
+        }
+
+        [TestMethod]
+        public void GetOrderIdWithItemId_should_throw_NotFoundException()
+        {
+            //* Arrange
+            using(var mockContext = new DataContext(_options))
+            {
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                //* Act and Assert
+                Assert.ThrowsException<NotFoundException>(() => itemRepo.GetOrderIdWithItemId(-100));
+            }
+        }
+
         //**********     Helper functions     **********//
         private void FillDatabase()
         {
