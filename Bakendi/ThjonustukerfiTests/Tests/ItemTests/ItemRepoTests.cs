@@ -30,7 +30,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 .EnableSensitiveDataLogging()
                 .Options;
             
-            FillDatabaseAndUpdateMapper(); // Fills database and updates the mapper with the current context
+            FillDatabase(); // Fills database and updates the mapper with the current context
         }
 
         [TestCleanup]
@@ -749,7 +749,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         }
 
         //**********     Helper functions     **********//
-        private void FillDatabaseAndUpdateMapper()
+        private void FillDatabase()
         {
             using(var mockContext = new DataContext(_options))
             {

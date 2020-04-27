@@ -174,7 +174,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             catch (System.Exception)
             {
                 var maxItem = _dbContext.Item.OrderByDescending(i => i.Barcode).FirstOrDefault();
-                code = maxItem.Barcode;
+                if(maxItem == null) { code = null; }
+                else { code = maxItem.Barcode; }
             }
 
             if(code == null) { code = "50500000"; }
