@@ -20,7 +20,7 @@ const ItemDetails = ({ id, updated, receivedUpdate }) => {
                     <div className="item-service">Þjónusta: {item.service}</div>
                     <div className="item-currentstate">Staða: {item.state}</div>
                     <div className="item-order">
-                        <Link to={`/customer/${item.orderId}`}>
+                        <Link to={`/order/${item.orderId}`}>
                             Pöntun: {item.orderId}
                         </Link>
                     </div>
