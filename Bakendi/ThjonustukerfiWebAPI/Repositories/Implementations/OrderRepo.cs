@@ -371,6 +371,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
             var itemOrderConnections = _dbContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderId).ToList();
 
+            if(itemOrderConnections.Count == 0) { return false; }   // if no item exists in order, then it isn't complete
+
             foreach (var itemConnection in itemOrderConnections)
             {
                 // get item
