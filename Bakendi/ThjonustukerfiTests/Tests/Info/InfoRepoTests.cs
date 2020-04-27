@@ -20,7 +20,7 @@ namespace ThjonustukerfiTests.Tests.Info
         private DbContextOptions<DataContext> _options;
 
         [TestInitialize]
-        public void Initialize()
+        public void Initialize()    // Initialization before each test, fill the inMemory database
         {
             // adding automapper with the configuration from the project
             var profile = new MappingProfile();
@@ -31,11 +31,14 @@ namespace ThjonustukerfiTests.Tests.Info
                 .UseInMemoryDatabase(databaseName: "Thjonustukerfi-info-tests")
                 .EnableSensitiveDataLogging()
                 .Options;
+
+            FillDatabase();
         }
 
         [TestCleanup]
-        public void Cleanup()
+        public void Cleanup()   // Cleanup after each test, clear the database after each test
         {
+            ClearDatabase();
             _mapper = null;
             _options = null;
         }
@@ -44,6 +47,8 @@ namespace ThjonustukerfiTests.Tests.Info
         public void GetServices_should_return_an_empty_list()
         {
             //* Arrange
+            ClearDatabase();    // Database should be empty hence clear it
+
             using (var mockContext = new DataContext(_options))
             {
                 var infoRepo = new InfoRepo(mockContext, _mapper);
@@ -62,6 +67,8 @@ namespace ThjonustukerfiTests.Tests.Info
         public void GetStates_should_return_an_empty_list()
         {
             //* Arrange
+            ClearDatabase();    // Database should be empty hence clear it
+
             using (var mockContext = new DataContext(_options))
             {
                 var infoRepo = new InfoRepo(mockContext, _mapper);
@@ -80,6 +87,8 @@ namespace ThjonustukerfiTests.Tests.Info
         public void GetCategories_should_return_an_empty_list()
         {
             //* Arrange
+            ClearDatabase();    // Database should be empty hence clear it
+
             using(var mockContext = new DataContext(_options))
             {
                 var infoRepo = new InfoRepo(mockContext, _mapper);
@@ -100,9 +109,6 @@ namespace ThjonustukerfiTests.Tests.Info
             //* Arrange
             using(var mockContext = new DataContext(_options))
             {
-                //! Add only once, unless appending changes. This database will live throughout this test class
-                FillDatabase(mockContext);
-
                 Assert.IsNotNull(mockContext);
                 Assert.IsTrue(mockContext.Service.Any());
                 Assert.IsTrue(mockContext.State.Any());
@@ -229,48 +235,63 @@ namespace ThjonustukerfiTests.Tests.Info
         }
 
         //**********     Helper functions     **********//
-        private void FillDatabase(DataContext mockContext)
+        private void FillDatabase()
         {
-            var services = new List<Service>()
+            using(var mockContext = new DataContext(_options))
             {
-                new Service { Id = 1, Name = "Birkireyking" },
-                new Service { Id = 2, Name = "Taðreyking" },
-                new Service { Id = 3, Name = "Grafið" }
-            };
+                var services = new List<Service>()
+                {
+                    new Service { Id = 1, Name = "Birkireyking" },
+                    new Service { Id = 2, Name = "Taðreyking" },
+                    new Service { Id = 3, Name = "Grafið" }
+                };
 
-            var states = new List<State>()
+                var states = new List<State>()
+                {
+                    new State() {Name = "Í vinnslu", Id = 1},
+                    new State() {Name = "Kælir 1", Id = 2},
+                    new State() {Name = "Kælir 2", Id = 3},
+                    new State() {Name = "Frystir", Id = 4},
+                    new State() {Name = "Sótt", Id = 5}
+                };
+
+                var categories = new List<Category>()
+                {
+                    // Categories for Reykofninn
+                    new Category() {Name = "Lax", Id = 1},
+                    new Category() {Name = "Silungur", Id = 2},
+                    new Category() {Name = "Lambakjöt", Id = 3}
+                };
+
+                var serviceStates = new List<ServiceState>()
+                {
+                    // Service state fyrir birkireykingu
+                    new ServiceState() {Id = 1, ServiceId = 1, StateId = 1, Step = 1},
+                    new ServiceState() {Id = 2, ServiceId = 1, StateId = 2, Step = 2},
+                    new ServiceState() {Id = 3, ServiceId = 1, StateId = 3, Step = 2},
+                    new ServiceState() {Id = 4, ServiceId = 1, StateId = 4, Step = 2},
+                    new ServiceState() {Id = 5, ServiceId = 1, StateId = 5, Step = 3}
+                };
+
+                // Adding services to the in memory database and saving it
+                mockContext.Service.AddRange(services);
+                mockContext.State.AddRange(states);
+                mockContext.Category.AddRange(categories);
+                mockContext.ServiceState.AddRange(serviceStates);
+                mockContext.SaveChanges();
+            }
+        }
+
+        private void ClearDatabase()
+        {
+            using(var mockContext = new DataContext(_options))
             {
-                new State() {Name = "Í vinnslu", Id = 1},
-                new State() {Name = "Kælir 1", Id = 2},
-                new State() {Name = "Kælir 2", Id = 3},
-                new State() {Name = "Frystir", Id = 4},
-                new State() {Name = "Sótt", Id = 5}
-            };
-
-            var categories = new List<Category>()
-            {
-                // Categories for Reykofninn
-                new Category() {Name = "Lax", Id = 1},
-                new Category() {Name = "Silungur", Id = 2},
-                new Category() {Name = "Lambakjöt", Id = 3}
-            };
-
-            var serviceStates = new List<ServiceState>()
-            {
-                // Service state fyrir birkireykingu
-                new ServiceState() {Id = 1, ServiceId = 1, StateId = 1, Step = 1},
-                new ServiceState() {Id = 2, ServiceId = 1, StateId = 2, Step = 2},
-                new ServiceState() {Id = 3, ServiceId = 1, StateId = 3, Step = 2},
-                new ServiceState() {Id = 4, ServiceId = 1, StateId = 4, Step = 2},
-                new ServiceState() {Id = 5, ServiceId = 1, StateId = 5, Step = 3}
-            };
-
-            // Adding services to the in memory database and saving it
-            mockContext.Service.AddRange(services);
-            mockContext.State.AddRange(states);
-            mockContext.Category.AddRange(categories);
-            mockContext.ServiceState.AddRange(serviceStates);
-            mockContext.SaveChanges();
+                mockContext.Service.RemoveRange(mockContext.Service);
+                mockContext.State.RemoveRange(mockContext.State);
+                mockContext.Category.RemoveRange(mockContext.Category);
+                mockContext.ServiceState.RemoveRange(mockContext.ServiceState);
+                mockContext.SaveChanges();
+            }
         }
     }
 }
