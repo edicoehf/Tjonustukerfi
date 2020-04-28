@@ -13,6 +13,7 @@ using ThjonustukerfiWebAPI.Models.Exceptions;
 using ThjonustukerfiWebAPI.Repositories.Implementations;
 using ThjonustukerfiWebAPI.Models.Entities;
 using ThjonustukerfiWebAPI.Repositories.Interfaces;
+using Newtonsoft.Json.Linq;
 
 namespace ThjonustukerfiTests.Tests
 {
@@ -294,17 +295,23 @@ namespace ThjonustukerfiTests.Tests
                     new ItemInputModel 
                     {
                         CategoryId = 3,
-                        ServiceId = 2
+                        ServiceId = 2,
+                        Sliced = true,
+                        Filleted = true
                     },
                     new ItemInputModel 
                     {
                         CategoryId = 3,
-                        ServiceId = 3
+                        ServiceId = 3,
+                        Sliced = false,
+                        Filleted = false
                     },
                     new ItemInputModel 
                     {
                         CategoryId = 1,
-                        ServiceId = 4
+                        ServiceId = 4,
+                        Sliced = true,
+                        Filleted = false
                     }
                 }
             };
@@ -386,7 +393,9 @@ namespace ThjonustukerfiTests.Tests
                     new ItemInputModel 
                     {
                         CategoryId = 1,
-                        ServiceId = 2
+                        ServiceId = 2,
+                        Sliced = true,
+                        Filleted = true
                     }
                 }
             };
@@ -500,27 +509,37 @@ namespace ThjonustukerfiTests.Tests
                     new ItemInputModel 
                     {
                         CategoryId = 2,
-                        ServiceId = 1
+                        ServiceId = 1,
+                        Sliced = true,
+                        Filleted = true
                     },
                     new ItemInputModel 
                     {
                         CategoryId = 2,
-                        ServiceId = 1
+                        ServiceId = 1,
+                        Sliced = false,
+                        Filleted = false
                     },
                     new ItemInputModel 
                     {
                         CategoryId = 2,
-                        ServiceId = 1
+                        ServiceId = 1,
+                        Sliced = true,
+                        Filleted = false
                     },
                     new ItemInputModel 
                     {
                         CategoryId = 2,
-                        ServiceId = 1
+                        ServiceId = 1,
+                        Sliced = false,
+                        Filleted = true
                     },
                     new ItemInputModel 
                     {
                         CategoryId = 2,
-                        ServiceId = 1
+                        ServiceId = 1,
+                        Sliced = true,
+                        Filleted = true
                     }
                 }
             };
@@ -572,6 +591,60 @@ namespace ThjonustukerfiTests.Tests
                 Assert.AreEqual(newItemList[2].ServiceId, (long)1);
                 Assert.AreEqual(newItemList[3].ServiceId, (long)1);
                 Assert.AreEqual(newItemList[4].ServiceId, (long)1);
+            }
+        }
+
+        [TestMethod]
+        public void UpdateOrder_should_update_json_file_and_details_correctly()
+        {
+            long orderID = 100;
+            long custId = 50;
+            //* Arrange
+            var orderInput = new OrderInputModel
+            {
+                CustomerId = custId,
+
+                Items = new List<ItemInputModel>()
+                {
+                    new ItemInputModel 
+                    {
+                        CategoryId = 2,
+                        ServiceId = 1,
+                        Sliced = true,
+                        Filleted = true,
+                        OtherCategory = "Rubber boot",
+                        OtherService = "Melt it",
+                        Details = "Now this is a strange item"
+                    }
+                }
+            };
+
+            using(var mockContext = new DataContext(_options))
+            {
+                IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
+
+                //* Act
+                orderRepo.UpdateOrder(orderInput, orderID);
+
+                // get the only updated item
+                var itemId = mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.OrderId == orderID).ItemId;
+                var item = mockContext.Item.FirstOrDefault(i => i.Id == itemId);
+
+                //* Assert
+                Assert.IsNotNull(item);
+                Assert.IsNotNull(item.JSON);
+
+                var itemInp = orderInput.Items.FirstOrDefault();   // get item from input
+                Assert.AreEqual(itemInp.CategoryId, item.CategoryId);
+                Assert.AreEqual(itemInp.ServiceId, item.ServiceId);
+                Assert.AreEqual(itemInp.Details, item.Details);
+
+                // Get json and check all json fields
+                JObject rss = JObject.Parse(item.JSON);
+                Assert.AreEqual(itemInp.Sliced, rss.Property("sliced").Value);
+                Assert.AreEqual(itemInp.Filleted, rss.Property("filleted").Value);
+                Assert.AreEqual(itemInp.OtherCategory, rss.Property("otherCategory").Value);
+                Assert.AreEqual(itemInp.OtherService, rss.Property("otherService").Value);
             }
         }
 
@@ -1093,6 +1166,7 @@ namespace ThjonustukerfiTests.Tests
                         StateId = 1,
                         ServiceId = 1,
                         Barcode = "50500001",
+                        JSON = @"{""location"":""Vinnslu"",""sliced"":true,""filleted"":false,""otherCategory"":"""",""otherService"":""""}",
                         DateCreated = DateTime.MinValue,
                         DateModified = DateTime.Now,
                     },
@@ -1103,6 +1177,7 @@ namespace ThjonustukerfiTests.Tests
                         StateId = 1,
                         ServiceId = 1,
                         Barcode = "50500002",
+                        JSON = @"{""location"":""Vinnslu"",""sliced"":true,""filleted"":false,""otherCategory"":"""",""otherService"":""""}",
                         DateCreated = DateTime.MinValue,
                         DateModified = DateTime.Now,
                     },
@@ -1113,6 +1188,7 @@ namespace ThjonustukerfiTests.Tests
                         StateId = 2,
                         ServiceId = 1,
                         Barcode = "50500003",
+                        JSON = @"{""location"":""Vinnslu"",""sliced"":true,""filleted"":false,""otherCategory"":"""",""otherService"":""""}",
                         DateCreated = DateTime.MinValue,
                         DateModified = DateTime.Now,
                     }
@@ -1131,7 +1207,8 @@ namespace ThjonustukerfiTests.Tests
                     new Service() { Name = serviceName, Id = 1 },
                     new Service() { Name = "Taðreyking", Id = 2 },
                     new Service() { Name = "Viðarreyking", Id = 3 },
-                    new Service() { Name = "Salt pækill", Id = 4 }
+                    new Service() { Name = "Salt pækill", Id = 4 },
+                    new Service() { Name = "Other", Id = 5 }
                 };
 
                 //* Add Service states here
@@ -1163,7 +1240,14 @@ namespace ThjonustukerfiTests.Tests
                     new ServiceState() {Id = 17, ServiceId = 4, StateId = 2, Step = 2},
                     new ServiceState() {Id = 18, ServiceId = 4, StateId = 3, Step = 2},
                     new ServiceState() {Id = 19, ServiceId = 4, StateId = 4, Step = 2},
-                    new ServiceState() {Id = 20, ServiceId = 4, StateId = 5, Step = 3}
+                    new ServiceState() {Id = 20, ServiceId = 4, StateId = 5, Step = 3},
+
+                    // Service state fyrir other
+                    new ServiceState() {Id = 21, ServiceId = 5, StateId = 1, Step = 1},
+                    new ServiceState() {Id = 22, ServiceId = 5, StateId = 2, Step = 2},
+                    new ServiceState() {Id = 23, ServiceId = 5, StateId = 3, Step = 2},
+                    new ServiceState() {Id = 24, ServiceId = 5, StateId = 4, Step = 2},
+                    new ServiceState() {Id = 25, ServiceId = 5, StateId = 5, Step = 3}
                 };
 
                 // Build a list of size 20, make it queryable for the database mock
@@ -1199,7 +1283,8 @@ namespace ThjonustukerfiTests.Tests
                     // Catagories for Reykofninn
                     new Category() {Name = "Lax", Id = 1},
                     new Category() {Name = "Silungur", Id = 2},
-                    new Category() {Name = "Ysa", Id = 3}
+                    new Category() {Name = "Ysa", Id = 3},
+                    new Category() {Name = "Other", Id = 4}
                 };
 
                 // Adding all entities to the in memory database
