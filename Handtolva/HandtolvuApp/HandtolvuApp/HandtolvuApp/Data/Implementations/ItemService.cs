@@ -3,6 +3,7 @@ using HandtolvuApp.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
@@ -93,5 +94,36 @@ namespace HandtolvuApp.Data.Implementations
                 Debug.WriteLine(@"\tERROR {0}", ex.Message);
             }
         }
+
+        public async Task StateChangeByLocation(ObservableCollection<string> items, string barcode)
+        {
+            string stateUri = "http://10.0.2.2:5000/api/items/scanner/statechangebybarcode";
+            var item = new List<LocationStateChange>();
+            foreach(string i in items)
+            {
+                item.Add(new LocationStateChange { ItemBarcode = i, StateChangeBarcode = barcode });
+            }
+
+            try
+            {
+                var method = new HttpMethod("PATCH");
+                var request = new HttpRequestMessage(method, stateUri)
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json")
+                };
+                var response = await _client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Debug.WriteLine(@"\tOrder successfully completed");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Debug.WriteLine(@"\tError {0}", ex.Message);
+            }
+        }
+
     }
 }

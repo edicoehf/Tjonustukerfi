@@ -2,6 +2,7 @@
 using HandtolvuApp.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,6 +31,11 @@ namespace HandtolvuApp.Data
         public Task StateChangeWithId(long itemId, string barcode)
         {
             return itemService.StateChangeWithId(itemId, barcode);
+        }
+
+        public Task StateChangeByLocation(ObservableCollection<string> items, string barcode)
+        {
+            return itemService.StateChangeByLocation(items, barcode);
         }
     }
 }

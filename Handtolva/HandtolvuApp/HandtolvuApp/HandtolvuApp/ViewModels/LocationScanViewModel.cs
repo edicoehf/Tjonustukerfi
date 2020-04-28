@@ -1,4 +1,5 @@
-﻿using HandtolvuApp.Data.Interfaces;
+﻿using HandtolvuApp.Controls;
+using HandtolvuApp.Data.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,7 +19,12 @@ namespace HandtolvuApp.ViewModels
 
             ClickCommand = new Command(async () =>
             {
-                // handle scan location
+                // TODO Check if valid barcode needed
+
+                var locationItemScanVM = new LocationItemScanViewModel(ScannedBarcodeText);
+                var locationItemScanPage = new LocationItemScanPage();
+                locationItemScanPage.BindingContext = locationItemScanVM;
+                await App.Current.MainPage.Navigation.PushAsync(locationItemScanPage);
             });
         }
 
