@@ -194,12 +194,13 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
             var addItems = new List<Item>();
 
+
             // Ready Items for DB input
             foreach(var item in inpItems)
             {
                 var itemToAdd = _mapper.Map<Item>(item);
                 itemToAdd.Barcode = newItemBarcode.ToString();
-                itemToAdd.JSON = @"{location: ""Vinnslu""}";
+                itemToAdd.JSON = @"{""location"": ""Vinnslu"", ""slices"": """ + item.Slices + @"""}";
                 addItems.Add(itemToAdd);
 
                 // Increment barcode

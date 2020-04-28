@@ -24,6 +24,7 @@ const ViewItems = ({ items, remove }) => {
                             <TableCell>Tegund</TableCell>
                             <TableCell>Þjónusta</TableCell>
                             <TableCell>Fjöldi</TableCell>
+                            <TableCell>Skurður</TableCell>
                             <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
@@ -33,6 +34,7 @@ const ViewItems = ({ items, remove }) => {
                                 <TableCell>{item.categoryName}</TableCell>
                                 <TableCell>{item.serviceName}</TableCell>
                                 <TableCell>{item.amount}</TableCell>
+                                <TableCell>{item.slices}</TableCell>
                                 <TableCell align="right">
                                     <Fab
                                         className="dlt-btn"

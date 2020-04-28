@@ -1,28 +1,25 @@
 import React from "react";
 import itemService from "../services/itemService";
 
-const useGetItemById = (id) => {
+const useGetItemByBarcode = (barcode) => {
     const [item, setItem] = React.useState({});
     const [error, setError] = React.useState(null);
-    const [isLoading, setIsLoading] = React.useState(true);
 
     const fetchItem = React.useCallback(() => {
         itemService
-            .getItemById(id)
+            .getItemByBarcode(barcode)
             .then((item) => {
-                item.json = JSON.parse(item.json);
                 setItem(item);
-                setIsLoading(false);
                 setError(null);
             })
             .catch((error) => setError(error));
-    }, [id]);
+    }, [barcode]);
 
     React.useEffect(() => {
         fetchItem();
     }, [fetchItem]);
 
-    return { item, error, fetchItem, isLoading };
+    return { item, error, fetchItem };
 };
 
-export default useGetItemById;
+export default useGetItemByBarcode;

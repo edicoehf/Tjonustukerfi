@@ -14,6 +14,18 @@ const getItemById = (id) => {
         .catch((error) => Promise.reject(error));
 };
 
+const getItemByBarcode = (barcode) => {
+    return fetch(endpoint + "search?barcode=" + barcode, {
+        method: "GET",
+        headers: {
+            crossDomain: true,
+        },
+    })
+        .then(handleErrors)
+        .then(handleData)
+        .catch((error) => Promise.reject(error));
+};
+
 const getNextStatesById = (id) => {
     return fetch(endpoint + "nextstate?itemId=" + id, {
         method: "GET",
@@ -74,6 +86,7 @@ const deleteItemById = (id) => {
 
 export default {
     getItemById,
+    getItemByBarcode,
     getNextStatesById,
     updateItemById,
     updateItemState,

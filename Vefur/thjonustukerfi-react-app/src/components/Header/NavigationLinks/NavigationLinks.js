@@ -28,6 +28,11 @@ const NavigationLinks = () => {
                     Nýr Viðskiptavinur
                 </MenuItem>
             </Link>
+            <Link className="navbar-item" to="/item-search">
+                <MenuItem selected={router.pathname === "/item-search"}>
+                    Leita að vöru
+                </MenuItem>
+            </Link>
             <Link className="navbar-item" to="/statistics">
                 <MenuItem selected={router.pathname === "/statistics"}>
                     Tölfræði Upplýsingar
