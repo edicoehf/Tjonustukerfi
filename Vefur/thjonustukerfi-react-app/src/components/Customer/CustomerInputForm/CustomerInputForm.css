@@ -2,7 +2,94 @@
     background-color: rgb(51, 50, 50);
     color: white;
 }
+
 .submit-btn:hover {
     background-color: rgb(17, 17, 17);
     color: white;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px var(--main-color) inset;
+}
+
+.customer-input-form .form .MuiFormControl-root .MuiFormLabel-root {
+    color: rgba(0, 0, 0, 0.9);
+}
+
+.customer-input-form .form .MuiFormControl-root .MuiFormLabel-root.Mui-focused {
+    color: #3f51b5;
+}
+
+.customer-input-form .form {
+    justify-content: center;
+    display: grid;
+    column-gap: 3em;
+    row-gap: 1em;
+    grid-template-columns: 25em 25em;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "name name"
+        "email email"
+        "ssn phone"
+        "address postalcode"
+        "submit submit"
+    ;
+}
+
+.customer-input-form.compact .form {
+    justify-content: center;
+    display: grid;
+    row-gap: 2em;
+    grid-template-columns: 30em;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "name"
+        "email"
+        "ssn"
+        "phone"
+        "address"
+        "postalcode"
+        "submit"
+    ;
+
+}
+
+.customer-input-form .form .name-input {
+    grid-area: name;
+}
+
+.customer-input-form .form .ssn-input {
+    grid-area: ssn;
+}
+
+.customer-input-form .form .phone-input {
+    grid-area: phone;
+}
+
+.customer-input-form .form .email-input {
+    grid-area: email;
+}
+
+.customer-input-form .form .address-input {
+    grid-area: address;
+}
+
+.customer-input-form .form .postalcode-input {
+    grid-area: postalcode;
+}
+
+.customer-input-form .form .input-submit {
+    grid-area: submit;
+    width: 20em;
+    margin-top: 4em;
+    display: grid;
+    justify-self: center;
 }
