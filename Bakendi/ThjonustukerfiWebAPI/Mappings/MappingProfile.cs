@@ -55,11 +55,11 @@ namespace ThjonustukerfiWebAPI.Mappings
                 .ForMember(src => src.StateId, opt => opt.MapFrom(src => 1));
 
             CreateMap<Item, ItemDTO>();
-            CreateMap<Item, ItemStateDTO>();
             // .ForMember(src => src.OrderId, opt => 
                 //     opt.MapFrom((src, dst) => dst.OrderId = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == src.Id).OrderId))
                 // .ForMember(src => src.State, opt =>
                 //     opt.MapFrom((src, dst) => dst.State = _dbContext.State.FirstOrDefault(s => s.Id == src.StateId).Name));
+            
 
             // Automapper for mapping item to item archive
             CreateMap<Item, ItemArchive>()

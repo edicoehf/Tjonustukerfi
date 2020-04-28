@@ -1,14 +1,24 @@
+using System;
+
 namespace ThjonustukerfiWebAPI.Models.DTOs
 {
     /// <summary>Data transfer object for Item entity, provides basic information of Item.</summary>
     public class ItemDTO
     {
         public long Id { get; set; }
+        public long OrderId { get; set; }
+        public long CategoryId { get; set; }
         public string Category { get; set; }
+        public long ServiceId { get; set; }
         public string Service { get; set; }
+        public long StateId { get; set; }
         public string State { get; set; }
         public string Barcode { get; set; }
+        public string Details { get; set; }
         public string JSON { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime DateModified { get; set; }
+        public DateTime? DateCompleted { get; set; }
 
         //*     Overrides     *//
         public static bool operator ==(ItemDTO i1, ItemDTO i2)

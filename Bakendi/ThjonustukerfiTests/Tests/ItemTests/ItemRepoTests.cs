@@ -283,7 +283,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 var itemEntity = mockContext.Item.FirstOrDefault(i => i.Id == itemID);
                 
                 // Same item the function should find
-                var itemDTO = _mapper.Map<ItemStateDTO>(itemEntity);
+                var itemDTO = _mapper.Map<ItemDTO>(itemEntity);
                 itemDTO.OrderId = mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemEntity.Id).OrderId;
                 itemDTO.State = mockContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;
                 itemDTO.Category = mockContext.Category.FirstOrDefault(c => c.Id == itemEntity.CategoryId).Name;
@@ -294,7 +294,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
                 //* Assert
                 Assert.IsNotNull(retVal);
-                Assert.IsInstanceOfType(retVal, typeof(ItemStateDTO));
+                Assert.IsInstanceOfType(retVal, typeof(ItemDTO));
                 Assert.AreEqual(itemDTO, retVal);
             }
         }
