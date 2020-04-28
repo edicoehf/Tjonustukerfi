@@ -1,20 +1,51 @@
-﻿using HandtolvuApp.Models;
+﻿using HandtolvuApp.Controls;
+using HandtolvuApp.Models;
+using HandtolvuApp.Models.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace HandtolvuApp.ViewModels
 {
-    public class ItemViewModel : INotifyPropertyChanged
+    public class ItemViewModel : BaseViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        public ItemViewModel(Item i)
+        public ItemViewModel(Item i, NextStates n)
         {
             Item = i;
+
+            ItemJson = JsonConvert.DeserializeObject<ItemJson>(i.Json);
+
+            NextStates = n;
+
+            nextStates.NextAvailableStates.Reverse();
+
+            ScanStateCommand = new Command(async () =>
+            {
+                // send user to scan site
+                var scanPageVM = new StateScanViewModel(item);
+                var scanPage = new StateScanPage();
+                scanPage.BindingContext = scanPageVM;
+                await App.Current.MainPage.Navigation.PushAsync(scanPage);
+            });
+        }
+
+        ItemJson itemJson;
+
+        public ItemJson ItemJson
+        {
+            get => itemJson;
+
+            set
+            {
+                itemJson = value;
+
+                NotifyPropertyChanged(nameof(ItemJson));
+            }
         }
 
         Item item;
@@ -27,13 +58,25 @@ namespace HandtolvuApp.ViewModels
             {
                 item = value;
 
-                var args = new PropertyChangedEventArgs(nameof(Item));
-
-                PropertyChanged?.Invoke(this, args);
+                NotifyPropertyChanged(nameof(Item));
             }
         }
 
-        Command DismissCommand { get;  }
+        NextStates nextStates;
+
+        public NextStates NextStates
+        {
+            get => nextStates;
+
+            set
+            {
+                nextStates = value;
+
+                NotifyPropertyChanged(nameof(NextStates));
+            }
+        }
+
+        public Command ScanStateCommand { get;  }
 
     }
 }

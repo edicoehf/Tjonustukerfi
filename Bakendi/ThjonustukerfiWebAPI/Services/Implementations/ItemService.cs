@@ -26,7 +26,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             _customerRepo = customerRepo;
             _mapper = mapper;
         }
-        public ItemStateDTO GetItemById(long itemId) => _itemRepo.GetItemById(itemId);
+        public ItemDTO GetItemById(long itemId) => _itemRepo.GetItemById(itemId);
         public ItemDTO CreateItem(ItemInputModel item)
         {
             return _itemRepo.CreateItem(item);
@@ -36,7 +36,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             _itemRepo.EditItem(input, itemId);  // edit item
             checkOrderPickupAndSend(_itemRepo.GetOrderIdWithItemId(itemId));  // send Notification if order is ready
         }
-        public ItemStateDTO SearchItem(string search) => _itemRepo.GetItemById(_itemRepo.SearchItem(search));
+        public ItemDTO SearchItem(string search) => _itemRepo.GetItemById(_itemRepo.SearchItem(search));
         public void CompleteItem(long id)
         {
             _itemRepo.CompleteItem(id);
