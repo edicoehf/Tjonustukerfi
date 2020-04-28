@@ -1,78 +1,51 @@
 import React from "react";
 import useFindItem from "../../../hooks/useFindItem";
-import {
-    IconButton,
-    FormControl,
-    InputLabel,
-    Input,
-    InputAdornment,
-    Button,
-} from "@material-ui/core";
-import SearchIcon from "@material-ui/icons/Search";
-import "./ItemSearch.css";
+import { Button } from "@material-ui/core";
 import Form from "../../Form/Form";
 import { Link } from "react-router-dom";
 import ItemDetails from "../ItemDetails/ItemDetails";
+import SearchBar from "../../SearchBar/SearchBar";
+import "./ItemSearch.css";
 
 const ItemSearch = () => {
     const [values, setValues] = React.useState({ id: "", barcode: "" });
     const { item, error, fetchItemById, fetchItemByBarcode } = useFindItem();
 
-    const handleChange = (name) => (event) => {
-        setValues({ ...values, [name]: event.target.value });
+    const handleIdChange = (event) => {
+        setValues({ ...values, id: event.target.value });
     };
-    console.log(item);
+
+    const handleBarcodeChange = (event) => {
+        setValues({ ...values, barcode: event.target.value });
+    };
+
+    const handleIdFetch = () => {
+        fetchItemById(values.id);
+    };
+
+    const handleBarcodeFetch = () => {
+        fetchItemByBarcode(values.barcode);
+    };
+
     return (
         <div className="item-search">
             <h1>Leita að vöru</h1>
             <div className="item-search-bars">
                 <Form>
-                    <FormControl>
-                        <InputLabel htmlFor="item-id-search">
-                            Leita eftir vörunúmeri
-                        </InputLabel>
-                        <Input
-                            id="item-id-search"
-                            type="text"
-                            autoComplete="off"
-                            value={values.id}
-                            onChange={handleChange("id")}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        onClick={() => {
-                                            fetchItemById(values.id);
-                                        }}
-                                    >
-                                        <SearchIcon />
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                        />
-                    </FormControl>
-                    <FormControl>
-                        <InputLabel htmlFor="item-id-barcode">
-                            Leita eftir strikamerki
-                        </InputLabel>
-                        <Input
-                            id="item-id-barcode"
-                            type="text"
-                            autoComplete="off"
-                            value={values.barcode}
-                            onChange={handleChange("barcode")}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        onClick={() => {
-                                            fetchItemByBarcode(values.barcode);
-                                        }}
-                                    >
-                                        <SearchIcon />
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                        />
-                    </FormControl>
+                    <SearchBar
+                        htmlId="id-search-bar"
+                        searchTerm={values.id}
+                        handleChange={handleIdChange}
+                        placeHolder="Leita eftir vörunúmeri"
+                        handleClick={handleIdFetch}
+                    />
+                    <SearchBar
+                        htmlId="barcode-search-bar"
+                        searchTerm={values.barcode}
+                        handleChange={handleBarcodeChange}
+                        placeHolder="Leita eftir strikamerki"
+                        handleClick={handleBarcodeFetch}
+                    />
                 </Form>
             </div>
             {error ? (
