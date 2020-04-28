@@ -278,6 +278,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             long itemID = 1;
             using(var mockContext = new DataContext(_options))
             {
+                UpdateMapper(mockContext);  // need to update mapper since it useses context
                 IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
 
                 var itemEntity = mockContext.Item.FirstOrDefault(i => i.Id == itemID);
