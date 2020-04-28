@@ -6,9 +6,6 @@
              mc:Ignorable="d"
              xmlns:local="clr-namespace:HandtolvuApp.ViewModels"
              x:Class="HandtolvuApp.Controls.ItemInputPage">
-    <ContentPage.BindingContext>
-        <local:ItemInputViewModel />
-    </ContentPage.BindingContext>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -39,7 +36,7 @@
                 Grid.Row="2"
                 Placeholder="{Binding Placeholder}" Margin="10,0"
                 AutomationId="inputEntry"
-                Text="{Binding InputVariable}"/>
+                Text="{Binding ScannedBarcodeText}"/>
 
         <Button Grid.Column="3" Text="Ok"
                 Grid.Row="2"

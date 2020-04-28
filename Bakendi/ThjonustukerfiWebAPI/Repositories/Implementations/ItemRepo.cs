@@ -25,21 +25,12 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             _mapper = mapper;
         }
 
-        public ItemStateDTO GetItemById(long itemId)
+        public ItemDTO GetItemById(long itemId)
         {
             var entity = _dbContext.Item.FirstOrDefault(i => i.Id == itemId);   // get entity
             if(entity == null) {throw new NotFoundException($"Item with ID {itemId} was not found."); } // entity not found
 
-            // Map the DTO
-            var stateDTO = _mapper.Map<ItemStateDTO>(entity);
-
-            // Get the connections for the DTO
-            stateDTO.OrderId = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == entity.Id).OrderId;   // get order ID
-            stateDTO.State = _dbContext.State.FirstOrDefault(s => s.Id == entity.StateId).Name;                         // get state name
-            stateDTO.Category = _dbContext.Category.FirstOrDefault(c => c.Id == entity.CategoryId).Name;                // get category name
-            stateDTO.Service = _dbContext.Service.FirstOrDefault(s => s.Id == entity.ServiceId).Name;                   // get service name
-
-            return stateDTO;
+            return _mapper.Map<ItemDTO>(entity);
         }
 
         public ItemDTO CreateItem(ItemInputModel item)
@@ -57,8 +48,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             var entity = _dbContext.Item.FirstOrDefault(i => i.Id == itemId);
             if(entity == null) { throw new NotFoundException($"Item with ID {itemId} was not found."); }
 
-            bool editState, editService, editOrder, editCategory, checkOrderComplete;
-            editState = editService = editOrder = editCategory = checkOrderComplete = false;
+            bool editState, editService, editOrder, editCategory, checkOrderComplete, editSlice, editFilleted, editOtherCategory, editOtherService, editDetails;
+            editState = editService = editOrder = editCategory = checkOrderComplete = editSlice = editFilleted = editOtherCategory = editOtherService = editDetails = false;
             long orderID = -1;
 
             // finish all checks before editing anything, unfilled inputs will not be edited
@@ -84,6 +75,11 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 if(_dbContext.Category.FirstOrDefault(t => t.Id == input.CategoryId) == null) { throw new NotFoundException($"Category with ID {input.CategoryId} was not found."); }
                 editCategory = true;
             }
+            if(input.Sliced != null) { editSlice = true; }
+            if(input.Filleted != null) { editFilleted = true; }
+            if(input.OtherCategory != null) { editOtherCategory = true; }
+            if(input.OtherService != null) { editOtherService = true; }
+            if(input.Details != null) { editDetails = true; }
 
             // Update Category
             if(editCategory) { entity.CategoryId = (long)input.CategoryId; }
@@ -112,16 +108,38 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 connection.OrderId = (long)input.OrderId;   // update the connection to the order
             }
 
+            // Update details
+            if(editDetails) { entity.Details = input.Details; }
+
+            // check and update JSON objects
+            JObject rss = JObject.Parse(entity.JSON);
+            if(editSlice)           { rss.Property("sliced").Value = input.Sliced; }
+            if(editFilleted)        { rss.Property("filleted").Value = input.Filleted; }
+            if(editOtherCategory)   { rss.Property("otherCategory").Value = input.OtherCategory; }
+            if(editOtherService)    { rss.Property("otherService").Value = input.OtherService; }
+            entity.JSON = JsonConvert.SerializeObject(rss);
+
             // If no changes are made, send a bad request response
-            if(!editCategory && !editState && !editService && !editOrder) {throw new BadRequestException($"The input had no valid values. No changes made."); }
+            if(!editCategory && !editState && !editService && !editOrder && !editDetails && !editSlice && !editFilleted && !editOtherCategory && !editOtherService) 
+            {
+                throw new BadRequestException($"The input had no valid values. No changes made.");
+            }
             else 
             {
                 // item and the order connected to it modified on this date
                 entity.DateModified = DateTime.Now;
 
-                _dbContext.Order.FirstOrDefault(o =>
-                    o.Id == _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == entity.Id).OrderId)  // find order connected to this item
-                        .DateModified = DateTime.Now;   // Update the date modified attribute in the order connected to this item
+                if(editOrder)
+                {
+                      // get the order that was changed
+                    _dbContext.Order.FirstOrDefault(o => o.Id == (long)input.OrderId).DateModified = DateTime.Now;   // Update the date modified attribute in the order connected to this item
+                }
+                else
+                {
+                    _dbContext.Order.FirstOrDefault(o =>
+                        o.Id == _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == entity.Id).OrderId)  // find order connected to this item
+                            .DateModified = DateTime.Now;   // Update the date modified attribute in the order connected to this item
+                }
             }
 
             _dbContext.SaveChanges();
@@ -324,10 +342,10 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // Get the json object and change it and write it back (making sure only to change the location property if there are any other properties there)
             if(entity.JSON != null && location != null)
             {
-                JObject rss = JObject.Parse(entity.JSON);                   // parse the entity
-                var prop = rss.Property("location");                        // get the location property
-                prop.Value = location;                                      // set the location
-                entity.JSON = $"{{{prop.ToString()}}}";   // serialize back to string
+                JObject rss = JObject.Parse(entity.JSON);           // parse the entity
+                var prop = rss.Property("location");                // get the location property
+                prop.Value = location;                              // set the location
+                entity.JSON = JsonConvert.SerializeObject(rss);     // serialize back
             }
 
             // Update/create timestamp

@@ -43,7 +43,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         {
             //* Arrange
             long itemID = 1;
-            var retDTO = new ItemStateDTO
+            var retDTO = new ItemDTO
             {
                 Id = itemID,
                 OrderId = 1,
@@ -63,7 +63,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
             //* Assert
             Assert.IsNotNull(response);
-            Assert.IsInstanceOfType(response, typeof(ItemStateDTO));
+            Assert.IsInstanceOfType(response, typeof(ItemDTO));
         }
 
         [TestMethod]
@@ -73,7 +73,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             long itemID = 1;
 
             // Mock dto and repo
-            ItemStateDTO itemstate = new ItemStateDTO
+            ItemDTO itemstate = new ItemDTO
             {
                 Id = itemID,
                 OrderId = 2,
@@ -91,7 +91,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
             //* Assert
             Assert.IsNotNull(retVal);
-            Assert.IsInstanceOfType(retVal, typeof(ItemStateDTO));
+            Assert.IsInstanceOfType(retVal, typeof(ItemDTO));
         }
 
         [TestMethod]

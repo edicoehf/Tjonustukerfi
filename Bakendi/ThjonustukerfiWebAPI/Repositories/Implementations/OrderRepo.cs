@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.Entities;
@@ -94,9 +96,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             {
                 for(var i = 0; i < items.Count; i++)
                 {
-                    items[i].CategoryId = (long)order.Items[i].CategoryId;
-                    items[i].ServiceId = (long)order.Items[i].ServiceId;
-                    items[i].DateModified = DateTime.Now;
+                    items[i].CopyInputToSelf(order.Items[i]);
                 }
             }
             else if(items.Count == 0 && order.Items.Count > 0)      // if the list in the database is empty, just add the new ones
@@ -110,9 +110,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 var i = 0;
                 for( ; i < items.Count; i++)
                 {
-                    items[i].CategoryId = (long)order.Items[i].CategoryId;
-                    items[i].ServiceId = (long)order.Items[i].ServiceId;
-                    items[i].DateModified = DateTime.Now;
+                    items[i].CopyInputToSelf(order.Items[i]);
                 }
 
                 // Build the rest of the list
@@ -132,9 +130,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 var i = 0;
                 for( ; i < order.Items.Count; i++)
                 {
-                    items[i].CategoryId = (long)order.Items[i].CategoryId;
-                    items[i].ServiceId = (long)order.Items[i].ServiceId;
-                    items[i].DateModified = DateTime.Now;
+                    items[i].CopyInputToSelf(order.Items[i]);
                 }
 
                 // rest of the items to delete off the tail as well as the timestamp
@@ -174,7 +170,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             catch (System.Exception)
             {
                 var maxItem = _dbContext.Item.OrderByDescending(i => i.Barcode).FirstOrDefault();
-                code = maxItem.Barcode;
+                if(maxItem == null) { code = null; }
+                else { code = maxItem.Barcode; }
             }
 
             if(code == null) { code = "50500000"; }
@@ -194,13 +191,21 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
             var addItems = new List<Item>();
 
-
             // Ready Items for DB input
             foreach(var item in inpItems)
             {
                 var itemToAdd = _mapper.Map<Item>(item);
                 itemToAdd.Barcode = newItemBarcode.ToString();
-                itemToAdd.JSON = @"{""location"": ""Vinnslu"", ""slices"": """ + item.Slices + @"""}";
+                
+                itemToAdd.JSON = JsonConvert.SerializeObject(new
+                {
+                    location = "Vinnslu",
+                    sliced = item.Sliced,
+                    filleted = item.Filleted,
+                    otherCategory = item.OtherCategory == null ? "" : item.OtherCategory,
+                    otherService = item.OtherService == null ? "" : item.OtherService
+                });
+
                 addItems.Add(itemToAdd);
 
                 // Increment barcode
@@ -369,6 +374,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             if(order == null) { throw new NotFoundException($"Order with ID {orderId} was not found."); }
 
             var itemOrderConnections = _dbContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderId).ToList();
+
+            if(itemOrderConnections.Count == 0) { return false; }   // if no item exists in order, then it isn't complete
 
             foreach (var itemConnection in itemOrderConnections)
             {
