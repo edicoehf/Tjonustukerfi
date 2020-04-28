@@ -54,7 +54,19 @@ namespace ThjonustukerfiWebAPI.Mappings
                 .ForMember(src => src.DateModified, opt => opt.MapFrom(src => DateTime.Now))
                 .ForMember(src => src.StateId, opt => opt.MapFrom(src => 1));
 
-            CreateMap<Item, ItemDTO>();
+            CreateMap<Item, ItemDTO>()
+            .AfterMap((src, dst) =>
+            {
+                BuildDatabase();
+
+                // Get the connections for the DTO
+                dst.OrderId = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == src.Id).OrderId;   // get order ID
+                dst.Category = _dbContext.Category.FirstOrDefault(c => c.Id == src.CategoryId).Name;                // get category name
+                dst.Service = _dbContext.Service.FirstOrDefault(s => s.Id == src.ServiceId).Name;                   // get service name
+                dst.State = _dbContext.State.FirstOrDefault(s => s.Id == src.StateId).Name;                         // get state name
+
+                DestroyDatabase();
+            });
             // .ForMember(src => src.OrderId, opt => 
                 //     opt.MapFrom((src, dst) => dst.OrderId = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == src.Id).OrderId))
                 // .ForMember(src => src.State, opt =>
@@ -121,11 +133,19 @@ namespace ThjonustukerfiWebAPI.Mappings
                         var add = new ItemDTO()
                         {
                             Id = itemEntity.Id,
+                            CategoryId = itemEntity.CategoryId,
+                            StateId = itemEntity.StateId,
+                            ServiceId = itemEntity.ServiceId,
+                            Barcode = itemEntity.Barcode,
+                            JSON = itemEntity.JSON,
+                            Details = itemEntity.Details,
+                            DateCreated = itemEntity.DateCreated,
+                            DateModified = itemEntity.DateModified,
+                            DateCompleted = itemEntity.DateCompleted,
+                            OrderId = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemEntity.Id).OrderId,
                             Category = _dbContext.Category.FirstOrDefault(c => c.Id == itemEntity.CategoryId).Name, // Find category name
                             Service = _dbContext.Service.FirstOrDefault(s => s.Id == itemEntity.ServiceId).Name,    // Find Service name
-                            State = _dbContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name,          // Find state name
-                            Barcode = itemEntity.Barcode,
-                            JSON = itemEntity.JSON
+                            State = _dbContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name          // Find state name
                         };
 
                         dst.Items.Add(add);     // Add the itemDTO to the orderDTO
