@@ -1,6 +1,5 @@
 import React from "react";
 import Form from "../../Form/Form";
-import Input from "../../Input/Input";
 import validateForm from "../CustomerValidate/CustomerValidate";
 import useForm from "../../../hooks/useForm";
 import "./CustomerInputForm.css";
@@ -9,6 +8,8 @@ import {
     isProcessingType,
     submitHandlerType,
 } from "../../../types/index";
+import TextInput from "../../TextInput/TextInput";
+import { Button } from "@material-ui/core";
 
 const initialState = {
     name: "",
@@ -23,6 +24,7 @@ const CustomerInputForm = ({
     existingCustomer,
     submitHandler,
     isProcessing,
+    compact,
 }) => {
     const isExistingCustomer =
         existingCustomer && Object.keys(existingCustomer).length > 0;
@@ -36,72 +38,74 @@ const CustomerInputForm = ({
     );
 
     return (
-        <div className="body">
+        <div className={`customer-input-form ${compact ? "compact" : ""}`}>
             <Form onSubmit={handleSubmit}>
-                <Input
-                    type="text"
+                <TextInput
                     name="name"
                     value={values.name}
                     htmlId="name"
-                    label="Nafn"
+                    className="name-input"
+                    label="Nafn *"
                     errorMessage={errors.name}
                     onInput={handleChange}
                 />
-                <Input
-                    type="text"
+                <TextInput
                     name="ssn"
                     value={values.ssn}
                     htmlId="ssn"
+                    className="ssn-input"
                     label="Kennitala"
                     errorMessage={errors.ssn}
                     onInput={handleChange}
                 />
-                <Input
-                    type="text"
+                <TextInput
                     name="phone"
                     value={values.phone}
                     htmlId="phone"
+                    className="phone-input"
                     label="Símanúmer"
                     errorMessage={errors.phone}
                     onInput={handleChange}
                 />
-                <Input
-                    type="text"
+                <TextInput
                     name="email"
                     value={values.email}
                     htmlId="email"
-                    label="Netfang"
+                    className="email-input"
+                    label="Netfang *"
                     errorMessage={errors.email}
                     onInput={handleChange}
                 />
-                <Input
-                    type="text"
+                <TextInput
                     name="address"
                     value={values.address}
                     htmlId="address"
+                    className="address-input"
                     label="Heimilisfang"
                     errorMessage={errors.address}
                     onInput={handleChange}
                 />
-                <Input
-                    type="text"
+                <TextInput
                     name="postalCode"
                     value={values.postalCode}
                     htmlId="postalCode"
+                    className="postalcode-input"
                     label="Póstnúmer"
                     errorMessage={errors.postalCode}
                     onInput={handleChange}
                 />
-                <input
+                <Button
+                    className="input-submit"
+                    variant="contained"
+                    color="primary"
+                    size="large"
                     disabled={isProcessing}
                     type="submit"
-                    value={
-                        isExistingCustomer
-                            ? "Uppfæra viðskiptavin"
-                            : "Skrá nýjan viðskiptavin"
-                    }
-                    className="btn submit-btn"
-                />
+                >
+                    {isExistingCustomer
+                        ? "Uppfæra viðskiptavin"
+                        : "Skrá nýjan viðskiptavin"}
+                </Button>
             </Form>
         </div>
     );

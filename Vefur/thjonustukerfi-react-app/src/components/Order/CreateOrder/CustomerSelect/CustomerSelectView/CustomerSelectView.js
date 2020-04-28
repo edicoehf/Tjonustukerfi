@@ -5,12 +5,13 @@ import SearchBar from "../../../../SearchBar/SearchBar";
 import { List } from "@material-ui/core";
 import CustomerSelectListItem from "../CustomerSelectListItem/CustomerSelectListItem";
 import { addCustomerType } from "../../../../../types";
+import "./CustomerSelectView.css";
 
 const CustomerSelectView = ({ addCustomer }) => {
     const { customers, error, isLoading } = useGetAllCustomers();
     customers.sort((a, b) => a.name.localeCompare(b.name));
     const { searchResults, handleChange, searchTerm } = useSearchBar(customers);
-    const searchBarPlaceHolder = "Má bjóða þér að leita eftir nafni?";
+    const searchBarPlaceHolder = "Leita eftir nafni";
 
     return (
         <>
@@ -19,13 +20,12 @@ const CustomerSelectView = ({ addCustomer }) => {
                     <p> Sæki viðskiptavini </p>
                 ) : (
                     <div className="customer-select-view">
-                        <div className="search-bar">
-                            <SearchBar
-                                searchTerm={searchTerm}
-                                handleChange={handleChange}
-                                placeHolder={searchBarPlaceHolder}
-                            />
-                        </div>
+                        <SearchBar
+                            searchTerm={searchTerm}
+                            handleChange={handleChange}
+                            placeHolder={searchBarPlaceHolder}
+                            htmlId="customer-select-searchbar"
+                        />
                         {searchResults.length === 0 ? (
                             <p className="error no-customers">
                                 Enginn viðskiptavinur fannst

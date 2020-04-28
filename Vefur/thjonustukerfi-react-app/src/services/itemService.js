@@ -39,7 +39,7 @@ const getNextStatesById = (id) => {
 };
 
 const updateItemState = ({ item, state }) => {
-    return fetch(endpoint + "statechangebyid", {
+    return fetch(endpoint + "statechange", {
         method: "PATCH",
         headers: {
             crossDomain: true,
@@ -48,8 +48,8 @@ const updateItemState = ({ item, state }) => {
         body: JSON.stringify([
             {
                 itemId: item,
-                barcode: null,
                 stateChangeTo: state,
+                location: "",
             },
         ]),
     })

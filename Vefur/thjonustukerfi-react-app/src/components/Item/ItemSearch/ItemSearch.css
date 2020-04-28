@@ -8,10 +8,6 @@
     justify-content: center;
 }
 
-.item-search .MuiFormControl-root {
-    margin: 0 2em;
-}
-
 .item-search-results {
     display: flex;
     flex-direction: column;
@@ -21,6 +17,10 @@
 
 .item-search-result-info .item-order {
     margin-bottom: 2em;
+}
+
+.item-search .search-bar .MuiFormControl-root {
+    margin: 0 2em;
 }
 
 .item-not-found {
