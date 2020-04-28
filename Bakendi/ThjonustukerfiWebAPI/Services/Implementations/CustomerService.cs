@@ -61,7 +61,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         {
             if(!_customerRepo.CustomerExists(customerId)) { throw new NotFoundException($"Customer with ID {customerId} was not found."); }
 
-            return _orderRepo.GetActiveOrdersByCustomerId(customerId);
+            return _orderRepo.GetOrdersReadyForPickupByCustomerID(customerId);
         }
     }
 }
