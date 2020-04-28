@@ -24,7 +24,9 @@ const ViewItems = ({ items, remove }) => {
                             <TableCell>Tegund</TableCell>
                             <TableCell>Þjónusta</TableCell>
                             <TableCell>Fjöldi</TableCell>
-                            <TableCell>Skurður</TableCell>
+                            <TableCell>Flökun</TableCell>
+                            <TableCell>Pökkun</TableCell>
+                            <TableCell>Annað</TableCell>
                             <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
@@ -34,7 +36,17 @@ const ViewItems = ({ items, remove }) => {
                                 <TableCell>{item.categoryName}</TableCell>
                                 <TableCell>{item.serviceName}</TableCell>
                                 <TableCell>{item.amount}</TableCell>
-                                <TableCell>{item.slices}</TableCell>
+                                <TableCell>
+                                    {item.filleted === "filleted"
+                                        ? "Flakað"
+                                        : "Óflakað"}
+                                </TableCell>
+                                <TableCell>
+                                    {item.sliced === "sliced"
+                                        ? "Bitar"
+                                        : "Heilt Flak"}
+                                </TableCell>
+                                <TableCell>{item.other}</TableCell>
                                 <TableCell align="right">
                                     <Fab
                                         className="dlt-btn"

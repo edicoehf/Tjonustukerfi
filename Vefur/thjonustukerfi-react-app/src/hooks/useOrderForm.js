@@ -18,7 +18,9 @@ const useOrderForm = (initialState, validate, submitHandler) => {
                     order.items.push({
                         categoryId: parseInt(item.category),
                         serviceId: parseInt(item.service),
-                        slices: item.slices,
+                        sliced: item.sliced,
+                        filleted: item.filleted,
+                        other: item.other,
                     });
                 }
             });

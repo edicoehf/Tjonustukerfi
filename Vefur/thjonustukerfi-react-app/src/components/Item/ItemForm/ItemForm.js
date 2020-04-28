@@ -19,8 +19,8 @@ const initialState = {
     category: null,
     service: null,
     amount: 1,
-    sliced: "",
-    filleted: "",
+    sliced: null,
+    filleted: null,
     other: "",
 };
 
@@ -93,7 +93,7 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
             <RadioGroup
                 name="filleted"
                 className="select"
-                value={values.fillet}
+                value={values.filleted}
                 onChange={handleChange}
             >
                 {errors.filleted && <p className="error">{errors.filleted}</p>}
@@ -112,7 +112,7 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
             <RadioGroup
                 name="sliced"
                 className="select"
-                value={values.slices}
+                value={values.sliced}
                 onChange={handleChange}
             >
                 {errors.sliced && <p className="error">{errors.sliced}</p>}
