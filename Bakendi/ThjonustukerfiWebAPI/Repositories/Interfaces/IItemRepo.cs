@@ -10,7 +10,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
     {
         /// <summary>Searches for the given barcode.</summary>
         /// <returns>An item state DTO.</returns>
-        ItemStateDTO GetItemById(long itemId);
+        ItemDTO GetItemById(long itemId);
 
         ItemDTO CreateItem(ItemInputModel item);
 

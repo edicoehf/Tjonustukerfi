@@ -5,6 +5,7 @@ using AutoMapper;
 using FizzWare.NBuilder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json.Linq;
 using ThjonustukerfiWebAPI.Mappings;
 using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Models.DTOs;
@@ -113,7 +114,12 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 CategoryId = categoryId,
                 StateId = stateID,
                 ServiceID = serviceID,
-                OrderId = orderChange
+                OrderId = orderChange,
+                Sliced = true,
+                Filleted = true,
+                OtherCategory = "Some other category",
+                OtherService = "This is a service to you all, these tests...",
+                Details = "A detailed description of whatever has the category id of 1?"
             };
 
             using(var mockContext = new DataContext(_options))
@@ -179,10 +185,19 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 Assert.AreEqual(categoryId, changedItem.CategoryId);
                 Assert.AreEqual(stateID, changedItem.StateId);
                 Assert.AreEqual(serviceID, changedItem.ServiceId);
+                Assert.AreEqual(itemInput.Details, changedItem.Details);
                 Assert.AreEqual(orderChange, mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == changedItem.Id).OrderId);
 
                 // check that there is one new timestamp
                 Assert.AreEqual(oldTimestampCount + 1, newTimestampCount);
+
+                // Check json values
+                Assert.IsNotNull(changedItem.JSON);
+                JObject rss = JObject.Parse(changedItem.JSON);
+                Assert.AreEqual(itemInput.Sliced, rss.Property("sliced").Value);
+                Assert.AreEqual(itemInput.Filleted, rss.Property("filleted").Value);
+                Assert.AreEqual(itemInput.OtherCategory, rss.Property("otherCategory").Value);
+                Assert.AreEqual(itemInput.OtherService, rss.Property("otherService").Value);
             }
         }
 
@@ -263,12 +278,13 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             long itemID = 1;
             using(var mockContext = new DataContext(_options))
             {
+                UpdateMapper(mockContext);  // need to update mapper since it useses context
                 IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
 
                 var itemEntity = mockContext.Item.FirstOrDefault(i => i.Id == itemID);
                 
                 // Same item the function should find
-                var itemDTO = _mapper.Map<ItemStateDTO>(itemEntity);
+                var itemDTO = _mapper.Map<ItemDTO>(itemEntity);
                 itemDTO.OrderId = mockContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemEntity.Id).OrderId;
                 itemDTO.State = mockContext.State.FirstOrDefault(s => s.Id == itemEntity.StateId).Name;
                 itemDTO.Category = mockContext.Category.FirstOrDefault(c => c.Id == itemEntity.CategoryId).Name;
@@ -279,7 +295,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
                 //* Assert
                 Assert.IsNotNull(retVal);
-                Assert.IsInstanceOfType(retVal, typeof(ItemStateDTO));
+                Assert.IsInstanceOfType(retVal, typeof(ItemDTO));
                 Assert.AreEqual(itemDTO, retVal);
             }
         }
@@ -910,7 +926,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                         StateId = 1,
                         ServiceId = 1,
                         Barcode = "50500001",
-                        JSON = @"{location:""Vinnslu""}",
+                        JSON = @"{""location"":""Vinnslu"",""sliced"":true,""filleted"":false,""otherCategory"":"""",""otherService"":""""}",
                         DateCreated = DateTime.MinValue,
                         DateModified = DateTime.Now,
                         DateCompleted = DateTime.MaxValue
@@ -922,7 +938,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                         StateId = 1,
                         ServiceId = 1,
                         Barcode = "50500002",
-                        JSON = @"{location:""Vinnslu""}",
+                        JSON = @"{""location"":""Vinnslu"",""sliced"":true,""filleted"":false,""otherCategory"":"""",""otherService"":""""}",
                         DateCreated = DateTime.MinValue,
                         DateModified = DateTime.Now,
                         DateCompleted = DateTime.MaxValue

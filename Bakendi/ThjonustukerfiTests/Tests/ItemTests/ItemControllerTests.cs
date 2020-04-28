@@ -27,7 +27,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
         public void SearchItem_should_return_200OK_and_a_ItemStateDTO()
         {
             //* Arrange
-            var retDTO = new ItemStateDTO
+            var retDTO = new ItemDTO
             {
                 Id = 1,
                 OrderId = 1,
@@ -47,7 +47,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             //* Assert
             Assert.IsNotNull(response);
             Assert.AreEqual(200, response.StatusCode);
-            Assert.IsInstanceOfType(response.Value as ItemStateDTO, typeof(ItemStateDTO));
+            Assert.IsInstanceOfType(response.Value as ItemDTO, typeof(ItemDTO));
         }
 
         [TestMethod]
@@ -95,7 +95,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             long itemID = 1;
 
             // Mock dto and service
-            ItemStateDTO itemstate = new ItemStateDTO
+            ItemDTO itemstate = new ItemDTO
             {
                 Id = itemID,
                 OrderId = 2,
@@ -114,7 +114,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             //* Assert
             Assert.IsNotNull(response);
             Assert.AreEqual(200, response.StatusCode);
-            Assert.IsInstanceOfType(response.Value as ItemStateDTO, typeof(ItemStateDTO));
+            Assert.IsInstanceOfType(response.Value as ItemDTO, typeof(ItemDTO));
         }
 
         [TestMethod]
