@@ -11,8 +11,9 @@ namespace ThjonustukerfiWebAPI.Models.InputModels
         public long? ServiceId { get; set; }
 
         [Required]
-        public bool Sliced { get; set; }
-        public bool Filleted { get; set; }
+        public bool? Sliced { get; set; }
+        [Required]
+        public bool? Filleted { get; set; }
         public string OtherCategory { get; set; }
         public string OtherService { get; set; }
         public string Details { get; set; }

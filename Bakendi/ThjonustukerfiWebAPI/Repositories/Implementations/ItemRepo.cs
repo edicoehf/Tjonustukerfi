@@ -61,8 +61,6 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             editState = editService = editOrder = editCategory = checkOrderComplete = editSlice = editFilleted = editOtherCategory = editOtherService = editDetails = false;
             long orderID = -1;
 
-            //! eftir: slice, fillet, othercat, otherserv, details
-
             // finish all checks before editing anything, unfilled inputs will not be edited
             if(input.StateId != null)
             {
