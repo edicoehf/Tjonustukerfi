@@ -1,4 +1,4 @@
-Button.update-order-button {
+.update-order a.update-order-button {
     display: flex;
     justify-content: center;
     background-color: rgb(209, 209, 30);
@@ -8,25 +8,24 @@ Button.update-order-button {
     margin: 0 1.5em 0 1.5em;
 }
 
-Button.update-order-button:hover {
+.update-order a.update-order-button:hover {
     background-color: rgb(138, 138, 20);
 }
 
-Button.update-order-button:hover b {
+.update-order a.update-order-button:hover b {
     opacity: 0;
 }
 
-Button.update-order-button:hover .update-icon {
+.update-order a.update-order-button:hover .update-icon {
     opacity: 1;
     margin-left: 45%;
-    margin-bottom: 10%;
 }
 
-Button.update-order-button b {
+.update-order a.update-order-button b {
     margin-right: 10%;
     opacity: 1;
 }
 
-Button.update-order-button .update-icon {
+.update-order a.update-order-button .update-icon {
     opacity: 0;
 }
