@@ -68,7 +68,7 @@ namespace ThjonustukerfiWebAPI.Controllers
         /// <response code="404">Item with given ID not found.</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Route("{id:long}/history")]
+        [Route("{id:long}/itemhistory")]
         [HttpGet]
         public IActionResult GetItemHistory(long id)
         {
