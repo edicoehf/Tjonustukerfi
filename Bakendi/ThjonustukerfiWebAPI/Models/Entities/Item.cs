@@ -14,6 +14,7 @@ namespace ThjonustukerfiWebAPI.Models.Entities
         public long ServiceId { get; set; }
         public string Barcode { get; set; }
         public string JSON { get; set; }    // extra information
+        public string Details { get; set; } // for extra details needed for the item
         // Auto generated
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
