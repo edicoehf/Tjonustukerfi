@@ -10,8 +10,10 @@ namespace ThjonustukerfiWebAPI.Models.InputModels
         [Required]
         public long? ServiceId { get; set; }
 
-				[Required]
-				public string Slices { get; set; }
+        [Required]
+        public string Slices { get; set; }
+        public string OtherCategory { get; set; }
+        public string OtherService { get; set; }
 
         //*     Overrides     *//
         public static bool operator ==(ItemInputModel i1, ItemInputModel i2)

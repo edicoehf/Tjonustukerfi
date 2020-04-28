@@ -66,7 +66,7 @@ namespace ThjonustukerfiWebAPI.Mappings
             .ForMember(src => src.Id, opt => opt.Ignore())
             .AfterMap((src, dst) =>
             {
-                DatabaseBuilder();  // create a db instance
+                BuildDatabase();  // create a db instance
 
                 dst.extraDataJSON = src.JSON;   // get the json data
                 dst.Category = _dbContext.Category.FirstOrDefault(c => c.Id == src.CategoryId).Name;    // Get category name
@@ -82,7 +82,7 @@ namespace ThjonustukerfiWebAPI.Mappings
                 // add all timestamps of the item to the json array
                 foreach (var stamp in timestampList)
                 {
-                    timeStamps.Add(JsonConvert.SerializeObject(new TimestampArchiveInput()  // special input that does not include the timestamp ID (no need)
+                    timeStamps.Add(JsonConvert.SerializeObject(new
                     {
                         StateId = stamp.StateId,
                         TimeOfChange = stamp.TimeOfChange
@@ -108,7 +108,7 @@ namespace ThjonustukerfiWebAPI.Mappings
             CreateMap<Order, OrderDTO>()
                 .AfterMap((src, dst) =>
                 {
-                    DatabaseBuilder();  // build instance of db
+                    BuildDatabase();  // build instance of db
 
                     dst.Customer = _dbContext.Customer.FirstOrDefault(c => c.Id == src.CustomerId).Name;
 
@@ -139,7 +139,7 @@ namespace ThjonustukerfiWebAPI.Mappings
                 .ForMember(src => src.Id, opt => opt.Ignore())
                 .AfterMap((src, dst) =>
                 {
-                    DatabaseBuilder();  // Create the db instance
+                    BuildDatabase();  // Create the db instance
 
                     dst.Customer = _dbContext.Customer.FirstOrDefault(c => c.Id == src.CustomerId).Name;        // get the customers name
                     dst.OrderSize = _dbContext.ItemOrderConnection.Where(ioc => ioc.OrderId == src.Id).Count(); // see the size of the order
@@ -173,7 +173,7 @@ namespace ThjonustukerfiWebAPI.Mappings
             CreateMap<ItemStateChangeInputIdScanner, ItemStateChangeBarcodeScanner>();
         }
 
-        private void DatabaseBuilder()
+        private void BuildDatabase()
         {
             if(_connectionString != null)
             {

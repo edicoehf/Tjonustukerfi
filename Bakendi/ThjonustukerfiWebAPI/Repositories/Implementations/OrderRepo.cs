@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Newtonsoft.Json;
 using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.Entities;
@@ -195,13 +196,20 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
             var addItems = new List<Item>();
 
-
             // Ready Items for DB input
             foreach(var item in inpItems)
             {
                 var itemToAdd = _mapper.Map<Item>(item);
                 itemToAdd.Barcode = newItemBarcode.ToString();
-                itemToAdd.JSON = @"{""location"": ""Vinnslu"", ""slices"": """ + item.Slices + @"""}";
+                
+                itemToAdd.JSON = JsonConvert.SerializeObject(new
+                {
+                    location = "Vinnslu",
+                    slices = item.Slices,
+                    otherCategory = item.OtherCategory == null ? "" : item.OtherCategory,
+                    otherService = item.OtherService == null ? "" : item.OtherService
+                });
+
                 addItems.Add(itemToAdd);
 
                 // Increment barcode

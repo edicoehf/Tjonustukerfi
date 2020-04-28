@@ -324,10 +324,10 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // Get the json object and change it and write it back (making sure only to change the location property if there are any other properties there)
             if(entity.JSON != null && location != null)
             {
-                JObject rss = JObject.Parse(entity.JSON);                   // parse the entity
-                var prop = rss.Property("location");                        // get the location property
-                prop.Value = location;                                      // set the location
-                entity.JSON = $"{{{prop.ToString()}}}";   // serialize back to string
+                JObject rss = JObject.Parse(entity.JSON);           // parse the entity
+                var prop = rss.Property("location");                // get the location property
+                prop.Value = location;                              // set the location
+                entity.JSON = JsonConvert.SerializeObject(rss);     // serialize back
             }
 
             // Update/create timestamp
