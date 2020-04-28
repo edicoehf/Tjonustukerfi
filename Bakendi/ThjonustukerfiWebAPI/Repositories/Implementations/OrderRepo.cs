@@ -407,6 +407,11 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             return readyOrders; // return the DTO of all these orders
         }
 
+        public List<OrderDTO> GetOrderReadyForPickupByCustomerID(long customerId)
+        {
+            return _mapper.Map<List<OrderDTO>>(GetOrdersReadyForPickup().Where(o => o.CustomerId == customerId));
+        }
+
         public void IncrementNotification(long orderId)
         {
             var order = _dbContext.Order.FirstOrDefault(o => o.Id == orderId);

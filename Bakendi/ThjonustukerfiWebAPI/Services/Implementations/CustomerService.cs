@@ -14,12 +14,10 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
     {
         private ICustomerRepo _customerRepo;
         private IOrderRepo _orderRepo;
-        private IMapper _mapper;
-        public CustomerService(ICustomerRepo customerRepo, IOrderRepo orderRepo, IMapper mapper)
+        public CustomerService(ICustomerRepo customerRepo, IOrderRepo orderRepo)
         {
             _customerRepo = customerRepo;
             _orderRepo = orderRepo;
-            _mapper = mapper;
         }
         public CustomerDTO CreateCustomer(CustomerInputModel customer) => _customerRepo.CreateCustomer(customer);
         public CustomerDetailsDTO GetCustomerById(long id) => _customerRepo.GetCustomerById(id);
@@ -62,10 +60,8 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         public List<OrderDTO> GetPickupOrdersByCustomerId(long customerId)
         {
             if(!_customerRepo.CustomerExists(customerId)) { throw new NotFoundException($"Customer with ID {customerId} was not found."); }
-            
-            var orders = _orderRepo.GetOrdersReadyForPickup().Where(o => o.CustomerId == customerId).ToList();
 
-            return _mapper.Map<List<OrderDTO>>(orders);
+            return _orderRepo.GetActiveOrdersByCustomerId(customerId);
         }
     }
 }
