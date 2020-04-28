@@ -1,4 +1,5 @@
 ﻿using HandtolvuApp.Controls;
+using HandtolvuApp.Data.Interfaces;
 using HandtolvuApp.Models;
 using System;
 using System.Collections.Generic;
@@ -8,21 +9,24 @@ using Xamarin.Forms;
 
 namespace HandtolvuApp.ViewModels
 {
-    class OrderInputViewModel : INotifyPropertyChanged
+    class OrderInputViewModel : ScannerViewModel
     {
-        public OrderInputViewModel()
+        public OrderInputViewModel() : base()
         {
             Placeholder = "Sláðu inn pöntunarnúmer";
 
+            ScannedBarcodeText = "";
+
             ClickCommand = new Command(async () =>
             {
-                if(InputVariable != null)
+                if(ScannedBarcodeText != null)
                 {
-                    Order order = await App.ItemManager.GetOrderAsync(inputVariable);
+                    Order order = await App.OrderManager.GetOrderAsync(ScannedBarcodeText);
                     if(order == null)
                     {
                         MessagingCenter.Send<OrderInputViewModel>(this, "NoOrder");
                         Placeholder = "Pöntunarnúmer er ekki til";
+                        ScannedBarcodeText = "";
                     }
                     else
                     {
@@ -38,40 +42,8 @@ namespace HandtolvuApp.ViewModels
                 }
             });
         }
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        string inputVariable;
-
-        public string InputVariable
-        {
-            get => inputVariable;
-
-            set
-            {
-                inputVariable = value;
-
-                var args = new PropertyChangedEventArgs(nameof(InputVariable));
-
-                PropertyChanged?.Invoke(this, args);
-            }
-        }
 
         public Command ClickCommand { get; }
 
-        string placeholder;
-
-        public string Placeholder
-        {
-            get => placeholder;
-
-            set
-            {
-                placeholder = value;
-
-                var args = new PropertyChangedEventArgs(nameof(Placeholder));
-
-                PropertyChanged?.Invoke(this, args);
-            }
-        }
     }
 }

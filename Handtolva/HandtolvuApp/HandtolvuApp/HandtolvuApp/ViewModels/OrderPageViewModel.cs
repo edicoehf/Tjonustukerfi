@@ -8,18 +8,17 @@ using Xamarin.Forms;
 
 namespace HandtolvuApp.ViewModels
 {
-    class OrderPageViewModel : INotifyPropertyChanged
+    class OrderPageViewModel : BaseViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public OrderPageViewModel(Order o)
         {
             Order = o;
 
             SelectedItemChangedCommand = new Command(async () =>
             {
+                NextStates n = await App.ItemManager.GetNextStatesAsync(SelectedItem.Barcode);
                 SelectedItem.OrderId = Order.Id;
-                var itemVM = new ItemViewModel(SelectedItem);
+                var itemVM = new ItemViewModel(SelectedItem, n);
                 var itemPage = new ItemPage();
                 itemPage.BindingContext = itemVM;
                 await App.Current.MainPage.Navigation.PushAsync(itemPage);
@@ -27,7 +26,7 @@ namespace HandtolvuApp.ViewModels
 
             CheckoutCommand = new Command(async () =>
             {
-                await App.ItemManager.CheckoutOrder(Order.Id);
+                await App.OrderManager.CheckoutOrder(Order.Id);
             });
         }
 
@@ -41,9 +40,7 @@ namespace HandtolvuApp.ViewModels
             {
                 selectedItem = value;
 
-                var args = new PropertyChangedEventArgs(nameof(SelectedItem));
-
-                PropertyChanged?.Invoke(this, args);
+                NotifyPropertyChanged(nameof(SelectedItem));
             }
         }
 
@@ -61,9 +58,7 @@ namespace HandtolvuApp.ViewModels
             {
                 order = value;
 
-                var args = new PropertyChangedEventArgs(nameof(Order));
-
-                PropertyChanged?.Invoke(this, args);
+                NotifyPropertyChanged(nameof(Order));
             }
         }
     }
