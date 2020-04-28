@@ -12,7 +12,6 @@ const ItemDetails = ({ id, updated, receivedUpdate }) => {
     }
     return (
         <>
-            {" "}
             {!isLoading ? (
                 <div className="item-details">
                     {!error ? (
