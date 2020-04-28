@@ -11,6 +11,7 @@ namespace ThjonustukerfiWebAPI.Models.DTOs
         public string Category { get; set; }
         public string State { get; set; }
         public string JSON { get; set; }
+        public string Details { get; set; }
         public DateTime DateModified { get; set; }
 
         //*     Overrides     *//
