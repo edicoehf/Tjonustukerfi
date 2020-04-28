@@ -96,7 +96,7 @@ namespace ThjonustukerfiWebAPI.Configurations
                 new Service() {Name = "Taðreyking", Id = 2},
                 new Service() {Name = "ViðarReyking", Id = 3},
                 new Service() {Name = "Salt pækill", Id = 4},
-                new Service() {Name = "Other", Id = 5}
+                new Service() {Name = "Annað", Id = 5}
             };
 
             //* Add Service states here
@@ -156,7 +156,7 @@ namespace ThjonustukerfiWebAPI.Configurations
                 new Category() {Name = "Lax", Id = 1},
                 new Category() {Name = "Silungur", Id = 2},
                 new Category() {Name = "Lambakjöt", Id = 3},
-                new Category() {Name = "Other", Id = 4}
+                new Category() {Name = "Annað", Id = 4}
             };
         }
     }
