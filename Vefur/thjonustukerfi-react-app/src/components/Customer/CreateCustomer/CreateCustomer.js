@@ -7,16 +7,12 @@ const CreateCustomer = () => {
     const { error, handleCreate, isProcessing } = useCreateCustomer();
 
     return (
-        <div className="body">
-            <div className="header">
-                <h1>Nýr viðskiptavinur</h1>
-            </div>
-            <div className="body">
-                <CustomerInputForm
-                    processing={isProcessing}
-                    submitHandler={handleCreate}
-                />
-            </div>
+        <div className="create-customer">
+            <h1>Nýr viðskiptavinur</h1>
+            <CustomerInputForm
+                processing={isProcessing}
+                submitHandler={handleCreate}
+            />
             {error && <div>Gat ekki bætt við viðskiptavin</div>}
         </div>
     );

@@ -16,3 +16,7 @@
     justify-content: center;
     color: rgb(102, 100, 0);
 }
+
+.customer-main .search-bar {
+    align-self: center;
+}
