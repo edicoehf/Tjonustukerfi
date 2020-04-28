@@ -18,8 +18,8 @@ const useOrderForm = (initialState, validate, submitHandler) => {
                     order.items.push({
                         categoryId: parseInt(item.category),
                         serviceId: parseInt(item.service),
-                        sliced: item.sliced,
-                        filleted: item.filleted,
+                        sliced: item.sliced === "sliced" ? true : false,
+                        filleted: item.filleted === "filleted" ? true : false,
                         other: item.other,
                     });
                 }
