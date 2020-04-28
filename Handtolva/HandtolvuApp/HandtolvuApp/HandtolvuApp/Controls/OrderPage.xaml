@@ -20,8 +20,8 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-        <Button Text="Skrá út" Grid.Row="0"  Grid.Column="0"
-                Grid.ColumnSpan="2" Command="{Binding CheckoutCommand}" 
+        <Button Text="Vara sótt" Grid.Row="0"  Grid.Column="1"
+                Grid.ColumnSpan="3" Command="{Binding CheckoutCommand}" 
                 Margin="10, 10, 10, 10" BackgroundColor="DodgerBlue"
                 CornerRadius="20"/>
 
