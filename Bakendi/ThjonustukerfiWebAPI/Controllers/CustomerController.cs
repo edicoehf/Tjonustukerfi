@@ -17,9 +17,9 @@ namespace ThjonustukerfiWebAPI.Controllers
             _customerService = customerService;
         }
 
-        /// <summary>Gets all customers</summary>
-        /// <returns>A list of all customers</returns>
-        /// <response code="200">List of all customers, empty list if none exist</response>
+        /// <summary>Gets all customers.</summary>
+        /// <returns>A list of all customers.</returns>
+        /// <response code="200">List of all customers, empty list if none exist.</response>
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Route("")]
@@ -31,7 +31,7 @@ namespace ThjonustukerfiWebAPI.Controllers
 
         /// <summary>Adds a new customer to the database.</summary>
         /// <param name="customer"></param>
-        /// <returns>A created at route</returns>
+        /// <returns>A created at route.</returns>
         /// <response code="201">Returns the route to the resource.</response>
         /// <response code="400">Returns bad request if the model state is not valid.</response>
         /// <response code="409">Returns conflict if the identifier (e-mail) already exists.</response>
@@ -48,10 +48,10 @@ namespace ThjonustukerfiWebAPI.Controllers
             return CreatedAtRoute("GetCustomerById", new { id = entity.Id }, null);
         }
 
-        /// <summary>Gets a customer by ID</summary>
-        /// <returns>A single customer</returns>
-        /// <response code="200">Returns a single customer with given ID</response>
-        /// <response code="404">Returns not found if the customer with the ID does not exist</response>
+        /// <summary>Gets a customer by ID.</summary>
+        /// <returns>A single customer.</returns>
+        /// <response code="200">Returns a single customer with given ID.</response>
+        /// <response code="404">Returns not found if the customer with the ID does not exist.</response>
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -64,11 +64,11 @@ namespace ThjonustukerfiWebAPI.Controllers
             return Ok(customer);
         }
 
-        /// <summary>Updates customer detailes</summary>
-        /// <returns>OK 200 status</returns>
+        /// <summary>Updates customer detailes.</summary>
+        /// <returns>OK 200 status.</returns>
         /// <response code="200">Customer has been successfully updated.</response>
         /// <response code="400">The input model was not valid.</response>
-        /// <response code="404">The customer with the given ID was not found</response>
+        /// <response code="404">The customer with the given ID was not found.</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -82,11 +82,11 @@ namespace ThjonustukerfiWebAPI.Controllers
         
         }
 
-        /// <summary>Deletes a customer with the given ID</summary>
-        /// <returns>Returns no content</returns>
-        /// <response code="204">Customer successfully deleted</response>
-        /// <response code="404">Customer with the given ID was not found</response>
-        /// <response code="409">Customer has active orders, no changes done and active orders are returned</response>
+        /// <summary>Deletes a customer with the given ID.</summary>
+        /// <returns>Returns no content.</returns>
+        /// <response code="204">Customer successfully deleted.</response>
+        /// <response code="404">Customer with the given ID was not found.</response>
+        /// <response code="409">Customer has active orders, no changes done and active orders are returned.</response>
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -102,10 +102,10 @@ namespace ThjonustukerfiWebAPI.Controllers
             return NoContent();
         }
 
-        /// <summary>Deletes a customer and removes all orders that are active with that customer as well</summary>
-        /// <returns>No Content</returns>
-        /// <response code="204">Customer successfully deleted</response>
-        /// <response code="404">Customer with the given ID was not found</response>
+        /// <summary>Deletes a customer and removes all orders that are active with that customer as well.</summary>
+        /// <returns>No Content.</returns>
+        /// <response code="204">Customer successfully deleted.</response>
+        /// <response code="404">Customer with the given ID was not found.</response>
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("{id:int}/confirm")]
@@ -115,6 +115,16 @@ namespace ThjonustukerfiWebAPI.Controllers
             _customerService.DeleteCustomerByIdAndOrders(id);
 
             return NoContent();
+        }
+
+        /// <summary>Gets all orders that are ready to be picked up by customer ID. Returns an empty list if customer has no complete orders.</summary>
+        /// <returns>List of Orders, empty if non exist.</returns>
+        /// <response code="404">Customer with given ID was not found.</response>
+        [Route("{id:long}/readyorders")]
+        [HttpGet]
+        public IActionResult GetPickupOrdersByCustomerId(long id)
+        {
+            return Ok(_customerService.GetPickupOrdersByCustomerId(id));
         }
     }
 }
