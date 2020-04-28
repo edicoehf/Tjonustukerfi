@@ -96,17 +96,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             {
                 for(var i = 0; i < items.Count; i++)
                 {
-                    items[i].CategoryId = (long)order.Items[i].CategoryId;
-                    items[i].ServiceId = (long)order.Items[i].ServiceId;
-                    items[i].DateModified = DateTime.Now;
-                    items[i].Details = order.Items[i].Details;
-
-                    JObject rss = JObject.Parse(items[i].JSON);
-                    rss.Property("sliced").Value = order.Items[i].Sliced;
-                    rss.Property("filleted").Value = order.Items[i].Filleted;
-                    rss.Property("otherCategory").Value = order.Items[i].OtherCategory;
-                    rss.Property("otherService").Value = order.Items[i].OtherService;
-                    items[i].JSON = JsonConvert.SerializeObject(rss);
+                    items[i].CopyInputToSelf(order.Items[i]);
                 }
             }
             else if(items.Count == 0 && order.Items.Count > 0)      // if the list in the database is empty, just add the new ones
@@ -120,18 +110,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 var i = 0;
                 for( ; i < items.Count; i++)
                 {
-                    items[i].CategoryId = (long)order.Items[i].CategoryId;
-                    items[i].ServiceId = (long)order.Items[i].ServiceId;
-                    items[i].DateModified = DateTime.Now;
-
-                    items[i].Details = order.Items[i].Details;
-
-                    JObject rss = JObject.Parse(items[i].JSON);
-                    rss.Property("sliced").Value = order.Items[i].Sliced;
-                    rss.Property("filleted").Value = order.Items[i].Filleted;
-                    rss.Property("otherCategory").Value = order.Items[i].OtherCategory;
-                    rss.Property("otherService").Value = order.Items[i].OtherService;
-                    items[i].JSON = JsonConvert.SerializeObject(rss);
+                    items[i].CopyInputToSelf(order.Items[i]);
                 }
 
                 // Build the rest of the list
@@ -151,18 +130,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 var i = 0;
                 for( ; i < order.Items.Count; i++)
                 {
-                    items[i].CategoryId = (long)order.Items[i].CategoryId;
-                    items[i].ServiceId = (long)order.Items[i].ServiceId;
-                    items[i].DateModified = DateTime.Now;
-
-                    items[i].Details = order.Items[i].Details;
-
-                    JObject rss = JObject.Parse(items[i].JSON);
-                    rss.Property("sliced").Value = order.Items[i].Sliced;
-                    rss.Property("filleted").Value = order.Items[i].Filleted;
-                    rss.Property("otherCategory").Value = order.Items[i].OtherCategory;
-                    rss.Property("otherService").Value = order.Items[i].OtherService;
-                    items[i].JSON = JsonConvert.SerializeObject(rss);
+                    items[i].CopyInputToSelf(order.Items[i]);
                 }
 
                 // rest of the items to delete off the tail as well as the timestamp

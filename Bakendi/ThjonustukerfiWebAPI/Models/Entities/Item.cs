@@ -1,5 +1,8 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using ThjonustukerfiWebAPI.Models.InputModels;
 
 namespace ThjonustukerfiWebAPI.Models.Entities
 {
@@ -19,6 +22,22 @@ namespace ThjonustukerfiWebAPI.Models.Entities
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
         public DateTime? DateCompleted { get; set; }
+
+        /// <summary>Takes an ItemInputModel and copies all variables as well as copy json objects correctly to its json string.</summary>
+        public void CopyInputToSelf(ItemInputModel other)
+        {
+            this.CategoryId = (long)other.CategoryId;
+            this.ServiceId = (long)other.ServiceId;
+            this.DateModified = DateTime.Now;
+            this.Details = other.Details;
+
+            JObject rss = JObject.Parse(this.JSON);
+            rss.Property("sliced").Value = other.Sliced;
+            rss.Property("filleted").Value = other.Filleted;
+            rss.Property("otherCategory").Value = other.OtherCategory == null ? "" : other.OtherCategory;
+            rss.Property("otherService").Value = other.OtherService == null ? "" : other.OtherService;
+            this.JSON = JsonConvert.SerializeObject(rss);
+        }
 
         //*     Overrides     *//
         public static bool operator ==(Item i1, Item i2)
