@@ -18,6 +18,8 @@ import {
 const initialState = {
     category: null,
     service: null,
+    otherCategory: "",
+    otherService: "",
     amount: 1,
     sliced: null,
     filleted: null,
@@ -25,7 +27,31 @@ const initialState = {
 };
 
 const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
-    const [details, setDetails] = React.useState(false);
+    const [isDetailsHidden, setDetailsHidden] = React.useState(true);
+    const [isOtherServiceHidden, setOtherServiceHidden] = React.useState(true);
+    const [isOtherCategoryHidden, setOtherCategoryHidden] = React.useState(
+        true
+    );
+
+    const handleOtherChange = (e) => {
+        console.log(e.target);
+        if (e.target.name === "service") {
+            if (e.target.value === services.length.toString()) {
+                setOtherServiceHidden(false);
+            } else {
+                setOtherServiceHidden(true);
+            }
+        }
+
+        if (e.target.name === "category") {
+            if (e.target.value === categories.length.toString()) {
+                setOtherCategoryHidden(false);
+            } else {
+                setOtherCategoryHidden(true);
+            }
+        }
+    };
+
     const getExistingItemWithIds = (item) => {
         let idItem = { ...item };
         const s = services[services.findIndex((s) => s.name === item.service)];
@@ -45,7 +71,7 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
         : initialState;
 
     const handleSubmitAndReset = (values) => {
-        setDetails(false);
+        setDetailsHidden(true);
         submitHandler(values, resetFields);
     };
 
@@ -54,6 +80,7 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
         itemValidate,
         handleSubmitAndReset
     );
+
     return (
         <FormControl component="fieldset">
             <FormLabel component="legend">Tegund:</FormLabel>
@@ -68,10 +95,28 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
                     <FormControlLabel
                         key={cat.id}
                         value={`${cat.id}`}
-                        control={<Radio />}
+                        control={
+                            <Radio onChange={(e) => handleOtherChange(e)} />
+                        }
                         label={cat.name}
                     />
                 ))}
+                <FormControlLabel
+                    key={categories.length + 1}
+                    value={`${categories.length + 1}`}
+                    control={<Radio onChange={handleOtherChange} />}
+                    label="Annað"
+                />
+                <TextField
+                    name="otherCategory"
+                    className="select"
+                    value={values.otherCategory}
+                    type="text"
+                    variant="standard"
+                    onChange={handleChange}
+                    placeholder="Hvaða Tegund?"
+                    hidden={isOtherCategoryHidden}
+                />
             </RadioGroup>
             <FormLabel component="legend">Þjónusta:</FormLabel>
             <RadioGroup
@@ -85,10 +130,26 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
                     <FormControlLabel
                         key={serv.id}
                         value={`${serv.id}`}
-                        control={<Radio />}
+                        control={<Radio onChange={handleOtherChange} />}
                         label={serv.name}
                     />
                 ))}
+                <FormControlLabel
+                    key={services.length + 1}
+                    value={`${services.length + 1}`}
+                    control={<Radio onChange={handleOtherChange} />}
+                    label="Annað"
+                />
+                <TextField
+                    name="otherService"
+                    className="select"
+                    value={values.otherService}
+                    type="text"
+                    variant="standard"
+                    onChange={handleChange}
+                    placeholder="Hvaða þjónusta?"
+                    hidden={isOtherServiceHidden}
+                />
             </RadioGroup>
             <FormLabel component="legend">Flökun:</FormLabel>
             <RadioGroup
@@ -149,26 +210,23 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
                 <>
                     <FormLabel
                         component="legend"
-                        onClick={() => setDetails(!details)}
+                        onClick={() => setDetailsHidden(!isDetailsHidden)}
                     >
                         Annað: <AddIcon fontSize="small" />
                     </FormLabel>
                     {errors.details && (
                         <p className="error">{errors.details}</p>
                     )}
-                    {details ? (
-                        <TextField
-                            id="outlined-multiline-flexible select"
-                            name="details"
-                            label="Var það eitthvað annað?"
-                            multiline
-                            value={values.details}
-                            onChange={handleChange}
-                            variant="outlined"
-                        />
-                    ) : (
-                        <></>
-                    )}
+                    <TextField
+                        id="outlined-multiline-flexible select"
+                        name="details"
+                        label="Var það eitthvað annað?"
+                        multiline
+                        value={values.details}
+                        onChange={handleChange}
+                        variant="outlined"
+                        hidden={isDetailsHidden}
+                    />
                 </>
             )}
             <Button
