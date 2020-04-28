@@ -117,7 +117,7 @@ namespace ThjonustukerfiWebAPI.Controllers
             return NoContent();
         }
 
-        /// <summary>Gets all orders that are ready to be picked up by customer ID.</summary>
+        /// <summary>Gets all orders that are ready to be picked up by customer ID. Returns an empty list if customer has no complete orders.</summary>
         /// <returns>List of Orders, empty if non exist.</returns>
         /// <response code="404">Customer with given ID was not found.</response>
         [Route("{id:long}/readyorders")]
