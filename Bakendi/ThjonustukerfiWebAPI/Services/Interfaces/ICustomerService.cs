@@ -29,5 +29,8 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
 
         /// <summary>Deletes customer and all of their active orders</summary>
         void DeleteCustomerByIdAndOrders(long customerId);
+
+        /// <summary>Gets all orders ready to be picked up by customer ID</summary>
+        List<OrderDTO> GetPickupOrdersByCustomerId(long customerId);
     }
 }

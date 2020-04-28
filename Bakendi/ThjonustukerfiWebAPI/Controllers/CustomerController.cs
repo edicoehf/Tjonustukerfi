@@ -116,5 +116,15 @@ namespace ThjonustukerfiWebAPI.Controllers
 
             return NoContent();
         }
+
+        /// <summary>Gets all orders that are ready to be picked up by customer ID</summary>
+        /// <returns>List of Orders</returns>
+        /// <response code="404">Customer with given ID was not found</response>
+        [Route("{id:long}/readyorders")]
+        [HttpGet]
+        public IActionResult GetPickupOrdersByCustomerId(long id)
+        {
+            return Ok(_customerService.GetPickupOrdersByCustomerId(id));
+        }
     }
 }

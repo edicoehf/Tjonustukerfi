@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.Exceptions;
 using ThjonustukerfiWebAPI.Models.InputModels;
@@ -13,10 +14,12 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
     {
         private ICustomerRepo _customerRepo;
         private IOrderRepo _orderRepo;
-        public CustomerService(ICustomerRepo customerRepo, IOrderRepo orderRepo)
+        private IMapper _mapper;
+        public CustomerService(ICustomerRepo customerRepo, IOrderRepo orderRepo, IMapper mapper)
         {
             _customerRepo = customerRepo;
             _orderRepo = orderRepo;
+            _mapper = mapper;
         }
         public CustomerDTO CreateCustomer(CustomerInputModel customer) => _customerRepo.CreateCustomer(customer);
         public CustomerDetailsDTO GetCustomerById(long id) => _customerRepo.GetCustomerById(id);
@@ -54,6 +57,15 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
 
             // After deleting orders (if any) delete the customer
             _customerRepo.DeleteCustomerById(customerId);
+        }
+
+        public List<OrderDTO> GetPickupOrdersByCustomerId(long customerId)
+        {
+            if(!_customerRepo.CustomerExists(customerId)) { throw new NotFoundException($"Customer with ID {customerId} was not found."); }
+            
+            var orders = _orderRepo.GetOrdersReadyForPickup().Where(o => o.CustomerId == customerId).ToList();
+
+            return _mapper.Map<List<OrderDTO>>(orders);
         }
     }
 }

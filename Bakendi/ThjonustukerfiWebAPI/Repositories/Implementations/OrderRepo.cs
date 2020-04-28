@@ -376,6 +376,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             var itemOrderConnections = _dbContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderId).ToList();
 
             if(itemOrderConnections.Count == 0) { return false; }   // if no item exists in order, then it isn't complete
+            if(order.DateCompleted != null) { return false; }   // order is already complete and customer has picked it up
 
             foreach (var itemConnection in itemOrderConnections)
             {
@@ -386,8 +387,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 // get items current step
                 var itemStep = _dbContext.ServiceState.FirstOrDefault(ss => ss.ServiceId == item.ServiceId && ss.StateId == item.StateId).Step;
 
-                // if the item is not in the next to last step it is not ready to be picked up
-                if(itemStep != (lastStep - 1)) { return false; }
+                // if the item is not in the next to last step or last step it is not ready to be picked up
+                if(itemStep != (lastStep - 1) && itemStep != lastStep) { return false; }
             }
 
             return true;
