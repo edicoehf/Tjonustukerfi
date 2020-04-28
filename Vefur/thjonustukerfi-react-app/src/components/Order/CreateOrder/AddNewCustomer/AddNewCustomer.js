@@ -12,6 +12,7 @@ const AddNewCustomer = () => {
             <CustomerInputForm
                 processing={isProcessing}
                 submitHandler={handleCreate}
+                compact={true}
             />
             {error && <div>Gat ekki bætt við viðskiptavin</div>}
         </div>

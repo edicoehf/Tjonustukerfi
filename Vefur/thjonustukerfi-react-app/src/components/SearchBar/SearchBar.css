@@ -1,4 +1,7 @@
-.search-bar {
-    width: 100%;
-    text-align: center;
+.search-bar .MuiFormControl-root .MuiFormLabel-root {
+    color: rgba(0, 0, 0, 0.9);
+}
+
+.search-bar .form .MuiFormControl-root .MuiFormLabel-root.Mui-focused {
+    color: #3f51b5;
 }
