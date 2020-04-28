@@ -1,5 +1,5 @@
 const itemValidate = (values) => {
-    const { category, service, amount, sliced, filleted, other } = values;
+    const { category, service, amount, sliced, filleted, details } = values;
     const errors = {};
     if (category === null) {
         errors.category = "Tegund vantar";
@@ -18,8 +18,8 @@ const itemValidate = (values) => {
     if (filleted === null) {
         errors.filleted = "Tilgreining á flökun vantar";
     }
-    if (other.length > 250) {
-        errors.other = "Annað má aðeins vera 250 stafir";
+    if (details.length > 250) {
+        errors.details = "Annað má aðeins vera 250 stafir";
     }
     return errors;
 };

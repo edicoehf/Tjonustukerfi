@@ -46,7 +46,7 @@ const ViewItems = ({ items, remove }) => {
                                         ? "Bitar"
                                         : "Heilt Flak"}
                                 </TableCell>
-                                <TableCell>{item.other}</TableCell>
+                                <TableCell>{item.details}</TableCell>
                                 <TableCell align="right">
                                     <Fab
                                         className="dlt-btn"

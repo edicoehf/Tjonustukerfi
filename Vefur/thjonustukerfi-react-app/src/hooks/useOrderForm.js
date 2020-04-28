@@ -20,7 +20,7 @@ const useOrderForm = (initialState, validate, submitHandler) => {
                         serviceId: parseInt(item.service),
                         sliced: item.sliced === "sliced" ? true : false,
                         filleted: item.filleted === "filleted" ? true : false,
-                        other: item.other,
+                        details: item.details,
                     });
                 }
             });

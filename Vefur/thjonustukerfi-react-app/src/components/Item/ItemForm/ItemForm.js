@@ -21,11 +21,11 @@ const initialState = {
     amount: 1,
     sliced: null,
     filleted: null,
-    other: "",
+    details: "",
 };
 
 const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
-    const [other, setOther] = React.useState(false);
+    const [details, setDetails] = React.useState(false);
     const getExistingItemWithIds = (item) => {
         let idItem = { ...item };
         const s = services[services.findIndex((s) => s.name === item.service)];
@@ -45,6 +45,7 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
         : initialState;
 
     const handleSubmitAndReset = (values) => {
+        setDetails(false);
         submitHandler(values, resetFields);
     };
 
@@ -148,18 +149,20 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
                 <>
                     <FormLabel
                         component="legend"
-                        onClick={() => setOther(!other)}
+                        onClick={() => setDetails(!details)}
                     >
                         Annað: <AddIcon fontSize="small" />
                     </FormLabel>
-                    {errors.other && <p className="error">{errors.other}</p>}
-                    {other ? (
+                    {errors.details && (
+                        <p className="error">{errors.details}</p>
+                    )}
+                    {details ? (
                         <TextField
                             id="outlined-multiline-flexible select"
-                            name="other"
+                            name="details"
                             label="Var það eitthvað annað?"
                             multiline
-                            value={values.other}
+                            value={values.details}
                             onChange={handleChange}
                             variant="outlined"
                         />
