@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.Entities;
@@ -98,6 +99,14 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                     items[i].CategoryId = (long)order.Items[i].CategoryId;
                     items[i].ServiceId = (long)order.Items[i].ServiceId;
                     items[i].DateModified = DateTime.Now;
+                    items[i].Details = order.Items[i].Details;
+
+                    JObject rss = JObject.Parse(items[i].JSON);
+                    rss.Property("sliced").Value = order.Items[i].Sliced;
+                    rss.Property("filleted").Value = order.Items[i].Filleted;
+                    rss.Property("otherCategory").Value = order.Items[i].OtherCategory;
+                    rss.Property("otherService").Value = order.Items[i].OtherService;
+                    items[i].JSON = JsonConvert.SerializeObject(rss);
                 }
             }
             else if(items.Count == 0 && order.Items.Count > 0)      // if the list in the database is empty, just add the new ones
@@ -114,6 +123,15 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                     items[i].CategoryId = (long)order.Items[i].CategoryId;
                     items[i].ServiceId = (long)order.Items[i].ServiceId;
                     items[i].DateModified = DateTime.Now;
+
+                    items[i].Details = order.Items[i].Details;
+
+                    JObject rss = JObject.Parse(items[i].JSON);
+                    rss.Property("sliced").Value = order.Items[i].Sliced;
+                    rss.Property("filleted").Value = order.Items[i].Filleted;
+                    rss.Property("otherCategory").Value = order.Items[i].OtherCategory;
+                    rss.Property("otherService").Value = order.Items[i].OtherService;
+                    items[i].JSON = JsonConvert.SerializeObject(rss);
                 }
 
                 // Build the rest of the list
@@ -136,6 +154,15 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                     items[i].CategoryId = (long)order.Items[i].CategoryId;
                     items[i].ServiceId = (long)order.Items[i].ServiceId;
                     items[i].DateModified = DateTime.Now;
+
+                    items[i].Details = order.Items[i].Details;
+
+                    JObject rss = JObject.Parse(items[i].JSON);
+                    rss.Property("sliced").Value = order.Items[i].Sliced;
+                    rss.Property("filleted").Value = order.Items[i].Filleted;
+                    rss.Property("otherCategory").Value = order.Items[i].OtherCategory;
+                    rss.Property("otherService").Value = order.Items[i].OtherService;
+                    items[i].JSON = JsonConvert.SerializeObject(rss);
                 }
 
                 // rest of the items to delete off the tail as well as the timestamp
@@ -205,7 +232,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 itemToAdd.JSON = JsonConvert.SerializeObject(new
                 {
                     location = "Vinnslu",
-                    slices = item.Slices,
+                    sliced = item.Sliced,
+                    filleted = item.Filleted,
                     otherCategory = item.OtherCategory == null ? "" : item.OtherCategory,
                     otherService = item.OtherService == null ? "" : item.OtherService
                 });
