@@ -57,9 +57,11 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             var entity = _dbContext.Item.FirstOrDefault(i => i.Id == itemId);
             if(entity == null) { throw new NotFoundException($"Item with ID {itemId} was not found."); }
 
-            bool editState, editService, editOrder, editCategory, checkOrderComplete;
-            editState = editService = editOrder = editCategory = checkOrderComplete = false;
+            bool editState, editService, editOrder, editCategory, checkOrderComplete, editSlice, editFilleted, editOtherCategory, editOtherService, editDetails;
+            editState = editService = editOrder = editCategory = checkOrderComplete = editSlice = editFilleted = editOtherCategory = editOtherService = editDetails = false;
             long orderID = -1;
+
+            //! eftir: slice, fillet, othercat, otherserv, details
 
             // finish all checks before editing anything, unfilled inputs will not be edited
             if(input.StateId != null)
@@ -84,6 +86,11 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 if(_dbContext.Category.FirstOrDefault(t => t.Id == input.CategoryId) == null) { throw new NotFoundException($"Category with ID {input.CategoryId} was not found."); }
                 editCategory = true;
             }
+            if(input.Sliced != null) { editSlice = true; }
+            if(input.Filleted != null) { editFilleted = true; }
+            if(input.OtherCategory != null) { editOtherCategory = true; }
+            if(input.OtherService != null) { editOtherService = true; }
+            if(input.Details != null) { editDetails = true; }
 
             // Update Category
             if(editCategory) { entity.CategoryId = (long)input.CategoryId; }
@@ -112,16 +119,38 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 connection.OrderId = (long)input.OrderId;   // update the connection to the order
             }
 
+            // Update details
+            if(editDetails) { entity.Details = input.Details; }
+
+            // check and update JSON objects
+            JObject rss = JObject.Parse(entity.JSON);
+            if(editSlice)           { rss.Property("sliced").Value = input.Sliced; }
+            if(editFilleted)        { rss.Property("filleted").Value = input.Filleted; }
+            if(editOtherCategory)   { rss.Property("otherCategory").Value = input.OtherCategory; }
+            if(editOtherService)    { rss.Property("otherService").Value = input.OtherService; }
+            entity.JSON = JsonConvert.SerializeObject(rss);
+
             // If no changes are made, send a bad request response
-            if(!editCategory && !editState && !editService && !editOrder) {throw new BadRequestException($"The input had no valid values. No changes made."); }
+            if(!editCategory && !editState && !editService && !editOrder && !editDetails && !editSlice && !editFilleted && !editOtherCategory && !editOtherService) 
+            {
+                throw new BadRequestException($"The input had no valid values. No changes made.");
+            }
             else 
             {
                 // item and the order connected to it modified on this date
                 entity.DateModified = DateTime.Now;
 
-                _dbContext.Order.FirstOrDefault(o =>
-                    o.Id == _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == entity.Id).OrderId)  // find order connected to this item
-                        .DateModified = DateTime.Now;   // Update the date modified attribute in the order connected to this item
+                if(editOrder)
+                {
+                      // get the order that was changed
+                    _dbContext.Order.FirstOrDefault(o => o.Id == (long)input.OrderId).DateModified = DateTime.Now;   // Update the date modified attribute in the order connected to this item
+                }
+                else
+                {
+                    _dbContext.Order.FirstOrDefault(o =>
+                        o.Id == _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == entity.Id).OrderId)  // find order connected to this item
+                            .DateModified = DateTime.Now;   // Update the date modified attribute in the order connected to this item
+                }
             }
 
             _dbContext.SaveChanges();
