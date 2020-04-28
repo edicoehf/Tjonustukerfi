@@ -407,7 +407,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             return readyOrders; // return the DTO of all these orders
         }
 
-        public List<OrderDTO> GetOrderReadyForPickupByCustomerID(long customerId)
+        public List<OrderDTO> GetOrdersReadyForPickupByCustomerID(long customerId)
         {
             return _mapper.Map<List<OrderDTO>>(GetOrdersReadyForPickup().Where(o => o.CustomerId == customerId));
         }
