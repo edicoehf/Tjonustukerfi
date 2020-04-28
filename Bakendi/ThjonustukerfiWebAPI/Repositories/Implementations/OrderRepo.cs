@@ -174,7 +174,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             catch (System.Exception)
             {
                 var maxItem = _dbContext.Item.OrderByDescending(i => i.Barcode).FirstOrDefault();
-                code = maxItem.Barcode;
+                if(maxItem == null) { code = null; }
+                else { code = maxItem.Barcode; }
             }
 
             if(code == null) { code = "50500000"; }
@@ -369,6 +370,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             if(order == null) { throw new NotFoundException($"Order with ID {orderId} was not found."); }
 
             var itemOrderConnections = _dbContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderId).ToList();
+
+            if(itemOrderConnections.Count == 0) { return false; }   // if no item exists in order, then it isn't complete
 
             foreach (var itemConnection in itemOrderConnections)
             {

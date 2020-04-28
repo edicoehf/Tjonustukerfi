@@ -21,7 +21,7 @@ namespace ThjonustukerfiTests.Tests
         private DbContextOptions<DataContext> _options;
 
         [TestInitialize]
-        public void Initialize()
+        public void Initialize()    // runs before each test, fill database
         {
             
             // Add automapper to use in the repo constructor
@@ -33,11 +33,14 @@ namespace ThjonustukerfiTests.Tests
             .UseInMemoryDatabase(databaseName: "Customer")
             .EnableSensitiveDataLogging()
             .Options;
+
+            FillDatabase();
         }
 
         [TestCleanup]
-        public void Cleanup()
+        public void Cleanup()   // runs after each test, clear the database
         {
+            ClearDatabase();
             _mapper = null;
             _options = null;
         }
@@ -46,6 +49,7 @@ namespace ThjonustukerfiTests.Tests
         public void GetAllCustomers_should_return_an_empty_list()
         {
             //* Arrange
+            ClearDatabase();    // clear database for this test because it should be empty
             using (var mockContext = new DataContext(_options))
             {
                 var customerRepo = new CustomerRepo(mockContext, _mapper);
@@ -65,9 +69,6 @@ namespace ThjonustukerfiTests.Tests
             //* Arrange
             using(var mockContext = new DataContext(_options))
             {
-                //! Add only ONCE! Unless appending changes
-                FillDatabase(mockContext);
-
                 Assert.IsNotNull(mockContext);
                 Assert.IsTrue(mockContext.Customer.Any());
             }
@@ -147,8 +148,8 @@ namespace ThjonustukerfiTests.Tests
             //* Arrange
             var inp = new CustomerInputModel
             {
-                Name = "Kalli Valli",
-                Email = "KV@vigsig.is"
+                Name = "Viggi Siggi",
+                Email = "viggi@siggi.is"
             };
 
             using (var mockContext = new DataContext(_options))
@@ -272,36 +273,39 @@ namespace ThjonustukerfiTests.Tests
         }
 
         //**********     Helper functions     **********//
-        private void FillDatabase(DataContext mockContext)
+        private void FillDatabase()
         {
-            long id = 100;
-            // Mock entity 
-            Customer mockCustomer = new Customer
+            using(var mockContext = new DataContext(_options))
             {
-                Id = id,
-                Name = "Viggi Siggi",
-                SSN = "1308943149",
-                Email = "viggi@siggi.is",
-                Phone = "5812345",
-                Address = "Bakkabakki 1",
-                PostalCode = "800"
-            };
+                long id = 100;
+                // Mock entity 
+                Customer mockCustomer = new Customer
+                {
+                    Id = id,
+                    Name = "Viggi Siggi",
+                    SSN = "1308943149",
+                    Email = "viggi@siggi.is",
+                    Phone = "5812345",
+                    Address = "Bakkabakki 1",
+                    PostalCode = "800"
+                };
 
-            //! Add only ONCE! Unless appending changes
-            // Build a list of size 20, make it queryable for the database mock
-            var customers = Builder<Customer>.CreateListOfSize(20)
-                .TheFirst(1)
-                .With(c => c.Id = mockCustomer.Id)
-                .With(c => c.Name = mockCustomer.Name)
-                .With(c => c.SSN = mockCustomer.SSN)
-                .With(c => c.Email = mockCustomer.Email)
-                .With(c => c.Phone = mockCustomer.Phone)
-                .With(c => c.Address = mockCustomer.Address)
-                .With(c => c.PostalCode = mockCustomer.PostalCode)
-                .Build();
+                // Build a list of size 20, make it queryable for the database mock
+                var customers = Builder<Customer>.CreateListOfSize(20).Build();
+                customers.Add(mockCustomer);
 
-            mockContext.Customer.AddRange(customers);
-            mockContext.SaveChanges();
+                mockContext.Customer.AddRange(customers);
+                mockContext.SaveChanges();
+            }
+        }
+
+        private void ClearDatabase()
+        {
+            using(var mockContext = new DataContext(_options))
+            {
+                mockContext.Customer.RemoveRange(mockContext.Customer);
+                mockContext.SaveChanges();
+            }
         }
     }
 }

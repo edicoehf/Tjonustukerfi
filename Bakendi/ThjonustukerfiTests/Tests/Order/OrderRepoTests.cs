@@ -23,22 +23,20 @@ namespace ThjonustukerfiTests.Tests
         private DbContextOptions<DataContext> _options;
 
         [TestInitialize]
-        public void Initialize()
+        public void Initialize()    // Each initialize fills the database with information for testing
         {
-            // Setting up automapper and dbContext options
-            var myProfile = new MappingProfile();   // Create a new profile like the one we implemented
-            var myConfig = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));   // Setup a configuration with our profile
-            _mapper = new Mapper(myConfig); // Create a new mapper with our profile
-
             _options = new DbContextOptionsBuilder<DataContext>()
                 .UseInMemoryDatabase(databaseName: "ThjonuskerfiDB")
                 .EnableSensitiveDataLogging()
                 .Options;
+
+            FillDatabase();
         }
 
         [TestCleanup]
-        public void Cleanup()
+        public void Cleanup()   // Clears the database for the next test
         {
+            ClearDatabase();
             _mapper = null;
             _options = null;
         }
@@ -49,6 +47,8 @@ namespace ThjonustukerfiTests.Tests
             //* Arrange
             using (var mockContext = new DataContext(_options))
             {
+                ClearDatabase();    // clear database since for this test it should be empty
+                UpdateMapper(mockContext); // setup mapper with the correct context
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
                 //* Act
@@ -67,10 +67,6 @@ namespace ThjonustukerfiTests.Tests
             using(var mockContext = new DataContext(_options))
             {
                 //* Act
-                //! Note this test method is creating the in memory database,
-                //! so this arrange when build DB should only be run once, unless adding more info to it.
-                //! This Database will live through all the tests in this class
-                FillDatabase(mockContext);
 
                 //* Assert
                 // Checks if all added entities are actually there
@@ -256,13 +252,14 @@ namespace ThjonustukerfiTests.Tests
         }
 
         [TestMethod]
-        public void GetActiveOrdersByCustomerId_should_retrieve_correct_order()
+        public void GetActiveOrdersByCustomerId_should_retrieve_correct_orders()
         {
             //* Arrange
             long customerId = 50;
-            long orderIdExpected = 100;
+            long orderIdExpected1 = 100;
+            long orderIdExpected2 = 101;
             
-            // This order was created in the build database test. This person should only have this one order
+            // These orders were created in the build database test. This person should have 2 orders
             using(var mockContext = new DataContext(_options))
             {
                 // Needs an updated automapper that has access to the current instance of db context
@@ -274,8 +271,12 @@ namespace ThjonustukerfiTests.Tests
                 var activeList = orderRepo.GetActiveOrdersByCustomerId(customerId);
 
                 Assert.IsNotNull(activeList);
-                Assert.AreEqual(1, activeList.Count);
-                Assert.AreEqual(orderIdExpected, activeList[0].Id);
+                Assert.AreEqual(2, activeList.Count);
+
+                foreach (var order in activeList)   // should be equal to these two orders
+                {
+                    Assert.IsTrue(order.Id == orderIdExpected1 || order.Id == orderIdExpected2);
+                }
             }
         }
 
@@ -285,19 +286,19 @@ namespace ThjonustukerfiTests.Tests
             long orderID = 100;
             long custId = 50;
             //* Arrange
-            var orperInput = new OrderInputModel
+            var orderInput = new OrderInputModel
             {
                 CustomerId = custId,
                 Items = new List<ItemInputModel>()
                 {
                     new ItemInputModel 
                     {
-                        CategoryId = 1,
+                        CategoryId = 3,
                         ServiceId = 2
                     },
                     new ItemInputModel 
                     {
-                        CategoryId = 1,
+                        CategoryId = 3,
                         ServiceId = 3
                     },
                     new ItemInputModel 
@@ -317,11 +318,23 @@ namespace ThjonustukerfiTests.Tests
                 List<Item> oldItemList = new List<Item>();
                 foreach (var item in oldConnection)
                 {
-                    oldItemList.Add(mockContext.Item.FirstOrDefault(i => i.Id == item.ItemId));
+                    var itemAdd = mockContext.Item.FirstOrDefault(i => i.Id == item.ItemId);
+                    oldItemList.Add(new Item()  // copy to a new item (not copy reference)
+                    {
+                        Id = itemAdd.Id,
+                        CategoryId = itemAdd.CategoryId,
+                        StateId = itemAdd.StateId,
+                        ServiceId = itemAdd.ServiceId,
+                        Barcode = itemAdd.Barcode,
+                        JSON = itemAdd.JSON,
+                        DateCreated = itemAdd.DateCreated,
+                        DateModified = itemAdd.DateModified,
+                        DateCompleted = itemAdd.DateCompleted
+                    });
                 }
 
                 //* Act
-                orderRepo.UpdateOrder(orperInput, orderID);
+                orderRepo.UpdateOrder(orderInput, orderID);
 
                 //* Assert
                 var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);   // get order entity to check
@@ -337,19 +350,25 @@ namespace ThjonustukerfiTests.Tests
                 Assert.AreEqual(orderEntity.CustomerId, custId);
                 // assert connections
                 Assert.IsNotNull(newConnection);
-                Assert.AreEqual(newConnection.Count, oldConnection.Count + 1);  // list is going from two to three
+                Assert.AreEqual(newConnection.Count, oldConnection.Count + 1);  // list has incremented by 1
                 
                 // Assert items
                 Assert.IsNotNull(newItemList);
-                Assert.AreEqual(newItemList.Count, oldItemList.Count + 1);      // list is going from two to three
-                // check type
-                Assert.AreEqual(newItemList[0].CategoryId, orperInput.Items[0].CategoryId);
-                Assert.AreEqual(newItemList[1].CategoryId, orperInput.Items[1].CategoryId);
-                Assert.AreEqual(newItemList[2].CategoryId, orperInput.Items[2].CategoryId);
-                // check service ID
-                Assert.AreEqual(newItemList[0].ServiceId, orperInput.Items[0].ServiceId);
-                Assert.AreEqual(newItemList[1].ServiceId, orperInput.Items[1].ServiceId);
-                Assert.AreEqual(newItemList[2].ServiceId, orperInput.Items[2].ServiceId);
+                Assert.AreEqual(newItemList.Count, oldItemList.Count + 1);      // list has been incremented by 1
+
+                // check older items updated
+                foreach (var item in oldItemList)
+                {
+                    var newItem = newItemList.FirstOrDefault(i => i.Id == item.Id);
+                    Assert.AreNotEqual(item.CategoryId, newItem.CategoryId);
+                    Assert.AreNotEqual(item.ServiceId, newItem.ServiceId);
+
+                    newItemList.Remove(newItem);    // remove checked item from list
+                }
+
+                // should be 1 item left in the newItemList (that was added to the order), should be same as the third item in input (that was added)
+                Assert.AreEqual(orderInput.Items[2].CategoryId, newItemList[0].CategoryId);
+                Assert.AreEqual(orderInput.Items[2].ServiceId, newItemList[0].ServiceId);
             }
         }
 
@@ -401,11 +420,11 @@ namespace ThjonustukerfiTests.Tests
                 Assert.AreEqual(orderEntity.CustomerId, custId);
                 // assert connections
                 Assert.IsNotNull(newConnection);
-                Assert.AreEqual(newConnection.Count, oldConnection.Count - 2);  // list is going from 3 to one
+                Assert.AreEqual(oldConnection.Count - 1, newConnection.Count);  // list is going from 2 to one
                 
                 // Assert items
                 Assert.IsNotNull(newItemList);
-                Assert.AreEqual(newItemList.Count, oldItemList.Count - 2);      // list is going from 3 to one
+                Assert.AreEqual(oldItemList.Count - 1, newItemList.Count);      // list is going from 2 to one
                 // check type
                 Assert.AreEqual(newItemList[0].CategoryId, orperInput.Items[0].CategoryId);
                 // check service ID
@@ -473,7 +492,7 @@ namespace ThjonustukerfiTests.Tests
                 CustomerId = custId,
                 Items = new List<ItemInputModel>()
             };
-            var orperInput = new OrderInputModel
+            var orderInput = new OrderInputModel
             {
                 CustomerId = custId,
                 Items = new List<ItemInputModel>()
@@ -519,8 +538,8 @@ namespace ThjonustukerfiTests.Tests
                 }
 
                 //* Act
-                orderRepo.UpdateOrder(clearItems, orderID);
-                orderRepo.UpdateOrder(orperInput, orderID);
+                orderRepo.UpdateOrder(clearItems, orderID);     // should clear all items in order
+                orderRepo.UpdateOrder(orderInput, orderID);     // should add 5 items to the now cleared list
 
                 //* Assert
                 var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);   // get order entity to check
@@ -536,11 +555,11 @@ namespace ThjonustukerfiTests.Tests
                 Assert.AreEqual(orderEntity.CustomerId, custId);
                 // assert connections
                 Assert.IsNotNull(newConnection);
-                Assert.AreEqual(newConnection.Count, oldConnection.Count + 5);  // list is going from zero to five
+                Assert.AreEqual(orderInput.Items.Count, newConnection.Count);   // list is going from zero to five
                 
                 // Assert items
                 Assert.IsNotNull(newItemList);
-                Assert.AreEqual(newItemList.Count, oldItemList.Count + 5);      // list is going from zero to five
+                Assert.AreEqual(orderInput.Items.Count, newItemList.Count);     // list is going from zero to five
                 // check type
                 Assert.AreEqual(newItemList[0].CategoryId, 2);
                 Assert.AreEqual(newItemList[1].CategoryId, 2);
@@ -795,13 +814,10 @@ namespace ThjonustukerfiTests.Tests
 
             using(var mockContext = new DataContext(_options))
             {
-                // This needs a seperate mapper with the current context
-                var myProfile = new MappingProfile(mockContext);   // Create a new profile like the one we implemented
-                var myConfig = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));   // Setup a configuration with our profile
-                var localMapper = new Mapper(myConfig); // Create a new mapper with our profile
+                UpdateMapper(mockContext);  // update mapper with the correct context, since this function uses automapper with context
 
                 // craeate repo
-                IOrderRepo orderRepo = new OrderRepo(mockContext, localMapper);
+                IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
 
                 var orderId = orderRepo.CreateOrder(orderInput);        // Add new order
                 orderRepo.CompleteOrder(orderId);                       // complete the order
@@ -840,156 +856,365 @@ namespace ThjonustukerfiTests.Tests
             }
         }
 
-        //**********     Helper functions     **********//
-        private void FillDatabase(DataContext mockContext)
+        [TestMethod]
+        public void ArchiveCompleteOrderByCustomerId_should_archive_complete_order_with_customer_ID()
         {
-            //! Note this test method is creating the in memory database,
-            //! so this arrange when build DB should only be run once, unless adding more info to it.
-            //! This Database will live through all the tests in this class
+            // This method does the same thing as archive order except the order doesn't need to be old
+            // and should be done via customer ID
+
             //* Arrange
-            // variables evaluating
-            long orderId = 100;
-            long customerId = 50;
-            string customerName = "Viggi Siggi";
-            string OrderBarCode = "20200001";
-            DateTime modifiedDate = DateTime.Now;
-            string serviceName = "Birkireyking";
-            // Mock entity
-            Order mockOrder = new Order
+            long customerID = 50;
+            // input for create order
+            var orderInput = new OrderInputModel()
             {
-                Id = orderId,
-                CustomerId = customerId,
-                Barcode = OrderBarCode,
-                DateCreated = DateTime.MinValue,
-                DateModified = modifiedDate,
-            };
-
-            Customer mockCustomer = new Customer
-            {
-                Id = customerId,
-                Name = customerName,
-                SSN = "1308943149",
-                Email = "viggi@siggi.is",
-                Phone = "5812345",
-                Address = "Bakkabakki 1",
-                PostalCode = "800"
-            };
-
-            // just for this order
-            List<ItemOrderConnection> mockIOConnect = new List<ItemOrderConnection>()
-            {
-                new ItemOrderConnection
+                CustomerId = customerID,
+                Items = new List<ItemInputModel>()
                 {
-                    Id = 1,
-                    ItemId = 1,
-                    OrderId = orderId
-                },
-                new ItemOrderConnection
-                {
-                    Id = 2,
-                    ItemId = 2,
-                    OrderId = orderId
+                    new ItemInputModel() { CategoryId = 1, ServiceId = 1, },
+                    new ItemInputModel() { CategoryId = 2, ServiceId = 2, },
+                    new ItemInputModel() { CategoryId = 1, ServiceId = 3, },
+                    new ItemInputModel() { CategoryId = 2, ServiceId = 4, },
+                    new ItemInputModel() { CategoryId = 1, ServiceId = 3, },
+                    new ItemInputModel() { CategoryId = 2, ServiceId = 2, }
                 }
             };
 
-            // adding items
-            List<Item> mockItems = new List<Item>()
+            using(var mockContext = new DataContext(_options))
             {
-                new Item
-                {
-                    Id = 1,
-                    CategoryId = 1,
-                    StateId = 1,
-                    ServiceId = 1,
-                    Barcode = "50500001",
-                    DateCreated = DateTime.MinValue,
-                    DateModified = DateTime.Now,
-                },
-                new Item
-                {
-                    Id = 2,
-                    CategoryId = 2,
-                    StateId = 1,
-                    ServiceId = 1,
-                    Barcode = "50500002",
-                    DateCreated = DateTime.MinValue,
-                    DateModified = DateTime.Now,
-                }
-            };
+                UpdateMapper(mockContext);  // update mapper with the correct context, since this function uses automapper with context
 
-            // Adding timestamp
-            List<ItemTimestamp> mockTimestamps = new List<ItemTimestamp>();
-            foreach (var item in mockItems)
-            {
-                mockTimestamps.Add(_mapper.Map<ItemTimestamp>(item));
+                // craeate repo
+                IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
+
+                var orderId = orderRepo.CreateOrder(orderInput);        // Add new order
+                orderRepo.CompleteOrder(orderId);                       // complete the order
+                var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderId);   // get order entity
+
+                //* Act
+                orderRepo.ArchiveCompleteOrdersByCustomerId(customerID);
+
+                // Get stuff
+                var archivedOrder = mockContext.OrderArchive.First();
+                var archivedItems = mockContext.ItemArchive.ToList();
+                var customerName = mockContext.Customer.FirstOrDefault(c => c.Id == orderInput.CustomerId).Name;
+
+                //* Assert
+                Assert.IsNotNull(archivedOrder);
+                Assert.IsNotNull(archivedItems);
+
+                Assert.AreEqual(orderInput.CustomerId, archivedOrder.CustomerId);
+                Assert.AreEqual(customerName, archivedOrder.Customer);
+
+                Assert.AreEqual(orderInput.Items.Count, archivedItems.Count);
+                foreach (var item in archivedItems)
+                {
+                    // use this to check if the correct information was passed
+                    var check = new ItemInputModel() { CategoryId = item.CategoryId, ServiceId = item.ServiceId };
+                    Assert.IsTrue(orderInput.Items.Contains(check));    // uses the equals override
+
+                    // Making sure that service and category where correctly put in archive
+                    var category = mockContext.Category.FirstOrDefault(c => c.Id == item.CategoryId).Name;
+                    var service = mockContext.Service.FirstOrDefault(s => s.Id == item.ServiceId).Name;
+
+                    Assert.AreEqual(category, item.Category);
+                    Assert.AreEqual(service, item.Service);
+                }
             }
+        }
 
-            // Adding service
-            var mockServices = new List<Service>()
+        [TestMethod]
+        public void OrderPickupReady_should_return_order_ready_if_it_is_else_not()
+        {
+            //* Arrange
+            long orderNotReadyID = 100;
+            long orderReadyID = 101;
+            long orderEmptyID = 10000;
+
+            using(var mockContext = new DataContext(_options))
             {
-                new Service() { Name = serviceName, Id = 1 },
-                new Service() { Name = "Taðreyking", Id = 2 },
-                new Service() { Name = "Viðarreyking", Id = 3 },
-                new Service() { Name = "Salt pækill", Id = 4 }
-            };
+                IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
 
-            // Build a list of size 20, make it queryable for the database mock
-            var orders = Builder<Order>.CreateListOfSize(20)
-                .TheFirst(1)
-                .With(o => o.Id = mockOrder.Id)
-                .With(o => o.CustomerId = mockOrder.CustomerId)
-                .With(o => o.Barcode = mockOrder.Barcode)
-                .With(o => o.DateCreated = mockOrder.DateCreated)
-                .With(o => o.DateModified = mockOrder.DateModified)
-                .With(o => o.DateCompleted = mockOrder.DateCompleted)
-                .TheRest()
-                .With(o => o.Barcode = "30200001")
-                .With(o => o.CustomerId = 2)
-                .With(o => o.DateCompleted = null)
-                .Build();
+                //* Act and Assert
+                Assert.IsTrue(orderRepo.OrderPickupReady(orderReadyID));        // order created in initialize that is ready
+                Assert.IsFalse(orderRepo.OrderPickupReady(orderNotReadyID));    // order created in initialize that is not ready
+                Assert.IsFalse(orderRepo.OrderPickupReady(orderEmptyID));       // order should have an empty list of items and return false
+            }
+        }
 
-            // Build a list of size 20, make it queryable for the database mock
-            var customers = Builder<Customer>.CreateListOfSize(20)
-                .TheFirst(1)
-                .With(c => c.Id = mockCustomer.Id)
-                .With(c => c.Name = mockCustomer.Name)
-                .With(c => c.SSN = mockCustomer.SSN)
-                .With(c => c.Email = mockCustomer.Email)
-                .With(c => c.Phone = mockCustomer.Phone)
-                .With(c => c.Address = mockCustomer.Address)
-                .With(c => c.PostalCode = mockCustomer.PostalCode)
-                .Build();
+        [TestMethod]
+        public void OrderPickupReady_should_throw_NotFoundException()
+        {
+            //* Arrange
+            long invalidOrder = -100;
 
-            // Adding states for lookup
-            var states = new List<State>()
+            using(var mockContext = new DataContext(_options))
             {
-                // states fyrir Reykofninn
-                new State() {Name = "Í vinnslu", Id = 1},
-                new State() {Name = "Kælir 1", Id = 2},
-                new State() {Name = "Kælir 2", Id = 3},
-                new State() {Name = "Frystir", Id = 4},
-                new State() {Name = "Sótt", Id = 5}
-            };
+                IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
 
-            // Adding categories
-            var categories = new List<Category>()
+                //* Act and Assert
+                Assert.ThrowsException<NotFoundException>(() => orderRepo.OrderPickupReady(invalidOrder));
+            }
+        }
+
+        [TestMethod]
+        public void GetOrdersReadyForPickup_should_return_a_list_of_ready_order()
+        {
+            //* Arrange
+            using(var mockContext = new DataContext(_options))
             {
-                // Catagories for Reykofninn
-                new Category() {Name = "Lax", Id = 1},
-                new Category() {Name = "Silungur", Id = 2}
-            };
+                IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
 
-            // Adding all entities to the in memory database
-            mockContext.Order.AddRange(orders);
-            mockContext.Customer.AddRange(customers);
-            mockContext.ItemOrderConnection.AddRange(mockIOConnect);
-            mockContext.Item.AddRange(mockItems);
-            mockContext.ItemTimestamp.AddRange(mockTimestamps);
-            mockContext.Service.AddRange(mockServices);
-            mockContext.State.AddRange(states);
-            mockContext.Category.AddRange(categories);
-            mockContext.SaveChanges();
-            //! Building DB done
+                //* Act
+                var orderToPickup = orderRepo.GetOrdersReadyForPickup();
+
+                //* Assert
+                // There should be only one ready order
+                Assert.IsNotNull(orderToPickup);
+                Assert.AreEqual(1, orderToPickup.Count);
+                Assert.AreEqual(101, orderToPickup.FirstOrDefault().Id);
+            }
+        }
+
+        [TestMethod]
+        public void GetOrdersReadyForPickup_should_return_an_empty_list()
+        {
+            //* Arrange
+            using(var mockContext = new DataContext(_options))
+            {
+                ClearDatabase();
+                IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
+
+                //* Act
+                var orderToPickup = orderRepo.GetOrdersReadyForPickup();
+
+                //* Assert
+                // There should be only one ready order
+                Assert.IsNotNull(orderToPickup);
+                Assert.IsFalse(orderToPickup.Any());
+            }
+        }
+
+        [TestMethod]
+        public void IncrementNotification_should_increment_notificationcount_of_item_by_one()
+        {
+            //* Arrange
+            using(var mockContext = new DataContext(_options))
+            {
+                IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
+
+                var order = mockContext.Order.FirstOrDefault();
+                var oldNotificationCount = order.NotificationCount;
+
+                //* Act
+                orderRepo.IncrementNotification(order.Id);
+
+                //* Assert
+                // order is a reference, hence its notfication count should be updated after running the method
+                Assert.AreEqual(oldNotificationCount + 1, order.NotificationCount);
+            }
+        }
+
+        //**********     Helper functions     **********//
+        private void FillDatabase()
+        {
+            using(var mockContext = new DataContext(_options))
+            {
+                UpdateMapper(mockContext);
+                //* Arrange
+                // variables evaluating
+                long orderId = 100;
+                long customerId = 50;
+                string customerName = "Viggi Siggi";
+                string OrderBarCode = "20200001";
+                DateTime modifiedDate = DateTime.Now;
+                string serviceName = "Birkireyking";
+                // Mock entity
+                Order mockOrder = new Order
+                {
+                    Id = orderId,
+                    CustomerId = customerId,
+                    Barcode = OrderBarCode,
+                    NotificationCount = 0,
+                    DateCreated = DateTime.MinValue,
+                    DateModified = modifiedDate,
+                };
+
+                Order mockOrder2 = new Order
+                {
+                    Id = orderId + 1,
+                    CustomerId = customerId,
+                    Barcode = "20200001",
+                    NotificationCount = 0,
+                    DateCreated = DateTime.Now,
+                    DateModified = modifiedDate
+                };
+
+                Customer mockCustomer = new Customer
+                {
+                    Id = customerId,
+                    Name = customerName,
+                    SSN = "1308943149",
+                    Email = "viggi@siggi.is",
+                    Phone = "5812345",
+                    Address = "Bakkabakki 1",
+                    PostalCode = "800"
+                };
+
+                // for order 1 and 1 order ready for pickup
+                List<ItemOrderConnection> mockIOConnect = new List<ItemOrderConnection>()
+                {
+                    new ItemOrderConnection
+                    {
+                        Id = 1,
+                        ItemId = 1,
+                        OrderId = orderId
+                    },
+                    new ItemOrderConnection
+                    {
+                        Id = 2,
+                        ItemId = 2,
+                        OrderId = orderId
+                    },
+                    new ItemOrderConnection
+                    {
+                        Id = 3,
+                        ItemId = 3,
+                        OrderId = orderId + 1
+                    }
+                };
+
+                // adding items
+                List<Item> mockItems = new List<Item>()
+                {
+                    new Item
+                    {
+                        Id = 1,
+                        CategoryId = 1,
+                        StateId = 1,
+                        ServiceId = 1,
+                        Barcode = "50500001",
+                        DateCreated = DateTime.MinValue,
+                        DateModified = DateTime.Now,
+                    },
+                    new Item
+                    {
+                        Id = 2,
+                        CategoryId = 2,
+                        StateId = 1,
+                        ServiceId = 1,
+                        Barcode = "50500002",
+                        DateCreated = DateTime.MinValue,
+                        DateModified = DateTime.Now,
+                    },
+                    new Item
+                    {
+                        Id = 3,
+                        CategoryId = 2,
+                        StateId = 2,
+                        ServiceId = 1,
+                        Barcode = "50500003",
+                        DateCreated = DateTime.MinValue,
+                        DateModified = DateTime.Now,
+                    }
+                };
+
+                // Adding timestamp
+                List<ItemTimestamp> mockTimestamps = new List<ItemTimestamp>();
+                foreach (var item in mockItems)
+                {
+                    mockTimestamps.Add(_mapper.Map<ItemTimestamp>(item));
+                }
+
+                // Adding service
+                var mockServices = new List<Service>()
+                {
+                    new Service() { Name = serviceName, Id = 1 },
+                    new Service() { Name = "Taðreyking", Id = 2 },
+                    new Service() { Name = "Viðarreyking", Id = 3 },
+                    new Service() { Name = "Salt pækill", Id = 4 }
+                };
+
+                //* Add Service states here
+                var serviceStates = new List<ServiceState>()
+                {
+                    // Service state fyrir birkireykingu
+                    new ServiceState() {Id = 1, ServiceId = 1, StateId = 1, Step = 1},
+                    new ServiceState() {Id = 2, ServiceId = 1, StateId = 2, Step = 2},
+                    new ServiceState() {Id = 3, ServiceId = 1, StateId = 3, Step = 2},
+                    new ServiceState() {Id = 4, ServiceId = 1, StateId = 4, Step = 2},
+                    new ServiceState() {Id = 5, ServiceId = 1, StateId = 5, Step = 3},
+
+                    // Service state fyrir Taðreykingu
+                    new ServiceState() {Id = 6, ServiceId = 2, StateId = 1, Step = 1},
+                    new ServiceState() {Id = 7, ServiceId = 2, StateId = 2, Step = 2},
+                    new ServiceState() {Id = 8, ServiceId = 2, StateId = 3, Step = 2},
+                    new ServiceState() {Id = 9, ServiceId = 2, StateId = 4, Step = 2},
+                    new ServiceState() {Id = 10, ServiceId = 2, StateId = 5, Step = 3},
+
+                    // Service state fyrir viðarReykingu
+                    new ServiceState() {Id = 11, ServiceId = 3, StateId = 1, Step = 1},
+                    new ServiceState() {Id = 12, ServiceId = 3, StateId = 2, Step = 2},
+                    new ServiceState() {Id = 13, ServiceId = 3, StateId = 3, Step = 2},
+                    new ServiceState() {Id = 14, ServiceId = 3, StateId = 4, Step = 2},
+                    new ServiceState() {Id = 15, ServiceId = 3, StateId = 5, Step = 3},
+
+                    // Service state fyrir salt pækil
+                    new ServiceState() {Id = 16, ServiceId = 4, StateId = 1, Step = 1},
+                    new ServiceState() {Id = 17, ServiceId = 4, StateId = 2, Step = 2},
+                    new ServiceState() {Id = 18, ServiceId = 4, StateId = 3, Step = 2},
+                    new ServiceState() {Id = 19, ServiceId = 4, StateId = 4, Step = 2},
+                    new ServiceState() {Id = 20, ServiceId = 4, StateId = 5, Step = 3}
+                };
+
+                // Build a list of size 20, make it queryable for the database mock
+                var orders = Builder<Order>.CreateListOfSize(20)
+                    .All()
+                    .With(o => o.Barcode = "30200001")
+                    .With(o => o.CustomerId = 2)
+                    .With(o => o.DateCompleted = null)
+                    .TheLast(1)
+                    .With(o => o.Id = 10000)
+                    .Build();
+                orders.Add(mockOrder);
+                orders.Add(mockOrder2);
+
+                // Build a list of size 20, make it queryable for the database mock
+                var customers = Builder<Customer>.CreateListOfSize(20).Build();
+                customers.Add(mockCustomer);
+
+                // Adding states for lookup
+                var states = new List<State>()
+                {
+                    // states fyrir Reykofninn
+                    new State() {Name = "Í vinnslu", Id = 1},
+                    new State() {Name = "Kælir 1", Id = 2},
+                    new State() {Name = "Kælir 2", Id = 3},
+                    new State() {Name = "Frystir", Id = 4},
+                    new State() {Name = "Sótt", Id = 5}
+                };
+
+                // Adding categories
+                var categories = new List<Category>()
+                {
+                    // Catagories for Reykofninn
+                    new Category() {Name = "Lax", Id = 1},
+                    new Category() {Name = "Silungur", Id = 2},
+                    new Category() {Name = "Ysa", Id = 3}
+                };
+
+                // Adding all entities to the in memory database
+                mockContext.Order.AddRange(orders);
+                mockContext.Customer.AddRange(customers);
+                mockContext.ItemOrderConnection.AddRange(mockIOConnect);
+                mockContext.Item.AddRange(mockItems);
+                mockContext.ItemTimestamp.AddRange(mockTimestamps);
+                mockContext.Service.AddRange(mockServices);
+                mockContext.State.AddRange(states);
+                mockContext.Category.AddRange(categories);
+                mockContext.ServiceState.AddRange(serviceStates);
+                mockContext.SaveChanges();
+                //! Building DB done
+            }
         }
 
         /// <summary>Updates the private mapper to have the current mock data context</summary>
@@ -999,6 +1224,26 @@ namespace ThjonustukerfiTests.Tests
             var myProfile = new MappingProfile(context);   // Create a new profile like the one we implemented
             var myConfig = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));   // Setup a configuration with our profile
             _mapper = new Mapper(myConfig); // Create a new mapper with our profile
+        }
+
+        private void ClearDatabase()
+        {
+            using(var mockContext = new DataContext(_options))
+            {
+                // Removing all entities to the in memory database
+                mockContext.Order.RemoveRange(mockContext.Order);
+                mockContext.Customer.RemoveRange(mockContext.Customer);
+                mockContext.ItemOrderConnection.RemoveRange(mockContext.ItemOrderConnection);
+                mockContext.Item.RemoveRange(mockContext.Item);
+                mockContext.ItemTimestamp.RemoveRange(mockContext.ItemTimestamp);
+                mockContext.Service.RemoveRange(mockContext.Service);
+                mockContext.State.RemoveRange(mockContext.State);
+                mockContext.Category.RemoveRange(mockContext.Category);
+                mockContext.ItemArchive.RemoveRange(mockContext.ItemArchive);
+                mockContext.OrderArchive.RemoveRange(mockContext.OrderArchive);
+                mockContext.ServiceState.RemoveRange(mockContext.ServiceState);
+                mockContext.SaveChanges();
+            }
         }
     }
 }
