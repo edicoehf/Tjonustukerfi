@@ -4,10 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             xmlns:local="clr-namespace:HandtolvuApp.ViewModels"
-             x:Class="HandtolvuApp.Controls.OrderInputPage">
- 
-
+             x:Class="HandtolvuApp.Controls.StateScanPage">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -27,7 +24,7 @@
                Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" 
                Margin="0, 20, 0, 0"/>
 
-        <Label Text="Sláðu inn pöntunarnúmer eða skannaðu strikamerki." FontSize="18"
+        <Label Text="Sláðu inn stöðu eða skannaðu Prufa." FontSize="18"
                Grid.Row="1" Grid.ColumnSpan="4"
                HorizontalTextAlignment="Center"
                VerticalOptions="Center" 
@@ -43,6 +40,6 @@
                 Grid.Row="2"
                 Margin="0, 5, 10, 5"
                 BackgroundColor="Green" TextColor="White"
-                Command="{Binding ClickCommand}"/>
+                Command="{Binding StateScan}"/>
     </Grid>
 </ContentPage>
