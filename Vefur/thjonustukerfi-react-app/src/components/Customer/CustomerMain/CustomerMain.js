@@ -10,7 +10,7 @@ const CustomerMain = () => {
     const { customers, error, isLoading } = useGetAllCustomers();
     customers.sort((a, b) => a.name.localeCompare(b.name));
     const { searchResults, handleChange, searchTerm } = useSearchBar(customers);
-    const searchBarPlaceHolder = "Leita eftir nafni?";
+    const searchBarPlaceHolder = "Leita eftir nafni";
 
     return (
         <div className="customer-main">
