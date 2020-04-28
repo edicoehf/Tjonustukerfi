@@ -70,5 +70,16 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
             return orders;
         }
+
+        public List<ItemTimeStampDTO> GetItemHistory(long itemId)
+        {
+            var item = _dbContext.Item.FirstOrDefault(i => i.Id == itemId); // get item
+            if(item == null) { throw new NotFoundException($"Item with ID {itemId} was not found."); }
+
+            // get timestamps and order by state
+            var timestamps = _dbContext.ItemTimestamp.Where(its => its.ItemId == itemId).ToList().OrderBy(s => s.StateId);
+
+            return _mapper.Map<List<ItemTimeStampDTO>>(timestamps); // return mapped timestamps
+        }
     }
 }

@@ -60,5 +60,18 @@ namespace ThjonustukerfiWebAPI.Controllers
         {
             return Ok(_infoService.GetArchivedOrders());
         }
+
+        /// <summary>Gets an Item history by its ID.</summary>
+        /// <returns>List of representing an items history</returns>
+        /// <response code="200">List of item history returned</response>
+        /// <response code="404">Item with given ID not found</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("{id:long}/history")]
+        [HttpGet]
+        public IActionResult GetItemHistory(long id)
+        {
+            return Ok(_infoService.GetItemHistory(id));
+        }
     }
 }
