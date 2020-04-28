@@ -95,7 +95,8 @@ namespace ThjonustukerfiWebAPI.Configurations
                 new Service() {Name = "Birkireyking", Id = 1},
                 new Service() {Name = "Taðreyking", Id = 2},
                 new Service() {Name = "ViðarReyking", Id = 3},
-                new Service() {Name = "Salt pækill", Id = 4}
+                new Service() {Name = "Salt pækill", Id = 4},
+                new Service() {Name = "Other", Id = 5}
             };
 
             //* Add Service states here
@@ -147,7 +148,8 @@ namespace ThjonustukerfiWebAPI.Configurations
                 // Categories for Reykofninn
                 new Category() {Name = "Lax", Id = 1},
                 new Category() {Name = "Silungur", Id = 2},
-                new Category() {Name = "Lambakjöt", Id = 3}
+                new Category() {Name = "Lambakjöt", Id = 3},
+                new Category() {Name = "Other", Id = 4}
             };
         }
     }
