@@ -33,8 +33,16 @@ const ViewItems = ({ items, remove }) => {
                     <TableBody className="order-body">
                         {items.map((item, i) => (
                             <TableRow key={i} className="order-row">
-                                <TableCell>{item.categoryName}</TableCell>
-                                <TableCell>{item.serviceName}</TableCell>
+                                <TableCell>
+                                    {item.otherCategory
+                                        ? item.otherCategory
+                                        : item.categoryName}
+                                </TableCell>
+                                <TableCell>
+                                    {item.otherService
+                                        ? item.otherService
+                                        : item.serviceName}
+                                </TableCell>
                                 <TableCell>{item.amount}</TableCell>
                                 <TableCell>
                                     {item.filleted === "filleted"

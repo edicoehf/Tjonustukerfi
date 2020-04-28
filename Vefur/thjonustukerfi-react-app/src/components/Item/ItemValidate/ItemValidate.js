@@ -1,6 +1,19 @@
 const itemValidate = (values) => {
-    const { category, service, amount, sliced, filleted, details } = values;
+    const {
+        category,
+        service,
+        amount,
+        sliced,
+        filleted,
+        details,
+        otherCategory,
+        otherService,
+        categories,
+        services,
+    } = values;
+
     const errors = {};
+
     if (category === null) {
         errors.category = "Tegund vantar";
     }
@@ -20,6 +33,12 @@ const itemValidate = (values) => {
     }
     if (details.length > 250) {
         errors.details = "Annað má aðeins vera 250 stafir";
+    }
+    if (category === categories.length.toString() && otherCategory === "") {
+        errors.otherCategory = "Vantar hvaða tegund";
+    }
+    if (service === services.length.toString() && otherService === "") {
+        errors.otherService = "Vantar hvaða þjónustu";
     }
     return errors;
 };

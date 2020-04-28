@@ -21,9 +21,11 @@ const initialState = {
     otherCategory: "",
     otherService: "",
     amount: 1,
-    sliced: null,
-    filleted: null,
+    sliced: "",
+    filleted: "",
     details: "",
+    categories: null,
+    services: null,
 };
 
 const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
@@ -32,25 +34,6 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
     const [isOtherCategoryHidden, setOtherCategoryHidden] = React.useState(
         true
     );
-
-    const handleOtherChange = (e) => {
-        console.log(e.target);
-        if (e.target.name === "service") {
-            if (e.target.value === services.length.toString()) {
-                setOtherServiceHidden(false);
-            } else {
-                setOtherServiceHidden(true);
-            }
-        }
-
-        if (e.target.name === "category") {
-            if (e.target.value === categories.length.toString()) {
-                setOtherCategoryHidden(false);
-            } else {
-                setOtherCategoryHidden(true);
-            }
-        }
-    };
 
     const getExistingItemWithIds = (item) => {
         let idItem = { ...item };
@@ -70,8 +53,31 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
         ? getExistingItemWithIds(existingItem)
         : initialState;
 
+    React.useEffect(() => {
+        state.categories = categories;
+        state.services = services;
+    }, [state, categories, services]);
+
+    const handleOtherChange = (e) => {
+        if (e.target.name === "service") {
+            e.target.value === services.length.toString()
+                ? setOtherServiceHidden(false)
+                : setOtherServiceHidden(true);
+        }
+
+        if (e.target.name === "category") {
+            e.target.value === categories.length.toString()
+                ? setOtherCategoryHidden(false)
+                : setOtherCategoryHidden(true);
+        }
+    };
+
     const handleSubmitAndReset = (values) => {
         setDetailsHidden(true);
+        setOtherCategoryHidden(true);
+        setOtherServiceHidden(true);
+        delete values.categories;
+        delete values.services;
         submitHandler(values, resetFields);
     };
 
@@ -101,12 +107,10 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
                         label={cat.name}
                     />
                 ))}
-                <FormControlLabel
-                    key={categories.length + 1}
-                    value={`${categories.length + 1}`}
-                    control={<Radio onChange={handleOtherChange} />}
-                    label="Annað"
-                />
+                {errors.otherCategory && (
+                    <p className="error">{errors.otherCategory}</p>
+                )}
+
                 <TextField
                     name="otherCategory"
                     className="select"
@@ -134,12 +138,9 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
                         label={serv.name}
                     />
                 ))}
-                <FormControlLabel
-                    key={services.length + 1}
-                    value={`${services.length + 1}`}
-                    control={<Radio onChange={handleOtherChange} />}
-                    label="Annað"
-                />
+                {errors.otherService && (
+                    <p className="error">{errors.otherService}</p>
+                )}
                 <TextField
                     name="otherService"
                     className="select"
