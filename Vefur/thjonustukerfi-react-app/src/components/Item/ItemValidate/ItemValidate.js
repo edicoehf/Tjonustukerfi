@@ -33,16 +33,10 @@ const itemValidate = (values) => {
     if (details.length > 250) {
         errors.details = "Annað má aðeins vera 250 stafir";
     }
-    if (
-        category.toString() === categories.length.toString() &&
-        otherCategory === ""
-    ) {
+    if (category === categories.length.toString() && otherCategory === "") {
         errors.otherCategory = "Vantar hvaða tegund";
     }
-    if (
-        service.toString() === services.length.toString() &&
-        otherService === ""
-    ) {
+    if (service === services.length.toString() && otherService === "") {
         errors.otherService = "Vantar hvaða þjónustu";
     }
     return errors;

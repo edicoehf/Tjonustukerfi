@@ -27,7 +27,7 @@ describe("<ItemDetails />", () => {
     });
 
     beforeEach(() => {
-        wrapper = mount(shallow(<ItemDetails id={"1"} />).get(0));
+        wrapper = mount(shallow(<ItemDetails id={"3"} />).get(0));
     });
 
     useGetItemById.mockReturnValue({
@@ -42,13 +42,13 @@ describe("<ItemDetails />", () => {
     });
 
     it("Should display item category correctly", () => {
-        expect(wrapper.find(".item-category").at(0).childAt(1).text()).toBe(
+        expect(wrapper.find(".item-category").at(0).childAt(2).text()).toBe(
             testItem.category
         );
     });
 
     it("Should display item service correctly", () => {
-        expect(wrapper.find(".item-service").at(0).childAt(1).text()).toBe(
+        expect(wrapper.find(".item-service").at(0).childAt(2).text()).toBe(
             testItem.service
         );
     });

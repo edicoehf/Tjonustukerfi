@@ -76,7 +76,13 @@ describe("<ItemForm />", () => {
             category: null,
             service: null,
             amount: 1,
-            slices: "",
+            sliced: "",
+            filleted: "",
+            details: "",
+            otherCategory: "",
+            otherService: "",
+            categories: null,
+            services: null,
         };
         radios = wrapper.find(RadioGroup);
         textfields = wrapper.find(TextField);
