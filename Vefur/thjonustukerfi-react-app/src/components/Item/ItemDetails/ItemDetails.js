@@ -34,7 +34,7 @@ const ItemDetails = ({ id, updated, receivedUpdate }) => {
                             <div className="item-currentstate">
                                 Staða: {state}
                             </div>
-                            <div className="item-fillet">
+                            <div className="item-filleted">
                                 Flökun: {json.filleted ? "Flakað" : "Óflakað"}
                             </div>
                             <div className="item-sliced">
@@ -43,7 +43,7 @@ const ItemDetails = ({ id, updated, receivedUpdate }) => {
                             <div className="item-barcode">
                                 Strikamerki: {barcode}
                             </div>
-                            <div className="item-details">Annað: {details}</div>
+                            <div className="item-extra">Annað: {details}</div>
                             <div className="item-order">
                                 <Link to={`/order/${orderId}`}>
                                     Pöntun: {orderId}
