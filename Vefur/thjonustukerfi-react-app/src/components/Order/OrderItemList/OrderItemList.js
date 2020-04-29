@@ -25,7 +25,13 @@ const OrderItemList = ({ items }) => {
                         <b>Þjónusta</b>
                     </TableCell>
                     <TableCell>
-                        <b>Skurður</b>
+                        <b>Flökun</b>
+                    </TableCell>
+                    <TableCell>
+                        <b>Pökkun</b>
+                    </TableCell>
+                    <TableCell>
+                        <b>Annað</b>
                     </TableCell>
                     <TableCell>
                         <b>Strikamerki</b>

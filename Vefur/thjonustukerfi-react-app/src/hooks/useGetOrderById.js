@@ -33,13 +33,9 @@ const useGetOrderById = (id) => {
 
     return { order, error, fetchOrder };
 };
-
-const parseItemJsonForItems = (items) => {
-    for (var i = 0; i < items.length; i++) {
-        console.log(items[i].json);
-        items[i].json = JSON.parse(items[i].json);
-    }
-    return items;
-};
+const parseItemJsonForItems = (items) =>
+    items.map((item) => {
+        return { ...item, json: JSON.parse(item.json) };
+    });
 
 export default useGetOrderById;
