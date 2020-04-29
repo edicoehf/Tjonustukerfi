@@ -151,4 +151,76 @@ describe("<ItemForm />", () => {
             expect(amnt.props().value).not.toBe("3");
         });
     });
+
+    describe("Filleted select", () => {
+        it("Should be empty string at start", () => {
+            const fill = findByName(radios, "filleted");
+            expect(fill.props().value).toBe("");
+        });
+
+        it("Should capture filleted correctly onChange", () => {
+            const fill = findByName(radios, "filleted");
+            fill.props().onChange({
+                target: { name: "filleted", value: "Flakað" },
+            });
+            testState.filleted = "Flakað";
+            expect(setState).toHaveBeenCalledWith(testState);
+        });
+
+        it("Should capture filleted incorrectly onChange", () => {
+            const fill = findByName(radios, "filleted");
+            fill.props().onChange({
+                target: { name: "filleted", value: "Flakað" },
+            });
+            expect(fill.props().value).not.toBe("Óflakað");
+        });
+    });
+
+    describe("Sliced select", () => {
+        it("Should be empty string at start", () => {
+            const sliced = findByName(radios, "sliced");
+            expect(sliced.props().value).toBe("");
+        });
+
+        it("Should capture sliced correctly onChange", () => {
+            const sliced = findByName(radios, "sliced");
+            sliced.props().onChange({
+                target: { name: "sliced", value: "Bitar" },
+            });
+            testState.sliced = "Bitar";
+            expect(setState).toHaveBeenCalledWith(testState);
+        });
+
+        it("Should capture sliced incorrectly onChange", () => {
+            const sliced = findByName(radios, "sliced");
+            sliced.props().onChange({
+                target: { name: "sliced", value: "Bitar" },
+            });
+            expect(sliced.props().value).not.toBe("Heilt Flak");
+        });
+    });
+
+    describe("Details select", () => {
+        it("Should be empty string at start", () => {
+            const det = findByName(textfields, "details");
+            expect(det.props().value).toBe("");
+        });
+
+        it("Should capture details correctly onChange", () => {
+            const det = findByName(textfields, "details");
+            det.props().onChange({
+                target: { name: "details", value: "4 bitar" },
+            });
+            testState.details = "4 bitar";
+            expect(setState).toHaveBeenCalledWith(testState);
+        });
+
+        it("Should capture details incorrectly onChange", () => {
+            const det = findByName(textfields, "details");
+            det.props().onChange({
+                target: { name: "details", value: "4 bitar" },
+            });
+            expect(det.props().value).not.toBe("3 bitar");
+        });
+    });
 });
