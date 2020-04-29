@@ -130,7 +130,7 @@ namespace ThjonustukerfiWebAPI.Configurations
                 new ServiceState() {Id = 19, ServiceId = 4, StateId = 4, Step = 2},
                 new ServiceState() {Id = 20, ServiceId = 4, StateId = 5, Step = 3},
 
-                // Service state fyrir salt other
+                // Service state fyrir annað
                 new ServiceState() {Id = 21, ServiceId = 5, StateId = 1, Step = 1},
                 new ServiceState() {Id = 22, ServiceId = 5, StateId = 2, Step = 2},
                 new ServiceState() {Id = 23, ServiceId = 5, StateId = 3, Step = 2},

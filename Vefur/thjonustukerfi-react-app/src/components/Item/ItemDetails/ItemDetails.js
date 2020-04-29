@@ -14,7 +14,6 @@ const ItemDetails = ({ id, updated, receivedUpdate }) => {
     // ÞETTA ÆTTI AÐ VERA TAFLA?
     return (
         <>
-            {" "}
             {!isLoading ? (
                 <div className="item-details">
                     {!error ? (

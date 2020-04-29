@@ -54,5 +54,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
 
         /// <summary>Increments order notifaction count by one given the order ID</summary>
         void IncrementNotification(long orderId);
+
+        /// <summary>Gets orders ready for pickup via customer ID</summary>
+        List<OrderDTO> GetOrdersReadyForPickupByCustomerID(long customerId);
     }
 }

@@ -180,6 +180,36 @@ namespace ThjonustukerfiTests.Tests
             Assert.ThrowsException<NotFoundException>(() => _customerService.DeleteCustomerByIdAndOrders(1));
         }
 
+        [TestMethod]
+        public void GetPickupOrdersByCustomerId_should_return_list_of_orders()
+        {
+            //* Arrange
+            _customerRepoMock.Setup(method => method.CustomerExists(It.IsAny<long>())).Returns(true);
+            _orderRepoMock.Setup(method => method.GetOrdersReadyForPickupByCustomerID(It.IsAny<long>())).Returns(CreateOrderDTOList());
+
+            // create service
+            _customerService = new CustomerService(_customerRepoMock.Object, _orderRepoMock.Object);
+
+            var list = _customerService.GetPickupOrdersByCustomerId((long)1);
+
+            Assert.IsNotNull(list);
+            Assert.IsInstanceOfType(list, typeof(List<OrderDTO>));
+        }
+
+        [TestMethod]
+        public void GetPickupOrdersByCustomerId_should_throw_NotFoundException()
+        {
+            //* Arrange
+            _customerRepoMock.Setup(method => method.CustomerExists(It.IsAny<long>())).Returns(false);
+
+            // create service
+            _customerService = new CustomerService(_customerRepoMock.Object, _orderRepoMock.Object);
+
+            //* Act and Arrange
+            Assert.ThrowsException<NotFoundException>(() => _customerService.GetPickupOrdersByCustomerId((long)1));
+        }
+        
+
         //*         Helper functions         *//
         /// <summary>Creates a list of order DTO for testing</summary>
         private List<OrderDTO> CreateOrderDTOList()

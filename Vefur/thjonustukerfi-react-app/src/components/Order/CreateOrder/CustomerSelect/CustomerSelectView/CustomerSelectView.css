@@ -1,0 +1,8 @@
+.customer-select-view {
+    display: flex;
+    flex-direction: column;
+}
+
+.customer-select-view .search-bar {
+    align-self: center;
+}
