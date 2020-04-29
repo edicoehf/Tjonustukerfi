@@ -58,12 +58,11 @@ const updateItemState = ({ item, state }) => {
 };
 
 const updateItemById = (item) => {
-    return fetch(endpoint + item.id, {
+    const id = item.id;
+    delete item.id;
+    return fetch(endpoint + id, {
         method: "PATCH",
-        body: JSON.stringify({
-            categoryId: item.categoryId,
-            serviceId: item.serviceId,
-        }),
+        body: JSON.stringify(item),
         headers: {
             "Content-Type": "application/json",
             crossDomain: true,

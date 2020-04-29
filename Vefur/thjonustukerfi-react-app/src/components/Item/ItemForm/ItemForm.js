@@ -29,10 +29,21 @@ const initialState = {
 };
 
 const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
-    const [isDetailsHidden, setDetailsHidden] = React.useState(true);
-    const [isOtherServiceHidden, setOtherServiceHidden] = React.useState(true);
+    const setDetailsHiddenBool =
+        existingItem && existingItem.details ? false : true;
+    const setOtherServiceHiddenBool =
+        existingItem && existingItem.json.otherService ? false : true;
+    const setOtherCategoryHiddenBool =
+        existingItem && existingItem.json.otherCategory ? false : true;
+
+    const [isDetailsHidden, setDetailsHidden] = React.useState(
+        setDetailsHiddenBool
+    );
+    const [isOtherServiceHidden, setOtherServiceHidden] = React.useState(
+        setOtherServiceHiddenBool
+    );
     const [isOtherCategoryHidden, setOtherCategoryHidden] = React.useState(
-        true
+        setOtherCategoryHiddenBool
     );
 
     const getExistingItemWithIds = (item) => {
@@ -41,9 +52,18 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
         const c =
             categories[categories.findIndex((c) => c.name === item.category)];
         if (s && c) {
+            if (c.id === categories.length) {
+                idItem.otherCategory = item.json.otherCategory;
+            }
             idItem.service = s.id.toString();
             idItem.category = c.id.toString();
+            idItem.filleted = item.json.filleted ? "filleted" : "notFilleted";
+            idItem.sliced = item.json.sliced ? "sliced" : "whole";
+            idItem.otherCategory = item.json.otherCategory || "";
+            idItem.otherService = item.json.otherService || "";
         }
+        idItem.categories = categories;
+        idItem.services = services;
         return idItem;
     };
 
@@ -60,15 +80,21 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
 
     const handleOtherChange = (e) => {
         if (e.target.name === "service") {
-            e.target.value === services.length.toString()
-                ? setOtherServiceHidden(false)
-                : setOtherServiceHidden(true);
+            if (e.target.value === services.length.toString()) {
+                setOtherServiceHidden(false);
+            } else {
+                setOtherServiceHidden(true);
+                values.otherService = "";
+            }
         }
 
         if (e.target.name === "category") {
-            e.target.value === categories.length.toString()
-                ? setOtherCategoryHidden(false)
-                : setOtherCategoryHidden(true);
+            if (e.target.value === categories.length.toString()) {
+                setOtherCategoryHidden(false);
+            } else {
+                setOtherCategoryHidden(true);
+                values.otherCategory = "";
+            }
         }
     };
 
@@ -207,29 +233,23 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
                     />
                 </>
             )}
-            {!isExistingItem && (
-                <>
-                    <FormLabel
-                        component="legend"
-                        onClick={() => setDetailsHidden(!isDetailsHidden)}
-                    >
-                        Annað: <AddIcon fontSize="small" />
-                    </FormLabel>
-                    {errors.details && (
-                        <p className="error">{errors.details}</p>
-                    )}
-                    <TextField
-                        id="outlined-multiline-flexible select"
-                        name="details"
-                        label="Var það eitthvað annað?"
-                        multiline
-                        value={values.details}
-                        onChange={handleChange}
-                        variant="outlined"
-                        hidden={isDetailsHidden}
-                    />
-                </>
-            )}
+            <FormLabel
+                component="legend"
+                onClick={() => setDetailsHidden(!isDetailsHidden)}
+            >
+                Annað: <AddIcon fontSize="small" />
+            </FormLabel>
+            {errors.details && <p className="error">{errors.details}</p>}
+            <TextField
+                id="outlined-multiline-flexible select"
+                name="details"
+                label="Var það eitthvað annað?"
+                multiline
+                value={values.details}
+                onChange={handleChange}
+                variant="outlined"
+                hidden={isDetailsHidden}
+            />
             <Button
                 className="sbm-btn"
                 variant="contained"
