@@ -20,7 +20,7 @@ namespace HandtolvuApp.ViewModels
 
             ClickCommand = new Command(async () =>
             {
-                if(ScannedBarcodeText != null)
+                if(ScannedBarcodeText != "")
                 {
                     Item item = await App.ItemManager.GetItemAsync(ScannedBarcodeText);
                     if(item == null)
@@ -32,12 +32,14 @@ namespace HandtolvuApp.ViewModels
                     }
                     else
                     {
-                        NextStates n = await App.ItemManager.GetNextStatesAsync(ScannedBarcodeText);
                         item.Barcode = ScannedBarcodeText;
-                        var itemVM = new ItemViewModel(item, n);
-                        var itemPage = new ItemPage();
-                        itemPage.BindingContext = itemVM;
+                        var itemVM = new ItemViewModel(item);
+                        var itemPage = new ItemPage
+                        {
+                            BindingContext = itemVM
+                        };
                         await Application.Current.MainPage.Navigation.PushAsync(itemPage);
+                        ScannedBarcodeText = "";
                     }
                 }
                 else

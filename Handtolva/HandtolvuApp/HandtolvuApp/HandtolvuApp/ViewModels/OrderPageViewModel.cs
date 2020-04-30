@@ -16,12 +16,16 @@ namespace HandtolvuApp.ViewModels
 
             SelectedItemChangedCommand = new Command(async () =>
             {
-                NextStates n = await App.ItemManager.GetNextStatesAsync(SelectedItem.Barcode);
-                SelectedItem.OrderId = Order.Id;
-                var itemVM = new ItemViewModel(SelectedItem, n);
-                var itemPage = new ItemPage();
-                itemPage.BindingContext = itemVM;
-                await App.Current.MainPage.Navigation.PushAsync(itemPage);
+                if(SelectedItem != null)
+                {
+                    //SelectedItem.OrderId = Order.Id;
+                    var itemVM = new ItemViewModel(SelectedItem);
+                    var itemPage = new ItemPage
+                    {
+                        BindingContext = itemVM
+                    };
+                    await App.Current.MainPage.Navigation.PushAsync(itemPage);
+                }
             });
 
             CheckoutCommand = new Command(async () =>

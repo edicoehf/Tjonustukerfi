@@ -33,7 +33,7 @@
                />
 
         <Editor Grid.Column="0" Grid.ColumnSpan="3"
-                Grid.Row="2"
+                Grid.Row="2" IsEnabled="True"
                 Placeholder="{Binding Placeholder}" Margin="10,0"
                 AutomationId="inputEntry"
                 Text="{Binding ScannedBarcodeText}"/>

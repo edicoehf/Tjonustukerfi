@@ -11,7 +11,7 @@ namespace HandtolvuApp.Data
 {
     public class ItemManager
     {
-        IItemService itemService;
+        readonly IItemService itemService;
         
         public ItemManager(IItemService service)
         {
@@ -28,7 +28,7 @@ namespace HandtolvuApp.Data
             return itemService.GetNextStatesAsync(barcode);
         }
 
-        public Task StateChangeWithId(long itemId, string barcode)
+        public Task<bool> StateChangeWithId(long itemId, string barcode)
         {
             return itemService.StateChangeWithId(itemId, barcode);
         }

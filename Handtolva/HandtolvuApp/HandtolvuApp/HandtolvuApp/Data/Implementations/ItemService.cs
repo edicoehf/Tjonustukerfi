@@ -13,9 +13,9 @@ namespace HandtolvuApp.Data.Implementations
 {
     public class ItemService : IItemService
     {
-        HttpClient _client;
+        readonly HttpClient _client;
 
-        public NextStates nextStates { get; private set; }
+        public NextStates NextStates { get; private set; }
 
         public Item Item { get; private set; }
 
@@ -49,7 +49,7 @@ namespace HandtolvuApp.Data.Implementations
 
         public async Task<NextStates> GetNextStatesAsync(string barcode)
         {
-            nextStates = null;
+            NextStates = null;
 
             string Uri = $"http://10.0.2.2:5000/api/items/nextstate?barcode={barcode}";
 
@@ -60,7 +60,7 @@ namespace HandtolvuApp.Data.Implementations
                 if(response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    nextStates = JsonConvert.DeserializeObject<NextStates>(content);
+                    NextStates = JsonConvert.DeserializeObject<NextStates>(content);
                 }
             }
             catch(Exception ex)
@@ -68,12 +68,12 @@ namespace HandtolvuApp.Data.Implementations
                 Debug.WriteLine(@"\tError {0}", ex.Message);
             }
 
-            return nextStates;
+            return NextStates;
         }
 
-        public async Task StateChangeWithId(long id, string barcode)
+        public async Task<bool> StateChangeWithId(long id, string barcode)
         {
-            string stateUri = "http://10.0.2.2:5000/api/items/statechangebyid";
+            string stateUri = "http://10.0.2.2:5000/api/items/scanner/statechangebyid";
             var item = new[] { new { itemId = id, stateChangeBarcode = barcode } };
 
             try
@@ -86,12 +86,17 @@ namespace HandtolvuApp.Data.Implementations
 
                 if(response.IsSuccessStatusCode)
                 {
-                    Debug.WriteLine(@"\tOrder successfully completed");
+                    return true;
+                }
+                else
+                {
+                    return false;
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(@"\tERROR {0}", ex.Message);
+                return false;
             }
         }
 

@@ -13,7 +13,7 @@ namespace HandtolvuApp.Data.Interfaces
 
         Task<Item> GetItemAsync(string barcode);
 
-        Task StateChangeWithId(long itemId, string barcode);
+        Task<bool> StateChangeWithId(long itemId, string barcode);
 
         Task StateChangeByLocation(ObservableCollection<string> items, string barcode);
     }

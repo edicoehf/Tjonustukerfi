@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HandtolvuApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,11 @@ namespace HandtolvuApp.Controls
         public OrderInputPage()
         {
             InitializeComponent();
+
+            MessagingCenter.Subscribe<OrderInputViewModel, string>(this, "NoOrder", async (sender, message) =>
+            {
+                await App.Current.MainPage.DisplayAlert("Villa", $"Pöntunarnúmer {message} er ekki til", "Ok");
+            });
         }
     }
 }

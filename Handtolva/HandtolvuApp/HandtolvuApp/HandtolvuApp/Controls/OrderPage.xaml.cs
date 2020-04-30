@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HandtolvuApp.Data.Implementations;
+using HandtolvuApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +17,17 @@ namespace HandtolvuApp.Controls
         public OrderPage()
         {
             InitializeComponent();
+
+            MessagingCenter.Subscribe<OrderService>(this, "Success", async (sender) =>
+            {
+                await App.Current.MainPage.DisplayAlert("Klárað", $"Pöntun hefur verið skráð sótt", "Ok");
+            });
+        }
+
+        protected override void OnAppearing()
+        {
+            MyCollectionView.SelectedItem = null;
+            base.OnAppearing();
         }
     }
 }

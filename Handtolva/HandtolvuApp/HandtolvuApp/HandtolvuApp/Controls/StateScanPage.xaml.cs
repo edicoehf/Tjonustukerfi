@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HandtolvuApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,16 @@ namespace HandtolvuApp.Controls
         public StateScanPage()
         {
             InitializeComponent();
+
+            MessagingCenter.Subscribe<StateScanViewModel, string>(this, "Success", async (sender, message) =>
+            {
+                await App.Current.MainPage.DisplayAlert("Klárað!", message, "OK");
+            });
+
+            MessagingCenter.Subscribe<StateScanViewModel, string>(this, "Fail", async (sender, message) =>
+            {
+                await App.Current.MainPage.DisplayAlert("Villa!", message, "OK");
+            });
         }
     }
 }

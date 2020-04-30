@@ -1,5 +1,7 @@
 ﻿using HandtolvuApp.Data.Interfaces;
 using HandtolvuApp.Models;
+using HandtolvuApp.Models.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,7 +24,21 @@ namespace HandtolvuApp.ViewModels
 
             StateScan = new Command(async () =>
             {
-                await App.ItemManager.StateChangeWithId(Item.Id, ScannedBarcodeText);
+                if(ScannedBarcodeText != "")
+                {
+                    if(await App.ItemManager.StateChangeWithId(Item.Id, ScannedBarcodeText))
+                    {
+                        MessagingCenter.Send<StateScanViewModel, string>(this, "Success", $"{Item.Barcode} hefur verið skannað í hólf {ScannedBarcodeText}");
+                    }
+                    else
+                    {
+                        MessagingCenter.Send<StateScanViewModel, string>(this, "Fail", $"Ekki var hægt að skanna {Item.Barcode} í hólf {ScannedBarcodeText}");
+                    }
+                }
+                else
+                {
+                    Placeholder = "Staðsetning verður að vera gefin";
+                }
             });
         }
 
