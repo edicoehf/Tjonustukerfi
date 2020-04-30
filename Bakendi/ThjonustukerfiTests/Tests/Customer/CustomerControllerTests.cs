@@ -35,11 +35,7 @@ namespace ThjonustukerfiTests.Tests
                 Name = "Siggi Viggi"
             };
 
-            _customerServiceMock.Setup(method => method.CreateCustomer(customer)).Returns(new CustomerDTO 
-            {
-                Id = 1,
-                Name = "Siggi Viggi"
-            });
+            _customerServiceMock.Setup(method => method.CreateCustomer(customer)).Returns(1);
 
             // Create controller
             _customerController = new CustomerController(_customerServiceMock.Object);
@@ -55,6 +51,7 @@ namespace ThjonustukerfiTests.Tests
             Assert.AreEqual("GetCustomerById", response.RouteName);
             Assert.AreEqual(expectedId, response.RouteValues["id"]);
             Assert.AreEqual(201, response.StatusCode);
+            Assert.IsNotNull(response.Value);
         }
 
         [TestMethod]

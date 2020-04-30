@@ -10,7 +10,7 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
     {
         /// <summary>Creates a new customer.</summary>
         /// <returns>A customer DTO of the customer that was just created.</returns>
-        CustomerDTO CreateCustomer(CustomerInputModel customer);
+        long CreateCustomer(CustomerInputModel customer);
 
         /// <summary>Gets a customer with the given ID.</summary>
         /// <returns>A detailed customer DTO.</returns>

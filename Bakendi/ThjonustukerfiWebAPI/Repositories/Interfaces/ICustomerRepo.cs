@@ -9,7 +9,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
     {
         /// <summary>Adds a new customer to the database.</summary>
         /// <returns>A CustomerDTO object.</returns>
-        CustomerDTO CreateCustomer(CustomerInputModel customer);
+        long CreateCustomer(CustomerInputModel customer);
 
         /// <summary>Gets a customer with the given ID from the database.</summary>
         /// <returns>A detailed DTO of the customer.</returns>

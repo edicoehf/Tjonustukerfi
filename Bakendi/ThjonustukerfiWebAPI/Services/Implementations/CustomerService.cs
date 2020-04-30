@@ -19,7 +19,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             _customerRepo = customerRepo;
             _orderRepo = orderRepo;
         }
-        public CustomerDTO CreateCustomer(CustomerInputModel customer) => _customerRepo.CreateCustomer(customer);
+        public long CreateCustomer(CustomerInputModel customer) => _customerRepo.CreateCustomer(customer);
         public CustomerDetailsDTO GetCustomerById(long id) => _customerRepo.GetCustomerById(id);
         public void UpdateCustomerDetails(CustomerInputModel customer, long id) => _customerRepo.UpdateCustomerDetails(customer, id);
         public List<OrderDTO> DeleteCustomerById(long id)

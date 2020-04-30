@@ -43,9 +43,10 @@ namespace ThjonustukerfiWebAPI.Controllers
         public IActionResult CreateCustomer([FromBody] CustomerInputModel customer)
         {
             if(!ModelState.IsValid) { return BadRequest("Input model is not valid"); }
-            var entity = _customerService.CreateCustomer(customer);
             
-            return CreatedAtRoute("GetCustomerById", new { id = entity.Id }, null);
+            var cId = _customerService.CreateCustomer(customer);
+
+            return CreatedAtRoute("GetCustomerById", new { id = cId }, new { customerId = cId });
         }
 
         /// <summary>Gets a customer by ID.</summary>

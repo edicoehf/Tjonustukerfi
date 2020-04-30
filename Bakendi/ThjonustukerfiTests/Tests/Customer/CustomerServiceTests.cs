@@ -28,7 +28,7 @@ namespace ThjonustukerfiTests.Tests
         }
 
         [TestMethod]
-        public void CreateCustomer_should_return_a_single_customerDTO()
+        public void CreateCustomer_should_return_a_customerId()
         {
             //* Arrange
             var inp = new CustomerInputModel
@@ -37,26 +37,18 @@ namespace ThjonustukerfiTests.Tests
                 Email = "VS@vigsig.is"
             };
 
-            // Mock dto and repo
-            CustomerDTO mockCustomerDTO = new CustomerDTO
-            {
-                Id = 10,
-                Name = inp.Name
-            };
-
             // Config returns values
-            _customerRepoMock.Setup(method => method.CreateCustomer(inp)).Returns(mockCustomerDTO);
+            _customerRepoMock.Setup(method => method.CreateCustomer(inp)).Returns(10);
 
             // Craete service
             _customerService = new CustomerService(_customerRepoMock.Object, _orderRepoMock.Object);
 
             //* Act
-            var customerDTOReturn = _customerService.CreateCustomer(inp);
+            var retVal = _customerService.CreateCustomer(inp);
 
             //* Assert
-            Assert.IsNotNull(customerDTOReturn);
-            Assert.AreEqual(customerDTOReturn.Id, mockCustomerDTO.Id);
-            Assert.AreEqual(customerDTOReturn.Name, mockCustomerDTO.Name);
+            Assert.IsNotNull(retVal);
+            Assert.IsInstanceOfType(retVal, typeof(long));
         }
 
         [TestMethod]
