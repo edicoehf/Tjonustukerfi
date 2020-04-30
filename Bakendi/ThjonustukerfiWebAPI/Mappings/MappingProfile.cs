@@ -109,6 +109,9 @@ namespace ThjonustukerfiWebAPI.Mappings
             // Automapper for item archive to DTO
             CreateMap<ItemArchive, ArchiveItemDTO>();
 
+            // Automapper for item print
+            CreateMap<ItemDTO, ItemPrintDetailsDTO>();
+
             //* Order Mappings
             // Automapper for OrderInputModel to Order entity
             CreateMap<OrderInputModel, Order>()

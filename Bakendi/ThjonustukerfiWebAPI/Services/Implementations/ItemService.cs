@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using AutoMapper;
 using ThjonustukerfiWebAPI.Configurations;
@@ -147,10 +149,24 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             return nextStateDto;
         }
 
-        public NextStatesDTO GetItemNextStatesByBarcode(string barcode)
+        // Get the ID and use get by ID
+        public NextStatesDTO GetItemNextStatesByBarcode(string barcode) => GetItemNextStates(_itemRepo.SearchItem(barcode));
+
+        public ItemPrintDetailsDTO GetItemPrintDetails(long itemId)
         {
-            // Get the ID and use get by ID
-            return GetItemNextStates(_itemRepo.SearchItem(barcode));
+            // get item print details
+            var item = _itemRepo.GetItemPrintDetails(itemId);
+
+            var bCode = new BarcodeLib.Barcode();   // get the barcode lib class
+
+            // encode to Image
+            var img = bCode.Encode(BarcodeLib.TYPE.CODE128, item.Barcode, Color.Black, Color.White, Constants.BarcodeImageSize.Width, Constants.BarcodeImageSize.Height);
+
+            // Convert image to byte array
+            ImageConverter ic = new ImageConverter();
+            item.BarcodeImage = (byte[])ic.ConvertTo(img, typeof(byte[]));
+        
+            return item;
         }
 
         //*        Helper Functions        *//
