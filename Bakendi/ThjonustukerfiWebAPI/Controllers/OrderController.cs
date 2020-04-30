@@ -58,7 +58,7 @@ namespace ThjonustukerfiWebAPI.Controllers
             if(!ModelState.IsValid) { return BadRequest("Input model is not valid"); }
             var entityId = _orderService.CreateOrder(order);
 
-            return CreatedAtRoute("GetOrderbyId", new { id = entityId }, null);
+            return CreatedAtRoute("GetOrderbyId", new { id = entityId }, new { orderId = entityId });
         }
 
         /// <summary>Updates Order data</summary>
