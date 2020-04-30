@@ -189,8 +189,18 @@ namespace ThjonustukerfiWebAPI.Mappings
                 .ForMember(src => src.TimeOfChange, opt => opt.MapFrom(src => DateTime.Now))
                 .AfterMap((src, dst) => { dst.ItemId = src.Id; });
 
+            // ItemTimestamp to dto
+            CreateMap<ItemTimestamp, ItemTimeStampDTO>()
+                .AfterMap((src, dst) =>
+                {
+                    BuildDatabase();
+                    dst.State = _dbContext.State.FirstOrDefault(s => s.Id == src.StateId).Name;
+                    DestroyDatabase();
+                });
+
             //* ItemstateInput Mappings
             CreateMap<ItemStateChangeInputIdScanner, ItemStateChangeBarcodeScanner>();
+
         }
 
         private void BuildDatabase()

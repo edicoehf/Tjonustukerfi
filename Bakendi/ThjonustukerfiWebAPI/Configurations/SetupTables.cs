@@ -25,6 +25,11 @@ namespace ThjonustukerfiWebAPI.Configurations
             //TODO: for config, maybe put in another class
             Constants.sendEmail = true;
             Constants.sendSMS = false;
+            Constants.Locations = new List<string>()
+            {
+                "holf1", "holf2", "holf3", "holf4", "holf5",
+                "holf6", "holf7", "holf8", "holf9", "holf10",
+            };
 
             var DB_Services = _dbContext.Set<Service>().ToList();
             var DB_ServiceStates = _dbContext.Set<ServiceState>().ToList();

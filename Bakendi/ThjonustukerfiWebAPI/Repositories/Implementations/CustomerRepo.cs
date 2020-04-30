@@ -26,7 +26,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
         {
             return _mapper.Map<IEnumerable<CustomerDTO>>(_dbContext.Customer.ToList());
         }
-        public CustomerDTO CreateCustomer(CustomerInputModel customer)
+        public long CreateCustomer(CustomerInputModel customer)
         {
             var check = _dbContext.Customer.FirstOrDefault(p => p.Email == customer.Email);
             if(check != null) { throw new InvalidIdException("This person already exists."); }
@@ -34,8 +34,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             var entity = _dbContext.Customer.Add(_mapper.Map<Customer>(customer)).Entity;
             _dbContext.SaveChanges();
 
-            // Mapping from entity to DTO
-            return _mapper.Map<CustomerDTO>(entity);
+            return entity.Id;
         }
         public CustomerDetailsDTO GetCustomerById(long id)
         {

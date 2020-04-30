@@ -10,8 +10,9 @@ describe("<OrderItem />", () => {
         category: "Lax",
         service: "Birkireyking",
         barcode: "50050001",
-        json: { location: "none", slices: "1 biti" },
+        json: { location: "none", sliced: true, filleted: true },
         state: "Vinnslu",
+        details: "something",
     };
 
     beforeEach(() => {
@@ -20,8 +21,8 @@ describe("<OrderItem />", () => {
         );
     });
 
-    it("Should have 6 children", () => {
-        expect(wrapper.find("tr").at(0).instance().children.length).toBe(6);
+    it("Should have 8 children", () => {
+        expect(wrapper.find("tr").at(0).instance().children.length).toBe(8);
     });
 
     it("Should display category correctly", () => {
@@ -46,5 +47,22 @@ describe("<OrderItem />", () => {
         expect(wrapper.find(".order-item-state").at(0).childAt(0).text()).toBe(
             testProps.state
         );
+    });
+
+    it("Should display filleted correctly", () => {
+        expect(
+            wrapper.find(".order-item-filleted").at(0).childAt(0).text()
+        ).toBe("Flakað");
+    });
+
+    it("Should display sliced correctly", () => {
+        expect(wrapper.find(".order-item-sliced").at(0).childAt(0).text()).toBe(
+            "Bitar"
+        );
+    });
+    it("Should display details correctly", () => {
+        expect(
+            wrapper.find(".order-item-details").at(0).childAt(0).text()
+        ).toBe(testProps.details);
     });
 });

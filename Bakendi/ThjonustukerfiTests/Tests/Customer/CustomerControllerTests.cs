@@ -35,11 +35,7 @@ namespace ThjonustukerfiTests.Tests
                 Name = "Siggi Viggi"
             };
 
-            _customerServiceMock.Setup(method => method.CreateCustomer(customer)).Returns(new CustomerDTO 
-            {
-                Id = 1,
-                Name = "Siggi Viggi"
-            });
+            _customerServiceMock.Setup(method => method.CreateCustomer(customer)).Returns(1);
 
             // Create controller
             _customerController = new CustomerController(_customerServiceMock.Object);
@@ -55,6 +51,7 @@ namespace ThjonustukerfiTests.Tests
             Assert.AreEqual("GetCustomerById", response.RouteName);
             Assert.AreEqual(expectedId, response.RouteValues["id"]);
             Assert.AreEqual(201, response.StatusCode);
+            Assert.IsNotNull(response.Value);
         }
 
         [TestMethod]
@@ -218,6 +215,7 @@ namespace ThjonustukerfiTests.Tests
             Assert.AreEqual(StatusCodes.Status204NoContent, response.StatusCode);
         }
 
+        [TestMethod]
         public void GetPickupOrdersByCustomerId_should_respond_with_OkObject()
         {
             //* Arrange
@@ -233,6 +231,27 @@ namespace ThjonustukerfiTests.Tests
             //* Assert
             Assert.IsNotNull(response);
             Assert.IsInstanceOfType(response, typeof(OkObjectResult));
+            Assert.AreEqual(StatusCodes.Status200OK, response.StatusCode);
+            Assert.IsInstanceOfType(response.Value as List<OrderDTO>, typeof(List<OrderDTO>));
+        }
+
+        [TestMethod]
+        public void GetOrdersByCustomerId_should_respond_with_OkObject()
+        {
+            //* Arrange
+            // mock
+            _customerServiceMock.Setup(method => method.GetOrdersByCustomerId(It.IsAny<long>())).Returns(CreateOrderDTOList());
+
+            // Creating controller
+            _customerController = new CustomerController(_customerServiceMock.Object);
+
+            //* Act
+            var response = _customerController.GetOrdersByCustomerId(1) as OkObjectResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOfType(response, typeof(OkObjectResult));
+            Assert.AreEqual(StatusCodes.Status200OK, response.StatusCode);
             Assert.IsInstanceOfType(response.Value as List<OrderDTO>, typeof(List<OrderDTO>));
         }
 

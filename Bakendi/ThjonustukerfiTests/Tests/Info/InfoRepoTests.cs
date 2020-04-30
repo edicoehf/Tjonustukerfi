@@ -10,6 +10,7 @@ using ThjonustukerfiWebAPI.Repositories.Implementations;
 using System.Linq;
 using ThjonustukerfiWebAPI.Repositories.Interfaces;
 using ThjonustukerfiWebAPI.Models.Exceptions;
+using System;
 
 namespace ThjonustukerfiTests.Tests.Info
 {
@@ -22,11 +23,6 @@ namespace ThjonustukerfiTests.Tests.Info
         [TestInitialize]
         public void Initialize()    // Initialization before each test, fill the inMemory database
         {
-            // adding automapper with the configuration from the project
-            var profile = new MappingProfile();
-            var config = new MapperConfiguration(cfg => cfg.AddProfile(profile));
-            _mapper = new Mapper(config);
-
             _options = new DbContextOptionsBuilder<DataContext>()
                 .UseInMemoryDatabase(databaseName: "Thjonustukerfi-info-tests")
                 .EnableSensitiveDataLogging()
@@ -234,11 +230,97 @@ namespace ThjonustukerfiTests.Tests.Info
             }
         }
 
+        [TestMethod]
+        public void GetItemHistory_should_return_a_list_of_itemTimeStampsDTO()
+        {
+            //* Arrange
+            long itemID = 1;
+            using(var mockContext = new DataContext(_options))
+            {
+                UpdateMapper(mockContext);  // this functions map uses context
+                IInfoRepo infoRepo = new InfoRepo(mockContext, _mapper);
+
+                var itemTimestampCount = mockContext.ItemTimestamp.Where(its => its.ItemId == itemID).Count();
+
+                //* Act
+                var value = infoRepo.GetItemHistory(itemID);
+
+                //* Assert
+                Assert.IsNotNull(value);
+                Assert.IsInstanceOfType(value, typeof(List<ItemTimeStampDTO>));
+                Assert.AreEqual(itemTimestampCount, value.Count);
+            }
+        }
+
+        [TestMethod]
+        public void GetItemHistory_should_throw_NotFoundException()
+        {
+            //* Arrange
+            long itemID = -100;
+            using(var mockContext = new DataContext(_options))
+            {
+                UpdateMapper(mockContext);  // this functions map uses context
+                IInfoRepo infoRepo = new InfoRepo(mockContext, _mapper);
+
+                //* Act and Assert
+                Assert.ThrowsException<NotFoundException>(()=> infoRepo.GetItemHistory(itemID));
+            }
+        }
+
         //**********     Helper functions     **********//
         private void FillDatabase()
         {
             using(var mockContext = new DataContext(_options))
             {
+                UpdateMapper(mockContext);  // update the mapper with the new context
+
+                var orders = new List<Order>()
+                {
+                    new Order()
+                    {
+                        Id = 1,
+                        CustomerId = 1,
+                        Barcode = "82374892374",
+                        JSON = "",
+                        DateCreated = DateTime.MinValue,
+                        DateModified = DateTime.Now,
+                        DateCompleted = DateTime.MaxValue,
+                        NotificationCount = 0
+                    }
+                };
+
+                var itemOrderConnections = new List<ItemOrderConnection>()
+                {
+                    new ItemOrderConnection { Id = 1, ItemId = 1, OrderId = 1 }
+                };
+
+                var items = new List<Item>()
+                {
+                    new Item()
+                    {
+                        Id = 1,
+                        CategoryId = 1,
+                        StateId = 5,
+                        ServiceId = 1,
+                        Barcode = "4567890",
+                        JSON = @"{""location"":""Vinnslu"",""sliced"":true,""filleted"":false,""otherCategory"":"""",""otherService"":""""}",
+                        Details = "Hello",
+                        DateCreated = DateTime.MinValue,
+                        DateModified = DateTime.Now,
+                        DateCompleted = DateTime.MaxValue
+                    }
+                };
+
+                var now = DateTime.Now;
+                var item1Timestamps = new List<ItemTimestamp>()
+                {
+                    new ItemTimestamp { Id = 1, ItemId = 1, StateId = 1, TimeOfChange = now.AddHours(1) },
+                    new ItemTimestamp { Id = 2, ItemId = 1, StateId = 2, TimeOfChange = now.AddHours(2) },
+                    new ItemTimestamp { Id = 3, ItemId = 1, StateId = 3, TimeOfChange = now.AddHours(3) },
+                    new ItemTimestamp { Id = 4, ItemId = 1, StateId = 4, TimeOfChange = now.AddHours(4) },
+                    new ItemTimestamp { Id = 5, ItemId = 1, StateId = 5, TimeOfChange = now.AddHours(5) }
+                };
+
                 var services = new List<Service>()
                 {
                     new Service { Id = 1, Name = "Birkireyking" },
@@ -278,8 +360,21 @@ namespace ThjonustukerfiTests.Tests.Info
                 mockContext.State.AddRange(states);
                 mockContext.Category.AddRange(categories);
                 mockContext.ServiceState.AddRange(serviceStates);
+                mockContext.Order.AddRange(orders);
+                mockContext.ItemOrderConnection.AddRange(itemOrderConnections);
+                mockContext.Item.AddRange(items);
+                mockContext.ItemTimestamp.AddRange(item1Timestamps);
                 mockContext.SaveChanges();
             }
+        }
+
+        /// <summary>Updates the private mapper to have the current mock data context</summary>
+        private void UpdateMapper(DataContext context)
+        {
+            // Needs a seperete automapper that has access to the current instance of db context
+            var myProfile = new MappingProfile(context);   // Create a new profile like the one we implemented
+            var myConfig = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));   // Setup a configuration with our profile
+            _mapper = new Mapper(myConfig); // Create a new mapper with our profile
         }
 
         private void ClearDatabase()
@@ -290,6 +385,10 @@ namespace ThjonustukerfiTests.Tests.Info
                 mockContext.State.RemoveRange(mockContext.State);
                 mockContext.Category.RemoveRange(mockContext.Category);
                 mockContext.ServiceState.RemoveRange(mockContext.ServiceState);
+                mockContext.Order.RemoveRange(mockContext.Order);
+                mockContext.ItemOrderConnection.RemoveRange(mockContext.ItemOrderConnection);
+                mockContext.Item.RemoveRange(mockContext.Item);
+                mockContext.ItemTimestamp.RemoveRange(mockContext.ItemTimestamp);
                 mockContext.SaveChanges();
             }
         }
