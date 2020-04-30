@@ -36,7 +36,6 @@ const useGetOrderById = (id) => {
 
 const parseItemJsonForItems = (items) => {
     for (var i = 0; i < items.length; i++) {
-        console.log(items[i].json);
         items[i].json = JSON.parse(items[i].json);
     }
     return items;

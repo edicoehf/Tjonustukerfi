@@ -10,7 +10,7 @@ const CreateCustomerAction = () => {
             <Link to={`/new-customer`}>
                 <Button
                     className="create-button"
-                    size="Large"
+                    size="large"
                     variant="contained"
                 >
                     <AddCircleIcon className="create-icon" />
