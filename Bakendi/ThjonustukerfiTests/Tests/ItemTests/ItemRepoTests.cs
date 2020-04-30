@@ -831,6 +831,25 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             }
         }
 
+        [TestMethod]
+        public void GetItemPrintDetails_should_return_ItemPrintDetailsDTO()
+        {
+            //* Arrange
+            using(var mockContext = new DataContext(_options))
+            {
+                UpdateMapper(mockContext);
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                //* Act
+                var value = itemRepo.GetItemPrintDetails(1);
+
+                //* Assert
+                Assert.IsNotNull(value);
+                Assert.IsInstanceOfType(value, typeof(ItemPrintDetailsDTO));
+                Assert.IsNull(value.BarcodeImage);  // handled in service
+            }
+        }
+
         //**********     Helper functions     **********//
         private void FillDatabase()
         {
