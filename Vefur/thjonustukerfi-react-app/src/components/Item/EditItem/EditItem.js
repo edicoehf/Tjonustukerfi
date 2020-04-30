@@ -22,6 +22,11 @@ const EditItem = ({ match, history }) => {
                 id: item.id,
                 categoryId: parseInt(item.category),
                 serviceId: parseInt(item.service),
+                filleted: item.filleted === "filleted" ? true : false,
+                sliced: item.sliced === "sliced" ? true : false,
+                otherCategory: item.otherCategory || "",
+                otherService: item.otherService || "",
+                details: item.details || "",
             });
         }
     };
