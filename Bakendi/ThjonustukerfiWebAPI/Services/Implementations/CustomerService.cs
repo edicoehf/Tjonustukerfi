@@ -19,7 +19,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             _customerRepo = customerRepo;
             _orderRepo = orderRepo;
         }
-        public CustomerDTO CreateCustomer(CustomerInputModel customer) => _customerRepo.CreateCustomer(customer);
+        public long CreateCustomer(CustomerInputModel customer) => _customerRepo.CreateCustomer(customer);
         public CustomerDetailsDTO GetCustomerById(long id) => _customerRepo.GetCustomerById(id);
         public void UpdateCustomerDetails(CustomerInputModel customer, long id) => _customerRepo.UpdateCustomerDetails(customer, id);
         public List<OrderDTO> DeleteCustomerById(long id)
@@ -62,6 +62,13 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             if(!_customerRepo.CustomerExists(customerId)) { throw new NotFoundException($"Customer with ID {customerId} was not found."); }
 
             return _orderRepo.GetOrdersReadyForPickupByCustomerID(customerId);
+        }
+
+        public List<OrderDTO> GetOrdersByCustomerId(long customerId)
+        {
+            if(!_customerRepo.CustomerExists(customerId)) { throw new NotFoundException($"Customer with ID {customerId} was not found."); }
+
+            return _orderRepo.GetOrdersByCustomerId(customerId);
         }
     }
 }

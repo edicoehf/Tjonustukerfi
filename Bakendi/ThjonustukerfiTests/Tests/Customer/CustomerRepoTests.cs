@@ -115,7 +115,7 @@ namespace ThjonustukerfiTests.Tests
         }
 
         [TestMethod]
-        public void CreateCustomer_should_create_and_return_customerDTO()
+        public void CreateCustomer_should_create_and_return_customerId()
         {
             //* Arrange
             var inp = new CustomerInputModel
@@ -135,10 +135,8 @@ namespace ThjonustukerfiTests.Tests
 
                 //* Assert
                 Assert.IsNotNull(result);
-                Assert.IsInstanceOfType(result, typeof(CustomerDTO));
+                Assert.IsInstanceOfType(result, typeof(long));
                 Assert.AreEqual(mockContext.Customer.Count(), dbSize + 1);
-                Assert.AreEqual(result.Name, inp.Name);
-                Assert.IsInstanceOfType(result.Id, typeof(long));
             };
         }
 

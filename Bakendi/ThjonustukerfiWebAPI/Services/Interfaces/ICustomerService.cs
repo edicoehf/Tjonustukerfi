@@ -10,7 +10,7 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
     {
         /// <summary>Creates a new customer.</summary>
         /// <returns>A customer DTO of the customer that was just created.</returns>
-        CustomerDTO CreateCustomer(CustomerInputModel customer);
+        long CreateCustomer(CustomerInputModel customer);
 
         /// <summary>Gets a customer with the given ID.</summary>
         /// <returns>A detailed customer DTO.</returns>
@@ -31,6 +31,11 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
         void DeleteCustomerByIdAndOrders(long customerId);
 
         /// <summary>Gets all orders ready to be picked up by customer ID</summary>
+        /// <returns>List of OrderDTO, empty list if none exist</returns>
         List<OrderDTO> GetPickupOrdersByCustomerId(long customerId);
+
+        /// <summary>Gets all orders (not archived) by customer ID</summary>
+        /// <returns>List of OrderDTO, empty list if none exist</returns>
+        List<OrderDTO> GetOrdersByCustomerId(long customerId);
     }
 }

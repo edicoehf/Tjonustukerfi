@@ -8,6 +8,7 @@ using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.InputModels;
 using ThjonustukerfiWebAPI.Services.Interfaces;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace ThjonustukerfiTests.Tests
 {
@@ -24,19 +25,10 @@ namespace ThjonustukerfiTests.Tests
         }
 
         [TestMethod]
-        public void CreateNewOrder_CheckingResponseNoContent()
+        public void CreateOrder_should_return_CreatedAtRoute()
         {
             //* Arrange
-            OrderInputModel order = new OrderInputModel
-            {
-                CustomerId = 1,
-                Items = new List<ItemInputModel>()
-                {
-                    new ItemInputModel {
-                        CategoryId = 1
-                    }
-                }
-            };
+            OrderInputModel order = new OrderInputModel();
 
             long expectedID = 1;
             _orderServiceMock.Setup(method => method.CreateOrder(order)).Returns(expectedID);
@@ -50,7 +42,8 @@ namespace ThjonustukerfiTests.Tests
             Assert.IsNotNull(response);
             Assert.AreEqual("GetOrderbyId", response.RouteName);
             Assert.AreEqual(expectedID, response.RouteValues["id"]);
-            Assert.AreEqual(201, response.StatusCode);
+            Assert.AreEqual(StatusCodes.Status201Created, response.StatusCode);
+            Assert.IsNotNull(response.Value);
         }
 
         [TestMethod]

@@ -28,7 +28,7 @@ namespace ThjonustukerfiTests.Tests
         }
 
         [TestMethod]
-        public void CreateCustomer_should_return_a_single_customerDTO()
+        public void CreateCustomer_should_return_a_customerId()
         {
             //* Arrange
             var inp = new CustomerInputModel
@@ -37,26 +37,18 @@ namespace ThjonustukerfiTests.Tests
                 Email = "VS@vigsig.is"
             };
 
-            // Mock dto and repo
-            CustomerDTO mockCustomerDTO = new CustomerDTO
-            {
-                Id = 10,
-                Name = inp.Name
-            };
-
             // Config returns values
-            _customerRepoMock.Setup(method => method.CreateCustomer(inp)).Returns(mockCustomerDTO);
+            _customerRepoMock.Setup(method => method.CreateCustomer(inp)).Returns(10);
 
             // Craete service
             _customerService = new CustomerService(_customerRepoMock.Object, _orderRepoMock.Object);
 
             //* Act
-            var customerDTOReturn = _customerService.CreateCustomer(inp);
+            var retVal = _customerService.CreateCustomer(inp);
 
             //* Assert
-            Assert.IsNotNull(customerDTOReturn);
-            Assert.AreEqual(customerDTOReturn.Id, mockCustomerDTO.Id);
-            Assert.AreEqual(customerDTOReturn.Name, mockCustomerDTO.Name);
+            Assert.IsNotNull(retVal);
+            Assert.IsInstanceOfType(retVal, typeof(long));
         }
 
         [TestMethod]
@@ -190,7 +182,7 @@ namespace ThjonustukerfiTests.Tests
             // create service
             _customerService = new CustomerService(_customerRepoMock.Object, _orderRepoMock.Object);
 
-            var list = _customerService.GetPickupOrdersByCustomerId((long)1);
+            var list = _customerService.GetPickupOrdersByCustomerId(1);
 
             Assert.IsNotNull(list);
             Assert.IsInstanceOfType(list, typeof(List<OrderDTO>));
@@ -209,6 +201,34 @@ namespace ThjonustukerfiTests.Tests
             Assert.ThrowsException<NotFoundException>(() => _customerService.GetPickupOrdersByCustomerId((long)1));
         }
         
+        [TestMethod]
+        public void GetOrdersByCustomerId_should_return_list_of_orders()
+        {
+            //* Arrange
+            _customerRepoMock.Setup(method => method.CustomerExists(It.IsAny<long>())).Returns(true);
+            _orderRepoMock.Setup(method => method.GetOrdersByCustomerId(It.IsAny<long>())).Returns(CreateOrderDTOList());
+
+            // create service
+            _customerService = new CustomerService(_customerRepoMock.Object, _orderRepoMock.Object);
+
+            var retVal = _customerService.GetOrdersByCustomerId(1);
+
+            Assert.IsNotNull(retVal);
+            Assert.IsInstanceOfType(retVal, typeof(List<OrderDTO>));
+        }
+
+        [TestMethod]
+        public void GetOrdersByCustomerId_should_throw_NotFoundException()
+        {
+            //* Arrange
+            _customerRepoMock.Setup(method => method.CustomerExists(It.IsAny<long>())).Returns(false);
+
+            // create service
+            _customerService = new CustomerService(_customerRepoMock.Object, _orderRepoMock.Object);
+
+            //* Act and Assert
+            Assert.ThrowsException<NotFoundException>(() => _customerService.GetOrdersByCustomerId(1));
+        }
 
         //*         Helper functions         *//
         /// <summary>Creates a list of order DTO for testing</summary>
