@@ -29,5 +29,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
         /// <summary>Gets all Archived orders along with their Items</summary>
         /// <returns>A list of all archived orders</returns>
         List<ArchiveOrderDTO> GetArchivedOrders();
+
+        /// <summary>Gets a list of an Items history</summary>
+        /// <returns>List of ItemTimeStampDTO</returns>
+        List<ItemTimeStampDTO> GetItemHistory(long itemId);
     }
 }

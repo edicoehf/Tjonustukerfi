@@ -218,6 +218,25 @@ namespace ThjonustukerfiTests.Tests
             Assert.AreEqual(StatusCodes.Status204NoContent, response.StatusCode);
         }
 
+        public void GetPickupOrdersByCustomerId_should_respond_with_OkObject()
+        {
+            //* Arrange
+            // mock
+            _customerServiceMock.Setup(method => method.GetPickupOrdersByCustomerId(It.IsAny<long>())).Returns(CreateOrderDTOList());
+
+            // Create controller
+            _customerController = new CustomerController(_customerServiceMock.Object);
+
+            //* Act
+            var response = _customerController.GetPickupOrdersByCustomerId((long)1) as OkObjectResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOfType(response, typeof(OkObjectResult));
+            Assert.AreEqual(StatusCodes.Status200OK, response.StatusCode);
+            Assert.IsInstanceOfType(response.Value as List<OrderDTO>, typeof(List<OrderDTO>));
+        }
+
         //*         Helper functions         *//
         /// <summary>Creates a list of order DTO for testing</summary>
         private List<OrderDTO> CreateOrderDTOList()

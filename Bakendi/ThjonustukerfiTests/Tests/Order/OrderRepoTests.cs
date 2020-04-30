@@ -1087,6 +1087,25 @@ namespace ThjonustukerfiTests.Tests
             }
         }
 
+        [TestMethod]
+        public void GetOrderReadyForPickupByCustomerID_should_return_list_of_order()
+        {
+            long customerID = 50;   // this customer should have one ready order and one not ready
+            //* Arrange
+            using(var mockContext = new DataContext(_options))
+            {
+                UpdateMapper(mockContext);  // uses current context
+
+                IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
+
+                var order = orderRepo.GetOrdersReadyForPickupByCustomerID(customerID);
+
+                Assert.IsNotNull(order);
+                Assert.IsInstanceOfType(order, typeof(List<OrderDTO>));
+                Assert.AreEqual(1, order.Count);
+            }
+        }
+
         //**********     Helper functions     **********//
         private void FillDatabase()
         {
