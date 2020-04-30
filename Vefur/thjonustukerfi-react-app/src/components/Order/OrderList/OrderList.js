@@ -7,6 +7,7 @@ import {
     TableCell,
     TableBody,
     TableContainer,
+    Divider,
 } from "@material-ui/core";
 import OrderListItem from "../OrderListItem/OrderListItem";
 import "./OrderList.css";
@@ -19,7 +20,11 @@ const OrderList = ({ orders, isLoading, error }) => {
                 isLoading ? (
                     <p> Sæki Pantanir </p>
                 ) : (
-                    <TableContainer component={Paper} className="order-list">
+                    <TableContainer
+                        component={Paper}
+                        elevation={3}
+                        className="order-list"
+                    >
                         <Table>
                             <TableHead>
                                 <TableRow className="order-row">
@@ -41,8 +46,11 @@ const OrderList = ({ orders, isLoading, error }) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {orders.map((order) => (
-                                    <OrderListItem order={order} />
+                                {orders.map((order, i) => (
+                                    <React.Fragment key={i}>
+                                        <OrderListItem order={order} />
+                                        {i < orders.length - 1 && <Divider />}
+                                    </React.Fragment>
                                 ))}
                             </TableBody>
                         </Table>

@@ -2,11 +2,7 @@
     width: 50em;
     margin: 0 auto;
     background-color: var(--data-color);
-    box-shadow:
-        0px 3px 3px -2px rgba(0, 0, 0, 0.2),
-        0px 3px 4px 0px rgba(0, 0, 0, 0.14),
-        0px 1px 8px 0px rgba(0, 0, 0, 0.12);
-
+    border-radius: 10px;
 }
 
 .order-list .order-row {
@@ -18,13 +14,16 @@
 }
 
 .order-list .MuiTableRow-root.order-row-body:hover {
-    background-color: #3f51b52d;
+    background-color: #9ba7f762;
     cursor: pointer;
 }
 
-.order-list .order-row th {
-    font-weight: bold;
+.order-list .order-row th {font-weight: bold;
     background-color: rgba(224, 225, 238, 0.829);
+}
+
+.order-list .order-row .MuiTableCell-root {
+    border-bottom: none;
 }
 
 .order-list .order-row .order-cell-id {
