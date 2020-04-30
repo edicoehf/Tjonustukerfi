@@ -31,6 +31,11 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
         void DeleteCustomerByIdAndOrders(long customerId);
 
         /// <summary>Gets all orders ready to be picked up by customer ID</summary>
+        /// <returns>List of OrderDTO, empty list if none exist</returns>
         List<OrderDTO> GetPickupOrdersByCustomerId(long customerId);
+
+        /// <summary>Gets all orders (not archived) by customer ID</summary>
+        /// <returns>List of OrderDTO, empty list if none exist</returns>
+        List<OrderDTO> GetOrdersByCustomerId(long customerId);
     }
 }

@@ -57,5 +57,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
 
         /// <summary>Gets orders ready for pickup via customer ID</summary>
         List<OrderDTO> GetOrdersReadyForPickupByCustomerID(long customerId);
+
+        /// <summary>Gets all orders (not archived) by customer ID</summary>
+        /// <returns>List of OrderDTO, empty list if none exist</returns>
+        List<OrderDTO> GetOrdersByCustomerId(long customerId);
     }
 }

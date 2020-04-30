@@ -63,5 +63,12 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
 
             return _orderRepo.GetOrdersReadyForPickupByCustomerID(customerId);
         }
+
+        public List<OrderDTO> GetOrdersByCustomerId(long customerId)
+        {
+            if(!_customerRepo.CustomerExists(customerId)) { throw new NotFoundException($"Customer with ID {customerId} was not found."); }
+
+            return _orderRepo.GetOrdersByCustomerId(customerId);
+        }
     }
 }
