@@ -13,6 +13,10 @@ button.dlt-btn:hover {
     border-radius: 10px;
 }
 
+.view-items div.MuiPaper-root .MuiTableCell-root {
+    border-bottom: none;
+}
+
 .view-items th {
     background-color: rgba(224, 225, 238, 0.829);
     font-weight: bold;
@@ -21,4 +25,65 @@ button.dlt-btn:hover {
 .view-items {
     width: 50rem;
     margin: 0 5rem 0 5rem;
+}
+
+.view-items div.MuiPaper-root .item-row {
+    display: grid;
+    grid-template-columns: 28% 28% 15% 15% 7% 7%;
+    grid-template-areas:
+        "category service filleted sliced amount remove";
+}
+
+.view-items div.MuiPaper-root .item-row .item-cell-category {
+    grid-area: category;
+    align-self: center;
+}
+
+.view-items div.MuiPaper-root .item-row .item-cell-service {
+    grid-area: service;
+    align-self: center;
+
+}
+
+.view-items div.MuiPaper-root .item-row .item-cell-filleted {
+    grid-area: filleted;
+    align-self: center;
+
+}
+
+.view-items div.MuiPaper-root .item-row .item-cell-sliced {
+    grid-area: sliced;
+    align-self: center;
+
+}
+
+.view-items div.MuiPaper-root .item-row .item-cell-amount {
+    grid-area: amount;
+    align-self: center;
+
+}
+
+.view-items div.MuiPaper-root .item-row .item-cell-remove {
+    grid-area: remove;
+    align-self: center;
+    justify-self: center;
+    padding: 0;
+}
+
+
+.view-items div.MuiPaper-root .item-row-details {
+    display: grid;
+    grid-template-columns: 8% 92%;
+    grid-template-areas:
+        "details-title details-content";
+}
+
+.view-items div.MuiPaper-root .item-row-details .item-cell-details-title {
+    grid-area: details-title;
+    padding-top: 0;
+}
+
+.view-items div.MuiPaper-root .item-row-details .item-cell-details-content {
+    grid-area: details-content;
+    padding-top: 0;
 }

@@ -7,9 +7,11 @@ import {
     TableHead,
     TableRow,
     Paper,
-    Fab,
+    Divider,
+    IconButton,
 } from "@material-ui/core";
-import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
+import ClearIcon from "@material-ui/icons/Clear";
+
 import "./ViewItems.css";
 import { itemsType, removeType } from "../../../../types";
 
@@ -20,51 +22,74 @@ const ViewItems = ({ items, remove }) => {
             <TableContainer component={Paper} elevation={3}>
                 <Table stickyHeader aria-label="simple table">
                     <TableHead>
-                        <TableRow>
-                            <TableCell>Tegund</TableCell>
-                            <TableCell>Þjónusta</TableCell>
-                            <TableCell>Fjöldi</TableCell>
-                            <TableCell>Flökun</TableCell>
-                            <TableCell>Pökkun</TableCell>
-                            <TableCell>Annað</TableCell>
+                        <TableRow className="item-row">
+                            <TableCell className="item-cell-category">
+                                Tegund
+                            </TableCell>
+                            <TableCell className="item-cell-service">
+                                Þjónusta
+                            </TableCell>
+                            <TableCell className="item-cell-filleted">
+                                Flökun
+                            </TableCell>
+                            <TableCell className="item-cell-sliced">
+                                Pökkun
+                            </TableCell>
+                            <TableCell className="item-cell-amount">
+                                Fjöldi
+                            </TableCell>
                             <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody className="order-body">
                         {items.map((item, i) => (
-                            <TableRow key={i} className="order-row">
-                                <TableCell>
-                                    {item.otherCategory
-                                        ? item.otherCategory
-                                        : item.categoryName}
-                                </TableCell>
-                                <TableCell>
-                                    {item.otherService
-                                        ? item.otherService
-                                        : item.serviceName}
-                                </TableCell>
-                                <TableCell>{item.amount}</TableCell>
-                                <TableCell>
-                                    {item.filleted === "filleted"
-                                        ? "Flakað"
-                                        : "Óflakað"}
-                                </TableCell>
-                                <TableCell>
-                                    {item.sliced === "sliced"
-                                        ? "Bitar"
-                                        : "Heilt Flak"}
-                                </TableCell>
-                                <TableCell>{item.details}</TableCell>
-                                <TableCell align="right">
-                                    <Fab
-                                        className="dlt-btn"
-                                        onClick={() => remove(item)}
-                                        size="small"
-                                    >
-                                        <RemoveCircleOutlineIcon />
-                                    </Fab>
-                                </TableCell>
-                            </TableRow>
+                            <React.Fragment key={i}>
+                                <TableRow key={i} className="item-row">
+                                    <TableCell className="item-cell-category">
+                                        {item.otherCategory
+                                            ? item.otherCategory
+                                            : item.categoryName}
+                                    </TableCell>
+                                    <TableCell className="item-cell-services">
+                                        {item.otherService
+                                            ? item.otherService
+                                            : item.serviceName}
+                                    </TableCell>
+                                    <TableCell className="item-cell-filleted">
+                                        {item.filleted === "filleted"
+                                            ? "Flakað"
+                                            : "Óflakað"}
+                                    </TableCell>
+                                    <TableCell className="item-cell-sliced">
+                                        {item.sliced === "sliced"
+                                            ? "Bitar"
+                                            : "Heilt Flak"}
+                                    </TableCell>
+                                    <TableCell className="item-cell-amount">
+                                        {item.amount}
+                                    </TableCell>
+                                    <TableCell className="item-cell-remove">
+                                        <IconButton
+                                            color="secondary"
+                                            component="span"
+                                            onClick={() => remove(item)}
+                                        >
+                                            <ClearIcon />
+                                        </IconButton>
+                                    </TableCell>
+                                </TableRow>
+                                {item.details !== "" && (
+                                    <TableRow className="item-row-details">
+                                        <TableCell className="item-cell-details-title">
+                                            <b>Annað:</b>
+                                        </TableCell>
+                                        <TableCell className="item-cell-details-content">
+                                            {item.details}
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                                {i < items.length - 1 && <Divider />}
+                            </React.Fragment>
                         ))}
                     </TableBody>
                 </Table>
