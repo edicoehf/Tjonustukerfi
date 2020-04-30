@@ -233,6 +233,7 @@ namespace ThjonustukerfiTests.Tests
             //* Assert
             Assert.IsNotNull(response);
             Assert.IsInstanceOfType(response, typeof(OkObjectResult));
+            Assert.AreEqual(StatusCodes.Status200OK, response.StatusCode);
             Assert.IsInstanceOfType(response.Value as List<OrderDTO>, typeof(List<OrderDTO>));
         }
 
