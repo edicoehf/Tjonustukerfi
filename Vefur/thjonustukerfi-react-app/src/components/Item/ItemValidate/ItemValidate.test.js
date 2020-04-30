@@ -11,6 +11,13 @@ describe("Validate item", () => {
                 category: null,
                 service: 1,
                 amount: 1,
+                sliced: "whole",
+                filleted: "filleted",
+                details: "details",
+                otherCategory: "lol",
+                otherService: "lol",
+                categories: [{}],
+                services: [{}],
             };
         });
 
@@ -34,6 +41,13 @@ describe("Validate item", () => {
                 category: 1,
                 service: null,
                 amount: 1,
+                sliced: "whole",
+                filleted: "filleted",
+                details: "details",
+                otherCategory: "lol",
+                otherService: "lol",
+                categories: [{}],
+                services: [{}],
             };
         });
 
@@ -57,6 +71,13 @@ describe("Validate item", () => {
                 category: 1,
                 service: 1,
                 amount: null,
+                sliced: "whole",
+                filleted: "filleted",
+                details: "details",
+                otherCategory: "lol",
+                otherService: "lol",
+                categories: [{}],
+                services: [{}],
             };
         });
 
