@@ -4,8 +4,9 @@ namespace ThjonustukerfiWebAPI.Configurations
 {
     public class BarcodeImageDimensions
     {
-        public int Width { get; set; }
-        public int Height { get; set; }
+        private static int _defaultValue = 100;
+        public int Width { get; set; } = _defaultValue;
+        public int Height { get; set; } = _defaultValue;
     }
     public static class Constants
     {
