@@ -1091,6 +1091,7 @@ namespace ThjonustukerfiTests.Tests
         public void GetOrderReadyForPickupByCustomerID_should_return_list_of_order()
         {
             long customerID = 50;   // this customer should have one ready order and one not ready
+            
             //* Arrange
             using(var mockContext = new DataContext(_options))
             {
@@ -1098,11 +1099,38 @@ namespace ThjonustukerfiTests.Tests
 
                 IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
 
-                var order = orderRepo.GetOrdersReadyForPickupByCustomerID(customerID);
+                //* Act
+                var orders = orderRepo.GetOrdersReadyForPickupByCustomerID(customerID);
 
-                Assert.IsNotNull(order);
-                Assert.IsInstanceOfType(order, typeof(List<OrderDTO>));
-                Assert.AreEqual(1, order.Count);
+                //* Assert
+                Assert.IsNotNull(orders);
+                Assert.IsInstanceOfType(orders, typeof(List<OrderDTO>));
+                Assert.AreEqual(1, orders.Count);
+            }
+        }
+
+        [TestMethod]
+        public void GetOrdersByCustomerId_should_return_list_of_order()
+        {
+            long customerID = 50;   // this customer should have two orders
+
+            //* Arrange
+            using(var mockContext = new DataContext(_options))
+            {
+                UpdateMapper(mockContext);
+
+                IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
+
+                // get order count
+                var orderCount = mockContext.Order.Where(o => o.CustomerId == customerID).Count();
+
+                //* Act
+                var orders = orderRepo.GetOrdersByCustomerId(customerID);
+
+                //* Assert
+                Assert.IsNotNull(orders);
+                Assert.IsInstanceOfType(orders, typeof(List<OrderDTO>));
+                Assert.AreEqual(orderCount, orders.Count);
             }
         }
 
