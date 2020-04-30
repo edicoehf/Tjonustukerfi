@@ -1,5 +1,5 @@
 .order-list.MuiPaper-root {
-    width: 50em;
+    width: 40em;
     margin: 0 auto;
     background-color: var(--data-color);
     border-radius: 10px;
@@ -18,7 +18,8 @@
     cursor: pointer;
 }
 
-.order-list .order-row th {font-weight: bold;
+.order-list .order-row th {
+    font-weight: bold;
     background-color: rgba(224, 225, 238, 0.829);
 }
 
