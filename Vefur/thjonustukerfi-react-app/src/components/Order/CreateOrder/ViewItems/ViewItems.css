@@ -2,12 +2,22 @@ button.dlt-btn {
     background-color: #d9534f;
     color: white;
 }
+
 button.dlt-btn:hover {
     background-color: #ee7773;
 }
-div.MuiPaper-root {
+
+.view-items div.MuiPaper-root {
     width: 50rem;
+    background-color: var(--data-color);
+    border-radius: 10px;
 }
+
+.view-items th {
+    background-color: rgba(234, 235, 247, 0.829);
+    font-weight: bold;
+}
+
 .view-items {
     width: 50rem;
     margin: 0 5rem 0 5rem;
