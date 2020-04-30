@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -115,6 +116,30 @@ namespace ThjonustukerfiTests.Tests.Info
             Assert.IsNotNull(response.Value);
             Assert.AreEqual(StatusCodes.Status200OK, response.StatusCode);
             Assert.IsInstanceOfType(response.Value as List<CategoryDTO>, typeof(List<CategoryDTO>));
+        }
+
+        [TestMethod]
+        public void GetItemHistory_should_return_a_list_of_an_items_history()
+        {
+            //* Arrange
+            var retDTO = new List<ItemTimeStampDTO>()
+            {
+                new ItemTimeStampDTO { ItemId = 1, StateId = 1, State = "working", TimeOfChange = DateTime.MinValue }
+            };
+
+            // mock method
+            _infoServiceMock.Setup(method => method.GetItemHistory(It.IsAny<long>())).Returns(retDTO);
+
+            // create controller
+            _infoController = new InfoController(_infoServiceMock.Object);
+
+            //* Act
+            var response = _infoController.GetItemHistory((long)1) as OkObjectResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(StatusCodes.Status200OK, response.StatusCode);
+            Assert.IsInstanceOfType(response.Value as List<ItemTimeStampDTO>, typeof(List<ItemTimeStampDTO>));
         }
     }
 }

@@ -19,5 +19,6 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
 
         public IEnumerable GetCategories() => _infoRepo.GetCategories();
         public List<ArchiveOrderDTO> GetArchivedOrders() => _infoRepo.GetArchivedOrders();
+        public List<ItemTimeStampDTO> GetItemHistory(long itemId) => _infoRepo.GetItemHistory(itemId);
     }
 }
