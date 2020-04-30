@@ -72,16 +72,16 @@ describe("<OrderList />", () => {
             expect(pTag).toBeNull;
         });
 
-        it("should contain Nafn", () => {
-            expect(wrapper.contains("Pantananúmer")).toEqual(true);
+        it("should contain Pöntunarnúmer", () => {
+            expect(wrapper.contains("Pöntunarnúmer")).toEqual(true);
         });
 
-        it("should contain Eigandi Pöntunar", () => {
-            expect(wrapper.contains("Eigandi Pöntunar")).toEqual(true);
+        it("should contain Viðskiptavinur", () => {
+            expect(wrapper.contains("Viðskiptavinur")).toEqual(true);
         });
 
-        it("should contain Fjöldi Vara", () => {
-            expect(wrapper.contains("Fjöldi Vara")).toEqual(true);
+        it("should contain Dagsetning", () => {
+            expect(wrapper.contains("Dagsetninga")).toEqual(true);
         });
     });
 });

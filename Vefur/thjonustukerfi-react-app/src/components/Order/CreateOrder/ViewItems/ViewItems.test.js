@@ -44,57 +44,57 @@ describe("<ViewItems />", () => {
 
     // Test categories
     it("Should display category of 1st row correctly", () => {
-        expect(wrapper.find("tr.order-row").at(0).find("td").at(0).text()).toBe(
+        expect(wrapper.find("tr.item-row").at(1).find("td").at(0).text()).toBe(
             testProps[0].categoryName
         );
     });
 
     it("Should display category of 2nd row correctly", () => {
-        expect(wrapper.find("tr.order-row").at(1).find("td").at(0).text()).toBe(
+        expect(wrapper.find("tr.item-row").at(2).find("td").at(0).text()).toBe(
             testProps[1].categoryName
         );
     });
 
     it("Should display category of 3rd row correctly", () => {
-        expect(wrapper.find("tr.order-row").at(2).find("td").at(0).text()).toBe(
+        expect(wrapper.find("tr.item-row").at(3).find("td").at(0).text()).toBe(
             testProps[2].categoryName
         );
     });
 
     // Test services
     it("Should display service of 1st row correctly", () => {
-        expect(wrapper.find("tr.order-row").at(0).find("td").at(1).text()).toBe(
+        expect(wrapper.find("tr.item-row").at(1).find("td").at(1).text()).toBe(
             testProps[0].serviceName
         );
     });
 
     it("Should display service of 2nd row correctly", () => {
-        expect(wrapper.find("tr.order-row").at(1).find("td").at(1).text()).toBe(
+        expect(wrapper.find("tr.item-row").at(2).find("td").at(1).text()).toBe(
             testProps[1].serviceName
         );
     });
 
     it("Should display service of 3rd row correctly", () => {
-        expect(wrapper.find("tr.order-row").at(2).find("td").at(1).text()).toBe(
+        expect(wrapper.find("tr.item-row").at(3).find("td").at(1).text()).toBe(
             testProps[2].serviceName
         );
     });
 
     // Test amount
     it("Should display amount of 1st row correctly", () => {
-        expect(wrapper.find("tr.order-row").at(0).find("td").at(2).text()).toBe(
+        expect(wrapper.find("tr.item-row").at(1).find("td").at(4).text()).toBe(
             testProps[0].amount.toString()
         );
     });
 
     it("Should display amount of 2nd row correctly", () => {
-        expect(wrapper.find("tr.order-row").at(1).find("td").at(2).text()).toBe(
+        expect(wrapper.find("tr.item-row").at(2).find("td").at(4).text()).toBe(
             testProps[1].amount.toString()
         );
     });
 
     it("Should display amount of 3rd row correctly", () => {
-        expect(wrapper.find("tr.order-row").at(2).find("td").at(2).text()).toBe(
+        expect(wrapper.find("tr.item-row").at(3).find("td").at(4).text()).toBe(
             testProps[2].amount.toString()
         );
     });
