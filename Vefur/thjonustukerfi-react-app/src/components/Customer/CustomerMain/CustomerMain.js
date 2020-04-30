@@ -6,11 +6,15 @@ import useGetAllCustomers from "../../../hooks/useGetAllCustomers";
 import useSearchBar from "../../../hooks/useSearchBar";
 import CreateCustomerAction from "../Actions/CreateCustomerAction/CreateCustomerAction";
 
-const CustomerMain = () => {
+const CustomerMain = ({ history }) => {
     const { customers, error, isLoading } = useGetAllCustomers();
     customers.sort((a, b) => a.name.localeCompare(b.name));
     const { searchResults, handleChange, searchTerm } = useSearchBar(customers);
     const searchBarPlaceHolder = "Leita eftir nafni";
+
+    const redirectToCustomerDetails = (id) => {
+        history.push(`/customer/${id}`);
+    };
 
     return (
         <div className="customer-main">
@@ -20,30 +24,26 @@ const CustomerMain = () => {
             <div className="main-item create-button">
                 <CreateCustomerAction />
             </div>
-            {!customers.length > 0 ? (
+            <SearchBar
+                searchTerm={searchTerm}
+                handleChange={handleChange}
+                placeHolder={searchBarPlaceHolder}
+                htmlId="customer-searchbar"
+            />
+            {!(searchResults.length > 0) && customers.length > 0 ? (
                 <>
                     <h4 className="main-item no-customers">
-                        Enginn viðskiptavinur fannst. Má bjóða þér að bæta við
-                        viðskiptavin?{" "}
-                    </h4>{" "}
+                        Enginn viðskiptavinur fannst með þessum leitarskilyrðum
+                    </h4>
                 </>
             ) : (
                 <>
-                    <div className="main-item search-bar">
-                        <SearchBar
-                            searchTerm={searchTerm}
-                            handleChange={handleChange}
-                            placeHolder={searchBarPlaceHolder}
-                            htmlId="customer-searchbar"
-                        />
-                    </div>
-                    <div className="main-item">
-                        <CustomerList
-                            customers={searchResults}
-                            error={error}
-                            isLoading={isLoading}
-                        />
-                    </div>
+                    <CustomerList
+                        customers={searchResults}
+                        error={error}
+                        isLoading={isLoading}
+                        cb={redirectToCustomerDetails}
+                    />
                 </>
             )}
         </div>

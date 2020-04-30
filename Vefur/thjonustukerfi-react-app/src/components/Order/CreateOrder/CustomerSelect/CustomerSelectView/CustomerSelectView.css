@@ -6,3 +6,19 @@
 .customer-select-view .search-bar {
     align-self: center;
 }
+
+.customer-select-list.MuiPaper-root {
+    margin-top: 1.5em;
+    align-self: center;
+    width: 40em;
+    border-radius: 10px;
+    background-color: var(--data-color);
+}
+
+.customer-select-list .list-of-customers {
+    padding: 0;
+}
+
+.customer-select-list .list-of-customers .customer-list-item {
+    padding-left: 48px;
+}

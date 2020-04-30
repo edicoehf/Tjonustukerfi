@@ -1,15 +1,3 @@
-.buttons {
-    display: flex;
-    justify-content: center;
-}
-.customers {
-    display: flex;
-    flex-direction: column;
-}
-li.button-area {
-    justify-content: center;
-    height: 100%;
-    background-color: rgb(255, 255, 255);
-    border-bottom: 0.1px solid rgb(187, 187, 187);
-    border-right: 0.1px solid rgb(187, 187, 187);
+.customer-list-item .MuiListItemText-secondary {
+    color: rgba(0, 0, 0, 0.6)
 }

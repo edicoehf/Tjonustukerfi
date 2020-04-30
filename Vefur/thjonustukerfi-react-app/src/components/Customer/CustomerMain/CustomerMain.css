@@ -20,3 +20,16 @@
 .customer-main .search-bar {
     align-self: center;
 }
+
+.customer-main .customer-list {
+    margin-top: 1.5em;
+    align-self: center;
+}
+
+.customer-main .no-customers {
+    margin-top: 2em;
+}
+
+.customer-main .search-bar .MuiFormControl-root {
+    width: 20em;
+}
