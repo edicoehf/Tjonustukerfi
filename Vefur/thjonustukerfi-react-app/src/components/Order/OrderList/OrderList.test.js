@@ -81,7 +81,7 @@ describe("<OrderList />", () => {
         });
 
         it("should contain Dagsetning", () => {
-            expect(wrapper.contains("Dagsetninga")).toEqual(true);
+            expect(wrapper.contains("Dagsetning")).toEqual(true);
         });
     });
 });
