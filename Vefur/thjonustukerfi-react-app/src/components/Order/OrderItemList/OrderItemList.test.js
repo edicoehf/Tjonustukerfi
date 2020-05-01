@@ -42,6 +42,7 @@ describe("<OrderItemList />", () => {
         wrapper = mount(
             <Router history={historyMock}>
                 <OrderItemList items={testProps} />
+            </Router>
         );
     });
 
