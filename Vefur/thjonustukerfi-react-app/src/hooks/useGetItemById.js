@@ -10,6 +10,7 @@ const useGetItemById = (id) => {
         itemService
             .getItemById(id)
             .then((item) => {
+                item.json = JSON.parse(item.json);
                 setItem(item);
                 setIsLoading(false);
                 setError(null);
