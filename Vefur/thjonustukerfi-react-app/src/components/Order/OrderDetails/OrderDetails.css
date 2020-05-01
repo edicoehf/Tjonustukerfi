@@ -1,14 +1,19 @@
-.order-details {
-    margin-top: 4em;
-}
-
 .order-title {
-    display: flex;
-    justify-content: center;
-    margin-top: 1em;
+    text-align: center;
+    margin: 0;
+    padding: 0.5em 0 0.5em 0;
+    background-color: rgba(224, 225, 238, 0.829);
 }
 
-.customer-link {
+.order-details .order-info {
+    margin: 0.5em 0 0.5em 0;
+}
+
+.order-details .order-title {
+    grid-area: title;
+}
+
+.order-details .customer-link {
     color: #212529;
     text-decoration: underline;
 }
@@ -32,6 +37,14 @@
 }
 
 .order-details .MuiPaper-root {
-    width: inherit;
-    min-width: 50rem;
+    width: 60rem;
+    background-color: var(--data-color);
+}
+
+.order-details .MuiPaper-root th {
+    background-color: rgba(224, 225, 238, 0.829);
+}
+
+.order-details .MuiPaper-root td {
+    border-bottom: none;
 }
