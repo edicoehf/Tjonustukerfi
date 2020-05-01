@@ -19,13 +19,20 @@
     margin-bottom: 2em;
 }
 
-.item-search .search-bar .MuiFormControl-root {
-    margin: 0 2em;
-}
-
 .item-not-found {
     margin-top: 2em;
     text-align: center;
     color: var(--error-color);
     font-weight: bold;
+}
+
+.item-search .item-search-bars {
+    margin: 0 auto;
+    width: fit-content;
+    background-color: var(--data-color);
+    border-radius: 10px;
+}
+
+.item-search .search-bar {
+    padding: 0.5em 2.5em 1.5em 2.5em;
 }

@@ -21,12 +21,17 @@ const CustomerSelectView = ({ addCustomer }) => {
                     <p> Sæki viðskiptavini </p>
                 ) : (
                     <div className="customer-select-view">
-                        <SearchBar
-                            searchTerm={searchTerm}
-                            handleChange={handleChange}
-                            placeHolder={searchBarPlaceHolder}
-                            htmlId="customer-select-searchbar"
-                        />
+                        <Paper
+                            elevation={3}
+                            className="customer-select-search-paper"
+                        >
+                            <SearchBar
+                                searchTerm={searchTerm}
+                                handleChange={handleChange}
+                                placeHolder={searchBarPlaceHolder}
+                                htmlId="customer-select-searchbar"
+                            />
+                        </Paper>
                         {searchResults.length === 0 ? (
                             <p className="error no-customers">
                                 Enginn viðskiptavinur fannst

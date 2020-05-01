@@ -1,6 +1,6 @@
 import React from "react";
 import useFindItem from "../../../hooks/useFindItem";
-import { Button } from "@material-ui/core";
+import { Button, Paper } from "@material-ui/core";
 import Form from "../../Form/Form";
 import { Link } from "react-router-dom";
 import ItemDetails from "../ItemDetails/ItemDetails";
@@ -30,7 +30,7 @@ const ItemSearch = () => {
     return (
         <div className="item-search">
             <h1>Leita að vöru</h1>
-            <div className="item-search-bars">
+            <Paper elevation={3} className="item-search-bars">
                 <Form>
                     <SearchBar
                         htmlId="id-search-bar"
@@ -47,7 +47,7 @@ const ItemSearch = () => {
                         handleClick={handleBarcodeFetch}
                     />
                 </Form>
-            </div>
+            </Paper>
             {error ? (
                 <div className="item-not-found">Vara fannst ekki</div>
             ) : (

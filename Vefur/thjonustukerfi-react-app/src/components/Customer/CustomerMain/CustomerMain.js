@@ -5,6 +5,7 @@ import SearchBar from "../../SearchBar/SearchBar";
 import useGetAllCustomers from "../../../hooks/useGetAllCustomers";
 import useSearchBar from "../../../hooks/useSearchBar";
 import CreateCustomerAction from "../Actions/CreateCustomerAction/CreateCustomerAction";
+import { Paper } from "@material-ui/core";
 
 const CustomerMain = ({ history }) => {
     const { customers, error, isLoading } = useGetAllCustomers();
@@ -24,12 +25,14 @@ const CustomerMain = ({ history }) => {
             <div className="main-item create-button">
                 <CreateCustomerAction />
             </div>
-            <SearchBar
-                searchTerm={searchTerm}
-                handleChange={handleChange}
-                placeHolder={searchBarPlaceHolder}
-                htmlId="customer-searchbar"
-            />
+            <Paper elevation={3} className="customer-search-paper">
+                <SearchBar
+                    searchTerm={searchTerm}
+                    handleChange={handleChange}
+                    placeHolder={searchBarPlaceHolder}
+                    htmlId="customer-searchbar"
+                />
+            </Paper>
             {!(searchResults.length > 0) && customers.length > 0 ? (
                 <>
                     <h4 className="main-item no-customers">
