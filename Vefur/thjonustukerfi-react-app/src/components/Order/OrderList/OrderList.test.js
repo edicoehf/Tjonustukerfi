@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow, mount } from "enzyme";
 import OrderList from "./OrderList";
-jest.mock("react-router-dom");
+import { Router } from "react-router-dom";
 
 describe("<OrderList />", () => {
     let wrapper;
@@ -46,15 +46,22 @@ describe("<OrderList />", () => {
         ],
     };
 
+    const historyMock = {
+        push: jest.fn(),
+        location: {},
+        listen: jest.fn(),
+        createHref: jest.fn(),
+    };
+
     beforeEach(() => {
         wrapper = mount(
-            shallow(
+            <Router history={historyMock}>
                 <OrderList
                     orders={[testOrder1, testOrder2]}
                     isLoading={false}
                     error={null}
                 />
-            ).get(0)
+            </Router>
         );
     });
 
