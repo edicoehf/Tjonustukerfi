@@ -1,3 +1,48 @@
-.order-item-list {
-    margin-top: 2.5em;
+.order-details div.MuiPaper-root .order-item-list-row {
+    display: grid;
+    grid-template-columns: 8% 21% 21% 12% 11% 11% 16%;
+    grid-template-areas:
+        "id category service filleted sliced barcode state"
+        ". details details details details details details";
+
+}
+
+.order-details div.MuiPaper-root .order-item-list-row.body-row:hover {
+    background-color: #9ba7f762;
+    cursor: pointer;
+}
+
+.order-details div.MuiPaper-root .order-item-id {
+    grid-area: id;
+    align-self: center;
+}
+
+.order-details div.MuiPaper-root .order-item-category {
+    grid-area: category;
+    align-self: center;
+}
+
+.order-details div.MuiPaper-root .order-item-service {
+    grid-area: service;
+    align-self: center;
+}
+
+.order-details div.MuiPaper-root .order-item-filleted {
+    grid-area: filleted;
+    align-self: center;
+}
+
+.order-details div.MuiPaper-root .order-item-sliced {
+    grid-area: sliced;
+    align-self: center;
+}
+
+.order-details div.MuiPaper-root .order-item-state {
+    grid-area: state;
+    align-self: center;
+}
+
+.order-details div.MuiPaper-root .order-item-details {
+    grid-area: details;
+    padding-top: 0;
 }
