@@ -1,22 +1,16 @@
 import React from "react";
 import { TableRow, TableCell } from "@material-ui/core";
 import { orderType } from "../../../types/index";
-import { Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import moment from "moment";
 import "moment/locale/is";
 import "./OrderListItem.css";
 
 const OrderListItem = ({ order }) => {
-    const [redirect, setRedirect] = React.useState(false);
+    const history = useHistory();
 
     const handleRedirect = () => {
-        setRedirect(true);
-    };
-
-    const renderRedirect = () => {
-        if (redirect) {
-            return <Redirect to={`/order/${order.id}`} />;
-        }
+        history.push(`/order/${order.id}`);
     };
 
     const dateFormat = (date) => {
@@ -26,7 +20,6 @@ const OrderListItem = ({ order }) => {
 
     return (
         <>
-            {renderRedirect()}
             <TableRow
                 hover={true}
                 onClick={handleRedirect}
