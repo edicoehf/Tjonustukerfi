@@ -1,8 +1,8 @@
 .order-view {
-    margin: 4rem auto 0 auto;
+    margin: 0 auto;
 }
 
 .order-detail-header {
-    display: flex;
-    justify-content: center;
+    text-align: center;
+    margin-top: 1em;
 }
