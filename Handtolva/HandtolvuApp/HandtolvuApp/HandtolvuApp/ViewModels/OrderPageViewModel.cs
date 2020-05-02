@@ -30,7 +30,14 @@ namespace HandtolvuApp.ViewModels
 
             CheckoutCommand = new Command(async () =>
             {
-                await App.OrderManager.CheckoutOrder(Order.Id);
+                if(await App.OrderManager.CheckoutOrder(Order.Id))
+                {
+                    MessagingCenter.Send<OrderPageViewModel, string>(this, "Success", $"Allar vörur í pöntun {Order.Barcode} hafar verið skráðar sóttar");
+                }
+                else
+                {
+                    MessagingCenter.Send<OrderPageViewModel, string>(this, "Fail", $"Ekki var hægt að skrá {Order.Barcode} sem sótta");
+                }
             });
         }
 

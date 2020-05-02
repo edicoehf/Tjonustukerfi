@@ -18,6 +18,29 @@ namespace HandtolvuApp.Controls
             InitializeComponent();
         }
 
+        protected override void OnAppearing()
+        {
+            MessagingCenter.Subscribe<LocationItemScanViewModel, string>(this, "Success", async (sender, message) =>
+            {
+                await App.Current.MainPage.DisplayAlert("Klárað!", message, "Ok");
+            });
+
+            MessagingCenter.Subscribe<LocationItemScanViewModel, string>(this, "Fail", async (sender, message) =>
+            {
+                await App.Current.MainPage.DisplayAlert("Villa!", message, "Ok");
+            });
+
+            MyEditor.Focus();
+            base.OnAppearing();
+        }
+
+        protected override void OnDisappearing()
+        {
+            MessagingCenter.Unsubscribe<LocationItemScanViewModel, string>(this, "Success");
+            MessagingCenter.Unsubscribe<LocationItemScanViewModel, string>(this, "Fail");
+            base.OnDisappearing();
+        }
+
         public void RemoveClicked(object sender, EventArgs e)
         {
             var button = sender as Button;

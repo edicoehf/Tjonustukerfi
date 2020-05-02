@@ -17,17 +17,29 @@ namespace HandtolvuApp.Controls
         public OrderPage()
         {
             InitializeComponent();
-
-            MessagingCenter.Subscribe<OrderService>(this, "Success", async (sender) =>
-            {
-                await App.Current.MainPage.DisplayAlert("Klárað", $"Pöntun hefur verið skráð sótt", "Ok");
-            });
         }
 
         protected override void OnAppearing()
         {
+            MessagingCenter.Subscribe<OrderPageViewModel, string>(this, "Success", async (sender, message) =>
+            {
+                await App.Current.MainPage.DisplayAlert("Klárað", message, "Ok");
+            });
+
+            MessagingCenter.Subscribe<OrderPageViewModel, string>(this, "Fail", async (sender, message) =>
+            {
+                await App.Current.MainPage.DisplayAlert("Villa", message, "Ok");
+            });
+
             MyCollectionView.SelectedItem = null;
             base.OnAppearing();
+        }
+
+        protected override void OnDisappearing()
+        {
+            MessagingCenter.Unsubscribe<OrderPageViewModel, string>(this, "Success");
+            MessagingCenter.Unsubscribe<OrderPageViewModel, string>(this, "Fail");
+            base.OnDisappearing();
         }
     }
 }

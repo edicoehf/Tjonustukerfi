@@ -15,6 +15,10 @@ namespace HandtolvuApp.Data.Interfaces
 
         Task<bool> StateChangeWithId(long itemId, string barcode);
 
-        Task StateChangeByLocation(ObservableCollection<string> items, string barcode);
+        Task<List<LocationStateChange>> StateChangeByLocation(ObservableCollection<string> items, string barcode);
+
+        Task<List<string>> GetAllLocations();
+
+        Task<List<State>> GetAllStates();
     }
 }

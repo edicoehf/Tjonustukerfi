@@ -32,8 +32,8 @@
                 BackgroundColor="Green" TextColor="White"
                 Command="{Binding SendCommand}"/>
 
-        <Editor Grid.Column="0" Grid.ColumnSpan="3"
-                Grid.Row="1"
+        <Entry Grid.Column="0" Grid.ColumnSpan="3" ReturnCommand="{Binding AddCommand}"
+                Grid.Row="1" x:Name="MyEditor" Keyboard="Numeric"
                 Placeholder="{Binding Placeholder}" Margin="10,0"
                 AutomationId="inputEntry"
                 Text="{Binding ScannedBarcodeText}"/>

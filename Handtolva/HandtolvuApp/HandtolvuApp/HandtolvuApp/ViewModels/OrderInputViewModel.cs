@@ -17,7 +17,7 @@ namespace HandtolvuApp.ViewModels
 
             ScannedBarcodeText = "";
 
-            ClickCommand = new Command(async () =>
+            FindOrderCommand = new Command(async () =>
             {
                 if(ScannedBarcodeText != "")
                 {
@@ -46,7 +46,7 @@ namespace HandtolvuApp.ViewModels
             });
         }
 
-        public Command ClickCommand { get; }
+        public Command FindOrderCommand { get; }
 
     }
 }

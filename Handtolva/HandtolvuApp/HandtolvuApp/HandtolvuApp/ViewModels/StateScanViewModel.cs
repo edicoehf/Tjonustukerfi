@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace HandtolvuApp.ViewModels
@@ -22,18 +23,11 @@ namespace HandtolvuApp.ViewModels
 
             ScannedBarcodeText = "";
 
-            StateScan = new Command(async () =>
+            StateScan = new Command(() =>
             {
                 if(ScannedBarcodeText != "")
                 {
-                    if(await App.ItemManager.StateChangeWithId(Item.Id, ScannedBarcodeText))
-                    {
-                        MessagingCenter.Send<StateScanViewModel, string>(this, "Success", $"{Item.Barcode} hefur verið skannað í hólf {ScannedBarcodeText}");
-                    }
-                    else
-                    {
-                        MessagingCenter.Send<StateScanViewModel, string>(this, "Fail", $"Ekki var hægt að skanna {Item.Barcode} í hólf {ScannedBarcodeText}");
-                    }
+                    StateChange();
                 }
                 else
                 {
@@ -55,6 +49,18 @@ namespace HandtolvuApp.ViewModels
                 item = value;
 
                 NotifyPropertyChanged(nameof(Item));
+            }
+        }
+
+        public async void StateChange()
+        {
+            if (await App.ItemManager.StateChangeWithId(Item.Id, ScannedBarcodeText))
+            {
+                MessagingCenter.Send<StateScanViewModel, string>(this, "Success", $"{Item.Barcode} hefur verið skannað í hólf {ScannedBarcodeText}");
+            }
+            else
+            {
+                MessagingCenter.Send<StateScanViewModel, string>(this, "Fail", $"Ekki var hægt að skanna {Item.Barcode} í hólf {ScannedBarcodeText}");
             }
         }
     }

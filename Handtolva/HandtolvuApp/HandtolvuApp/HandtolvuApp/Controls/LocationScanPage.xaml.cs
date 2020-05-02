@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HandtolvuApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,24 @@ namespace HandtolvuApp.Controls
         public LocationScanPage()
         {
             InitializeComponent();
+        }
+
+        protected override void OnAppearing()
+        {
+            MessagingCenter.Subscribe<LocationScanViewModel, string>(this, "Fail", async (sender, message) =>
+            {
+                await App.Current.MainPage.DisplayAlert("Villa!", message, "Ok");
+                MyEditor.Focus();
+            });
+
+            MyEditor.Focus();
+            base.OnAppearing();
+        }
+
+        protected override void OnDisappearing()
+        {
+            MessagingCenter.Unsubscribe<LocationScanViewModel, string>(this, "Fail");
+            base.OnDisappearing();
         }
     }
 }

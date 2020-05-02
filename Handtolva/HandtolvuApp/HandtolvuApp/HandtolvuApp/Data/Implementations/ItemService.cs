@@ -100,9 +100,10 @@ namespace HandtolvuApp.Data.Implementations
             }
         }
 
-        public async Task StateChangeByLocation(ObservableCollection<string> items, string barcode)
+        public async Task<List<LocationStateChange>> StateChangeByLocation(ObservableCollection<string> items, string barcode)
         {
             string stateUri = "http://10.0.2.2:5000/api/items/scanner/statechangebybarcode";
+            List<LocationStateChange> ret = new List<LocationStateChange>();
             var item = new List<LocationStateChange>();
             foreach(string i in items)
             {
@@ -120,7 +121,8 @@ namespace HandtolvuApp.Data.Implementations
 
                 if (response.IsSuccessStatusCode)
                 {
-                    Debug.WriteLine(@"\tOrder successfully completed");
+                    var content = await response.Content.ReadAsStringAsync();
+                    ret = JsonConvert.DeserializeObject<List<LocationStateChange>>(content);
                 }
             }
             catch (Exception ex)
@@ -128,6 +130,54 @@ namespace HandtolvuApp.Data.Implementations
 
                 Debug.WriteLine(@"\tError {0}", ex.Message);
             }
+
+            return ret;
+        }
+
+        public async Task<List<string>> GetAllLocations()
+        {
+            string reqUri = "http://10.0.2.2:5000/api/info/itemlocations";
+            List<string> ret = new List<string>();
+
+            try
+            {
+                var response = await _client.GetAsync(reqUri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    ret = JsonConvert.DeserializeObject<List<string>>(content);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(@"\tError {0}", ex.Message);
+            }
+
+            return ret;
+        }
+
+        public async Task<List<State>> GetAllStates()
+        {
+            string reqUri = "http://10.0.2.2:5000/api/info/states";
+            List<State> ret = new List<State>();
+
+            try
+            {
+                var response = await _client.GetAsync(reqUri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    ret = JsonConvert.DeserializeObject<List<State>>(content);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(@"\tError {0}", ex.Message);
+            }
+
+            return ret;
         }
 
     }

@@ -16,11 +16,24 @@ namespace HandtolvuApp.Controls
         public OrderInputPage()
         {
             InitializeComponent();
+        }
+
+        protected override void OnAppearing()
+        {
+            MyEditor.Focus();
 
             MessagingCenter.Subscribe<OrderInputViewModel, string>(this, "NoOrder", async (sender, message) =>
             {
                 await App.Current.MainPage.DisplayAlert("Villa", $"Pöntunarnúmer {message} er ekki til", "Ok");
             });
+
+            base.OnAppearing();
+        }
+
+        protected override void OnDisappearing()
+        {
+            MessagingCenter.Unsubscribe<OrderInputViewModel, string>(this, "NoOrder");
+            base.OnDisappearing();
         }
     }
 }

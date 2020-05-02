@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.companyname.handtolvuapp" android:installLocation="preferExternal">
-	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="28" />
+	<uses-sdk android:minSdkVersion="22" android:targetSdkVersion="28" />
 	<application android:label="HandtolvuApp.Android">
-    <uses-library android:name="com.symbol.emdk" android:required="false"/>
-  </application>
-	<uses-permission android:name="com.symbol.emdk.permission.EMDK" android:requiredFeature="false"/>
+		<uses-library android:name="com.symbol.emdk" android:required="false" />
+	</application>
+	<uses-permission android:name="com.symbol.emdk.permission.EMDK" android:requiredFeature="false" />
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest>

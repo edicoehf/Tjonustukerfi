@@ -16,10 +16,25 @@ namespace HandtolvuApp.Controls
         public ItemInputPage()
         {
             InitializeComponent();
-            MessagingCenter.Subscribe<ItemInputViewModel>(this, "Villa", async (sender) =>
+        }
+
+        protected override void OnAppearing()
+        {
+            MyEditor.Focus();
+
+            MessagingCenter.Subscribe<ItemInputViewModel, string>(this, "Villa", async (sender, message) =>
             {
-                await App.Current.MainPage.DisplayAlert("Villa", "Vörunúmer er ekki til", "Ok");
+                await App.Current.MainPage.DisplayAlert("Villa", message, "Ok");
+                MyEditor.Focus();
             });
+
+            base.OnAppearing();
+        }
+
+        protected override void OnDisappearing()
+        {
+            MessagingCenter.Unsubscribe<ItemInputViewModel, string>(this, "Villa");
+            base.OnDisappearing();
         }
     }
 }

@@ -16,16 +16,31 @@ namespace HandtolvuApp.Controls
         public StateScanPage()
         {
             InitializeComponent();
+        }
 
+        protected override void OnAppearing()
+        {
             MessagingCenter.Subscribe<StateScanViewModel, string>(this, "Success", async (sender, message) =>
             {
                 await App.Current.MainPage.DisplayAlert("Klárað!", message, "OK");
+                MyEditor.Focus();
             });
 
             MessagingCenter.Subscribe<StateScanViewModel, string>(this, "Fail", async (sender, message) =>
             {
                 await App.Current.MainPage.DisplayAlert("Villa!", message, "OK");
+                MyEditor.Focus();
             });
+
+            MyEditor.Focus();
+            base.OnAppearing();
+        }
+
+        protected override void OnDisappearing()
+        {
+            MessagingCenter.Unsubscribe<StateScanViewModel, string>(this, "Success");
+            MessagingCenter.Unsubscribe<StateScanViewModel, string>(this, "Fail");
+            base.OnDisappearing();
         }
     }
 }

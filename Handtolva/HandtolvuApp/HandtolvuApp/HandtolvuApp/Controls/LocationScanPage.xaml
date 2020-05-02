@@ -31,8 +31,8 @@
                VerticalOptions="CenterAndExpand" 
                />
 
-        <Editor Grid.Column="0" Grid.ColumnSpan="3"
-                Grid.Row="2"
+        <Entry  Grid.Column="0" Grid.ColumnSpan="3" ReturnCommand="{Binding ClickCommand}"
+                Grid.Row="2" x:Name="MyEditor"
                 Placeholder="{Binding Placeholder}" Margin="10,0"
                 AutomationId="inputEntry"
                 Text="{Binding ScannedBarcodeText}"/>

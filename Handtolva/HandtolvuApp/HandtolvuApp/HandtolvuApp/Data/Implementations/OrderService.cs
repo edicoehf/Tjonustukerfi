@@ -44,7 +44,7 @@ namespace HandtolvuApp.Data.Implementations
             return Order;
         }
 
-        public async Task CheckoutOrder(long id)
+        public async Task<bool> CheckoutOrder(long id)
         {
             // uri to set order to completed state
             string checkoutUri = "http://10.0.2.2:5000/api/orders/";
@@ -58,14 +58,14 @@ namespace HandtolvuApp.Data.Implementations
 
                 if (response.IsSuccessStatusCode)
                 {
-                    MessagingCenter.Send<OrderService>(this, "Success");
-                    Debug.WriteLine(@"\tOrder successfully completed");
+                    return true;
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(@"\rERROR {0}", ex.Message);
             }
+            return false;
         }
     }
 }

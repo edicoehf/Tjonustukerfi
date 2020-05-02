@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HandtolvuApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
@@ -12,7 +13,7 @@ namespace HandtolvuApp.ViewModels
         {
 
             Barcode = barcode;
-
+            
             Placeholder = "Sláðu inn vörunúmer";
 
             ScannedBarcodeText = "";
@@ -32,7 +33,34 @@ namespace HandtolvuApp.ViewModels
 
             SendCommand = new Command( async () =>
             {
-                await App.ItemManager.StateChangeByLocation(AllItems, Barcode);
+                if(AllItems.Count > 0)
+                {
+                    List<LocationStateChange> invalidInput = await App.ItemManager.StateChangeByLocation(AllItems, Barcode);
+
+                    if(invalidInput.Count == 0)
+                    {
+                        // success
+                        MessagingCenter.Send<LocationItemScanViewModel, string>(this, $"Success", "Allar vörur eru skannaðar í hólf {Barcode}");
+                        AllItems.Clear();
+                    }
+                    else
+                    {
+                        // display alert that something failed
+                        MessagingCenter.Send<LocationItemScanViewModel, string>(this, "Fail", $"Ekki var hægt að setja allar vörur í hólf {Barcode}. \n\n Eftir er listi af vörum sem ekki var hægt að setja í hólfið");
+                        AllItems.Clear();
+
+                        foreach (LocationStateChange i in invalidInput)
+                        {
+                            AllItems.Add(i.ItemBarcode);
+                        }
+                    }
+                }
+                else
+                {
+                    // must be some items on the list
+                    MessagingCenter.Send<LocationItemScanViewModel, string>(this, $"Fail", "Það verður að vera einhverjar vörur til að skanna í hólf");
+
+                }
             });
         }
 
