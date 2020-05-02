@@ -8,6 +8,6 @@ namespace ThjonustukerfiWebAPI.Models.DTOs
         public string Service { get; set; }
         public string Barcode { get; set; }
         public string JSON { get; set; }
-        public byte[] BarcodeImage { get; set; }
+        public Image BarcodeImage { get; set; }
     }
 }
