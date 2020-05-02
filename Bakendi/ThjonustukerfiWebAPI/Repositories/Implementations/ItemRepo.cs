@@ -322,6 +322,15 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             return IoConnection.OrderId;
         }
 
+        public ItemPrintDetailsDTO GetItemPrintDetails(long itemId)
+        {
+            // gets item dto
+            var item = GetItemById(itemId);
+
+            // maps item dto to item print details
+            return _mapper.Map<ItemPrintDetailsDTO>(item);
+        }
+
         //*     Helper functions     *//
 
         private void changeState(long itemId, long stateId, string location = null)

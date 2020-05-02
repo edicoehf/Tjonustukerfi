@@ -44,7 +44,11 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
         NextStatesDTO GetItemNextStates(long id);
 
         /// <summary>Gets the current state of Item and next availables states with barcode.</summary>
-        /// <returns>Current state and a list of next states</returns>
+        /// <returns>Current state and a list of next states.</returns>
         NextStatesDTO GetItemNextStatesByBarcode(string barcode);
+
+        /// <summary> Gets item information for printing.</summary>
+        /// <returns>DTO that has item info and image of barcode as a byte array.</returns>
+        ItemPrintDetailsDTO GetItemPrintDetails(long itemId);
     }
 }

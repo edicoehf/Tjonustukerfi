@@ -135,5 +135,17 @@ namespace ThjonustukerfiWebAPI.Controllers
 
             return NoContent();
         }
+
+        /// <summary>Gets all print information for all items in an order.</summary>
+        /// <response code="200">Success, returns a list of item print details.</response>
+        /// <response code="404">Order with given ID not found</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("printer/{id:long}")]
+        [HttpGet]
+        public IActionResult GetOrderPrintDetails(long id)
+        {
+            return Ok(_orderService.GetOrderPrintDetails(id));
+        }
     }
 }

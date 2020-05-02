@@ -61,5 +61,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
         /// <summary>Gets all orders (not archived) by customer ID</summary>
         /// <returns>List of OrderDTO, empty list if none exist</returns>
         List<OrderDTO> GetOrdersByCustomerId(long customerId);
+
+        /// <summary>Gets all item information from order for printing.</summary>
+        /// <returns>List of item print information.</returns>
+        List<ItemPrintDetailsDTO> GetOrderPrintDetails(long orderId);
     }
 }
