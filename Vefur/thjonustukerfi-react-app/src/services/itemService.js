@@ -83,6 +83,18 @@ const deleteItemById = (id) => {
         .catch((error) => Promise.reject(error));
 };
 
+const getItemHistoryById = (id) => {
+    return fetch(`http://localhost:5000/api/info/${id}/itemhistory`, {
+        method: "GET",
+        headers: {
+            crossDomain: true,
+        },
+    })
+        .then(handleErrors)
+        .then(handleData)
+        .catch((error) => Promise.reject(error));
+};
+
 export default {
     getItemById,
     getItemByBarcode,
@@ -90,4 +102,5 @@ export default {
     updateItemById,
     updateItemState,
     deleteItemById,
+    getItemHistoryById,
 };
