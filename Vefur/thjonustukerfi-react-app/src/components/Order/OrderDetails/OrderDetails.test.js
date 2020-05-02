@@ -88,7 +88,7 @@ describe("<OrderDetails />", () => {
         expect(wrapper.find(OrderItemList)).toHaveLength(1);
     });
 
-    it("Should display 3 rows items", () => {
-        expect(wrapper.find("tbody").at(1).instance().children).toHaveLength(3);
+    it("Should display 2 rows items", () => {
+        expect(wrapper.find("tbody").at(1).instance().children).toHaveLength(2);
     });
 });
