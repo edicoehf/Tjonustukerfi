@@ -175,5 +175,17 @@ namespace ThjonustukerfiWebAPI.Controllers
 
             return Ok();
         }
+
+        /// <summary>Gets printable information for a single Item by ID.</summary>
+        /// <response code="200">DTO containing information for printing an item</response>
+        /// <response code="404">Item was not found</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("printer/{id:long}")]
+        [HttpGet]
+        public IActionResult GetItemPrintDetails(long id)
+        {
+            return Ok(_itemService.GetItemPrintDetails(id));
+        }
     }
 }

@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using AutoMapper;
 using ThjonustukerfiWebAPI.Configurations;
@@ -147,11 +149,10 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             return nextStateDto;
         }
 
-        public NextStatesDTO GetItemNextStatesByBarcode(string barcode)
-        {
-            // Get the ID and use get by ID
-            return GetItemNextStates(_itemRepo.SearchItem(barcode));
-        }
+        // Get the ID and use get by ID
+        public NextStatesDTO GetItemNextStatesByBarcode(string barcode) => GetItemNextStates(_itemRepo.SearchItem(barcode));
+
+        public ItemPrintDetailsDTO GetItemPrintDetails(long itemId) => _itemRepo.GetItemPrintDetails(itemId);
 
         //*        Helper Functions        *//
         /// <summary>Checks if the order connected to Item is ready for pickup and sends a notification to the customer</summary>
