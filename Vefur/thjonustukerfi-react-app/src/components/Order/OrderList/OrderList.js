@@ -7,7 +7,6 @@ import {
     TableCell,
     TableBody,
     TableContainer,
-    Divider,
 } from "@material-ui/core";
 import OrderListItem from "../OrderListItem/OrderListItem";
 import "./OrderList.css";
