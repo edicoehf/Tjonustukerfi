@@ -6,7 +6,6 @@ import {
     TableRow,
     TableCell,
     TableBody,
-    Divider,
 } from "@material-ui/core";
 import { itemsType } from "../../../types";
 import "./OrderItemList.css";
@@ -43,10 +42,7 @@ const OrderItemList = ({ items }) => {
             </TableHead>
             <TableBody>
                 {items.map((item, i) => (
-                    <React.Fragment key={i}>
-                        <OrderItem item={item} />
-                        {i < items.length - 1 && <Divider />}
-                    </React.Fragment>
+                    <OrderItem key={i} item={item} border={i !== 0} />
                 ))}
             </TableBody>
         </Table>

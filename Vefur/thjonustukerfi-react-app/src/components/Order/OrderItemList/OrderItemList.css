@@ -46,3 +46,7 @@
     grid-area: details;
     padding-top: 0;
 }
+
+.order-details .order-item-list-row.with-border {
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+}

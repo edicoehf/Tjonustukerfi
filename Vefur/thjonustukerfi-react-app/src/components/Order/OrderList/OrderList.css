@@ -18,6 +18,10 @@
     cursor: pointer;
 }
 
+.order-list .MuiTableRow-root.order-row-body.with-border {
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
 .order-list .order-row th {
     font-weight: bold;
     background-color: rgba(224, 225, 238, 0.829);

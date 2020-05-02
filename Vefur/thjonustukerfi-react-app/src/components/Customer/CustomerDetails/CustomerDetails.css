@@ -10,6 +10,10 @@
   background-color: var(--data-color);
 }
 
+.customer-details div.MuiPaper-root .MuiTableCell-root {
+  border-bottom: none;
+}
+
 .customer-details .customer-details-row {
   display: grid;
   grid-template-columns: 30% 70%;
@@ -25,6 +29,10 @@
 .customer-details .customer-details-content-cell {
   grid-template-areas: content;
   align-self: center;
+}
+
+.customer-details .customer-details-row.with-border {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 .error {

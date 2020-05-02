@@ -9,7 +9,9 @@ const CustomerProperty = ({ title, name, value }) => {
                 <TableRow
                     key={name}
                     title={name}
-                    className="customer-details-row"
+                    className={`customer-details-row ${
+                        title !== "Nafn" ? " with-border" : ""
+                    }`}
                 >
                     <TableCell className="customer-details-title-cell">
                         {title}:

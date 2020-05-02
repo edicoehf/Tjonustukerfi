@@ -3,7 +3,7 @@ import { itemType } from "../../../types/index";
 import { useHistory } from "react-router-dom";
 import { TableRow, TableCell } from "@material-ui/core";
 
-const OrderItem = ({ item }) => {
+const OrderItem = ({ item, border }) => {
     const { id, category, service, barcode, state, json, details } = item;
     const { sliced, filleted, otherCategory, otherService } = json;
 
@@ -15,7 +15,9 @@ const OrderItem = ({ item }) => {
 
     return (
         <TableRow
-            className="order-item-list-row body-row"
+            className={`order-item-list-row body-row ${
+                border === true ? "with-border" : ""
+            }`}
             onClick={handleRedirect}
             hover
         >

@@ -25,6 +25,10 @@
         "category service filleted sliced amount remove";
 }
 
+.view-items div.MuiPaper-root .item-row.with-border {
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
 .view-items div.MuiPaper-root .item-row .item-cell-category {
     grid-area: category;
     align-self: center;

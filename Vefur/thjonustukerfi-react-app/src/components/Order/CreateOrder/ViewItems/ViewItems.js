@@ -7,7 +7,6 @@ import {
     TableHead,
     TableRow,
     Paper,
-    Divider,
     IconButton,
 } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
@@ -44,7 +43,12 @@ const ViewItems = ({ items, remove }) => {
                     <TableBody className="order-body">
                         {items.map((item, i) => (
                             <React.Fragment key={i}>
-                                <TableRow key={i} className="item-row">
+                                <TableRow
+                                    key={i}
+                                    className={`item-row ${
+                                        i !== 0 ? "with-border" : ""
+                                    }`}
+                                >
                                     <TableCell className="item-cell-category">
                                         {item.otherCategory
                                             ? item.otherCategory
@@ -88,7 +92,6 @@ const ViewItems = ({ items, remove }) => {
                                         </TableCell>
                                     </TableRow>
                                 )}
-                                {i < items.length - 1 && <Divider />}
                             </React.Fragment>
                         ))}
                     </TableBody>

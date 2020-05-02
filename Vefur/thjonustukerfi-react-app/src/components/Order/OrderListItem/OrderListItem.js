@@ -4,9 +4,8 @@ import { orderType } from "../../../types/index";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
 import "moment/locale/is";
-import "./OrderListItem.css";
 
-const OrderListItem = ({ order }) => {
+const OrderListItem = ({ order, border }) => {
     const history = useHistory();
 
     const handleRedirect = () => {
@@ -23,7 +22,9 @@ const OrderListItem = ({ order }) => {
             <TableRow
                 hover={true}
                 onClick={handleRedirect}
-                className="order-row order-row-body"
+                className={`order-row order-row-body ${
+                    border === true ? "with-border" : ""
+                }`}
             >
                 <TableCell className="order-cell-id">{order.id}</TableCell>
                 <TableCell align="right" className="order-cell-customer">

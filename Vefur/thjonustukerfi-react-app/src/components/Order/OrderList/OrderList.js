@@ -47,10 +47,11 @@ const OrderList = ({ orders, isLoading, error }) => {
                             </TableHead>
                             <TableBody>
                                 {orders.map((order, i) => (
-                                    <React.Fragment key={i}>
-                                        <OrderListItem order={order} />
-                                        {i < orders.length - 1 && <Divider />}
-                                    </React.Fragment>
+                                    <OrderListItem
+                                        key={i}
+                                        order={order}
+                                        border={i !== 0}
+                                    />
                                 ))}
                             </TableBody>
                         </Table>
