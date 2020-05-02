@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using AutoMapper;
+using BarcodeLib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ThjonustukerfiWebAPI.Configurations;
 using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.Entities;
@@ -110,7 +113,18 @@ namespace ThjonustukerfiWebAPI.Mappings
             CreateMap<ItemArchive, ArchiveItemDTO>();
 
             // Automapper for item print
-            CreateMap<ItemDTO, ItemPrintDetailsDTO>();
+            CreateMap<ItemDTO, ItemPrintDetailsDTO>()
+            .AfterMap((src, dst) =>
+            {
+                var bCode = new Barcode();  // get barcode lib class
+
+                // encode to image
+                var img = bCode.Encode(BarcodeLib.TYPE.CODE128, src.Barcode, Color.Black, Color.White, Constants.BarcodeImageSize.Width, Constants.BarcodeImageSize.Height);
+
+                // convert image to byte array to send
+                ImageConverter ic = new ImageConverter();
+                dst.BarcodeImage = (byte[])ic.ConvertTo(img, typeof(byte[]));
+            });
 
             //* Order Mappings
             // Automapper for OrderInputModel to Order entity
