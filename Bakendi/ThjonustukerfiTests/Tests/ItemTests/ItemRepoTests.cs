@@ -846,7 +846,8 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 //* Assert
                 Assert.IsNotNull(value);
                 Assert.IsInstanceOfType(value, typeof(ItemPrintDetailsDTO));
-                Assert.IsNull(value.BarcodeImage);  // handled in service
+                Assert.IsNotNull(value.BarcodeImage);   // image is created
+                Assert.IsInstanceOfType(value.BarcodeImage, typeof(byte[]));
             }
         }
 
