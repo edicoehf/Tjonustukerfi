@@ -122,9 +122,8 @@ namespace ThjonustukerfiWebAPI.Mappings
                 var img = bCode.Encode(BarcodeLib.TYPE.CODE128, src.Barcode, Color.Black, Color.White, BarcodeImageDimensions.Width, BarcodeImageDimensions.Height);
 
                 // convert image to byte array to send
-                // ImageConverter ic = new ImageConverter();
-                // dst.BarcodeImage = (byte[])ic.ConvertTo(img, typeof(byte[]));
-                dst.BarcodeImage = img;
+                ImageConverter ic = new ImageConverter();
+                dst.BarcodeImage = (byte[])ic.ConvertTo(img, typeof(byte[]));
             });
 
             //* Order Mappings
