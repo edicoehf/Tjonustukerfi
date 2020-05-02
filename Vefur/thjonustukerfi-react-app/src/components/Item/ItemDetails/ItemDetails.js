@@ -22,7 +22,6 @@ const ItemDetails = ({ id, updated, receivedUpdate }) => {
         otherCategory: "",
         otherService: "",
     });
-    console.log(other);
     React.useEffect(() => {
         if (json) {
             setOther(json);
