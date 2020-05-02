@@ -152,22 +152,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         // Get the ID and use get by ID
         public NextStatesDTO GetItemNextStatesByBarcode(string barcode) => GetItemNextStates(_itemRepo.SearchItem(barcode));
 
-        public ItemPrintDetailsDTO GetItemPrintDetails(long itemId)
-        {
-            // get item print details
-            var item = _itemRepo.GetItemPrintDetails(itemId);
-
-            var bCode = new BarcodeLib.Barcode();   // get the barcode lib class
-
-            // encode to Image
-            var img = bCode.Encode(BarcodeLib.TYPE.CODE128, item.Barcode, Color.Black, Color.White, Constants.BarcodeImageSize.Width, Constants.BarcodeImageSize.Height);
-
-            // Convert image to byte array
-            ImageConverter ic = new ImageConverter();
-            item.BarcodeImage = (byte[])ic.ConvertTo(img, typeof(byte[]));
-        
-            return item;
-        }
+        public ItemPrintDetailsDTO GetItemPrintDetails(long itemId) => _itemRepo.GetItemPrintDetails(itemId);
 
         //*        Helper Functions        *//
         /// <summary>Checks if the order connected to Item is ready for pickup and sends a notification to the customer</summary>
