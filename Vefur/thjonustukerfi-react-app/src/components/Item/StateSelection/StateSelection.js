@@ -102,7 +102,7 @@ const StateSelection = ({ id, hasUpdated }) => {
 
     return (
         <div className="state-selection">
-            {!error ? (
+            {!error && !locationsError ? (
                 <>
                     {nextStates.length > 0 && (
                         <Button
