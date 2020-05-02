@@ -1,8 +1,8 @@
-/* .item-states .MuiPaper-root {
-    background-color: var(--main-color);
-    padding: 0;
-    margin-top: 1rem;
-} */
+.item-states .MuiPaper-root {
+    background-color: var(--data-color);
+    margin-top: 1em;
+    border-radius: 10px;
+}
 
 .item-details {
     width: 25em;
@@ -11,6 +11,10 @@
 .item-details .MuiPaper-root {
     background-color: var(--data-color);
     border-radius: 10px;
+}
+
+.item-details .MuiPaper-root td {
+    border-bottom: none;
 }
 
 .item-details .details-item-title {
@@ -43,9 +47,14 @@
     text-decoration: underline;
 }
 
+.item-details .details-item-row.no-border {
+    border: none;
+}
+
 .item-details .details-item-row {
     display: grid;
     grid-template-columns: 30% 70%;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
     grid-template-areas: "title content";
 }
 

@@ -41,7 +41,7 @@ const ItemDetails = ({ id, updated, receivedUpdate }) => {
                             <h3 className="details-item-title">Vara {id}</h3>
                             <Table>
                                 <TableHead>
-                                    <TableRow className="details-item-info-row">
+                                    <TableRow className="details-item-info-row no-border">
                                         <TableCell className="details-item-orderid-cell">
                                             <Link to={`/order/${orderId}`}>
                                                 Pöntun: {orderId}
@@ -53,7 +53,7 @@ const ItemDetails = ({ id, updated, receivedUpdate }) => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    <TableRow className="details-item-row">
+                                    <TableRow className="details-item-row no-border">
                                         <TableCell className="details-item-title-cell">
                                             Tegund:
                                         </TableCell>
