@@ -135,5 +135,13 @@ namespace ThjonustukerfiWebAPI.Controllers
 
             return NoContent();
         }
+
+        /// <summary>Gets all print information for all items in an order.</summary>
+        [Route("printer/{id:long}")]
+        [HttpGet]
+        public IActionResult GetOrderPrintDetails(long id)
+        {
+            return Ok(_orderService.GetOrderPrintDetails(id));
+        }
     }
 }
