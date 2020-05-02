@@ -12,6 +12,7 @@ import {
     DialogActions,
     DialogContent,
     DialogContentText,
+    MobileStepper,
 } from "@material-ui/core";
 import useGetNextStatesById from "../../../hooks/useGetNextStatesById";
 import useGetItemLocations from "../../../hooks/useGetItemLocations";
@@ -114,14 +115,24 @@ const StateSelection = ({ id, hasUpdated }) => {
                             Færa í næstu stöðu
                         </Button>
                     )}
-                    <Dialog onClose={handleClose} open={openSelection}>
+                    <Dialog
+                        onClose={handleClose}
+                        open={openSelection}
+                        className="state-selection-modal"
+                    >
+                        <MobileStepper
+                            variant="dots"
+                            steps={3}
+                            position="static"
+                            activeStep={activeStep}
+                        />
                         {activeStep === 0 && (
                             <>
                                 <DialogTitle id="state-dialog-title">
                                     Veldu næstu stöðu
                                 </DialogTitle>
                                 <DialogContent>
-                                    <List>
+                                    <List className="selection-list">
                                         {nextStates.map((state) => (
                                             <ListItem
                                                 button
@@ -150,7 +161,7 @@ const StateSelection = ({ id, hasUpdated }) => {
                                     Veldu staðsetningu
                                 </DialogTitle>
                                 <DialogContent>
-                                    <List>
+                                    <List className="selection-list">
                                         {itemLocations.map((location) => (
                                             <ListItem
                                                 button
@@ -189,7 +200,7 @@ const StateSelection = ({ id, hasUpdated }) => {
                                     Staðfestu nýja stöðu
                                 </DialogTitle>
                                 <DialogContent>
-                                    <DialogContentText>
+                                    <DialogContentText className="selection-list">
                                         {stateName}
                                         {location !== "" && `, ${location}`}
                                     </DialogContentText>
