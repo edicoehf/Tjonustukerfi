@@ -423,6 +423,11 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             }
         }
 
+        public List<OrderDTO> GetOrdersByCustomerId(long customerId)
+        {
+            return _mapper.Map<List<OrderDTO>>(_dbContext.Order.Where(o => o.CustomerId == customerId));
+        }
+
         //*     Helper functions     *//
         private void Archive(List<Order> toArchive)
         {

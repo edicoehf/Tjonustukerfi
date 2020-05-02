@@ -43,9 +43,10 @@ namespace ThjonustukerfiWebAPI.Controllers
         public IActionResult CreateCustomer([FromBody] CustomerInputModel customer)
         {
             if(!ModelState.IsValid) { return BadRequest("Input model is not valid"); }
-            var entity = _customerService.CreateCustomer(customer);
             
-            return CreatedAtRoute("GetCustomerById", new { id = entity.Id }, null);
+            var cId = _customerService.CreateCustomer(customer);
+
+            return CreatedAtRoute("GetCustomerById", new { id = cId }, new { customerId = cId });
         }
 
         /// <summary>Gets a customer by ID.</summary>
@@ -119,6 +120,7 @@ namespace ThjonustukerfiWebAPI.Controllers
 
         /// <summary>Gets all orders that are ready to be picked up by customer ID. Returns an empty list if customer has no complete orders.</summary>
         /// <returns>List of Orders, empty if non exist.</returns>
+        /// <response code="200">List of orders, empty if non exist.</response>
         /// <response code="404">Customer with given ID was not found.</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -127,6 +129,19 @@ namespace ThjonustukerfiWebAPI.Controllers
         public IActionResult GetPickupOrdersByCustomerId(long id)
         {
             return Ok(_customerService.GetPickupOrdersByCustomerId(id));
+        }
+
+        /// <summary>Gets all orders (not archived) by customer ID.</summary>
+        /// <returns>List of orders, empty if non exist.</returns>
+        /// <response code="200">List of orders, empty if non exist.</response>
+        /// <response code="404">Customer with given ID was not found.</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("{id:long}/orders")]
+        [HttpGet]
+        public IActionResult GetOrdersByCustomerId(long id)
+        {
+            return Ok(_customerService.GetOrdersByCustomerId(id));
         }
     }
 }
