@@ -13,6 +13,7 @@ import {
     Radio,
     TextField,
     Button,
+    Paper,
 } from "@material-ui/core";
 
 const initialState = {
@@ -115,141 +116,145 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
 
     return (
         <FormControl component="fieldset">
-            <FormLabel component="legend">Tegund:</FormLabel>
-            <RadioGroup
-                name="category"
-                className="select"
-                value={values.category}
-                onChange={handleChange}
-            >
-                {errors.category && <p className="error">{errors.category}</p>}
-                {categories.map((cat) => (
-                    <FormControlLabel
+            <Paper elevation={3} className="item-form-paper">
+                <FormLabel component="legend" className="first-label">Tegund:</FormLabel>
+                <RadioGroup
+                    name="category"
+                    className="select"
+                    value={values.category}
+                    onChange={handleChange}
+                >
+                    {errors.category && <p className="error">{errors.category}</p>}
+                    {categories.map((cat) => (
+                        <FormControlLabel
                         key={cat.id}
-                        value={`${cat.id}`}
-                        control={
-                            <Radio onChange={(e) => handleOtherChange(e)} />
-                        }
-                        label={cat.name}
-                    />
-                ))}
-                {errors.otherCategory && (
-                    <p className="error">{errors.otherCategory}</p>
-                )}
+                            value={`${cat.id}`}
+                            control={
+                                <Radio onChange={(e) => handleOtherChange(e)} />
+                            }
+                            label={cat.name}
+                        />
+                        ))}
+                    {errors.otherCategory && (
+                        <p className="error">{errors.otherCategory}</p>
+                    )}
 
-                <TextField
-                    name="otherCategory"
-                    className="select"
-                    value={values.otherCategory}
-                    type="text"
-                    variant="standard"
-                    onChange={handleChange}
-                    placeholder="Hvaða Tegund?"
-                    hidden={isOtherCategoryHidden}
-                />
-            </RadioGroup>
-            <FormLabel component="legend">Þjónusta:</FormLabel>
-            <RadioGroup
-                name="service"
-                className="select"
-                value={values.service}
-                onChange={handleChange}
-            >
-                {errors.service && <p className="error">{errors.service}</p>}
-                {services.map((serv) => (
-                    <FormControlLabel
-                        key={serv.id}
-                        value={`${serv.id}`}
-                        control={<Radio onChange={handleOtherChange} />}
-                        label={serv.name}
-                    />
-                ))}
-                {errors.otherService && (
-                    <p className="error">{errors.otherService}</p>
-                )}
-                <TextField
-                    name="otherService"
-                    className="select"
-                    value={values.otherService}
-                    type="text"
-                    variant="standard"
-                    onChange={handleChange}
-                    placeholder="Hvaða þjónusta?"
-                    hidden={isOtherServiceHidden}
-                />
-            </RadioGroup>
-            <FormLabel component="legend">Flökun:</FormLabel>
-            <RadioGroup
-                name="filleted"
-                className="select"
-                value={values.filleted}
-                onChange={handleChange}
-            >
-                {errors.filleted && <p className="error">{errors.filleted}</p>}
-                <FormControlLabel
-                    value="filleted"
-                    control={<Radio />}
-                    label="Flakað"
-                />
-                <FormControlLabel
-                    value="notFilleted"
-                    control={<Radio />}
-                    label="Óflakað"
-                />
-            </RadioGroup>
-            <FormLabel component="legend">Pökkun:</FormLabel>
-            <RadioGroup
-                name="sliced"
-                className="select"
-                value={values.sliced}
-                onChange={handleChange}
-            >
-                {errors.sliced && <p className="error">{errors.sliced}</p>}
-                <FormControlLabel
-                    value="whole"
-                    control={<Radio />}
-                    label="Heilt Flak"
-                />
-                <FormControlLabel
-                    value="sliced"
-                    control={<Radio />}
-                    label="Bitar"
-                />
-            </RadioGroup>
-            {!isExistingItem && (
-                <>
-                    <FormLabel component="legend">Fjöldi:</FormLabel>
-                    {errors.amount && <p className="error">{errors.amount}</p>}
                     <TextField
-                        name="amount"
+                        name="otherCategory"
                         className="select"
-                        value={values.amount}
-                        type="number"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
+                        value={values.otherCategory}
+                        type="text"
                         variant="standard"
                         onChange={handleChange}
-                    />
-                </>
-            )}
-            <FormLabel
-                component="legend"
-                onClick={() => setDetailsHidden(!isDetailsHidden)}
-            >
-                Annað: <AddIcon fontSize="small" />
-            </FormLabel>
-            {errors.details && <p className="error">{errors.details}</p>}
-            <TextField
-                id="outlined-multiline-flexible select"
-                name="details"
-                label="Var það eitthvað annað?"
-                multiline
-                value={values.details}
-                onChange={handleChange}
-                variant="outlined"
-                hidden={isDetailsHidden}
-            />
+                        placeholder="Hvaða Tegund?"
+                        hidden={isOtherCategoryHidden}
+                        />
+                </RadioGroup>
+                <FormLabel component="legend">Þjónusta:</FormLabel>
+                <RadioGroup
+                    name="service"
+                    className="select"
+                    value={values.service}
+                    onChange={handleChange}
+                >
+                    {errors.service && <p className="error">{errors.service}</p>}
+                    {services.map((serv) => (
+                        <FormControlLabel
+                        key={serv.id}
+                        value={`${serv.id}`}
+                            control={<Radio onChange={handleOtherChange} />}
+                            label={serv.name}
+                            />
+                    ))}
+                    {errors.otherService && (
+                        <p className="error">{errors.otherService}</p>
+                    )}
+                    <TextField
+                        name="otherService"
+                        className="select"
+                        value={values.otherService}
+                        type="text"
+                        variant="standard"
+                        onChange={handleChange}
+                        placeholder="Hvaða þjónusta?"
+                        hidden={isOtherServiceHidden}
+                        />
+                </RadioGroup>
+                <FormLabel component="legend">Flökun:</FormLabel>
+                <RadioGroup
+                    name="filleted"
+                    className="select"
+                    value={values.filleted}
+                    onChange={handleChange}
+                >
+                    {errors.filleted && <p className="error">{errors.filleted}</p>}
+                    <FormControlLabel
+                        value="filleted"
+                        control={<Radio />}
+                        label="Flakað"
+                        />
+                    <FormControlLabel
+                        value="notFilleted"
+                        control={<Radio />}
+                        label="Óflakað"
+                        />
+                </RadioGroup>
+                <FormLabel component="legend">Pökkun:</FormLabel>
+                <RadioGroup
+                    name="sliced"
+                    className="select"
+                    value={values.sliced}
+                    onChange={handleChange}
+                    >
+                    {errors.sliced && <p className="error">{errors.sliced}</p>}
+                    <FormControlLabel
+                        value="whole"
+                        control={<Radio />}
+                        label="Heilt Flak"
+                        />
+                    <FormControlLabel
+                        value="sliced"
+                        control={<Radio />}
+                        label="Bitar"
+                        />
+                </RadioGroup>
+                {!isExistingItem && (
+                    <>
+                        <FormLabel component="legend">Fjöldi:</FormLabel>
+                        {errors.amount && <p className="error">{errors.amount}</p>}
+                        <TextField
+                            name="amount"
+                            className="select amount"
+                            value={values.amount}
+                            type="number"
+                            inputProps={{min: "1"}}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            variant="standard"
+                            onChange={handleChange}
+                        />
+                    </>
+                )}
+                <FormLabel
+                    component="legend"
+                    onClick={() => setDetailsHidden(!isDetailsHidden)}
+                    >
+                    Annað: <AddIcon fontSize="small" />
+                </FormLabel>
+                {errors.details && <p className="error">{errors.details}</p>}
+                <TextField
+                    id="outlined-multiline-flexible select"
+                    name="details"
+                    label="Var það eitthvað annað?"
+                    className="details-input"
+                    multiline
+                    value={values.details}
+                    onChange={handleChange}
+                    variant="outlined"
+                    hidden={isDetailsHidden}
+                />
+            </Paper>
             <Button
                 className="sbm-btn"
                 variant="contained"
@@ -259,7 +264,7 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
                     isExistingItem ? <EditIcon /> : <AddShoppingCartIcon />
                 }
                 onClick={handleSubmit}
-            >
+                >
                 {!isExistingItem ? "Bæta við pöntun" : "Breyta vöru"}
             </Button>
         </FormControl>
