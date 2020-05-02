@@ -39,6 +39,7 @@
 .order-details .MuiPaper-root {
     width: 60rem;
     background-color: var(--data-color);
+    border-radius: 10px;
 }
 
 .order-details .MuiPaper-root th {
