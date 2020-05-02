@@ -119,7 +119,7 @@ namespace ThjonustukerfiWebAPI.Mappings
                 var bCode = new Barcode();  // get barcode lib class
 
                 // encode to image
-                var img = bCode.Encode(BarcodeLib.TYPE.CODE128, src.Barcode, Color.Black, Color.White, Constants.BarcodeImageSize.Width, Constants.BarcodeImageSize.Height);
+                var img = bCode.Encode(BarcodeLib.TYPE.CODE128, src.Barcode, Color.Black, Color.White, BarcodeImageDimensions.Width, BarcodeImageDimensions.Height);
 
                 // convert image to byte array to send
                 ImageConverter ic = new ImageConverter();
