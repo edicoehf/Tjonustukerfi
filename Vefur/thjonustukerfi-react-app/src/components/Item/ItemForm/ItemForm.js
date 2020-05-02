@@ -117,38 +117,42 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
     return (
         <FormControl component="fieldset">
             <Paper elevation={3} className="item-form-paper">
-                <FormLabel component="legend" className="first-label">Tegund:</FormLabel>
+                <FormLabel component="legend" className="first-label">
+                    Tegund:
+                </FormLabel>
                 <RadioGroup
                     name="category"
                     className="select"
                     value={values.category}
                     onChange={handleChange}
                 >
-                    {errors.category && <p className="error">{errors.category}</p>}
+                    {errors.category && (
+                        <p className="error">{errors.category}</p>
+                    )}
                     {categories.map((cat) => (
                         <FormControlLabel
-                        key={cat.id}
+                            key={cat.id}
                             value={`${cat.id}`}
                             control={
                                 <Radio onChange={(e) => handleOtherChange(e)} />
                             }
                             label={cat.name}
                         />
-                        ))}
+                    ))}
                     {errors.otherCategory && (
                         <p className="error">{errors.otherCategory}</p>
                     )}
 
                     <TextField
                         name="otherCategory"
-                        className="select"
+                        className="select other-input"
                         value={values.otherCategory}
                         type="text"
                         variant="standard"
                         onChange={handleChange}
                         placeholder="Hvaða Tegund?"
                         hidden={isOtherCategoryHidden}
-                        />
+                    />
                 </RadioGroup>
                 <FormLabel component="legend">Þjónusta:</FormLabel>
                 <RadioGroup
@@ -157,28 +161,30 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
                     value={values.service}
                     onChange={handleChange}
                 >
-                    {errors.service && <p className="error">{errors.service}</p>}
+                    {errors.service && (
+                        <p className="error">{errors.service}</p>
+                    )}
                     {services.map((serv) => (
                         <FormControlLabel
-                        key={serv.id}
-                        value={`${serv.id}`}
+                            key={serv.id}
+                            value={`${serv.id}`}
                             control={<Radio onChange={handleOtherChange} />}
                             label={serv.name}
-                            />
+                        />
                     ))}
                     {errors.otherService && (
                         <p className="error">{errors.otherService}</p>
                     )}
                     <TextField
                         name="otherService"
-                        className="select"
+                        className="select other-input"
                         value={values.otherService}
                         type="text"
                         variant="standard"
                         onChange={handleChange}
                         placeholder="Hvaða þjónusta?"
                         hidden={isOtherServiceHidden}
-                        />
+                    />
                 </RadioGroup>
                 <FormLabel component="legend">Flökun:</FormLabel>
                 <RadioGroup
@@ -187,17 +193,19 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
                     value={values.filleted}
                     onChange={handleChange}
                 >
-                    {errors.filleted && <p className="error">{errors.filleted}</p>}
+                    {errors.filleted && (
+                        <p className="error">{errors.filleted}</p>
+                    )}
                     <FormControlLabel
                         value="filleted"
                         control={<Radio />}
                         label="Flakað"
-                        />
+                    />
                     <FormControlLabel
                         value="notFilleted"
                         control={<Radio />}
                         label="Óflakað"
-                        />
+                    />
                 </RadioGroup>
                 <FormLabel component="legend">Pökkun:</FormLabel>
                 <RadioGroup
@@ -205,29 +213,31 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
                     className="select"
                     value={values.sliced}
                     onChange={handleChange}
-                    >
+                >
                     {errors.sliced && <p className="error">{errors.sliced}</p>}
                     <FormControlLabel
                         value="whole"
                         control={<Radio />}
                         label="Heilt Flak"
-                        />
+                    />
                     <FormControlLabel
                         value="sliced"
                         control={<Radio />}
                         label="Bitar"
-                        />
+                    />
                 </RadioGroup>
                 {!isExistingItem && (
                     <>
                         <FormLabel component="legend">Fjöldi:</FormLabel>
-                        {errors.amount && <p className="error">{errors.amount}</p>}
+                        {errors.amount && (
+                            <p className="error">{errors.amount}</p>
+                        )}
                         <TextField
                             name="amount"
                             className="select amount"
                             value={values.amount}
                             type="number"
-                            inputProps={{min: "1"}}
+                            inputProps={{ min: "1" }}
                             InputLabelProps={{
                                 shrink: true,
                             }}
@@ -239,7 +249,7 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
                 <FormLabel
                     component="legend"
                     onClick={() => setDetailsHidden(!isDetailsHidden)}
-                    >
+                >
                     Annað: <AddIcon fontSize="small" />
                 </FormLabel>
                 {errors.details && <p className="error">{errors.details}</p>}
@@ -264,7 +274,7 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
                     isExistingItem ? <EditIcon /> : <AddShoppingCartIcon />
                 }
                 onClick={handleSubmit}
-                >
+            >
                 {!isExistingItem ? "Bæta við pöntun" : "Breyta vöru"}
             </Button>
         </FormControl>
