@@ -1,25 +1,24 @@
 import React from "react";
-import CustomerActions from "../Actions/CustomerActions/CustomerActions";
+import { ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import { addCustomerType, customerType } from "../../../types";
 import "./CustomerListItem.css";
-import { customerType } from "../../../types/index";
-import ListItemLink from "../../ListItemLink/ListItemLink";
-import { ListItem } from "@material-ui/core";
 
-const CustomerListItem = ({ customer }) => {
+const CustomerListItem = ({ customer, onClick, icon }) => {
     return (
-        <>
-            <ListItemLink href={"/customer/" + customer.id}>
-                {customer.name} - {customer.email}
-            </ListItemLink>
-            <ListItem className="button-area">
-                <CustomerActions id={customer.id} />
-            </ListItem>
-        </>
+        <ListItem
+            button
+            onClick={() => onClick(customer)}
+            className="customer-list-item"
+        >
+            <ListItemText primary={customer.name} secondary={customer.email} />
+            {icon && <ListItemIcon>{icon}</ListItemIcon>}
+        </ListItem>
     );
 };
 
 CustomerListItem.propTypes = {
     customer: customerType,
+    onClick: addCustomerType,
 };
 
 export default CustomerListItem;

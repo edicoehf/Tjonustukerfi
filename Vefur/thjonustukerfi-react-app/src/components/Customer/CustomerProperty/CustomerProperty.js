@@ -1,15 +1,24 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./CustomerProperty.css";
 import { TableRow, TableCell } from "@material-ui/core";
 
 const CustomerProperty = ({ title, name, value }) => {
     return (
         <>
             {value ? (
-                <TableRow key={name} title={name}>
-                    <TableCell>{title}:</TableCell>
-                    <TableCell>{value}</TableCell>
+                <TableRow
+                    key={name}
+                    title={name}
+                    className={`customer-details-row ${
+                        title !== "Nafn" ? " with-border" : ""
+                    }`}
+                >
+                    <TableCell className="customer-details-title-cell">
+                        {title}:
+                    </TableCell>
+                    <TableCell className="customer-details-content-cell">
+                        {value}
+                    </TableCell>
                 </TableRow>
             ) : (
                 <></>

@@ -30,8 +30,8 @@ const itemValidate = (values) => {
     if (filleted === null) {
         errors.filleted = "Tilgreining á flökun vantar";
     }
-    if (details.length > 250) {
-        errors.details = "Annað má aðeins vera 250 stafir";
+    if (details.length > 100) {
+        errors.details = "Annað má aðeins vera 100 stafir";
     }
     if (category === categories.length.toString() && otherCategory === "") {
         errors.otherCategory = "Vantar hvaða tegund";

@@ -24,21 +24,9 @@ describe("<CustomerList />", () => {
         });
 
         describe("CustomerList component renders properly", () => {
-            it("should not be null", () => {
-                expect(wrapper).not.toBeNull;
-            });
-
             it("should not contain p HTML tag", () => {
                 const pTag = wrapper.find("p");
                 expect(pTag).toBeNull;
-            });
-
-            it("should contain Nafn", () => {
-                expect(wrapper.contains("Nafn")).toEqual(true);
-            });
-
-            it("should contain Aðgerðir", () => {
-                expect(wrapper.contains("Aðgerðir")).toEqual(true);
             });
         });
     });
@@ -62,14 +50,6 @@ describe("<CustomerList />", () => {
         });
 
         describe("CustomerList renders properly", () => {
-            it("should not be null", () => {
-                expect(wrapper).not.toBeNull;
-            });
-
-            it("should not contain Nafn", () => {
-                expect(wrapper.contains("Nafn")).not.toEqual(true);
-            });
-
             it("should contain <p> HTML tag", () => {
                 const pTag = wrapper.find("p");
                 expect(pTag.instance()).not.toBeNull;
@@ -96,14 +76,6 @@ describe("<CustomerList />", () => {
         });
 
         describe("CustomerList renders properly", () => {
-            it("should not be null", () => {
-                expect(wrapper).not.toBeNull;
-            });
-
-            it("should not contain Nafn", () => {
-                expect(wrapper.contains("Nafn")).not.toEqual(true);
-            });
-
             it("should contain <p> HTML tag", () => {
                 const pTag = wrapper.find("p");
                 expect(pTag.instance()).not.toBeNull;

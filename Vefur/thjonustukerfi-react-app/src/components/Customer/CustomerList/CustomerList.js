@@ -1,30 +1,33 @@
 import React from "react";
 import CustomerListItem from "../CustomerListItem/CustomerListItem";
-import { List, ListItem } from "@material-ui/core";
+import { List, Divider, Paper } from "@material-ui/core";
 import "./CustomerList.css";
 import { customersType, isLoadingType } from "../../../types";
-
-const CustomerList = ({ customers, error, isLoading }) => {
+import PersonIcon from "@material-ui/icons/Person";
+const CustomerList = ({ customers, error, isLoading, cb }) => {
+    const redirect = (customer) => {
+        cb(customer.id);
+    };
     return (
-        <div>
+        <>
             {!error ? (
                 isLoading ? (
                     <p> Sæki viðskiptavini </p>
                 ) : (
-                    <List className="customer-list">
-                        <ListItem className="item">
-                            <h5>Nafn</h5>
-                        </ListItem>
-                        <ListItem className="item action-item">
-                            <h5 className="actions">Aðgerðir</h5>
-                        </ListItem>
-                        {customers.map((customer) => (
-                            <CustomerListItem
-                                customer={customer}
-                                key={customer.id}
-                            />
-                        ))}
-                    </List>
+                    <Paper elevation={3} className="customer-list">
+                        <List className="list-of-customers">
+                            {customers.map((customer, i) => (
+                                <React.Fragment key={customer.id}>
+                                    <CustomerListItem
+                                        customer={customer}
+                                        onClick={redirect}
+                                        icon={<PersonIcon />}
+                                    />
+                                    {i < customers.length - 1 && <Divider />}
+                                </React.Fragment>
+                            ))}
+                        </List>
+                    </Paper>
                 )
             ) : (
                 <p className="error">
@@ -32,7 +35,7 @@ const CustomerList = ({ customers, error, isLoading }) => {
                     Villa kom upp: Gat ekki sótt viðskiptavin
                 </p>
             )}
-        </div>
+        </>
     );
 };
 

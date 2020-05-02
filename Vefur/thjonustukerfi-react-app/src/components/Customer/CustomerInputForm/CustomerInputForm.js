@@ -9,7 +9,7 @@ import {
     submitHandlerType,
 } from "../../../types/index";
 import TextInput from "../../TextInput/TextInput";
-import { Button } from "@material-ui/core";
+import { Button, Paper } from "@material-ui/core";
 
 const initialState = {
     name: "",
@@ -40,60 +40,62 @@ const CustomerInputForm = ({
     return (
         <div className={`customer-input-form ${compact ? "compact" : ""}`}>
             <Form onSubmit={handleSubmit}>
-                <TextInput
-                    name="name"
-                    value={values.name}
-                    htmlId="name"
-                    className="name-input"
-                    label="Nafn *"
-                    errorMessage={errors.name}
-                    onInput={handleChange}
-                />
-                <TextInput
-                    name="ssn"
-                    value={values.ssn}
-                    htmlId="ssn"
-                    className="ssn-input"
-                    label="Kennitala"
-                    errorMessage={errors.ssn}
-                    onInput={handleChange}
-                />
-                <TextInput
-                    name="phone"
-                    value={values.phone}
-                    htmlId="phone"
-                    className="phone-input"
-                    label="Símanúmer"
-                    errorMessage={errors.phone}
-                    onInput={handleChange}
-                />
-                <TextInput
-                    name="email"
-                    value={values.email}
-                    htmlId="email"
-                    className="email-input"
-                    label="Netfang *"
-                    errorMessage={errors.email}
-                    onInput={handleChange}
-                />
-                <TextInput
-                    name="address"
-                    value={values.address}
-                    htmlId="address"
-                    className="address-input"
-                    label="Heimilisfang"
-                    errorMessage={errors.address}
-                    onInput={handleChange}
-                />
-                <TextInput
-                    name="postalCode"
-                    value={values.postalCode}
-                    htmlId="postalCode"
-                    className="postalcode-input"
-                    label="Póstnúmer"
-                    errorMessage={errors.postalCode}
-                    onInput={handleChange}
-                />
+                <Paper elevation={3}>
+                    <TextInput
+                        name="name"
+                        value={values.name}
+                        htmlId="name"
+                        className="name-input"
+                        label="Nafn *"
+                        errorMessage={errors.name}
+                        onInput={handleChange}
+                    />
+                    <TextInput
+                        name="ssn"
+                        value={values.ssn}
+                        htmlId="ssn"
+                        className="ssn-input"
+                        label="Kennitala"
+                        errorMessage={errors.ssn}
+                        onInput={handleChange}
+                    />
+                    <TextInput
+                        name="phone"
+                        value={values.phone}
+                        htmlId="phone"
+                        className="phone-input"
+                        label="Símanúmer"
+                        errorMessage={errors.phone}
+                        onInput={handleChange}
+                    />
+                    <TextInput
+                        name="email"
+                        value={values.email}
+                        htmlId="email"
+                        className="email-input"
+                        label="Netfang *"
+                        errorMessage={errors.email}
+                        onInput={handleChange}
+                    />
+                    <TextInput
+                        name="address"
+                        value={values.address}
+                        htmlId="address"
+                        className="address-input"
+                        label="Heimilisfang"
+                        errorMessage={errors.address}
+                        onInput={handleChange}
+                    />
+                    <TextInput
+                        name="postalCode"
+                        value={values.postalCode}
+                        htmlId="postalCode"
+                        className="postalcode-input"
+                        label="Póstnúmer"
+                        errorMessage={errors.postalCode}
+                        onInput={handleChange}
+                    />
+                </Paper>
                 <Button
                     className="input-submit"
                     variant="contained"

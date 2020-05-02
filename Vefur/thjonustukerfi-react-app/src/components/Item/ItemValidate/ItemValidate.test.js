@@ -191,16 +191,16 @@ describe("Validate item", () => {
             expect(Object.keys(itemValidate(testObject))).toHaveLength(0);
         });
 
-        it("should have the error message Annað má aðeins vera 250 stafir when details is 251 characters", () => {
-            errorMsg = "Annað má aðeins vera 250 stafir";
+        it("should have the error message Annað má aðeins vera 100 stafir when details is 251 characters", () => {
+            errorMsg = "Annað má aðeins vera 100 stafir";
             testObject.details =
                 "ekki skera i bita nema þetta hafi komið óflakað, ef þetta kom flakað þá má skera í bita nema þetta hafi verið síða þá verður að skera í síður. Passa verður að hafa ekki til mat í hádeginu fyrir starfsmenn ef þeir eru svangir. Við viljum ekki fita stm.";
             expect(itemValidate(testObject).details).toEqual(errorMsg);
         });
 
-        it("should contain 0 errors if details is 250 characters", () => {
+        it("should contain 0 errors if details is 100 characters", () => {
             testObject.details =
-                "ekki skera i bita nema þetta hafi komið óflakað, ef þetta kom flakað þá má skera í bita nema þetta hafi verið síða þá verður að skera í síður. Passa verður að hafa ekki til mat í hádeginu fyrir starfsmenn ef þeir eru svangir. Við viljum ekki fita stm";
+                "ekki skera i bita nema þetta hafi komið óflakað, ef þetta kom flakað þá má skera í bita nema þetta..";
             expect(Object.keys(itemValidate(testObject))).toHaveLength(0);
         });
     });

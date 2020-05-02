@@ -59,8 +59,6 @@ const useOrderForm = (initialState, validate, submitHandler) => {
     };
 
     const handleSubmit = () => {
-        console.log(customer);
-        console.log(items);
         const validationErrors = validate(customer, items);
         setErrors(validationErrors);
         setSubmitting(true);

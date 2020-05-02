@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow, mount } from "enzyme";
 import OrderItemList from "./OrderItemList";
-jest.mock("react-router-dom");
+import { Router } from "react-router-dom";
 
 describe("<OrderItemList />", () => {
     let wrapper;
@@ -31,14 +31,25 @@ describe("<OrderItemList />", () => {
             state: "Vinnslu",
         },
     ];
+    const historyMock = {
+        push: jest.fn(),
+        location: {},
+        listen: jest.fn(),
+        createHref: jest.fn(),
+    };
 
     beforeEach(() => {
-        wrapper = mount(shallow(<OrderItemList items={testProps} />).get(0));
+        wrapper = mount(
+            <Router history={historyMock}>
+                <OrderItemList items={testProps} />
+            </Router>
+        );
     });
 
-    it("Should have 8 columns", () => {
+    it("Should have 7 columns", () => {
         expect(
-            wrapper.find("tr.order-item").at(0).instance().children.length
-        ).toBe(8);
+            wrapper.find("tr.order-item-list-row").at(0).instance().children
+                .length
+        ).toBe(7);
     });
 });

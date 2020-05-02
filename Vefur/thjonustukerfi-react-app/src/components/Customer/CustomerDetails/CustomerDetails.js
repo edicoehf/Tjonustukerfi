@@ -11,7 +11,7 @@ const CustomerDetails = ({ id }) => {
     return (
         <div className="customer-details">
             {!error ? (
-                <TableContainer component={Paper}>
+                <TableContainer component={Paper} elevation={3}>
                     <Table aria-label="caption table">
                         <TableBody>
                             <CustomerProperty

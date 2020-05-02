@@ -3,8 +3,8 @@ import { shallow, mount } from "enzyme";
 import OrderDetails from "./OrderDetails";
 import OrderItemList from "../OrderItemList/OrderItemList";
 import useGetOrderById from "../../../hooks/useGetOrderById";
+import { Router } from "react-router-dom";
 jest.mock("../../../hooks/useGetOrderById");
-jest.mock("react-router-dom");
 
 describe("<OrderDetails />", () => {
     let wrapper;
@@ -36,13 +36,23 @@ describe("<OrderDetails />", () => {
     const setState = jest.fn();
     const useStateSpy = jest.spyOn(React, "useState");
     useStateSpy.mockImplementation((init) => [init, setState]);
+    const historyMock = {
+        push: jest.fn(),
+        location: {},
+        listen: jest.fn(),
+        createHref: jest.fn(),
+    };
 
     afterEach(() => {
         jest.clearAllMocks();
     });
 
     beforeEach(() => {
-        wrapper = mount(shallow(<OrderDetails id={"1"} />).get(0));
+        wrapper = mount(
+            <Router history={historyMock}>
+                <OrderDetails id={"1"} />
+            </Router>
+        );
     });
 
     useGetOrderById.mockReturnValue({
@@ -64,7 +74,7 @@ describe("<OrderDetails />", () => {
 
     it("Should display order creation date correctly", () => {
         expect(wrapper.find(".order-date").at(2).childAt(2).text()).toBe(
-            "2. apr 2020 kl. 13:56"
+            "2. apríl 2020 kl. 13:56"
         );
     });
 
@@ -78,7 +88,7 @@ describe("<OrderDetails />", () => {
         expect(wrapper.find(OrderItemList)).toHaveLength(1);
     });
 
-    it("Should display 3 rows items", () => {
-        expect(wrapper.find("tr").at(0).instance().children).toHaveLength(3);
+    it("Should display 2 rows items", () => {
+        expect(wrapper.find("tbody").at(1).instance().children).toHaveLength(2);
     });
 });
