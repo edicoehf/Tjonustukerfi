@@ -26,29 +26,19 @@ const OrderDetails = ({ id, update, receivedUpdate }) => {
     // Icelandic human readable format, e.g. 4. sep, 2020 08:
     const dateFormat = (date) => {
         moment.locale("is");
-        return moment(date).format("lll");
+        return moment(date).format("LLL");
     };
     return (
         <div className="order-details">
             {!error ? (
-                <TableContainer component={Paper}>
+                <TableContainer component={Paper} elevation={3}>
                     <h3 className="order-title">Pöntun {order.id}</h3>
-                    <Table>
+                    <Table className="order-info">
                         <TableBody>
                             <TableRow>
                                 <TableCell className="order-barcode">
                                     <b>Strikamerki:</b> {order.barcode}
                                 </TableCell>
-                                <TableCell className="order-date">
-                                    <b>Dagsetning:</b>{" "}
-                                    {dateFormat(order.dateCreated)}
-                                </TableCell>
-                                {order.dateCompleted && (
-                                    <TableCell>
-                                        <b>Sótt:</b>{" "}
-                                        {dateFormat(order.dateCompleted)}
-                                    </TableCell>
-                                )}
                                 <TableCell>
                                     <b>Viðskiptavinur: </b>
                                     <Link
@@ -57,6 +47,20 @@ const OrderDetails = ({ id, update, receivedUpdate }) => {
                                     >
                                         {order.customer}
                                     </Link>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell className="order-date">
+                                    <b>Dagsetning:</b>{" "}
+                                    {dateFormat(order.dateCreated)}
+                                </TableCell>
+                                <TableCell>
+                                    {order.dateCompleted && (
+                                        <>
+                                            <b>Sótt:</b>{" "}
+                                            {dateFormat(order.dateCompleted)}
+                                        </>
+                                    )}
                                 </TableCell>
                             </TableRow>
                         </TableBody>

@@ -831,6 +831,27 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             }
         }
 
+        //? test doesn't work on azure because of System.Drawing.ImageConverter, seems to be windows platform specific?
+        // [TestMethod]
+        // public void GetItemPrintDetails_should_return_ItemPrintDetailsDTO()
+        // {
+        //     //* Arrange
+        //     using(var mockContext = new DataContext(_options))
+        //     {
+        //         UpdateMapper(mockContext);
+        //         IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+        //         //* Act
+        //         var value = itemRepo.GetItemPrintDetails(1);
+
+        //         //* Assert
+        //         Assert.IsNotNull(value);
+        //         Assert.IsInstanceOfType(value, typeof(ItemPrintDetailsDTO));
+        //         Assert.IsNotNull(value.BarcodeImage);   // image is created
+        //         Assert.IsInstanceOfType(value.BarcodeImage, typeof(byte[]));
+        //     }
+        // }
+
         //**********     Helper functions     **********//
         private void FillDatabase()
         {

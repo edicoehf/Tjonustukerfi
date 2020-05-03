@@ -1,30 +1,50 @@
 import React from "react";
-import { Step, Stepper, StepLabel } from "@material-ui/core/";
+import { Step, Stepper, StepLabel, Typography } from "@material-ui/core/";
+import useGetItemHistoryById from "../../../hooks/useGetItemHistory";
+import moment from "moment";
+import "moment/locale/is";
 
-const ItemStates = ({ id }) => {
-    // Hook sem sækir þær stöður sem varan hefur verið í
-    // {states, error} = useGetItemStatesById(id);
+const dateFormat = (date) => {
+    moment.locale("is");
+    return moment(date).format("l");
+};
+
+const ItemStates = ({ id, updated, receivedUpdate }) => {
+    const { itemHistory, error, fetchItemHistory } = useGetItemHistoryById(id);
+    if (updated) {
+        fetchItemHistory();
+        receivedUpdate();
+    }
 
     return (
         <div className="item-states">
             {!error ? (
                 <>
-                    <Stepper activeStep={0} alternativeLabel>
-                        <Step>
-                            <StepLabel>
-                                {states.currentState &&
-                                    states.currentState.name}
-                            </StepLabel>
-                        </Step>
-                        {nextStates.map((state) => (
-                            <Step key={state.id}>
-                                <StepLabel>{state.name}</StepLabel>
+                    <Stepper
+                        activeStep={itemHistory.length - 1}
+                        alternativeLabel
+                        elevation={3}
+                    >
+                        {itemHistory.map((state) => (
+                            <Step key={state.stateId}>
+                                <StepLabel
+                                    optional={
+                                        <Typography
+                                            variant="caption"
+                                            color="textSecondary"
+                                        >
+                                            {dateFormat(state.timeOfChange)}
+                                        </Typography>
+                                    }
+                                >
+                                    {state.state}
+                                </StepLabel>
                             </Step>
                         ))}
                     </Stepper>
                 </>
             ) : (
-                <p className="error">Gat ekki sótt stöður vöru</p>
+                <p className="error">Gat ekki sótt fyrrum stöður vöru</p>
             )}
         </div>
     );

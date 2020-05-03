@@ -1,19 +1,26 @@
 import React from "react";
 import ItemDetails from "../ItemDetails/ItemDetails";
 import StateSelection from "../StateSelection/StateSelection";
+import ItemStates from "../ItemStates/ItemStates";
 import ItemActions from "../Actions/ItemActions/ItemActions";
 import "./ItemView.css";
 
 const ItemView = ({ match }) => {
     const id = match.params.id;
-    const [update, setUpdate] = React.useState(false);
+    const [detailsUpdate, setDetailsUpdate] = React.useState(false);
+    const [statesUpdate, setStatesUpdate] = React.useState(false);
 
     const hasUpdated = () => {
-        setUpdate(true);
+        setDetailsUpdate(true);
+        setStatesUpdate(true);
     };
 
-    const receivedUpdate = () => {
-        setUpdate(false);
+    const detailsReceivedUpdate = () => {
+        setDetailsUpdate(false);
+    };
+
+    const statesReceivedUpdate = () => {
+        setStatesUpdate(false);
     };
 
     return (
@@ -21,10 +28,15 @@ const ItemView = ({ match }) => {
             <h1>Upplýsingar um vöru</h1>
             <ItemDetails
                 id={id}
-                updated={update}
-                receivedUpdate={receivedUpdate}
+                updated={detailsUpdate}
+                receivedUpdate={detailsReceivedUpdate}
             />
             <StateSelection id={id} hasUpdated={hasUpdated} />
+            <ItemStates
+                id={id}
+                updated={statesUpdate}
+                receivedUpdate={statesReceivedUpdate}
+            />
             <ItemActions id={id} />
         </div>
     );

@@ -50,6 +50,6 @@ describe("<CustomerSelectView />", () => {
     useSearchBar.mockReturnValue({ searchResults: testProps });
 
     it("Should have 3 items", () => {
-        expect(wrapper.find("div.customer-select-list-item").length).toBe(3);
+        expect(wrapper.find(".list-of-customers").length).toBe(3);
     });
 });

@@ -6,3 +6,30 @@
 .customer-select-view .search-bar {
     align-self: center;
 }
+
+.customer-select-list.MuiPaper-root {
+    margin-top: 1.5em;
+    align-self: center;
+    width: 40em;
+    border-radius: 10px;
+    background-color: var(--data-color);
+}
+
+.customer-select-list .list-of-customers {
+    padding: 0;
+}
+
+.customer-select-list .list-of-customers .customer-list-item {
+    padding-left: 48px;
+}
+
+.customer-select-view .customer-select-search-paper {
+    margin: 0 auto;
+    width: fit-content;
+    background-color: var(--data-color);
+    border-radius: 10px;
+}
+
+.customer-select-view .search-bar {
+    padding: 0.5em 2.5em 1.5em 2.5em;
+}

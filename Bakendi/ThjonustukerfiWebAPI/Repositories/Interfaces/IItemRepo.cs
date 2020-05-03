@@ -46,5 +46,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
         /// <summary>Gets orderId with itemId</summary>
         /// <returns>OrderId (long)</returns>
         long GetOrderIdWithItemId(long itemId);
+
+        /// <summary> Gets item information from printing.</summary>
+        /// <returns>DTO that has item info and image of barcode as a byte array.</returns>
+        ItemPrintDetailsDTO GetItemPrintDetails(long itemId);
     }
 }

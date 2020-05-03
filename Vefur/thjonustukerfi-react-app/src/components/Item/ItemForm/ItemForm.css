@@ -1,6 +1,57 @@
-.select {
+.item-form-paper legend {
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+
+.item-form-paper legend.first-label {
+    margin-top: 0;
+}
+
+
+.select.MuiFormControl-root {
+    padding-left: 15px;
+}
+
+.item-form-paper input[type=number]::-webkit-inner-spin-button {
+    opacity: 1
+}
+
+.select.MuiFormGroup-root .MuiFormControlLabel-root {
     margin-bottom: 0rem;
 }
-legend {
-    margin-top: 1rem;
+
+.select.MuiFormControl-root.amount {
+    padding-left: 15px;
+    margin-bottom: 10px;
+    width: 7em;
+}
+
+.select.MuiFormControl-root.amount input {
+    text-align: center;
+}
+
+.item-form-paper.MuiPaper-root {
+    border-radius: 10px;
+    padding: 20px;
+    background-color: var(--data-color);
+    min-width: 15em;
+    width: fit-content;
+}
+
+.sbm-btn.MuiButtonBase-root {
+    margin: 2em auto 0 auto;
+}
+
+.item-form-paper .details-input .MuiFormLabel-root {
+    color: rgba(0, 0, 0, 0.9);
+}
+
+.item-form-paper .details-input .MuiFormLabel-root.Mui-focused {
+    color: #3f51b5;
+}
+
+.item-form-paper .other-input input::-webkit-input-placeholder,
+.item-form-paper .other-input input::placeholder {
+    color: black;
+    opacity: 1;
 }

@@ -20,3 +20,27 @@
 .customer-main .search-bar {
     align-self: center;
 }
+
+.customer-main .customer-list {
+    margin-top: 1.5em;
+    align-self: center;
+}
+
+.customer-main .no-customers {
+    margin-top: 2em;
+}
+
+.customer-main .search-bar .MuiFormControl-root {
+    width: 20em;
+}
+
+.customer-main .search-bar {
+    padding: 0.5em 2.5em 1.5em 2.5em;
+}
+
+.customer-main .customer-search-paper {
+    margin: 0 auto;
+    width: fit-content;
+    background-color: var(--data-color);
+    border-radius: 10px;
+}

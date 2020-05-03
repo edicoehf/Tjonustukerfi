@@ -1,7 +1,6 @@
 import React from "react";
 import { shallow, mount } from "enzyme";
 import CustomerListItem from "./CustomerListItem";
-jest.mock("react-router-dom");
 
 describe("<CustomerListItem />", () => {
     describe("CustomerListItem renders properly", () => {
@@ -9,7 +8,7 @@ describe("<CustomerListItem />", () => {
         let customer;
         const testCustomer = { id: "1", name: "arni", email: "arni@arni.is" };
         let CustomerListItemComponent = (
-            <CustomerListItem customer={testCustomer} />
+            <CustomerListItem customer={testCustomer} addCustomer={() => {}} />
         );
         beforeEach(() => {
             wrapper = mount(CustomerListItemComponent);

@@ -28,7 +28,12 @@ select:-webkit-autofill:focus {
     color: #3f51b5;
 }
 
-.customer-input-form .form {
+.customer-input-form .form div.MuiPaper-root {
+    padding: 0.5em 1em 1em 1em;
+    background-color: var(--data-color);
+    border-radius: 10px;
+    margin: 0 auto;
+    width: fit-content;
     justify-content: center;
     display: grid;
     column-gap: 3em;
@@ -40,11 +45,10 @@ select:-webkit-autofill:focus {
         "email email"
         "ssn phone"
         "address postalcode"
-        "submit submit"
     ;
 }
 
-.customer-input-form.compact .form {
+.customer-input-form.compact .form div.MuiPaper-root {
     justify-content: center;
     display: grid;
     row-gap: 2em;
@@ -57,7 +61,6 @@ select:-webkit-autofill:focus {
         "phone"
         "address"
         "postalcode"
-        "submit"
     ;
 
 }
@@ -87,9 +90,9 @@ select:-webkit-autofill:focus {
 }
 
 .customer-input-form .form .input-submit {
-    grid-area: submit;
+    margin: 0 auto;
     width: 20em;
-    margin-top: 4em;
+    margin-top: 2em;
     display: grid;
     justify-self: center;
 }

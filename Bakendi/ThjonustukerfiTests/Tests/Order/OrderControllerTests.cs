@@ -208,6 +208,25 @@ namespace ThjonustukerfiTests.Tests
             Assert.AreEqual(204, response.StatusCode);
         }
 
+        [TestMethod]
+        public void GetOrderPrintDetails_should_respond_with_200_OK()
+        {
+            //* Arrange
+            // Mock method
+            _orderServiceMock.Setup(method => method.GetOrderPrintDetails(It.IsAny<long>())).Returns(new List<ItemPrintDetailsDTO> ());
+
+            // create controller
+            _orderController = new OrderController(_orderServiceMock.Object);
+
+            //* Act
+            var response = _orderController.GetOrderPrintDetails(1) as OkObjectResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(StatusCodes.Status200OK, response.StatusCode);
+            Assert.IsInstanceOfType(response.Value as List<ItemPrintDetailsDTO>, typeof(List<ItemPrintDetailsDTO>));
+        }
+
         //*     Helper functions     *//
         
         /// <summary>Creates List with OrderDTO</summary>

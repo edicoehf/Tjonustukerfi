@@ -428,6 +428,13 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             return _mapper.Map<List<OrderDTO>>(_dbContext.Order.Where(o => o.CustomerId == customerId));
         }
 
+        public List<ItemPrintDetailsDTO> GetOrderPrintDetails(long orderId)
+        {
+            var order = GetOrderbyId(orderId);  // Get order
+
+            return _mapper.Map<List<ItemPrintDetailsDTO>>(order.Items); // return all items in order
+        }
+
         //*     Helper functions     *//
         private void Archive(List<Order> toArchive)
         {
