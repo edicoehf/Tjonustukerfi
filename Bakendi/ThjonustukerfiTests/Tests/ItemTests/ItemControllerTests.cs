@@ -345,5 +345,26 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             var retVal = response.Value as List<ItemStateChangeInput>;
             Assert.AreEqual(invalidInputs.Count, retVal.Count);
         }
+
+        [TestMethod]
+        public void GetItemPrintDetails_should_return_OkObjectResult()
+        {
+            //* Arrange
+            var retVal = new ItemPrintDetailsDTO();
+
+            // Mock service
+            _itemServiceMock.Setup(method => method.GetItemPrintDetails(It.IsAny<long>())).Returns(retVal);
+
+            // Creating controller
+            _itemController = new ItemController(_itemServiceMock.Object);
+
+            //* Act
+            var response = _itemController.GetItemPrintDetails(1) as OkObjectResult;
+
+            //* Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(StatusCodes.Status200OK, response.StatusCode);
+            Assert.IsInstanceOfType(response.Value as ItemPrintDetailsDTO, typeof(ItemPrintDetailsDTO));
+        }
     }
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow, mount } from "enzyme";
 import OrderItem from "./OrderItem";
-jest.mock("react-router-dom");
+import { Router } from "react-router-dom";
 
 describe("<OrderItem />", () => {
     let wrapper;
@@ -14,10 +14,17 @@ describe("<OrderItem />", () => {
         state: "Vinnslu",
         details: "something",
     };
-
+    const historyMock = {
+        push: jest.fn(),
+        location: {},
+        listen: jest.fn(),
+        createHref: jest.fn(),
+    };
     beforeEach(() => {
         wrapper = mount(
-            shallow(<OrderItem key={testProps.id} item={testProps} />).get(0)
+            <Router history={historyMock}>
+                <OrderItem key={testProps.id} item={testProps} />
+            </Router>
         );
     });
 
@@ -63,6 +70,6 @@ describe("<OrderItem />", () => {
     it("Should display details correctly", () => {
         expect(
             wrapper.find(".order-item-details").at(0).childAt(0).text()
-        ).toBe(testProps.details);
+        ).toBe("Annað: " + testProps.details);
     });
 });

@@ -5,6 +5,7 @@ using ThjonustukerfiWebAPI.Services.Interfaces;
 using ThjonustukerfiWebAPI.Models.Exceptions;
 using System.Collections;
 using ThjonustukerfiWebAPI.Configurations;
+using System.Collections.Generic;
 
 namespace ThjonustukerfiWebAPI.Services.Implementations
 {
@@ -44,5 +45,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         }
 
         public void RemoveOrderQuery(string barcode) => _orderRepo.DeleteByOrderId(_orderRepo.SearchOrder(barcode));
+
+        public List<ItemPrintDetailsDTO> GetOrderPrintDetails(long orderId) => _orderRepo.GetOrderPrintDetails(orderId);
     }
 }

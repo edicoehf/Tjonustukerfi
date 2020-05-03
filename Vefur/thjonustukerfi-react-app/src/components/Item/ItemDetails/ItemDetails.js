@@ -1,55 +1,127 @@
 import React from "react";
 import useGetItemById from "../../../hooks/useGetItemById";
+import {
+    TableContainer,
+    Table,
+    Paper,
+    TableRow,
+    TableCell,
+    TableBody,
+    TableHead,
+} from "@material-ui/core";
 import { Link } from "react-router-dom";
 import "./ItemDetails.css";
 
 const ItemDetails = ({ id, updated, receivedUpdate }) => {
     const { item, error, fetchItem, isLoading } = useGetItemById(id);
     const { category, service, orderId, state, json, barcode, details } = item;
+    const [other, setOther] = React.useState({
+        location: "",
+        sliced: false,
+        filleted: false,
+        otherCategory: "",
+        otherService: "",
+    });
+    React.useEffect(() => {
+        if (json) {
+            setOther(json);
+        }
+    }, [json]);
 
     if (updated) {
         receivedUpdate();
         fetchItem();
     }
-    // ÞETTA ÆTTI AÐ VERA TAFLA?
     return (
         <>
             {!isLoading ? (
                 <div className="item-details">
                     {!error ? (
-                        <>
-                            <div className="item-title">Vara: {id}</div>
-                            <div className="item-category">
-                                Tegund:{" "}
-                                {json.otherCategory
-                                    ? json.otherCategory
-                                    : category}
-                            </div>
-                            <div className="item-service">
-                                Þjónusta:{" "}
-                                {json.otherService
-                                    ? json.otherService
-                                    : service}
-                            </div>
-                            <div className="item-currentstate">
-                                Staða: {state}
-                            </div>
-                            <div className="item-filleted">
-                                Flökun: {json.filleted ? "Flakað" : "Óflakað"}
-                            </div>
-                            <div className="item-sliced">
-                                Pökkun: {json.sliced ? "Bitar" : "Heilt Flak"}
-                            </div>
-                            <div className="item-barcode">
-                                Strikamerki: {barcode}
-                            </div>
-                            <div className="item-extra">Annað: {details}</div>
-                            <div className="item-order">
-                                <Link to={`/order/${orderId}`}>
-                                    Pöntun: {orderId}
-                                </Link>
-                            </div>
-                        </>
+                        <TableContainer component={Paper} elevation={3}>
+                            <h3 className="details-item-title">Vara {id}</h3>
+                            <Table>
+                                <TableHead>
+                                    <TableRow className="details-item-info-row no-border">
+                                        <TableCell className="details-item-orderid-cell">
+                                            <Link to={`/order/${orderId}`}>
+                                                Pöntun: {orderId}
+                                            </Link>
+                                        </TableCell>
+                                        <TableCell className="details-item-barcode-cell">
+                                            Strikamerki: {barcode}
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    <TableRow className="details-item-row no-border">
+                                        <TableCell className="details-item-title-cell">
+                                            Tegund:
+                                        </TableCell>
+                                        <TableCell className="details-item-content-cell">
+                                            {other.otherCategory
+                                                ? other.otherCategory
+                                                : category}
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow className="details-item-row">
+                                        <TableCell className="details-item-title-cell">
+                                            Þjónusta:
+                                        </TableCell>
+                                        <TableCell className="details-item-content-cell">
+                                            {other.otherService
+                                                ? other.otherService
+                                                : service}
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow className="details-item-row">
+                                        <TableCell className="details-item-title-cell">
+                                            Flökun:
+                                        </TableCell>
+                                        <TableCell className="details-item-content-cell">
+                                            {other.filleted
+                                                ? "Flakað"
+                                                : "Óflakað"}
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow className="details-item-row">
+                                        <TableCell className="details-item-title-cell">
+                                            Pökkun:
+                                        </TableCell>
+                                        <TableCell className="details-item-content-cell">
+                                            {other.sliced
+                                                ? "Bitar"
+                                                : "Heilt Flak"}
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow className="details-item-row">
+                                        <TableCell className="details-item-title-cell">
+                                            Staða:
+                                        </TableCell>
+                                        <TableCell className="details-item-content-cell">
+                                            {state}
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow className="details-item-row">
+                                        <TableCell className="details-item-title-cell">
+                                            Staðsetning:
+                                        </TableCell>
+                                        <TableCell className="details-item-content-cell">
+                                            {other.location}
+                                        </TableCell>
+                                    </TableRow>
+                                    {details !== "" && (
+                                        <TableRow className="details-item-row">
+                                            <TableCell className="details-item-title-cell">
+                                                Annað:
+                                            </TableCell>
+                                            <TableCell className="details-item-content-cell">
+                                                {details}
+                                            </TableCell>
+                                        </TableRow>
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
                     ) : (
                         <p className="error">
                             Gat ekki sótt upplýsingar um vöru

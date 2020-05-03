@@ -1,14 +1,13 @@
-.customer-list {
-    display: grid;
-    grid-template-columns: 80% 20%;
+.customer-list.MuiPaper-root {
+    width: 40em;
+    border-radius: 10px;
+    background-color: var(--data-color);
 }
-li.item {
-    width: 100%;
-    height: 100%;
-    background-color: rgb(238, 238, 238);
-    border-bottom: 0.1px solid rgb(187, 187, 187);
-    border-right: 0.1px solid rgb(187, 187, 187);
+
+.customer-list .list-of-customers {
+    padding: 0;
 }
-li.action-item {
-    justify-content: center;
+
+.customer-list .list-of-customers .customer-list-item {
+    padding-left: 48px;
 }

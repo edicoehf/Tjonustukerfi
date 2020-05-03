@@ -2,6 +2,6 @@
     color: rgba(0, 0, 0, 0.9);
 }
 
-.search-bar .form .MuiFormControl-root .MuiFormLabel-root.Mui-focused {
+.search-bar .MuiFormControl-root .MuiFormLabel-root.Mui-focused {
     color: #3f51b5;
 }

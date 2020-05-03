@@ -12,7 +12,6 @@ const OrderView = ({ match }) => {
     };
 
     const receivedUpdate = () => {
-        console.log("rec");
         setUpdate(false);
     };
 

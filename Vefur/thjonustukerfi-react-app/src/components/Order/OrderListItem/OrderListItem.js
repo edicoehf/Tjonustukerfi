@@ -1,23 +1,39 @@
 import React from "react";
-import { ListItem } from "@material-ui/core";
-import "./OrderListItem.css";
+import { TableRow, TableCell } from "@material-ui/core";
 import { orderType } from "../../../types/index";
-import ListItemLink from "../../ListItemLink/ListItemLink";
-import DeleteOrderAction from "../Actions/DeleteOrderAction/DeleteOrderAction";
+import { useHistory } from "react-router-dom";
+import moment from "moment";
+import "moment/locale/is";
 
-const OrderListItem = ({ order }) => {
+const OrderListItem = ({ order, border }) => {
+    const history = useHistory();
+
+    const handleRedirect = () => {
+        history.push(`/order/${order.id}`);
+    };
+
+    const dateFormat = (date) => {
+        moment.locale("is");
+        return moment(date).format("LL");
+    };
+
     return (
         <>
-            <ListItemLink href={"/order/" + order.id}>{order.id}</ListItemLink>
-            <ListItemLink href={"/order/" + order.id}>
-                {order.customer + " og mail?"}
-            </ListItemLink>
-            <ListItemLink href={"/order/" + order.id}>
-                {order.items.length}
-            </ListItemLink>
-            <ListItem className="order-button-area">
-                <DeleteOrderAction />
-            </ListItem>
+            <TableRow
+                hover={true}
+                onClick={handleRedirect}
+                className={`order-row order-row-body ${
+                    border === true ? "with-border" : ""
+                }`}
+            >
+                <TableCell className="order-cell-id">{order.id}</TableCell>
+                <TableCell align="right" className="order-cell-customer">
+                    {order.customer}
+                </TableCell>
+                <TableCell align="right" className="order-cell-date">
+                    {dateFormat(order.dateCreated)}
+                </TableCell>
+            </TableRow>
         </>
     );
 };

@@ -38,7 +38,7 @@ const getNextStatesById = (id) => {
         .catch((error) => Promise.reject(error));
 };
 
-const updateItemState = ({ item, state }) => {
+const updateItemState = ({ item, state, location }) => {
     return fetch(endpoint + "statechange", {
         method: "PATCH",
         headers: {
@@ -49,7 +49,7 @@ const updateItemState = ({ item, state }) => {
             {
                 itemId: item,
                 stateChangeTo: state,
-                location: "",
+                location: location,
             },
         ]),
     })
@@ -83,6 +83,30 @@ const deleteItemById = (id) => {
         .catch((error) => Promise.reject(error));
 };
 
+const getItemHistoryById = (id) => {
+    return fetch(`http://localhost:5000/api/info/${id}/itemhistory`, {
+        method: "GET",
+        headers: {
+            crossDomain: true,
+        },
+    })
+        .then(handleErrors)
+        .then(handleData)
+        .catch((error) => Promise.reject(error));
+};
+
+const getItemLocations = () => {
+    return fetch(`http://localhost:5000/api/info/itemlocations`, {
+        method: "GET",
+        headers: {
+            crossDomain: true,
+        },
+    })
+        .then(handleErrors)
+        .then(handleData)
+        .catch((error) => Promise.reject(error));
+};
+
 export default {
     getItemById,
     getItemByBarcode,
@@ -90,4 +114,6 @@ export default {
     updateItemById,
     updateItemState,
     deleteItemById,
+    getItemHistoryById,
+    getItemLocations,
 };

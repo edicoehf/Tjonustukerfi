@@ -1,5 +1,13 @@
 import React from "react";
-import { List, ListItem } from "@material-ui/core";
+import {
+    Paper,
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody,
+    TableContainer,
+} from "@material-ui/core";
 import OrderListItem from "../OrderListItem/OrderListItem";
 import "./OrderList.css";
 import { ordersType, isLoadingType } from "../../../types";
@@ -11,23 +19,42 @@ const OrderList = ({ orders, isLoading, error }) => {
                 isLoading ? (
                     <p> Sæki Pantanir </p>
                 ) : (
-                    <List className="order-list">
-                        <ListItem className="order-item" variant="dark">
-                            <h5>Pantananúmer</h5>
-                        </ListItem>
-                        <ListItem className="order-item" variant="dark">
-                            <h5>Eigandi Pöntunar</h5>
-                        </ListItem>
-                        <ListItem className="order-item" variant="dark">
-                            <h5 className="item">Fjöldi Vara</h5>
-                        </ListItem>
-                        <ListItem className="order-item order-action-item">
-                            <h5>Aðgerðir</h5>
-                        </ListItem>
-                        {orders.map((item) => (
-                            <OrderListItem order={item} key={item.id} />
-                        ))}
-                    </List>
+                    <TableContainer
+                        component={Paper}
+                        elevation={3}
+                        className="order-list"
+                    >
+                        <Table>
+                            <TableHead>
+                                <TableRow className="order-row">
+                                    <TableCell className="order-cell-id">
+                                        Pöntunarnúmer
+                                    </TableCell>
+                                    <TableCell
+                                        align="right"
+                                        className="order-cell-customer"
+                                    >
+                                        Viðskiptavinur
+                                    </TableCell>
+                                    <TableCell
+                                        align="right"
+                                        className="order-cell-date"
+                                    >
+                                        Dagsetning
+                                    </TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {orders.map((order, i) => (
+                                    <OrderListItem
+                                        key={i}
+                                        order={order}
+                                        border={i !== 0}
+                                    />
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                 )
             ) : (
                 <p className="error"> Villa kom upp: Gat ekki sótt pantanir</p>
