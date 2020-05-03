@@ -134,7 +134,8 @@ namespace ThjonustukerfiWebAPI
                 endpoints.MapControllers();
             });
 
-            loggerFactory.AddLog4Net();
+            var logConfigPath = $"{AppContext.BaseDirectory}" + @"Config/log4net.config";
+            loggerFactory.AddLog4Net(logConfigPath);
         }
     }
 }
