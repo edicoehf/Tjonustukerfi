@@ -87,13 +87,5 @@ namespace ThjonustukerfiWebAPI.Controllers
         {
             return Ok(Constants.Locations);
         }
-
-        [Route("test")]
-        [HttpGet]
-        public IActionResult TestLogger()
-        {
-            _log.Info("Hello world!");
-            return Ok("test");
-        }
     }
 }
