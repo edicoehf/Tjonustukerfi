@@ -35,10 +35,12 @@ const ItemDetails = ({ id, updated, receivedUpdate }) => {
                                 Staða: {state}
                             </div>
                             <div className="item-filleted">
-                                Flökun: {json.filleted ? "Flakað" : "Óflakað"}
+                                Flökun:
+                                {json.filleted ? "Flakað" : "Óflakað"}
                             </div>
                             <div className="item-sliced">
-                                Pökkun: {json.sliced ? "Bitar" : "Heilt Flak"}
+                                Pökkun:
+                                {json.sliced ? "Bitar" : "Heilt Flak"}
                             </div>
                             <div className="item-barcode">
                                 Strikamerki: {barcode}
