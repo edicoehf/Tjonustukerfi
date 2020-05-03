@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ThjonustukerfiWebAPI.Configurations;
+using ThjonustukerfiWebAPI.Setup;
 using ThjonustukerfiWebAPI.Models;
 
 namespace ThjonustukerfiWebAPI.Extensions

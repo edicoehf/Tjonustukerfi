@@ -7,7 +7,7 @@ using BarcodeLib;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using ThjonustukerfiWebAPI.Configurations;
+using ThjonustukerfiWebAPI.Setup;
 using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.Entities;

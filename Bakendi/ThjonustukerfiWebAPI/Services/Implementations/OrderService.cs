@@ -4,7 +4,7 @@ using ThjonustukerfiWebAPI.Repositories.Interfaces;
 using ThjonustukerfiWebAPI.Services.Interfaces;
 using ThjonustukerfiWebAPI.Models.Exceptions;
 using System.Collections;
-using ThjonustukerfiWebAPI.Configurations;
+using ThjonustukerfiWebAPI.Setup;
 using System.Collections.Generic;
 
 namespace ThjonustukerfiWebAPI.Services.Implementations

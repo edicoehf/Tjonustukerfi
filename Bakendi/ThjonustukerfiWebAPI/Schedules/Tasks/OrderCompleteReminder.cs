@@ -4,7 +4,7 @@ using System.Diagnostics;
 using AutoMapper;
 using FluentScheduler;
 using Microsoft.EntityFrameworkCore;
-using ThjonustukerfiWebAPI.Configurations;
+using ThjonustukerfiWebAPI.Setup;
 using ThjonustukerfiWebAPI.Mappings;
 using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Models.DTOs;

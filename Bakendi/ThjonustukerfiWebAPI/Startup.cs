@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ThjonustukerfiWebAPI.Configurations;
+using ThjonustukerfiWebAPI.Setup;
 using ThjonustukerfiWebAPI.Extensions;
 using ThjonustukerfiWebAPI.Mappings;
 using ThjonustukerfiWebAPI.Models;

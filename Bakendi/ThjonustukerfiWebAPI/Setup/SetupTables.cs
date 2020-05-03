@@ -4,7 +4,7 @@ using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Models.Entities;
 using ThjonustukerfiWebAPI.Extensions;
 
-namespace ThjonustukerfiWebAPI.Configurations
+namespace ThjonustukerfiWebAPI.Setup
 {
     public class SetupTables : ISetupTables
     {

@@ -3,7 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using AutoMapper;
-using ThjonustukerfiWebAPI.Configurations;
+using ThjonustukerfiWebAPI.Setup;
 using ThjonustukerfiWebAPI.Extensions;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.Exceptions;
