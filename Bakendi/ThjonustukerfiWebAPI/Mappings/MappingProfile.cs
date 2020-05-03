@@ -5,7 +5,6 @@ using System.Linq;
 using AutoMapper;
 using BarcodeLib;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ThjonustukerfiWebAPI.Configurations;

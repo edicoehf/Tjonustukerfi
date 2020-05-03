@@ -95,7 +95,7 @@ namespace ThjonustukerfiWebAPI
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                opt.IncludeXmlComments(xmlPath);
+                opt.IncludeXmlComments(xmlPath, includeControllerXmlComments : true);
             });
 
             JobManager.Initialize(new Scheduler());
