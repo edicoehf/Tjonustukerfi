@@ -1,4 +1,5 @@
-﻿using HandtolvuApp.ViewModels;
+﻿using HandtolvuApp.Data.Interfaces;
+using HandtolvuApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,7 @@ namespace HandtolvuApp.Controls
         {
             MessagingCenter.Subscribe<StateScanViewModel, string>(this, "Success", async (sender, message) =>
             {
+               // DependencyService.Get<IToast>().Show("Success!");
                 await App.Current.MainPage.DisplayAlert("Klárað!", message, "OK");
                 MyEditor.Focus();
             });

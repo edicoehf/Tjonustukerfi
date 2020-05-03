@@ -26,21 +26,21 @@
         </Grid.ColumnDefinitions>
 
         <Button Grid.Row="0" Grid.Column="1"
-                Grid.ColumnSpan="2" Text="Pöntun"
+                Grid.ColumnSpan="2" Text="Skanna Pöntun"
                 BackgroundColor="Blue" TextColor="White"
                 Margin="5, 5, 5, 5"
                 Command="{Binding OrderCommand}" 
                 CornerRadius="20" />
         
         <Button Grid.Row="1" Grid.Column="1"
-                Grid.ColumnSpan="2" Text="Item"
+                Grid.ColumnSpan="2" Text="Skanna Vöra"
                 BackgroundColor="Blue" TextColor="White"
                 Margin="5, 5, 5, 5"
                 Command="{Binding ItemCommand}"
                 CornerRadius="20" />
 
         <Button Grid.Row="2" Grid.Column="1"
-                Grid.ColumnSpan="2" Text="Skanna í hólf"
+                Grid.ColumnSpan="2" Text="Skanna í Hólf"
                 BackgroundColor="Blue" TextColor="White"
                 Margin="5, 5, 5, 5"
                 Command="{Binding LocationCommand}"

@@ -35,7 +35,8 @@ namespace HandtolvuApp.Droid
             else
             {
                 App.Scanner = null;
-                Toast.MakeText(Android.App.Application.Context, "No zebra device", ToastLength.Long).Show();
+                Android.Widget.Toast.MakeText(Android.App.Application.Context, "No zebra device", ToastLength.Long).Show();
+                //Toast.MakeText(Android.App.Application.Context, "No zebra device", ToastLength.Long).Show();
             }
 
 

@@ -122,7 +122,10 @@ namespace HandtolvuApp.Data.Implementations
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    ret = JsonConvert.DeserializeObject<List<LocationStateChange>>(content);
+                    if(content != "")
+                    {
+                        ret = JsonConvert.DeserializeObject<List<LocationStateChange>>(content);
+                    }
                 }
             }
             catch (Exception ex)

@@ -8,9 +8,10 @@
   
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height=".3*"/>
-                <RowDefinition Height=".01*"/>
+                <RowDefinition Height=".2*"/>
+                <RowDefinition Height=".2*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height=".2*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -20,7 +21,20 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-        <Button Text="Vara sótt" Grid.Row="0"  Grid.Column="1"
+        <Label Text="Eigandi:" FontSize="Title" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+               HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontAttributes="Bold"/>
+            
+        <Label Text="{Binding Order.Customer}" FontSize="Title" Grid.Row="0" Grid.ColumnSpan="3" Grid.Column="2"
+               HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontAttributes="Bold"/>
+
+        <Label Text="Strikamerki:" FontSize="Title" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0"
+               HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontAttributes="Bold"/>
+            
+        <Label Text="{Binding Order.Barcode}" FontSize="Title" Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="2"
+               HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontAttributes="Bold"/>
+
+
+        <Button Text="Skrá út pöntun" Grid.Row="3"  Grid.Column="1"
                 Grid.ColumnSpan="3" Command="{Binding CheckoutCommand}" 
                 Margin="10, 10, 10, 10" BackgroundColor="DodgerBlue"
                 CornerRadius="20"/>
@@ -34,7 +48,7 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <StackLayout Padding="10, 10">
-                        <Frame >
+                        <Frame HasShadow="True" CornerRadius="10" BackgroundColor="LightSlateGray">
                             <Label Text="{Binding Category}" FontSize="Large" 
                                    VerticalTextAlignment="Center" 
                                    HorizontalTextAlignment="Center"/>

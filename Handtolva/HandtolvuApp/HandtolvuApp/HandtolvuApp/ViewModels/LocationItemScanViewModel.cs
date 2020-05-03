@@ -40,13 +40,13 @@ namespace HandtolvuApp.ViewModels
                     if(invalidInput.Count == 0)
                     {
                         // success
-                        MessagingCenter.Send<LocationItemScanViewModel, string>(this, $"Success", "Allar vörur eru skannaðar í hólf {Barcode}");
+                        MessagingCenter.Send<LocationItemScanViewModel, string>(this, "Success", $"Allar vörur eru skannaðar í hólf {Barcode}");
                         AllItems.Clear();
                     }
                     else
                     {
                         // display alert that something failed
-                        MessagingCenter.Send<LocationItemScanViewModel, string>(this, "Fail", $"Ekki var hægt að setja allar vörur í hólf {Barcode}. \n\n Eftir er listi af vörum sem ekki var hægt að setja í hólfið");
+                        MessagingCenter.Send<LocationItemScanViewModel, string>(this, "Fail", $"Ekki var hægt að setja allar vörur í hólf {Barcode}.\n\nEftir er listi af vörum sem ekki var hægt að setja í hólfið");
                         AllItems.Clear();
 
                         foreach (LocationStateChange i in invalidInput)
