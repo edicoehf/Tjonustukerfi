@@ -988,6 +988,24 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                     }
                 };
 
+                // Adding service states
+                var mockServiceStateList = new List<ServiceState>()
+                {
+                    // for birkireykt
+                    new ServiceState { Id = 1, ServiceId = 1, StateId = 1, Step = 1 },
+                    new ServiceState { Id = 2, ServiceId = 1, StateId = 2, Step = 2 },
+                    new ServiceState { Id = 3, ServiceId = 1, StateId = 3, Step = 2 },
+                    new ServiceState { Id = 4, ServiceId = 1, StateId = 4, Step = 2 },
+                    new ServiceState { Id = 5, ServiceId = 1, StateId = 5, Step = 3 },
+
+                    // for taðreykt
+                    new ServiceState { Id = 6, ServiceId = 2, StateId = 1, Step = 1 },
+                    new ServiceState { Id = 7, ServiceId = 2, StateId = 2, Step = 2 },
+                    new ServiceState { Id = 8, ServiceId = 2, StateId = 3, Step = 2 },
+                    new ServiceState { Id = 9, ServiceId = 2, StateId = 4, Step = 2 },
+                    new ServiceState { Id = 10, ServiceId = 2, StateId = 5, Step = 3 }
+                };
+
                 // Build a list of size 20, make it queryable for the database mock
                 var orders = Builder<Order>.CreateListOfSize(20)
                     .All()
@@ -1028,6 +1046,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 mockContext.Item.AddRange(mockItems);
                 mockContext.ItemTimestamp.AddRange(mockTimestamps);
                 mockContext.Service.AddRange(MockServiceList);
+                mockContext.ServiceState.AddRange(mockServiceStateList);
                 mockContext.State.AddRange(states);
                 mockContext.Category.AddRange(categories);
                 mockContext.SaveChanges();
@@ -1054,6 +1073,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 mockContext.Item.RemoveRange(mockContext.Item);
                 mockContext.ItemTimestamp.RemoveRange(mockContext.ItemTimestamp);
                 mockContext.Service.RemoveRange(mockContext.Service);
+                mockContext.ServiceState.RemoveRange(mockContext.ServiceState);
                 mockContext.State.RemoveRange(mockContext.State);
                 mockContext.Category.RemoveRange(mockContext.Category);
                 mockContext.SaveChanges();
