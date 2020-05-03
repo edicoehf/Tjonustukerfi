@@ -283,7 +283,10 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 var itemToChange = _dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId);
                 if(itemToChange == null) { throw new NotFoundException($"Item with ID {item.ItemId} was not found in order with order ID {orderId}."); }
                 
-                itemToChange.StateId = 5;  //TODO: Same as in complete Item, update id to be more general (e.g. some global enunm or somthing)
+                // get final state id
+                var finalStateId = _dbContext.ServiceState.Where(ss => ss.ServiceId == itemToChange.ServiceId).OrderByDescending(ss => ss.Step).FirstOrDefault().StateId;
+
+                itemToChange.StateId = finalStateId;    // set to final state
                 itemToChange.DateCompleted = currentDate;
                 itemToChange.DateModified = currentDate;
 

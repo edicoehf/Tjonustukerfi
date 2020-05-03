@@ -164,7 +164,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             var entity = _dbContext.Item.FirstOrDefault(i => i.Id == id);
             if(entity == null) { throw new NotFoundException($"Item with id {id} was not found."); }
 
-            entity.StateId = 5; //TODO: Prety hardcoded, when config for company ready then maybe make this more general
+            // Gets max (final) step and then the relevant stateID of the step
+            entity.StateId = _dbContext.ServiceState.Where(ss => ss.ServiceId == entity.ServiceId).OrderByDescending(ss => ss.Step).FirstOrDefault().StateId;
             entity.DateModified = DateTime.Now;
             entity.DateCompleted = DateTime.Now;
 
@@ -340,12 +341,14 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // get entity
             var entity = _dbContext.Item.FirstOrDefault(i => i.Id == itemId);
 
+            // find the final-state-id
+            var finalState = _dbContext.ServiceState.Where(ss => ss.ServiceId == entity.ServiceId).OrderByDescending(ss => ss.Step).FirstOrDefault().StateId;
+
             // update the entity itself
             entity.StateId = stateId;
             entity.DateModified = DateTime.Now;
 
-            //TODO: Change final state check, like others
-            if(entity.StateId == 5) { entity.DateCompleted = timeNow; }
+            if(entity.StateId == finalState) { entity.DateCompleted = timeNow; }
             else { entity.DateCompleted = null; }
 
             // Get the json object and change it and write it back (making sure only to change the location property if there are any other properties there)
@@ -388,11 +391,12 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // list is empty, return false
             if(!connection.Any()) { return false; }
 
-            foreach (var item in connection)
+            foreach (var itemConection in connection)
             {
-                //TODO: Change state done check to something else, like with other TODOs
+                var item = _dbContext.Item.FirstOrDefault(i => i.Id == itemConection.ItemId);
+                var finalState = _dbContext.ServiceState.Where(ss => ss.ServiceId == item.ServiceId).OrderByDescending(ss => ss.Step).FirstOrDefault().StateId;
                 // Return false if any item is not complete
-                if(_dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId).StateId != 5) { return false; }
+                if(item.StateId != finalState) { return false; }
             }
 
             return true;
