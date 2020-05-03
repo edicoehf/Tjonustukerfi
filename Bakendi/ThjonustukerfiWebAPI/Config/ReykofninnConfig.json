@@ -1,0 +1,63 @@
+{
+    "locations": [
+        "holf1", "holf2", "holf3", "holf4", "holf5",
+        "holf6", "holf7", "holf8", "holf9", "holf10"
+    ],
+    "BarcodeImageDimensions": {
+        "height": 50,
+        "width": 100
+    },
+    "services": [
+        { "name": "Birkireyking", "id": 1 },
+        { "name": "Taðreyking", "id": 2 },
+        { "name": "ViðarReyking", "id": 3 },
+        { "name": "Salt pækill", "id": 4 },
+        { "name": "Annað", "id": 5 }
+    ],
+    "serviceStates": [
+        { "Id": 1, "serviceId": 1, "stateId": 1, "step": 1 },
+        { "Id": 2, "serviceId": 1, "stateId": 2, "step": 2 },
+        { "Id": 3, "serviceId": 1, "stateId": 3, "step": 2 },
+        { "Id": 4, "serviceId": 1, "stateId": 4, "step": 2 },
+        { "Id": 5, "serviceId": 1, "stateId": 5, "step": 3 },
+
+        { "Id": 6, "serviceId": 2, "stateId": 1, "step": 1 },
+        { "Id": 7, "serviceId": 2, "stateId": 2, "step": 2 },
+        { "Id": 8, "serviceId": 2, "stateId": 3, "step": 2 },
+        { "Id": 9, "serviceId": 2, "stateId": 4, "step": 2 },
+        { "Id": 10, "serviceId": 2, "stateId": 5, "step": 3 },
+
+        { "Id": 11, "serviceId": 3, "stateId": 1, "step": 1 },
+        { "Id": 12, "serviceId": 3, "stateId": 2, "step": 2 },
+        { "Id": 13, "serviceId": 3, "stateId": 3, "step": 2 },
+        { "Id": 14, "serviceId": 3, "stateId": 4, "step": 2 },
+        { "Id": 15, "serviceId": 3, "stateId": 5, "step": 3 },
+
+        { "Id": 16, "serviceId": 4, "stateId": 1, "step": 1 },
+        { "Id": 17, "serviceId": 4, "stateId": 2, "step": 2 },
+        { "Id": 18, "serviceId": 4, "stateId": 3, "step": 2 },
+        { "Id": 19, "serviceId": 4, "stateId": 4, "step": 2 },
+        { "Id": 20, "serviceId": 4, "stateId": 5, "step": 3 },
+
+        { "Id": 21, "serviceId": 5, "stateId": 1, "step": 1 },
+        { "Id": 22, "serviceId": 5, "stateId": 2, "step": 2 },
+        { "Id": 23, "serviceId": 5, "stateId": 3, "step": 2 },
+        { "Id": 24, "serviceId": 5, "stateId": 4, "step": 2 },
+        { "Id": 25, "serviceId": 5, "stateId": 5, "step": 3 }
+    ],
+    "states": [
+        { "name": "Vinnslu", "id": 1 },
+        { "name": "Kælir1", "id": 2 },
+        { "name": "Kælir2", "id": 3 },
+        { "name": "Frystir", "id": 4 },
+        { "name": "Sótt", "id": 5 }
+    ],
+    "categories": [
+        { "name": "Lax", "id": 1 },
+        { "name": "Silungur", "id": 2 },
+        { "name": "Lambakjöt", "id": 3 },
+        { "name": "Annað", "id": 4 }
+    ],
+    "sendSMS": false,
+    "sendEmail": true
+}
