@@ -6,6 +6,10 @@ using ThjonustukerfiWebAPI.Models;
 using System.Xml;
 using System.IO;
 using System.Reflection;
+using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using ThjonustukerfiWebAPI.Config;
 
 namespace ThjonustukerfiWebAPI.Extensions
 {
@@ -46,9 +50,14 @@ namespace ThjonustukerfiWebAPI.Extensions
             using (var scope = serviceScopeFactory.CreateScope())
             {
                 var services = scope.ServiceProvider;
-                ISetupTables setuptable = new SetupTables(services.GetRequiredService<DataContext>());
+                IBaseSetup baseSetup = new BaseSetup(services.GetRequiredService<DataContext>());
 
-                setuptable.Run();
+                var company = "Reykofninn";                                             // enter company name that has a config
+                var path = $"{AppContext.BaseDirectory}\\Config\\{company}Config.json"; // get the path
+                var json = File.ReadAllText(path);                                      // read the file to json
+                var config = JsonConvert.DeserializeObject<ConfigClass>(json);          // Convert to config class for easy setup
+
+                baseSetup.Run(config);
             }
 
             return webHost;
