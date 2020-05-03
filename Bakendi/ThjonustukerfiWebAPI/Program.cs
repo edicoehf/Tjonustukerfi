@@ -16,7 +16,6 @@ namespace ThjonustukerfiWebAPI
         {
             CreateHostBuilder(args)
                 .Build()
-                .Log4NetSetup() // custom function
                 .FillTables()   // custom function
                 .Run();
         }

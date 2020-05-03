@@ -19,6 +19,7 @@ using System.IO;
 using Microsoft.OpenApi.Models;
 using FluentScheduler;
 using ThjonustukerfiWebAPI.Schedules;
+using Microsoft.Extensions.Logging;
 
 namespace ThjonustukerfiWebAPI
 {
@@ -102,7 +103,7 @@ namespace ThjonustukerfiWebAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -132,6 +133,8 @@ namespace ThjonustukerfiWebAPI
             {
                 endpoints.MapControllers();
             });
+
+            loggerFactory.AddLog4Net();
         }
     }
 }
