@@ -132,7 +132,6 @@ namespace ThjonustukerfiWebAPI
             {
                 endpoints.MapControllers();
             });
-
         }
     }
 }

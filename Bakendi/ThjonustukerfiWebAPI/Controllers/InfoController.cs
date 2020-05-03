@@ -12,6 +12,7 @@ namespace ThjonustukerfiWebAPI.Controllers
     [ApiController]
     public class InfoController : ControllerBase
     {
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(InfoController));
         private IInfoService _infoService;
 
         public InfoController(IInfoService inforservice)
@@ -85,6 +86,14 @@ namespace ThjonustukerfiWebAPI.Controllers
         public IActionResult GetItemLocations()
         {
             return Ok(Constants.Locations);
+        }
+
+        [Route("test")]
+        [HttpGet]
+        public IActionResult TestLogger()
+        {
+            _log.Info("Hello world!");
+            return Ok("test");
         }
     }
 }
