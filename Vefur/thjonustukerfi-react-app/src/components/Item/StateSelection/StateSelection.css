@@ -1,3 +1,8 @@
 button.state-btn {
     margin-top: 2rem;
 }
+
+.state-selection-modal .selection-list {
+    max-height: 20em;
+    min-width: 15em;
+}

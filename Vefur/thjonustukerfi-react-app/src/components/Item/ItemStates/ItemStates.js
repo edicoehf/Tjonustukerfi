@@ -11,9 +11,7 @@ const dateFormat = (date) => {
 
 const ItemStates = ({ id, updated, receivedUpdate }) => {
     const { itemHistory, error, fetchItemHistory } = useGetItemHistoryById(id);
-    console.log(updated);
     if (updated) {
-        console.log("UP");
         fetchItemHistory();
         receivedUpdate();
     }
