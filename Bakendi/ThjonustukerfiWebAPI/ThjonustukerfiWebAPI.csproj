@@ -7,6 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="$(SolutionDir)config\**"
+      CopyToOutputDirectory="PreserveNewest"
+      LinkBase="config\" />
     <PackageReference Include="Automapper" Version="9.0.0" />
     <PackageReference Include="BarcodeLib" Version="2.2.5" />
     <PackageReference Include="FluentScheduler" Version="5.3.0" />
