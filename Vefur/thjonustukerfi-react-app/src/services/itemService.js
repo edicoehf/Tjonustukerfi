@@ -3,6 +3,7 @@ import { handleErrors, handleData } from "./serviceHandlers";
 const endpoint = "http://localhost:5000/api/items/";
 
 const getItemById = (id) => {
+    console.log(typeof id);
     return fetch(endpoint + id, {
         method: "GET",
         headers: {
@@ -107,6 +108,19 @@ const getItemLocations = () => {
         .catch((error) => Promise.reject(error));
 };
 
+const getItemPrintDetails = (id) => {
+    console.log(typeof id);
+    return fetch(`http://localhost:5000/api/items/printer/${id}`, {
+        method: "GET",
+        headers: {
+            crossDomain: true,
+        },
+    })
+        .then(handleErrors)
+        .then(handleData)
+        .catch((error) => Promise.reject(error));
+};
+
 export default {
     getItemById,
     getItemByBarcode,
@@ -116,4 +130,5 @@ export default {
     deleteItemById,
     getItemHistoryById,
     getItemLocations,
+    getItemPrintDetails,
 };

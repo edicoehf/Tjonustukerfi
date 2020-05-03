@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import "./ItemDetails.css";
+import PrintItemView from "../PrintItemView/PrintItemView";
 
 const ItemDetails = ({ id, updated, receivedUpdate }) => {
     const { item, error, fetchItem, isLoading } = useGetItemById(id);
