@@ -9,7 +9,7 @@ namespace ThjonustukerfiWebAPI.Config.EnvironmentVariables
         /// <returns>Dictionary of string and string</returns>
         public static Dictionary<string, string> LoadEvironmentFile()
         {
-            string envFile = "Config\\EnvironmentVariables\\.env";
+            string envFile = "Config/EnvironmentVariables/.env";
             var dic = new Dictionary<string, string>();
 
             if (File.Exists(envFile))

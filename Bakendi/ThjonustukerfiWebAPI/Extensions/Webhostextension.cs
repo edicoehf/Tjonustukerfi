@@ -53,7 +53,7 @@ namespace ThjonustukerfiWebAPI.Extensions
                 IBaseSetup baseSetup = new BaseSetup(services.GetRequiredService<DataContext>());
 
                 var company = "Reykofninn";                                             // enter company name that has a config
-                var path = $"{AppContext.BaseDirectory}\\Config\\{company}Config.json"; // get the path
+                var path = $"{AppContext.BaseDirectory}Config/{company}Config.json";   // get the path
                 var json = File.ReadAllText(path);                                      // read the file to json
                 var config = JsonConvert.DeserializeObject<ConfigClass>(json);          // Convert to config class for easy setup
 
