@@ -5,6 +5,7 @@ using RestSharp;
 using RestSharp.Authenticators;
 using ThjonustukerfiWebAPI.EnvironmentVariables;
 using ThjonustukerfiWebAPI.Models.DTOs;
+using ThjonustukerfiWebAPI.Models.Exceptions;
 using ThjonustukerfiWebAPI.Setup;
 
 namespace ThjonustukerfiWebAPI.Services.Implementations
@@ -57,13 +58,16 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         }
         private static IRestResponse Sendmail (string emailAddress, string subject, string body, string OrderBarcodeBase64Image = null)
         {
-            var env = EnvironmentFileManager.LoadEvironmentFile();
-            string apiKey = null;
-            env.TryGetValue("MAILGUN_AUTHENTICATION_KEY", out apiKey);
-            if(apiKey == null) { apiKey = ""; }
+            var env = EnvironmentFileManager.LoadEvironmentFile();      // load env variables
+            string apiKey;
+            string apiUrl;
+            env.TryGetValue("MAILGUN_AUTHENTICATION_KEY", out apiKey);  // get api key
+            env.TryGetValue("MAILGUN_URL", out apiUrl);                 // get api urdl
+            // if environmental variables are not set correctly throw exception
+            if(apiKey == null || apiUrl == null) { throw new EmailException($"Could not send email. Could not find url or authentication key for the email request."); }
             
             RestClient client = new RestClient ();
-            client.BaseUrl = new Uri ("https://api.mailgun.net/v3/sandboxfd3dcd967775490d82138a8f336fb6b2.mailgun.org/messages");
+            client.BaseUrl = new Uri (apiUrl);
             client.Authenticator = new HttpBasicAuthenticator ("api", apiKey);
 
             RestRequest request = new RestRequest ();
