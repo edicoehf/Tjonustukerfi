@@ -1,9 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Drawing;
+using BarcodeLib;
 using RestSharp;
 using RestSharp.Authenticators;
+using ThjonustukerfiWebAPI.EnvironmentVariables;
 using ThjonustukerfiWebAPI.Models.DTOs;
+using ThjonustukerfiWebAPI.Setup;
 
 namespace ThjonustukerfiWebAPI.Services.Implementations
 {
@@ -22,7 +24,13 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
 
             body += "\nKær kveðja Reykofninn";
 
-            MailService.Sendmail(emailAddress, subject, body);
+            var bCode = new Barcode(); // get barcode lib class
+
+            // encode to image
+            bCode.Encode(BarcodeLib.TYPE.CODE128, order.Barcode, Color.Black, Color.White, BarcodeImageDimensions.Width, BarcodeImageDimensions.Height);
+            var barcodeImageBase64 = Convert.ToBase64String(bCode.Encoded_Image_Bytes);
+
+            MailService.Sendmail(emailAddress, subject, body, barcodeImageBase64);
         }
 
         public static void sendOrderComplete(OrderDTO order, CustomerDetailsDTO customer)
@@ -38,15 +46,25 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             }
 
             body += "Kær kveðja Reykofninn";
-            
-            MailService.Sendmail(emailAddress, subject, body);
+
+            var bCode = new Barcode(); // get barcode lib class
+
+            // encode to image
+            bCode.Encode(BarcodeLib.TYPE.CODE128, order.Barcode, Color.Black, Color.White, BarcodeImageDimensions.Width, BarcodeImageDimensions.Height);
+            var barcodeImageBase64 = Convert.ToBase64String(bCode.Encoded_Image_Bytes);
+
+            MailService.Sendmail(emailAddress, subject, body, barcodeImageBase64);
         }
-        private static IRestResponse Sendmail (string emailAddress, string subject, string body, string base64Image = null)
+        private static IRestResponse Sendmail (string emailAddress, string subject, string body, string OrderBarcodeBase64Image = null)
         {
-            var apiKey = Environment.GetEnvironmentVariable("secrets.MAILGUN_API_TOKEN");
+            var env = EnvironmentFileManager.LoadEvironmentFile();
+            string apiKey = null;
+            env.TryGetValue("MAILGUN_AUTHENTICATION_KEY", out apiKey);
+            if(apiKey == null) { apiKey = ""; }
+            
             RestClient client = new RestClient ();
             client.BaseUrl = new Uri ("https://api.mailgun.net/v3/sandboxfd3dcd967775490d82138a8f336fb6b2.mailgun.org/messages");
-            client.Authenticator = new HttpBasicAuthenticator ("api", "97ee06aae75d080a18d280122fcadc89-816b23ef-ebe3f667");
+            client.Authenticator = new HttpBasicAuthenticator ("api", apiKey);
 
             RestRequest request = new RestRequest ();
             request.AddParameter ("from", "Mailgun Sandbox <postmaster@sandboxfd3dcd967775490d82138a8f336fb6b2.mailgun.org>");
@@ -54,10 +72,9 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             request.AddParameter ("subject", subject);
             request.AddParameter ("text", body);
             // add image if there is one.
-            if(base64Image != null)
+            if(OrderBarcodeBase64Image != null)
             {
-                request.AddParameter (  "html",
-                                        $"<html>Barcode: <img src=\"data:image/jpeg;base64, {base64Image}\"></html>");
+                request.AddParameter ("html", $"<html>Order: <img src=\"data:image/jpeg;base64, {OrderBarcodeBase64Image}\"></html>");
             }
             request.Method = Method.POST;
 

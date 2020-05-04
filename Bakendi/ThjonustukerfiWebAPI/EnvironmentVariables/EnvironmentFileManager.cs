@@ -5,6 +5,8 @@ namespace ThjonustukerfiWebAPI.EnvironmentVariables
 {
     public static class EnvironmentFileManager
     {
+        /// <summary>Loads up the environment variable file and returns a dictionary with environment values</summary>
+        /// <returns>Dictionary of string and string</returns>
         public static Dictionary<string, string> LoadEvironmentFile()
         {
             string envFile = "EnvironmentVariables\\.env";
