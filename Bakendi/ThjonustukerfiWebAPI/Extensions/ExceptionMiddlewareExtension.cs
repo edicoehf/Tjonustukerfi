@@ -15,7 +15,7 @@ namespace ThjonustukerfiWebAPI.Extensions
     /// </summary>
     public class ExceptionMiddlewareExtension
     {
-        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(ExceptionMiddlewareExtension));
+        // private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(ExceptionMiddlewareExtension));
         private readonly RequestDelegate _next;
         public ExceptionMiddlewareExtension(RequestDelegate next)
         {
@@ -40,9 +40,6 @@ namespace ThjonustukerfiWebAPI.Extensions
         {
             context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
             context.Response.ContentType = "application/json";
-
-            _log.Info("Hello from the Exception MiddleWare");
-            _log.Info("Some message", exception);
 
             if(exception != null)
             {

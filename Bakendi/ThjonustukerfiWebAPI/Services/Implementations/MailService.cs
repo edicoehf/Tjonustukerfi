@@ -3,7 +3,7 @@ using System.Drawing;
 using BarcodeLib;
 using RestSharp;
 using RestSharp.Authenticators;
-using ThjonustukerfiWebAPI.EnvironmentVariables;
+using ThjonustukerfiWebAPI.Config.EnvironmentVariables;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.Exceptions;
 using ThjonustukerfiWebAPI.Setup;
@@ -62,7 +62,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             string apiKey;
             string apiUrl;
             env.TryGetValue("MAILGUN_AUTHENTICATION_KEY", out apiKey);  // get api key
-            env.TryGetValue("MAILGUN_URL", out apiUrl);                 // get api urdl
+            env.TryGetValue("MAILGUN_URL", out apiUrl);                 // get api url
             // if environmental variables are not set correctly throw exception
             if(apiKey == null || apiUrl == null) { throw new EmailException($"Could not send email. Could not find url or authentication key for the email request."); }
             

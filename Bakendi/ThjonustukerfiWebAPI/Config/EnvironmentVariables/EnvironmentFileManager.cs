@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace ThjonustukerfiWebAPI.EnvironmentVariables
+namespace ThjonustukerfiWebAPI.Config.EnvironmentVariables
 {
     public static class EnvironmentFileManager
     {
@@ -9,7 +9,7 @@ namespace ThjonustukerfiWebAPI.EnvironmentVariables
         /// <returns>Dictionary of string and string</returns>
         public static Dictionary<string, string> LoadEvironmentFile()
         {
-            string envFile = "EnvironmentVariables\\.env";
+            string envFile = "Config\\EnvironmentVariables\\.env";
             var dic = new Dictionary<string, string>();
 
             if (File.Exists(envFile))
