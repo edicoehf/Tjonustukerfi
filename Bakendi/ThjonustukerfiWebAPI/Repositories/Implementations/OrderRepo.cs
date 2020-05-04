@@ -321,7 +321,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             {
                 foreach (var item in order.Items)   // loop through all items in all orders
                 {
-                    if(item.State != "Sótt")    // If any item is not done, add order to active orders and check next order
+                    var lastState = _dbContext.ServiceState.Where(ss => ss.ServiceId == item.ServiceId).OrderByDescending(ss => ss.Step).FirstOrDefault().StateId;
+                    if(item.StateId != lastState)    // If any item is not done, add order to active orders and check next order
                     {
                         activeOrders.Add(order);
                         break;
