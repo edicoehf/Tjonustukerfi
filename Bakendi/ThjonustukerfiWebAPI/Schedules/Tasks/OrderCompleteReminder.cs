@@ -55,7 +55,8 @@ namespace ThjonustukerfiWebAPI.Schedules.Tasks
                 if(totalWeeksready > order.NotificationCount)
                 {
                     var customer = _customerRepo.GetCustomerById(order.CustomerId); // get the customer
-                    MailService.SendOrderNotification(_mapper.Map<OrderDTO>(order), customer, totalWeeksready); // send the mail
+                    if(Constants.sendEmail) { MailService.SendOrderNotification(_mapper.Map<OrderDTO>(order), customer, totalWeeksready); } // send the mail
+                    if(Constants.sendSMS)   { /* send sms */ }
                     _orderRepo.IncrementNotification(order.Id); // Increment notification count so it only sends once a week
                 }
             }
