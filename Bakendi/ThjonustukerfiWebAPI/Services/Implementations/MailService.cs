@@ -41,7 +41,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             
             MailService.Sendmail(emailAddress, subject, body);
         }
-        private static IRestResponse Sendmail (string emailAddress, string subject, string body)
+        private static IRestResponse Sendmail (string emailAddress, string subject, string body, string base64Image = null)
         {
             RestClient client = new RestClient ();
             client.BaseUrl = new Uri ("https://api.mailgun.net/v3/sandboxfd3dcd967775490d82138a8f336fb6b2.mailgun.org/messages");
@@ -52,6 +52,12 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             request.AddParameter ("to", emailAddress);
             request.AddParameter ("subject", subject);
             request.AddParameter ("text", body);
+            // add image if there is one.
+            if(base64Image != null)
+            {
+                request.AddParameter (  "html",
+                                        $"<html>Barcode: <img src=\"data:image/jpeg;base64, {base64Image}\"></html>");
+            }
             request.Method = Method.POST;
 
             return client.Execute (request);
