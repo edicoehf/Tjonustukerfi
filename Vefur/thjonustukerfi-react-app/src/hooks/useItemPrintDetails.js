@@ -6,7 +6,7 @@ const useItemPrintDetails = (id) => {
     const [error, setError] = React.useState(null);
     const [isLoading, setIsLoading] = React.useState(true);
 
-    const fetchItem = React.useCallback(() => {
+    React.useEffect(() => {
         itemService
             .getItemPrintDetails(id)
             .then((item) => {
@@ -18,11 +18,7 @@ const useItemPrintDetails = (id) => {
             .catch((error) => setError(error));
     }, [id]);
 
-    React.useEffect(() => {
-        fetchItem();
-    }, [fetchItem]);
-
-    return { item, error, fetchItem, isLoading };
+    return { item, error, isLoading };
 };
 
 export default useItemPrintDetails;

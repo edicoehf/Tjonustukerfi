@@ -109,7 +109,6 @@ const getItemLocations = () => {
 };
 
 const getItemPrintDetails = (id) => {
-    console.log(typeof id);
     return fetch(`http://localhost:5000/api/items/printer/${id}`, {
         method: "GET",
         headers: {
