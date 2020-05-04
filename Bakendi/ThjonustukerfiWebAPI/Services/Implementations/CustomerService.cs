@@ -53,6 +53,9 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
                 }
             }
 
+            // be sure to archive complete orders
+            _orderRepo.ArchiveCompleteOrdersByCustomerId(customerId);
+
             // After deleting orders (if any) delete the customer
             _customerRepo.DeleteCustomerById(customerId);
         }

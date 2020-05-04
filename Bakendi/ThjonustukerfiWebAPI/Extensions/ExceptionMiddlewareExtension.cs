@@ -15,6 +15,7 @@ namespace ThjonustukerfiWebAPI.Extensions
     /// </summary>
     public class ExceptionMiddlewareExtension
     {
+        // private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(ExceptionMiddlewareExtension));
         private readonly RequestDelegate _next;
         public ExceptionMiddlewareExtension(RequestDelegate next)
         {
@@ -57,6 +58,12 @@ namespace ThjonustukerfiWebAPI.Extensions
                 if(exception is BadRequestException)
                 {
                     context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+
+                    return context.Response.WriteAsync(exception.Message);
+                }
+                if(exception is EmailException)
+                {
+                    context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
 
                     return context.Response.WriteAsync(exception.Message);
                 }

@@ -5,10 +5,9 @@ using System.Linq;
 using AutoMapper;
 using BarcodeLib;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using ThjonustukerfiWebAPI.Configurations;
+using ThjonustukerfiWebAPI.Setup;
 using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.Entities;
@@ -119,11 +118,10 @@ namespace ThjonustukerfiWebAPI.Mappings
                 var bCode = new Barcode();  // get barcode lib class
 
                 // encode to image
-                var img = bCode.Encode(BarcodeLib.TYPE.CODE128, src.Barcode, Color.Black, Color.White, BarcodeImageDimensions.Width, BarcodeImageDimensions.Height);
-
-                // convert image to byte array to send
-                ImageConverter ic = new ImageConverter();
-                dst.BarcodeImage = (byte[])ic.ConvertTo(img, typeof(byte[]));
+                bCode.Encode(BarcodeLib.TYPE.CODE128, src.Barcode, Color.Black, Color.White, BarcodeImageDimensions.Width, BarcodeImageDimensions.Height);
+                
+                // set as base64
+                dst.BarcodeImage = Convert.ToBase64String(bCode.Encoded_Image_Bytes);
             });
 
             //* Order Mappings

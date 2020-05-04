@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace ThjonustukerfiWebAPI.Configurations
+namespace ThjonustukerfiWebAPI.Setup
 {
     public static class BarcodeImageDimensions
     {
