@@ -62,7 +62,7 @@ const getCustomerById = (id) => {
 };
 
 const updateCustomer = (customer) => {
-    return fetch(endpoint + customer.id + "/update", {
+    return fetch(endpoint + customer.id, {
         method: "PATCH",
         body: JSON.stringify(customer),
         headers: {
