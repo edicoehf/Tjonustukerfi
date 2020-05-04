@@ -25,24 +25,30 @@ const UpdateOrder = ({ order, categories, services }) => {
         setCancel(true);
     };
 
-    const getServiceId = (service) => {
-        return services[services.findIndex((s) => s.name === service)].id;
-    };
+    // const getServiceId = (service) => {
+    //     return services[services.findIndex((s) => s.name === service)].id;
+    // };
 
-    const getCategoryId = (category) => {
-        return categories[categories.findIndex((c) => c.name === category)].id;
-    };
+    // const getCategoryId = (category) => {
+    //     return categories[categories.findIndex((c) => c.name === category)].id;
+    // };
 
+    console.log(order);
     const initialState = {
         customer: null,
         items: order.items.map((item) => {
             return {
                 id: item.id,
-                category: getCategoryId(item.category).toString(),
-                service: getServiceId(item.service).toString(),
+                category: item.categoryId.toString(),
+                service: item.serviceId.toString(),
                 amount: 1,
                 categoryName: item.category,
                 serviceName: item.service,
+                details: item.details,
+                sliced: item.json.sliced,
+                filleted: item.json.filleted,
+                otherCategory: item.json.otherCategory,
+                otherService: item.json.otherService,
             };
         }),
     };

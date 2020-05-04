@@ -6,7 +6,7 @@ using AutoMapper;
 using FluentScheduler;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using ThjonustukerfiWebAPI.Configurations;
+using ThjonustukerfiWebAPI.Setup;
 using ThjonustukerfiWebAPI.Mappings;
 using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Repositories.Implementations;

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ThjonustukerfiWebAPI.Configurations;
+using ThjonustukerfiWebAPI.Setup;
 using ThjonustukerfiWebAPI.Extensions;
 using ThjonustukerfiWebAPI.Mappings;
 using ThjonustukerfiWebAPI.Models;
@@ -19,6 +19,7 @@ using System.IO;
 using Microsoft.OpenApi.Models;
 using FluentScheduler;
 using ThjonustukerfiWebAPI.Schedules;
+using Microsoft.Extensions.Logging;
 
 namespace ThjonustukerfiWebAPI
 {
@@ -77,7 +78,7 @@ namespace ThjonustukerfiWebAPI
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IOrderRepo, OrderRepo>();
             // Adding foor SetupTables
-            services.AddTransient<ISetupTables, SetupTables>();
+            services.AddTransient<IBaseSetup, BaseSetup>();
 
             // Adding for Information
             services.AddTransient<IInfoService, InfoService>();
@@ -95,14 +96,14 @@ namespace ThjonustukerfiWebAPI
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                opt.IncludeXmlComments(xmlPath);
+                opt.IncludeXmlComments(xmlPath, includeControllerXmlComments : true);
             });
 
             JobManager.Initialize(new Scheduler());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -133,6 +134,8 @@ namespace ThjonustukerfiWebAPI
                 endpoints.MapControllers();
             });
 
+            var logConfigPath = $"{AppContext.BaseDirectory}" + @"Config/log4net.config";
+            loggerFactory.AddLog4Net(logConfigPath);
         }
     }
 }
