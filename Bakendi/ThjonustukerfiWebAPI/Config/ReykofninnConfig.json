@@ -59,5 +59,5 @@
         { "name": "Annað", "id": 4 }
     ],
     "sendSMS": false,
-    "sendEmail": true
+    "sendEmail": false
 }
