@@ -1,9 +1,12 @@
 .delete-item {
-    padding-right: 0.5em;
+    padding-right: 0.6em;
 }
 
 Button.delete-item-button {
+    display: flex;
+    justify-content: space-evenly;
     color: black;
+    width: 8.5em;
 }
 
 Button.delete-item-button:hover b {
@@ -11,5 +14,5 @@ Button.delete-item-button:hover b {
 }
 
 Button.delete-item-button:hover .delete-icon {
-    margin-left: 60%;
+    margin-left: 50%;
 }
