@@ -43,6 +43,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         }
         private static IRestResponse Sendmail (string emailAddress, string subject, string body, string base64Image = null)
         {
+            var apiKey = Environment.GetEnvironmentVariable("secrets.MAILGUN_API_TOKEN");
             RestClient client = new RestClient ();
             client.BaseUrl = new Uri ("https://api.mailgun.net/v3/sandboxfd3dcd967775490d82138a8f336fb6b2.mailgun.org/messages");
             client.Authenticator = new HttpBasicAuthenticator ("api", "97ee06aae75d080a18d280122fcadc89-816b23ef-ebe3f667");
