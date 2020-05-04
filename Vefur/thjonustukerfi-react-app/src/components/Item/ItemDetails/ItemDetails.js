@@ -11,9 +11,8 @@ import {
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import "./ItemDetails.css";
-import PrintItemView from "../PrintItemView/PrintItemView";
 
-const ItemDetails = ({ id, updated, receivedUpdate }) => {
+const ItemDetails = ({ id, updated, receivedUpdate, itemLoaded }) => {
     const { item, error, fetchItem, isLoading } = useGetItemById(id);
     const { category, service, orderId, state, json, barcode, details } = item;
     const [other, setOther] = React.useState({
@@ -26,8 +25,9 @@ const ItemDetails = ({ id, updated, receivedUpdate }) => {
     React.useEffect(() => {
         if (json) {
             setOther(json);
+            itemLoaded();
         }
-    }, [json]);
+    }, [json, itemLoaded]);
 
     if (updated) {
         receivedUpdate();

@@ -17,6 +17,6 @@
 }
 .right-line {
     display: grid;
-    grid-template-rows: 20% 80%;
+    grid-template-rows: 50% 50%;
     justify-items: center;
 }
