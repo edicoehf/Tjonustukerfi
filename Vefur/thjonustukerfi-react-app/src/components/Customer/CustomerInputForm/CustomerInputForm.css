@@ -44,8 +44,7 @@ select:-webkit-autofill:focus {
         "name name"
         "email email"
         "ssn phone"
-        "address postalcode"
-    ;
+        "address postalcode";
 }
 
 .customer-input-form.compact .form div.MuiPaper-root {
@@ -60,9 +59,7 @@ select:-webkit-autofill:focus {
         "ssn"
         "phone"
         "address"
-        "postalcode"
-    ;
-
+        "postalcode";
 }
 
 .customer-input-form .form .name-input {
@@ -92,7 +89,10 @@ select:-webkit-autofill:focus {
 .customer-input-form .form .input-submit {
     margin: 0 auto;
     width: 20em;
-    margin-top: 2em;
     display: grid;
     justify-self: center;
+}
+
+.customer-input-form .progress-button {
+    margin-top: 2em;
 }
