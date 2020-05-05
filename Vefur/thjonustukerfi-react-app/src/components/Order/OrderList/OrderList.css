@@ -9,8 +9,11 @@
     display: grid;
     grid-template-columns: 20% 50% 30%;
     grid-template-rows: auto;
-    grid-template-areas:
-        "id customer date";
+    grid-template-areas: "id customer date";
+}
+
+.order-list .order-row td.MuiTableCell-root {
+    padding: 8px 16px 8px 16px;
 }
 
 .order-list .MuiTableRow-root.order-row-body:hover {
@@ -33,12 +36,15 @@
 
 .order-list .order-row .order-cell-id {
     grid-area: id;
+    align-self: center;
 }
 
 .order-list .order-row .order-cell-customer {
     grid-area: customer;
+    align-self: center;
 }
 
 .order-list .order-row .order-cell-date {
     grid-area: date;
+    align-self: center;
 }
