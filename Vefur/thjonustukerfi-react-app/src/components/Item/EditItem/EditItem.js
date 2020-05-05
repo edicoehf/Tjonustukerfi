@@ -5,6 +5,7 @@ import useGetServices from "../../../hooks/useGetServices";
 import useGetCategories from "../../../hooks/useGetCategories";
 import useUpdateItem from "../../../hooks/useUpdateItem";
 import "./EditItem.css";
+import ProgressComponent from "../../Feedback/ProgressComponent/ProgressComponent";
 
 const EditItem = ({ match, history }) => {
     const id = match.params.id;
@@ -38,13 +39,15 @@ const EditItem = ({ match, history }) => {
     return (
         <div className="edit-item">
             <h3>Breyta vöru</h3>
-            {loaded(item) && loaded(services) && loaded(categories) && (
+            {loaded(item) && loaded(services) && loaded(categories) ? (
                 <ItemForm
                     existingItem={item}
                     categories={categories}
                     services={services}
                     submitHandler={editItem}
                 />
+            ) : (
+                <>{!error && <ProgressComponent isLoading={true} />}</>
             )}
             {error && <p className="error">Vara fannst ekki</p>}
             {updateError && <p className="error">Gat ekki uppfært vöru</p>}
