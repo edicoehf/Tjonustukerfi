@@ -7,6 +7,7 @@ import CustomerListItem from "../../../../Customer/CustomerListItem/CustomerList
 import { addCustomerType } from "../../../../../types";
 import AddIcon from "@material-ui/icons/AddCircleOutline";
 import "./CustomerSelectView.css";
+import ProgressComponent from "../../../../Feedback/ProgressComponent/ProgressComponent";
 
 const CustomerSelectView = ({ addCustomer }) => {
     const { customers, error, isLoading } = useGetAllCustomers();
@@ -16,9 +17,9 @@ const CustomerSelectView = ({ addCustomer }) => {
 
     return (
         <>
-            {!error ? (
-                isLoading ? (
-                    <p> Sæki viðskiptavini </p>
+            {!isLoading ? (
+                error ? (
+                    <p className="error">Gat ekki sótt viðskiptavin</p>
                 ) : (
                     <div className="customer-select-view">
                         <Paper
@@ -60,10 +61,7 @@ const CustomerSelectView = ({ addCustomer }) => {
                     </div>
                 )
             ) : (
-                <p className="error">
-                    {" "}
-                    Villa kom upp: Gat ekki sótt viðskiptavin
-                </p>
+                <ProgressComponent isLoading={isLoading} />
             )}
         </>
     );
