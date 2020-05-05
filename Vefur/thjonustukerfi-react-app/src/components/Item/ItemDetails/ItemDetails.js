@@ -32,9 +32,8 @@ const ItemDetails = ({
     React.useEffect(() => {
         if (json) {
             setOther(json);
-            itemLoaded();
         }
-    }, [json, itemLoaded]);
+    }, [json]);
 
     if (updated) {
         receivedUpdate();
