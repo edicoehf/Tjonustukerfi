@@ -52,7 +52,7 @@ namespace ThjonustukerfiTests.Tests
         }
 
         [TestMethod]
-        public void GetCustomer_should_return_a_single_customerDetailsDTO()
+        public void GetCustomerById_should_return_a_single_customerDetailsDTO()
         {
             //* Arrange
             long id = 10;
@@ -70,6 +70,7 @@ namespace ThjonustukerfiTests.Tests
             };
             // setup mocked method
             _customerRepoMock.Setup(method => method.GetCustomerById(id)).Returns(mockCustomerDetailsDTO);
+            _orderRepoMock.Setup(method => method.GetActiveOrdersByCustomerId(It.IsAny<long>())).Returns(new List<OrderDTO>());
 
             // Create service
             _customerService = new CustomerService(_customerRepoMock.Object, _orderRepoMock.Object);
@@ -86,6 +87,49 @@ namespace ThjonustukerfiTests.Tests
             Assert.AreEqual(mockCustomerDetailsDTO.Phone, customerDetailsDTO.Phone);
             Assert.AreEqual(mockCustomerDetailsDTO.Address, customerDetailsDTO.Address);
             Assert.AreEqual(mockCustomerDetailsDTO.PostalCode, customerDetailsDTO.PostalCode);
+        }
+
+        [TestMethod]
+        public void GetCustomerByID_should_have_activeOrders_set_to_true()
+        {
+            //* Arrange
+            // setup and mock method
+            _customerRepoMock.Setup(method => method.GetCustomerById(It.IsAny<long>())).Returns(new CustomerDetailsDTO());
+            _orderRepoMock.Setup(method => method.GetActiveOrdersByCustomerId(It.IsAny<long>())).Returns(new List<OrderDTO>()
+            {
+                new OrderDTO()
+            });
+
+            // Create service
+            _customerService = new CustomerService(_customerRepoMock.Object, _orderRepoMock.Object);
+
+            //* Act
+            var customerDto = _customerService.GetCustomerById(2983);
+
+            //* Assert
+            Assert.IsNotNull(customerDto);
+            Assert.IsInstanceOfType(customerDto, typeof(CustomerDetailsDTO));
+            Assert.IsTrue(customerDto.HasActiveOrder);
+        }
+
+        [TestMethod]
+        public void GetCustomerByID_should_have_activeOrders_set_to_false()
+        {
+            //* Arrange
+            // setup and mock method
+            _customerRepoMock.Setup(method => method.GetCustomerById(It.IsAny<long>())).Returns(new CustomerDetailsDTO());
+            _orderRepoMock.Setup(method => method.GetActiveOrdersByCustomerId(It.IsAny<long>())).Returns(new List<OrderDTO>());
+
+            // Create service
+            _customerService = new CustomerService(_customerRepoMock.Object, _orderRepoMock.Object);
+
+            //* Act
+            var customerDto = _customerService.GetCustomerById(2983);
+
+            //* Assert
+            Assert.IsNotNull(customerDto);
+            Assert.IsInstanceOfType(customerDto, typeof(CustomerDetailsDTO));
+            Assert.IsFalse(customerDto.HasActiveOrder);
         }
 
         [TestMethod]
