@@ -13,7 +13,13 @@ import { Link } from "react-router-dom";
 import "./ItemDetails.css";
 import ProgressComponent from "../../Feedback/ProgressComponent/ProgressComponent";
 
-const ItemDetails = ({ id, updated, receivedUpdate, componentLoading }) => {
+const ItemDetails = ({
+    id,
+    updated,
+    receivedUpdate,
+    componentLoading,
+    itemLoaded,
+}) => {
     const { item, error, fetchItem, isLoading } = useGetItemById(id);
     const { category, service, orderId, state, json, barcode, details } = item;
     const [other, setOther] = React.useState({
@@ -26,8 +32,9 @@ const ItemDetails = ({ id, updated, receivedUpdate, componentLoading }) => {
     React.useEffect(() => {
         if (json) {
             setOther(json);
+            itemLoaded();
         }
-    }, [json]);
+    }, [json, itemLoaded]);
 
     if (updated) {
         receivedUpdate();

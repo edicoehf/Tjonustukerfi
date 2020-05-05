@@ -6,7 +6,7 @@ using AutoMapper;
 using FluentScheduler;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using ThjonustukerfiWebAPI.Configurations;
+using ThjonustukerfiWebAPI.Setup;
 using ThjonustukerfiWebAPI.Mappings;
 using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Repositories.Implementations;
@@ -29,7 +29,7 @@ namespace ThjonustukerfiWebAPI.Schedules.Tasks
 
             Mapper mapper;
             // Create the mapping profile and the mapper
-            var profile = new MappingProfile(Constants.DBConnection);
+            var profile = new MappingProfile();
             var config = new MapperConfiguration(cfg => cfg.AddProfile(profile));
             mapper = new Mapper(config);
 

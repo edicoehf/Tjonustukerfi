@@ -4,7 +4,7 @@ using System.Diagnostics;
 using AutoMapper;
 using FluentScheduler;
 using Microsoft.EntityFrameworkCore;
-using ThjonustukerfiWebAPI.Configurations;
+using ThjonustukerfiWebAPI.Setup;
 using ThjonustukerfiWebAPI.Mappings;
 using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Models.DTOs;
@@ -31,7 +31,7 @@ namespace ThjonustukerfiWebAPI.Schedules.Tasks
             dbContext = new DataContext(options);
 
             // Create the mapping profile and the mapper
-            var profile = new MappingProfile(Constants.DBConnection);
+            var profile = new MappingProfile();
             var config = new MapperConfiguration(cfg => cfg.AddProfile(profile));
             _mapper = new Mapper(config);
 
@@ -55,7 +55,8 @@ namespace ThjonustukerfiWebAPI.Schedules.Tasks
                 if(totalWeeksready > order.NotificationCount)
                 {
                     var customer = _customerRepo.GetCustomerById(order.CustomerId); // get the customer
-                    MailService.SendOrderNotification(_mapper.Map<OrderDTO>(order), customer, totalWeeksready); // send the mail
+                    if(Constants.sendEmail) { MailService.SendOrderNotification(_mapper.Map<OrderDTO>(order), customer, totalWeeksready); } // send the mail
+                    if(Constants.sendSMS)   { /* send sms */ }
                     _orderRepo.IncrementNotification(order.Id); // Increment notification count so it only sends once a week
                 }
             }

@@ -3,8 +3,9 @@ import ItemDetails from "../ItemDetails/ItemDetails";
 import StateSelection from "../StateSelection/StateSelection";
 import ItemStates from "../ItemStates/ItemStates";
 import ItemActions from "../Actions/ItemActions/ItemActions";
-import "./ItemView.css";
 import ProgressComponent from "../../Feedback/ProgressComponent/ProgressComponent";
+import PrintItemView from "../PrintItemView/PrintItemView";
+import "./ItemView.css";
 
 const ItemView = ({ match }) => {
     const id = match.params.id;
@@ -14,6 +15,9 @@ const ItemView = ({ match }) => {
     const [nextStatesLoading, setNextStatesLoading] = React.useState(false);
     const [prevStatesLoading, setPrevStatesLoading] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(true);
+    const [isPrintingReady, setPrintingReady] = React.useState(false);
+    const ticketWidth = "15cm";
+    const ticketHeight = "10cm";
 
     const hasUpdated = () => {
         setDetailsUpdate(true);
@@ -26,6 +30,9 @@ const ItemView = ({ match }) => {
 
     const statesReceivedUpdate = () => {
         setStatesUpdate(false);
+    };
+    const itemLoaded = () => {
+        setPrintingReady(true);
     };
 
     React.useEffect(() => {
@@ -50,6 +57,7 @@ const ItemView = ({ match }) => {
                 id={id}
                 hasUpdated={hasUpdated}
                 componentLoading={setNextStatesLoading}
+                itemLoaded={itemLoaded}
             />
             <ItemStates
                 id={id}
@@ -57,7 +65,16 @@ const ItemView = ({ match }) => {
                 receivedUpdate={statesReceivedUpdate}
                 componentLoading={setPrevStatesLoading}
             />
-            <ItemActions id={id} />
+            <div className="button-area">
+                <ItemActions id={id} />{" "}
+                {isPrintingReady && (
+                    <PrintItemView
+                        id={id}
+                        width={ticketWidth}
+                        height={ticketHeight}
+                    />
+                )}
+            </div>
         </div>
     );
 };

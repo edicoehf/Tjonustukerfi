@@ -79,7 +79,16 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // get timestamps and order by state
             var timestamps = _dbContext.ItemTimestamp.Where(its => its.ItemId == itemId).ToList().OrderBy(s => s.StateId);
 
-            return _mapper.Map<List<ItemTimeStampDTO>>(timestamps); // return mapped timestamps
+            var dtoList = new List<ItemTimeStampDTO>();
+            foreach (var stamp in timestamps)
+            {
+                var dto = _mapper.Map<ItemTimeStampDTO>(stamp);
+                dto.State = _dbContext.State.FirstOrDefault(s => s.Id == stamp.StateId).Name;
+
+                dtoList.Add(dto);
+            }
+
+            return dtoList; // return mapped timestamps
         }
     }
 }

@@ -28,6 +28,10 @@ namespace ThjonustukerfiTests.Tests.Info
                 .EnableSensitiveDataLogging()
                 .Options;
 
+            var myProfile = new MappingProfile();   // Create a new profile like the one we implemented
+            var myConfig = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));   // Setup a configuration with our profile
+            _mapper = new Mapper(myConfig); // Create a new mapper with our profile
+
             FillDatabase();
         }
 
@@ -237,7 +241,6 @@ namespace ThjonustukerfiTests.Tests.Info
             long itemID = 1;
             using(var mockContext = new DataContext(_options))
             {
-                UpdateMapper(mockContext);  // this functions map uses context
                 IInfoRepo infoRepo = new InfoRepo(mockContext, _mapper);
 
                 var itemTimestampCount = mockContext.ItemTimestamp.Where(its => its.ItemId == itemID).Count();
@@ -259,7 +262,6 @@ namespace ThjonustukerfiTests.Tests.Info
             long itemID = -100;
             using(var mockContext = new DataContext(_options))
             {
-                UpdateMapper(mockContext);  // this functions map uses context
                 IInfoRepo infoRepo = new InfoRepo(mockContext, _mapper);
 
                 //* Act and Assert
@@ -272,8 +274,6 @@ namespace ThjonustukerfiTests.Tests.Info
         {
             using(var mockContext = new DataContext(_options))
             {
-                UpdateMapper(mockContext);  // update the mapper with the new context
-
                 var orders = new List<Order>()
                 {
                     new Order()
@@ -366,15 +366,6 @@ namespace ThjonustukerfiTests.Tests.Info
                 mockContext.ItemTimestamp.AddRange(item1Timestamps);
                 mockContext.SaveChanges();
             }
-        }
-
-        /// <summary>Updates the private mapper to have the current mock data context</summary>
-        private void UpdateMapper(DataContext context)
-        {
-            // Needs a seperete automapper that has access to the current instance of db context
-            var myProfile = new MappingProfile(context);   // Create a new profile like the one we implemented
-            var myConfig = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));   // Setup a configuration with our profile
-            _mapper = new Mapper(myConfig); // Create a new mapper with our profile
         }
 
         private void ClearDatabase()

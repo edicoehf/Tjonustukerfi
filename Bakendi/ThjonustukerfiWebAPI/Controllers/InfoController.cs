@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ThjonustukerfiWebAPI.Configurations;
-using ThjonustukerfiWebAPI.Services.Implementations;
+using ThjonustukerfiWebAPI.Setup;
 using ThjonustukerfiWebAPI.Services.Interfaces;
 
 namespace ThjonustukerfiWebAPI.Controllers
 {
-    /// <summary>Provides an endpoint for various information from the API</summary>
+    /// <summary>
+    ///     Provides endpoints to retrieve various information from the API.
+    /// </summary>
     [Route("api/info")]
     [ApiController]
     public class InfoController : ControllerBase

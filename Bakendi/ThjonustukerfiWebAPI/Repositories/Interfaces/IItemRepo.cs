@@ -12,8 +12,6 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
         /// <returns>An item state DTO.</returns>
         ItemDTO GetItemById(long itemId);
 
-        ItemDTO CreateItem(ItemInputModel item);
-
         /// <summary>Updates an item with the EditItemInput model, will not edit empty fields.</summary>
         void EditItem(EditItemInput input, long itemId);
         
