@@ -4,11 +4,15 @@ import StateSelection from "../StateSelection/StateSelection";
 import ItemStates from "../ItemStates/ItemStates";
 import ItemActions from "../Actions/ItemActions/ItemActions";
 import "./ItemView.css";
+import PrintItemView from "../PrintItemView/PrintItemView";
 
 const ItemView = ({ match }) => {
     const id = match.params.id;
     const [detailsUpdate, setDetailsUpdate] = React.useState(false);
     const [statesUpdate, setStatesUpdate] = React.useState(false);
+    const [isPrintingReady, setPrintingReady] = React.useState(false);
+    const ticketWidth = "15cm";
+    const ticketHeight = "10cm";
 
     const hasUpdated = () => {
         setDetailsUpdate(true);
@@ -22,6 +26,9 @@ const ItemView = ({ match }) => {
     const statesReceivedUpdate = () => {
         setStatesUpdate(false);
     };
+    const itemLoaded = () => {
+        setPrintingReady(true);
+    };
 
     return (
         <div className="item-view">
@@ -30,6 +37,7 @@ const ItemView = ({ match }) => {
                 id={id}
                 updated={detailsUpdate}
                 receivedUpdate={detailsReceivedUpdate}
+                itemLoaded={itemLoaded}
             />
             <StateSelection id={id} hasUpdated={hasUpdated} />
             <ItemStates
@@ -37,7 +45,18 @@ const ItemView = ({ match }) => {
                 updated={statesUpdate}
                 receivedUpdate={statesReceivedUpdate}
             />
-            <ItemActions id={id} />
+            <div className="button-area">
+                <ItemActions id={id} />{" "}
+                {isPrintingReady ? (
+                    <PrintItemView
+                        id={id}
+                        width={ticketWidth}
+                        height={ticketHeight}
+                    />
+                ) : (
+                    <>Hallo</>
+                )}
+            </div>
         </div>
     );
 };
