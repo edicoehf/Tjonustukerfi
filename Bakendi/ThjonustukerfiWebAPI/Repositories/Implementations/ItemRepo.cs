@@ -82,7 +82,14 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // Update Category
             if(editCategory) { entity.CategoryId = (long)input.CategoryId; }
 
-            // Update State
+            // check and update JSON objects
+            JObject rss = JObject.Parse(entity.JSON);
+            if(editSlice)           { rss.Property("sliced").Value = input.Sliced; }
+            if(editFilleted)        { rss.Property("filleted").Value = input.Filleted; }
+            if(editOtherCategory)   { rss.Property("otherCategory").Value = input.OtherCategory; }
+            if(editOtherService)    { rss.Property("otherService").Value = input.OtherService; }
+
+            // Update State, also check if location needs to be updated
             if(editState) 
             {
                 entity.StateId = (long)input.StateId; 
@@ -94,7 +101,17 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
                 orderID = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemId).OrderId;   // get the id of the connected order
                 checkOrderComplete = true;
+
+                // get all steps for this order in ascending order
+                var steps = _dbContext.ServiceState.Where(ss => ss.ServiceId == entity.ServiceId).OrderBy(ss => ss.Step).ToList();
+                var currStep = steps.FirstOrDefault(s => s.StateId == entity.StateId).Step; // get item current step
+
+                //TODO: Reykofninn specific since first step has no location
+                // set location to empty if first or last step
+                if(currStep == steps.Min(s => s.Step) || currStep == steps.Max(s => s.Step)) { rss.Property("location").Value = ""; }
             }
+
+            entity.JSON = JsonConvert.SerializeObject(rss);
 
             // Update Service
             if(editService) { entity.ServiceId = (long)input.ServiceID; }
@@ -108,14 +125,6 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
             // Update details
             if(editDetails) { entity.Details = input.Details; }
-
-            // check and update JSON objects
-            JObject rss = JObject.Parse(entity.JSON);
-            if(editSlice)           { rss.Property("sliced").Value = input.Sliced; }
-            if(editFilleted)        { rss.Property("filleted").Value = input.Filleted; }
-            if(editOtherCategory)   { rss.Property("otherCategory").Value = input.OtherCategory; }
-            if(editOtherService)    { rss.Property("otherService").Value = input.OtherService; }
-            entity.JSON = JsonConvert.SerializeObject(rss);
 
             // If no changes are made, send a bad request response
             if(!editCategory && !editState && !editService && !editOrder && !editDetails && !editSlice && !editFilleted && !editOtherCategory && !editOtherService) 

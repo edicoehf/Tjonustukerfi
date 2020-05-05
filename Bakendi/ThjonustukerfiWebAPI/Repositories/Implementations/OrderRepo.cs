@@ -197,6 +197,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 var itemToAdd = _mapper.Map<Item>(item);
                 itemToAdd.Barcode = newItemBarcode.ToString();
                 
+                //TODO: Not generic, this is reykofninn specific
                 itemToAdd.JSON = JsonConvert.SerializeObject(new
                 {
                     location = "",
@@ -289,6 +290,11 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 itemToChange.StateId = finalStateId;    // set to final state
                 itemToChange.DateCompleted = currentDate;
                 itemToChange.DateModified = currentDate;
+
+                JObject rss = JObject.Parse(itemToChange.JSON);         // parse the entity
+                var prop = rss.Property("location");                    // get the location property
+                prop.Value = "";                                        // set the location to empty (complete)
+                itemToChange.JSON = JsonConvert.SerializeObject(rss);   // serialize back
 
                 // Update the timestamp
                 // state and item need to be the same else create a new timestamp
