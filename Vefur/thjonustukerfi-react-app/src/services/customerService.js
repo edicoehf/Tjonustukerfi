@@ -46,6 +46,7 @@ const createCustomer = (customer) => {
         },
     })
         .then(handleErrors)
+        .then(handleData)
         .catch((error) => Promise.reject(error));
 };
 

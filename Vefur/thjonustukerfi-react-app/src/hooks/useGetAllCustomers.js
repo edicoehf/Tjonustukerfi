@@ -9,12 +9,14 @@ const useGetAllCustomers = () => {
     useEffect(() => {
         customerService
             .getAllCustomers()
-            .then(customers => {
+            .then((customers) => {
                 setCustomers(customers);
-                setIsLoading(false);
                 setError(null);
             })
-            .catch(error => setError(error));
+            .catch((error) => setError(error))
+            .finally(() => {
+                setIsLoading(false);
+            });
     }, []);
     return { customers, error, isLoading };
 };

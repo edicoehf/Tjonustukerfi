@@ -11,10 +11,12 @@ const useGetItemHistoryById = (id) => {
             .getItemHistoryById(id)
             .then((history) => {
                 setItemHistory(history);
-                setIsLoading(false);
                 setError(null);
             })
-            .catch((error) => setError(error));
+            .catch((error) => setError(error))
+            .finally(() => {
+                setIsLoading(false);
+            });
     }, [id]);
 
     React.useEffect(() => {

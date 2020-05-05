@@ -2,7 +2,7 @@ import React from "react";
 import orderService from "../services/orderService";
 
 const initState = {
-    id: "",
+    id: null,
     customer: "",
     customerId: "",
     barcode: "",
@@ -15,8 +15,10 @@ const initState = {
 const useGetOrderById = (id) => {
     const [order, setOrder] = React.useState(initState);
     const [error, setError] = React.useState(null);
+    const [isLoading, setIsLoading] = React.useState(false);
 
     const fetchOrder = React.useCallback(() => {
+        setIsLoading(true);
         orderService
             .getOrderById(id)
             .then((order) => {
@@ -24,14 +26,17 @@ const useGetOrderById = (id) => {
                 setOrder(order);
                 setError(null);
             })
-            .catch((error) => setError(error));
+            .catch((error) => setError(error))
+            .finally(() => {
+                setIsLoading(false);
+            });
     }, [id]);
 
     React.useEffect(() => {
         fetchOrder();
     }, [fetchOrder]);
 
-    return { order, error, fetchOrder };
+    return { order, error, fetchOrder, isLoading };
 };
 const parseItemJsonForItems = (items) =>
     items.map((item) => {
