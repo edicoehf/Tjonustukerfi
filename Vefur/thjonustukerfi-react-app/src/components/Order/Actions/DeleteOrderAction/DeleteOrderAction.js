@@ -8,23 +8,26 @@ import {
     isDeletingType,
 } from "../../../../types/index";
 import "./DeleteOrderAction.css";
+import ProgressButton from "../../../Feedback/ProgressButton/ProgressButton";
 
 const DeleteOrderAction = ({ id }) => {
     const { error, handleDelete, isDeleting } = useDeleteOrderById(id);
 
     return (
         <div className="delete-order">
-            <Button
-                className="delete-order-button"
-                size="medium"
-                color="secondary"
-                variant="contained"
-                disabled={isDeleting}
-                onClick={handleDelete}
-            >
-                <DeleteIcon className="delete-order-icon" size="small" />
-                <b>Eyða Pöntun</b>
-            </Button>
+            <ProgressButton isLoading={isDeleting}>
+                <Button
+                    className="delete-order-button"
+                    size="medium"
+                    color="secondary"
+                    variant="contained"
+                    disabled={isDeleting}
+                    onClick={handleDelete}
+                >
+                    <DeleteIcon className="delete-order-icon" size="small" />
+                    <b>Eyða Pöntun</b>
+                </Button>
+            </ProgressButton>
             {error && <p className="delete-error">Gat ekki eytt pöntun</p>}
         </div>
     );
