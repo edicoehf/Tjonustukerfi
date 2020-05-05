@@ -8,3 +8,28 @@
 h1 {
     margin-bottom: 2rem;
 }
+.button-area {
+    display: grid;
+    grid-template-columns: 70% 30%;
+    align-items: flex-end;
+}
+
+Button.print-item-button {
+    display: flex;
+    justify-content: space-evenly;
+    background-color: white;
+    color: black;
+    width: 9em;
+}
+
+Button.print-item-button:hover {
+    background-color: rgb(163, 163, 163);
+}
+
+Button.print-item-button:hover b {
+    opacity: 0;
+}
+
+Button.print-item-button:hover .print-icon {
+    margin-left: 60%;
+}
