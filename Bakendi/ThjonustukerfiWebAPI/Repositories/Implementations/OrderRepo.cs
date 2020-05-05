@@ -457,8 +457,10 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
         {
             var dto = _mapper.Map<OrderDTO>(order);
 
-            // add customer name
-            dto.Customer = _dbContext.Customer.FirstOrDefault(c => c.Id == dto.CustomerId).Name;
+            // add customer name and email
+            var customer = _dbContext.Customer.FirstOrDefault(c => c.Id == dto.CustomerId);
+            dto.Customer = customer.Name;
+            dto.CustomerEmail = customer.Email;
 
             // Loop through all items in the order and add them to the DTO
             var itemList = _dbContext.ItemOrderConnection.Where(c => c.OrderId == order.Id).ToList();
