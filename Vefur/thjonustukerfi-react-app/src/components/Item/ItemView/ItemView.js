@@ -15,7 +15,6 @@ const ItemView = ({ match }) => {
     const [nextStatesLoading, setNextStatesLoading] = React.useState(false);
     const [prevStatesLoading, setPrevStatesLoading] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(true);
-    const [isPrintingReady, setPrintingReady] = React.useState(false);
     const ticketWidth = "15cm";
     const ticketHeight = "10cm";
 
@@ -30,9 +29,6 @@ const ItemView = ({ match }) => {
 
     const statesReceivedUpdate = () => {
         setStatesUpdate(false);
-    };
-    const itemLoaded = () => {
-        setPrintingReady(true);
     };
 
     React.useEffect(() => {
@@ -57,7 +53,6 @@ const ItemView = ({ match }) => {
                 id={id}
                 hasUpdated={hasUpdated}
                 componentLoading={setNextStatesLoading}
-                itemLoaded={itemLoaded}
             />
             <ItemStates
                 id={id}
@@ -67,13 +62,11 @@ const ItemView = ({ match }) => {
             />
             <div className="button-area">
                 <ItemActions id={id} />{" "}
-                {isPrintingReady && (
-                    <PrintItemView
-                        id={id}
-                        width={ticketWidth}
-                        height={ticketHeight}
-                    />
-                )}
+                <PrintItemView
+                    id={id}
+                    width={ticketWidth}
+                    height={ticketHeight}
+                />
             </div>
         </div>
     );
