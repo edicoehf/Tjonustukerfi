@@ -348,22 +348,34 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // get entity
             var entity = _dbContext.Item.FirstOrDefault(i => i.Id == itemId);
 
-            // find the final-state-id
-            var finalState = _dbContext.ServiceState.Where(ss => ss.ServiceId == entity.ServiceId).OrderByDescending(ss => ss.Step).FirstOrDefault().StateId;
-
             // update the entity itself
             entity.StateId = stateId;
             entity.DateModified = DateTime.Now;
 
-            if(entity.StateId == finalState) { entity.DateCompleted = timeNow; }
+            // find the final-state-id
+            var serviceSteps = _dbContext.ServiceState.Where(ss => ss.ServiceId == entity.ServiceId).ToList();
+            var currStep = serviceSteps.FirstOrDefault(ss => ss.StateId == entity.StateId).Step;
+            var maxStep = serviceSteps.Max(ss => ss.Step);
+            var minStep = serviceSteps.Min(ss => ss.Step);
+
+            // is at last step
+            if(currStep == maxStep) { entity.DateCompleted = timeNow; }
             else { entity.DateCompleted = null; }
 
+            //TODO: Min step with location 0, is company specific
             // Get the json object and change it and write it back (making sure only to change the location property if there are any other properties there)
-            if(entity.JSON != null && location != null)
+            if(entity.JSON != null && location != null && currStep != minStep && currStep != maxStep)
             {
                 JObject rss = JObject.Parse(entity.JSON);           // parse the entity
                 var prop = rss.Property("location");                // get the location property
                 prop.Value = location;                              // set the location
+                entity.JSON = JsonConvert.SerializeObject(rss);     // serialize back
+            }
+            else if(currStep == minStep || currStep == maxStep) // set location to empty string if in first or last step
+            {
+                JObject rss = JObject.Parse(entity.JSON);           // parse the entity
+                var prop = rss.Property("location");                // get the location property
+                prop.Value = "";                                    // set the location
                 entity.JSON = JsonConvert.SerializeObject(rss);     // serialize back
             }
 
