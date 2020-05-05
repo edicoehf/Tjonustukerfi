@@ -27,7 +27,7 @@ describe("<CustomerDetails />", () => {
         testCustomer = {
             name: "",
             ssn: "",
-            telephone: "",
+            phone: "",
             email: "",
             postalCode: "",
             address: "",
@@ -176,14 +176,14 @@ describe("<CustomerDetails />", () => {
         });
 
         it("Should render correct value when it has value", () => {
-            testCustomer.telephone = "5812345";
+            testCustomer.phone = "5812345";
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: null,
             });
             wrapper = mount(shallow(<CustomerDetails id="2" />).get(0));
-            const fields = findByName(wrapper.find("tr"), "telephone");
-            expect(fields.childAt(1).text()).toBe(testCustomer.telephone);
+            const fields = findByName(wrapper.find("tr"), "phone");
+            expect(fields.childAt(1).text()).toBe(testCustomer.phone);
         });
     });
 
