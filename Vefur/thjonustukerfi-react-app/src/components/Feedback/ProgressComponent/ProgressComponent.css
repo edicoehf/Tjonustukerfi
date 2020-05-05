@@ -1,0 +1,5 @@
+div.progress-component {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+}
