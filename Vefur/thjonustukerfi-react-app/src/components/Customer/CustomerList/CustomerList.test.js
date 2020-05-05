@@ -76,8 +76,8 @@ describe("<CustomerList />", () => {
         });
 
         describe("CustomerList renders properly", () => {
-            it("should contain <p> HTML tag", () => {
-                const pTag = wrapper.find("p");
+            it("should contain a progress component", () => {
+                const pTag = wrapper.find(".progress-component");
                 expect(pTag.instance()).not.toBeNull;
             });
         });

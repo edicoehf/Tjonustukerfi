@@ -6,10 +6,17 @@ import { Link } from "react-router-dom";
 import ItemDetails from "../ItemDetails/ItemDetails";
 import SearchBar from "../../SearchBar/SearchBar";
 import "./ItemSearch.css";
+import ProgressComponent from "../../Feedback/ProgressComponent/ProgressComponent";
 
 const ItemSearch = () => {
     const [values, setValues] = React.useState({ id: "", barcode: "" });
-    const { item, error, fetchItemById, fetchItemByBarcode } = useFindItem();
+    const {
+        item,
+        error,
+        fetchItemById,
+        fetchItemByBarcode,
+        isLoading,
+    } = useFindItem();
 
     const handleIdChange = (event) => {
         setValues({ ...values, id: event.target.value });
@@ -48,25 +55,31 @@ const ItemSearch = () => {
                     />
                 </Form>
             </Paper>
-            {error ? (
-                <div className="item-not-found">Vara fannst ekki</div>
+            {isLoading ? (
+                <ProgressComponent isLoading={isLoading} />
             ) : (
-                <div className="item-search-results">
-                    {Object.keys(item).length > 0 && (
-                        <div className="item-search-result-info">
-                            <ItemDetails id={item.id} />
-                            <Link to={`/item/${item.id}`}>
-                                <Button
-                                    className="details-item-button"
-                                    variant="contained"
-                                    color="primary"
-                                >
-                                    Skoða nánar
-                                </Button>
-                            </Link>
+                <>
+                    {!error ? (
+                        <div className="item-search-results">
+                            {Object.keys(item).length > 0 && (
+                                <div className="item-search-result-info">
+                                    <ItemDetails id={item.id} />
+                                    <Link to={`/item/${item.id}`}>
+                                        <Button
+                                            className="details-item-button"
+                                            variant="contained"
+                                            color="primary"
+                                        >
+                                            Skoða nánar
+                                        </Button>
+                                    </Link>
+                                </div>
+                            )}
                         </div>
+                    ) : (
+                        <div className="item-not-found">Vara fannst ekki</div>
                     )}
-                </div>
+                </>
             )}
         </div>
     );

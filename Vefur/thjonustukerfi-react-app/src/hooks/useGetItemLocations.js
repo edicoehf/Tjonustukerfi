@@ -7,14 +7,17 @@ const useGetItemLocations = () => {
     const [isLoading, setIsLoading] = React.useState(true);
 
     const fetchItemLocations = React.useCallback(() => {
+        setIsLoading(true);
         itemService
             .getItemLocations()
             .then((locations) => {
                 setItemLocations(locations);
-                setIsLoading(false);
                 setError(null);
             })
-            .catch((error) => setError(error));
+            .catch((error) => setError(error))
+            .finally(() => {
+                setIsLoading(false);
+            });
     }, []);
 
     React.useEffect(() => {

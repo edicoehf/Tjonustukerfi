@@ -4,12 +4,14 @@ import useGetCustomerById from "../../../hooks/useGetCustomerById";
 import { TableContainer, Table, Paper, TableBody } from "@material-ui/core";
 import "./CustomerDetails.css";
 import { idType } from "../../../types/index";
+import ProgressComponent from "../../Feedback/ProgressComponent/ProgressComponent";
 
 const CustomerDetails = ({ id }) => {
-    const { customer, error } = useGetCustomerById(id);
-
+    const { customer, error, isProcessing } = useGetCustomerById(id);
+    console.log(isProcessing);
     return (
         <div className="customer-details">
+            <ProgressComponent isLoading={isProcessing} />
             {!error ? (
                 <TableContainer component={Paper} elevation={3}>
                     <Table aria-label="caption table">
@@ -26,8 +28,8 @@ const CustomerDetails = ({ id }) => {
                             />
                             <CustomerProperty
                                 title="Sími"
-                                name="telephone"
-                                value={customer.telephone}
+                                name="phone"
+                                value={customer.phone}
                             />
                             <CustomerProperty
                                 title="Netfang"
@@ -48,9 +50,7 @@ const CustomerDetails = ({ id }) => {
                     </Table>
                 </TableContainer>
             ) : (
-                <p className="error">
-                    Villa kom upp: Gat ekki sótt viðskiptavin
-                </p>
+                <p className="error">Gat ekki sótt viðskiptavin</p>
             )}
         </div>
     );

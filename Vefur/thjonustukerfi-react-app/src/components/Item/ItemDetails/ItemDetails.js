@@ -11,8 +11,15 @@ import {
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import "./ItemDetails.css";
+import ProgressComponent from "../../Feedback/ProgressComponent/ProgressComponent";
 
-const ItemDetails = ({ id, updated, receivedUpdate, itemLoaded }) => {
+const ItemDetails = ({
+    id,
+    updated,
+    receivedUpdate,
+    componentLoading,
+    itemLoaded,
+}) => {
     const { item, error, fetchItem, isLoading } = useGetItemById(id);
     const { category, service, orderId, state, json, barcode, details } = item;
     const [other, setOther] = React.useState({
@@ -33,6 +40,13 @@ const ItemDetails = ({ id, updated, receivedUpdate, itemLoaded }) => {
         receivedUpdate();
         fetchItem();
     }
+
+    React.useEffect(() => {
+        if (componentLoading !== undefined) {
+            componentLoading(isLoading);
+        }
+    }, [isLoading, componentLoading]);
+
     return (
         <>
             {!isLoading ? (
@@ -130,7 +144,7 @@ const ItemDetails = ({ id, updated, receivedUpdate, itemLoaded }) => {
                     )}
                 </div>
             ) : (
-                <div>Sæki upplýsingar</div>
+                <ProgressComponent isLoading={componentLoading === undefined} />
             )}
         </>
     );

@@ -5,6 +5,7 @@ import useDeleteCustomerById from "../../../../hooks/useDeleteCustomerById";
 import "./DeleteCustomerAction.css";
 import ForceDeleteCustomerAction from "../ForceDeleteCustomerAction/ForceDeleteCustomerAction";
 import { idType } from "../../../../types/index";
+import ProgressButton from "../../../Feedback/ProgressButton/ProgressButton";
 
 const DeleteCustomerAction = ({ id }) => {
     const {
@@ -14,21 +15,24 @@ const DeleteCustomerAction = ({ id }) => {
         modalIsOpen,
         handleClose,
         handleForceDelete,
+        isForceDeleting,
     } = useDeleteCustomerById(id);
 
     return (
         <div className="delete-customer">
-            <Button
-                className="delete-button"
-                size="medium"
-                color="secondary"
-                variant="contained"
-                disabled={isDeleting}
-                onClick={handleDelete}
-            >
-                <DeleteIcon className="delete-icon" size="small" />
-                <b>Eyða</b>
-            </Button>
+            <ProgressButton isLoading={isDeleting || isForceDeleting}>
+                <Button
+                    className="delete-button"
+                    size="medium"
+                    color="secondary"
+                    variant="contained"
+                    disabled={isDeleting || isForceDeleting}
+                    onClick={handleDelete}
+                >
+                    <DeleteIcon className="delete-icon" size="small" />
+                    <b>Eyða</b>
+                </Button>
+            </ProgressButton>
             <ForceDeleteCustomerAction
                 open={modalIsOpen}
                 handleDelete={handleForceDelete}

@@ -15,7 +15,7 @@ import {
     confirmTextType,
     handleCloseType,
     openType,
-} from "../../types/index";
+} from "../../../types/index";
 
 const ConfirmationDialog = ({
     title,

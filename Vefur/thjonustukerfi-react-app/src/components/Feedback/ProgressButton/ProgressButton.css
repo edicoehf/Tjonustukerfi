@@ -1,0 +1,11 @@
+div.button-wrapper {
+    position: relative;
+}
+
+div.button-wrapper .MuiCircularProgress-root.MuiCircularProgress-indeterminate {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -12px;
+    margin-left: -12px;
+}

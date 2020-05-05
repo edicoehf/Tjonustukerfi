@@ -70,6 +70,7 @@ const useDeleteCustomerById = (id) => {
         modalIsOpen,
         handleClose,
         handleForceDelete,
+        isForceDeleting,
     };
 };
 

@@ -9,13 +9,15 @@ const useGetAllOrders = () => {
     useEffect(() => {
         orderService
             .getAllOrders()
-            .then(orders => {
+            .then((orders) => {
                 setOrders(orders);
-                setIsLoading(false);
                 setError(null);
             })
-            .catch(error => {
+            .catch((error) => {
                 setError(error);
+            })
+            .finally(() => {
+                setIsLoading(false);
             });
     }, []);
     return { orders, isLoading, error };

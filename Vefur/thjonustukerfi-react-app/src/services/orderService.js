@@ -24,6 +24,7 @@ const createOrder = (order) => {
         },
     })
         .then(handleErrors)
+        .then(handleData)
         .catch((error) => Promise.reject(error));
 };
 
