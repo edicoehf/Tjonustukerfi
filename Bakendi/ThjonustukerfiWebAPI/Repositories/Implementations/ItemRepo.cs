@@ -30,7 +30,14 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             var entity = _dbContext.Item.FirstOrDefault(i => i.Id == itemId);   // get entity
             if(entity == null) {throw new NotFoundException($"Item with ID {itemId} was not found."); } // entity not found
 
-            return _mapper.Map<ItemDTO>(entity);
+            var dto = _mapper.Map<ItemDTO>(entity);
+            // Get the connections for the DTO
+            dto.OrderId = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == entity.Id).OrderId;   // get order ID
+            dto.Category = _dbContext.Category.FirstOrDefault(c => c.Id == entity.CategoryId).Name;                // get category name
+            dto.Service = _dbContext.Service.FirstOrDefault(s => s.Id == entity.ServiceId).Name;                   // get service name
+            dto.State = _dbContext.State.FirstOrDefault(s => s.Id == entity.StateId).Name;                         // get state name
+
+            return dto;
         }
 
         public ItemDTO CreateItem(ItemInputModel item)
