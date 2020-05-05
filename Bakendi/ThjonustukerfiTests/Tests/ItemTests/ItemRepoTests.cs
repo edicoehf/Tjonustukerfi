@@ -831,25 +831,25 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             }
         }
 
-        // [TestMethod]
-        // public void GetItemPrintDetails_should_return_ItemPrintDetailsDTO()
-        // {
-        //     //* Arrange
-        //     using(var mockContext = new DataContext(_options))
-        //     {
-        //         UpdateMapper(mockContext);
-        //         IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+        [TestMethod]
+        public void GetItemPrintDetails_should_return_ItemPrintDetailsDTO()
+        {
+            //* Arrange
+            using(var mockContext = new DataContext(_options))
+            {
+                UpdateMapper(mockContext);
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
 
-        //         //* Act
-        //         var value = itemRepo.GetItemPrintDetails(1);
+                //* Act
+                var value = itemRepo.GetItemPrintDetails(1);
 
-        //         //* Assert
-        //         Assert.IsNotNull(value);
-        //         Assert.IsInstanceOfType(value, typeof(ItemPrintDetailsDTO));
-        //         Assert.IsNotNull(value.BarcodeImage);   // image is created
-        //         Assert.IsInstanceOfType(value.BarcodeImage, typeof(string));
-        //     }
-        // }
+                //* Assert
+                Assert.IsNotNull(value);
+                Assert.IsInstanceOfType(value, typeof(ItemPrintDetailsDTO));
+                Assert.IsNotNull(value.BarcodeImage);   // image is created
+                Assert.IsInstanceOfType(value.BarcodeImage, typeof(string));
+            }
+        }
 
         //**********     Helper functions     **********//
         private void FillDatabase()
