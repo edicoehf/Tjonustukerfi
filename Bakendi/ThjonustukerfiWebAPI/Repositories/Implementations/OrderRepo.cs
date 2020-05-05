@@ -199,7 +199,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 
                 itemToAdd.JSON = JsonConvert.SerializeObject(new
                 {
-                    location = "Vinnslu",
+                    location = "",
                     sliced = item.Sliced,
                     filleted = item.Filleted,
                     otherCategory = item.OtherCategory == null ? "" : item.OtherCategory,
