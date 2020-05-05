@@ -29,10 +29,6 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             _mapper = mapper;
         }
         public ItemDTO GetItemById(long itemId) => _itemRepo.GetItemById(itemId);
-        public ItemDTO CreateItem(ItemInputModel item)
-        {
-            return _itemRepo.CreateItem(item);
-        }
         public void EditItem(EditItemInput input, long itemId)
         {
             _itemRepo.EditItem(input, itemId);  // edit item

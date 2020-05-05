@@ -31,7 +31,7 @@ namespace ThjonustukerfiWebAPI.Schedules.Tasks
             dbContext = new DataContext(options);
 
             // Create the mapping profile and the mapper
-            var profile = new MappingProfile(Constants.DBConnection);
+            var profile = new MappingProfile();
             var config = new MapperConfiguration(cfg => cfg.AddProfile(profile));
             _mapper = new Mapper(config);
 

@@ -31,6 +31,10 @@ namespace ThjonustukerfiTests.Tests
                 .EnableSensitiveDataLogging()
                 .Options;
 
+            var myProfile = new MappingProfile();   // Create a new profile like the one we implemented
+            var myConfig = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));   // Setup a configuration with our profile
+            _mapper = new Mapper(myConfig); // Create a new mapper with our profile
+
             FillDatabase();
         }
 
@@ -49,7 +53,6 @@ namespace ThjonustukerfiTests.Tests
             using (var mockContext = new DataContext(_options))
             {
                 ClearDatabase();    // clear database since for this test it should be empty
-                UpdateMapper(mockContext); // setup mapper with the correct context
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
                 //* Act
@@ -92,9 +95,6 @@ namespace ThjonustukerfiTests.Tests
                 string customerName = "Viggi Siggi";
                 string OrderBarCode = "20200001";
                 DateTime modifiedDate = mockContext.Order.FirstOrDefault(o => o.Id == orderId).DateModified;
-
-                // Needs an updated automapper that has access to the current instance of db context
-                UpdateMapper(mockContext);
 
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
@@ -263,9 +263,6 @@ namespace ThjonustukerfiTests.Tests
             // These orders were created in the build database test. This person should have 2 orders
             using(var mockContext = new DataContext(_options))
             {
-                // Needs an updated automapper that has access to the current instance of db context
-                UpdateMapper(mockContext);
-
                 IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
 
                 //* Act
@@ -676,9 +673,6 @@ namespace ThjonustukerfiTests.Tests
 
             using(var mockContext = new DataContext(_options))
             {
-                // Needs an updated automapper that has access to the current instance of db context
-                UpdateMapper(mockContext);
-
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
                 var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
@@ -851,9 +845,6 @@ namespace ThjonustukerfiTests.Tests
             //* Arrange
             using (var mockContext = new DataContext(_options))
             {
-                // Needs an updated automapper that has access to the current instance of db context
-                UpdateMapper(mockContext);
-
                 var orderRepo = new OrderRepo(mockContext, _mapper);
                 var DbSize = mockContext.Order.Count();
 
@@ -887,8 +878,6 @@ namespace ThjonustukerfiTests.Tests
 
             using(var mockContext = new DataContext(_options))
             {
-                UpdateMapper(mockContext);  // update mapper with the correct context, since this function uses automapper with context
-
                 // craeate repo
                 IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
 
@@ -954,8 +943,6 @@ namespace ThjonustukerfiTests.Tests
 
             using(var mockContext = new DataContext(_options))
             {
-                UpdateMapper(mockContext);  // update mapper with the correct context, since this function uses automapper with context
-
                 // craeate repo
                 IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
 
@@ -1095,8 +1082,6 @@ namespace ThjonustukerfiTests.Tests
             //* Arrange
             using(var mockContext = new DataContext(_options))
             {
-                UpdateMapper(mockContext);  // uses current context
-
                 IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
 
                 //* Act
@@ -1117,8 +1102,6 @@ namespace ThjonustukerfiTests.Tests
             //* Arrange
             using(var mockContext = new DataContext(_options))
             {
-                UpdateMapper(mockContext);
-
                 IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
 
                 // get order count
@@ -1143,7 +1126,6 @@ namespace ThjonustukerfiTests.Tests
             using(var mockContext = new DataContext(_options))
             {
                 // update mapper and create repo
-                UpdateMapper(mockContext);
                 IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
 
                 // Get the size of the list
@@ -1164,7 +1146,6 @@ namespace ThjonustukerfiTests.Tests
         {
             using(var mockContext = new DataContext(_options))
             {
-                UpdateMapper(mockContext);
                 //* Arrange
                 // variables evaluating
                 long orderId = 100;
@@ -1372,15 +1353,6 @@ namespace ThjonustukerfiTests.Tests
                 mockContext.SaveChanges();
                 //! Building DB done
             }
-        }
-
-        /// <summary>Updates the private mapper to have the current mock data context</summary>
-        private void UpdateMapper(DataContext context)
-        {
-            // Needs a seperete automapper that has access to the current instance of db context
-            var myProfile = new MappingProfile(context);   // Create a new profile like the one we implemented
-            var myConfig = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));   // Setup a configuration with our profile
-            _mapper = new Mapper(myConfig); // Create a new mapper with our profile
         }
 
         private void ClearDatabase()

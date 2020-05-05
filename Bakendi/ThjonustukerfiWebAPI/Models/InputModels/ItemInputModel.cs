@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ThjonustukerfiWebAPI.Models.InputModels
 {
+    //TODO: Not a generic class, used for Reykofninn
     /// <summary>Input model to add new Item to the database.</summary>
     public class ItemInputModel
     {

@@ -50,14 +50,21 @@ namespace ThjonustukerfiWebAPI
             {
                 connectionString = Configuration.GetConnectionString("DefaultConnection");
             }
-            Constants.DBConnection = connectionString;
             
-            services.AddDbContext<DataContext>(options => { options.UseNpgsql(connectionString); });
+            services.AddDbContext<DataContext>(options => 
+            {
+                options.UseNpgsql(connectionString);
+                
+            });
+
+            // set the constant connection string for other services to connect
+            Constants.DBConnection = connectionString;
 
             // Adding automapper
             var mappingProfile = new MapperConfiguration(mc => {
-                mc.AddProfile(new MappingProfile(connectionString));
+                mc.AddProfile(new MappingProfile());
             });
+
             var mapper = mappingProfile.CreateMapper();
             services.AddSingleton(mapper);
 

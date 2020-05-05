@@ -30,16 +30,14 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             var entity = _dbContext.Item.FirstOrDefault(i => i.Id == itemId);   // get entity
             if(entity == null) {throw new NotFoundException($"Item with ID {itemId} was not found."); } // entity not found
 
-            return _mapper.Map<ItemDTO>(entity);
-        }
+            var dto = _mapper.Map<ItemDTO>(entity);
+            // Get the connections for the DTO
+            dto.OrderId = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == entity.Id).OrderId;   // get order ID
+            dto.Category = _dbContext.Category.FirstOrDefault(c => c.Id == entity.CategoryId).Name;                // get category name
+            dto.Service = _dbContext.Service.FirstOrDefault(s => s.Id == entity.ServiceId).Name;                   // get service name
+            dto.State = _dbContext.State.FirstOrDefault(s => s.Id == entity.StateId).Name;                         // get state name
 
-        public ItemDTO CreateItem(ItemInputModel item)
-        {
-            // Mapping from input to entity and adding to database
-            var entity = _dbContext.Item.Add(_mapper.Map<Item>(item)).Entity;
-            _dbContext.SaveChanges();
-            // Mapping from entity to DTO
-            return _mapper.Map<ItemDTO>(entity);
+            return dto;
         }
 
         public void EditItem(EditItemInput input, long itemId)
@@ -84,7 +82,14 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // Update Category
             if(editCategory) { entity.CategoryId = (long)input.CategoryId; }
 
-            // Update State
+            // check and update JSON objects
+            JObject rss = JObject.Parse(entity.JSON);
+            if(editSlice)           { rss.Property("sliced").Value = input.Sliced; }
+            if(editFilleted)        { rss.Property("filleted").Value = input.Filleted; }
+            if(editOtherCategory)   { rss.Property("otherCategory").Value = input.OtherCategory; }
+            if(editOtherService)    { rss.Property("otherService").Value = input.OtherService; }
+
+            // Update State, also check if location needs to be updated
             if(editState) 
             {
                 entity.StateId = (long)input.StateId; 
@@ -96,7 +101,17 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
                 orderID = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemId).OrderId;   // get the id of the connected order
                 checkOrderComplete = true;
+
+                // get all steps for this order in ascending order
+                var steps = _dbContext.ServiceState.Where(ss => ss.ServiceId == entity.ServiceId).OrderBy(ss => ss.Step).ToList();
+                var currStep = steps.FirstOrDefault(s => s.StateId == entity.StateId).Step; // get item current step
+
+                //TODO: Reykofninn specific since first step has no location
+                // set location to empty if first or last step
+                if(currStep == steps.Min(s => s.Step) || currStep == steps.Max(s => s.Step)) { rss.Property("location").Value = ""; }
             }
+
+            entity.JSON = JsonConvert.SerializeObject(rss);
 
             // Update Service
             if(editService) { entity.ServiceId = (long)input.ServiceID; }
@@ -110,14 +125,6 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
             // Update details
             if(editDetails) { entity.Details = input.Details; }
-
-            // check and update JSON objects
-            JObject rss = JObject.Parse(entity.JSON);
-            if(editSlice)           { rss.Property("sliced").Value = input.Sliced; }
-            if(editFilleted)        { rss.Property("filleted").Value = input.Filleted; }
-            if(editOtherCategory)   { rss.Property("otherCategory").Value = input.OtherCategory; }
-            if(editOtherService)    { rss.Property("otherService").Value = input.OtherService; }
-            entity.JSON = JsonConvert.SerializeObject(rss);
 
             // If no changes are made, send a bad request response
             if(!editCategory && !editState && !editService && !editOrder && !editDetails && !editSlice && !editFilleted && !editOtherCategory && !editOtherService) 
@@ -341,22 +348,34 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // get entity
             var entity = _dbContext.Item.FirstOrDefault(i => i.Id == itemId);
 
-            // find the final-state-id
-            var finalState = _dbContext.ServiceState.Where(ss => ss.ServiceId == entity.ServiceId).OrderByDescending(ss => ss.Step).FirstOrDefault().StateId;
-
             // update the entity itself
             entity.StateId = stateId;
             entity.DateModified = DateTime.Now;
 
-            if(entity.StateId == finalState) { entity.DateCompleted = timeNow; }
+            // find the final-state-id
+            var serviceSteps = _dbContext.ServiceState.Where(ss => ss.ServiceId == entity.ServiceId).ToList();
+            var currStep = serviceSteps.FirstOrDefault(ss => ss.StateId == entity.StateId).Step;
+            var maxStep = serviceSteps.Max(ss => ss.Step);
+            var minStep = serviceSteps.Min(ss => ss.Step);
+
+            // is at last step
+            if(currStep == maxStep) { entity.DateCompleted = timeNow; }
             else { entity.DateCompleted = null; }
 
+            //TODO: Min step with location empty string, is company specific
             // Get the json object and change it and write it back (making sure only to change the location property if there are any other properties there)
-            if(entity.JSON != null && location != null)
+            if(entity.JSON != null && location != null && currStep != minStep && currStep != maxStep)
             {
                 JObject rss = JObject.Parse(entity.JSON);           // parse the entity
                 var prop = rss.Property("location");                // get the location property
                 prop.Value = location;                              // set the location
+                entity.JSON = JsonConvert.SerializeObject(rss);     // serialize back
+            }
+            else if(currStep == minStep || currStep == maxStep) // set location to empty string if in first or last step
+            {
+                JObject rss = JObject.Parse(entity.JSON);           // parse the entity
+                var prop = rss.Property("location");                // get the location property
+                prop.Value = "";                                    // set the location
                 entity.JSON = JsonConvert.SerializeObject(rss);     // serialize back
             }
 

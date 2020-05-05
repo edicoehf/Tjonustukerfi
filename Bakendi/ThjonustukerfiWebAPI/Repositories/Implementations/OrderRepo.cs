@@ -30,7 +30,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // Check if order exists
             if(entity == null) { throw new NotFoundException($"Order with id {id} was not found."); }
 
-            return _mapper.Map<OrderDTO>(entity);
+            return MapOrderToDTO(entity);
         }
 
         public long CreateOrder(OrderInputModel order)
@@ -197,9 +197,10 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 var itemToAdd = _mapper.Map<Item>(item);
                 itemToAdd.Barcode = newItemBarcode.ToString();
                 
+                //TODO: Not generic, this is reykofninn specific
                 itemToAdd.JSON = JsonConvert.SerializeObject(new
                 {
-                    location = "Vinnslu",
+                    location = "",
                     sliced = item.Sliced,
                     filleted = item.Filleted,
                     otherCategory = item.OtherCategory == null ? "" : item.OtherCategory,
@@ -290,6 +291,11 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 itemToChange.DateCompleted = currentDate;
                 itemToChange.DateModified = currentDate;
 
+                JObject rss = JObject.Parse(itemToChange.JSON);         // parse the entity
+                var prop = rss.Property("location");                    // get the location property
+                prop.Value = "";                                        // set the location to empty (complete)
+                itemToChange.JSON = JsonConvert.SerializeObject(rss);   // serialize back
+
                 // Update the timestamp
                 // state and item need to be the same else create a new timestamp
                 var timeStamp = _dbContext.ItemTimestamp.FirstOrDefault(ts => ts.ItemId == itemToChange.Id && ts.StateId == itemToChange.StateId);
@@ -299,7 +305,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
             _dbContext.SaveChanges();
 
-            return _mapper.Map<OrderDTO>(orderEntity);
+            return MapOrderToDTO(orderEntity);
         }
 
         public long SearchOrder(string barcode)
@@ -333,6 +339,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             return activeOrders;    // Active orders, empty list if there are none
         }
 
+        /// <summary>Gets a list of orderDTO with a list of order entity</summary>
         private List<OrderDTO> GetOrderDTOwithOrderList(List<Order> ordersEntity)
         {
             var orders = new List<OrderDTO>();
@@ -343,7 +350,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             // Loop through all orders
             foreach (var order in ordersEntity)
             {
-                orders.Add(_mapper.Map<OrderDTO>(order));
+                orders.Add(MapOrderToDTO(order));
             }
             
             return orders;
@@ -366,7 +373,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
         public void ArchiveCompleteOrdersByCustomerId(long customerId)
         {
-            var completeOrders = _dbContext.Order.Where(o => o.CustomerId == customerId && o.DateCompleted != null).ToList();  // Get all complete orders for this customer
+            // Get all complete orders for this customer
+            var completeOrders = _dbContext.Order.Where(o => o.CustomerId == customerId && o.DateCompleted != null).ToList();
 
             // Archive the orders
             Archive(completeOrders);
@@ -413,7 +421,10 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
         public List<OrderDTO> GetOrdersReadyForPickupByCustomerID(long customerId)
         {
-            return _mapper.Map<List<OrderDTO>>(GetOrdersReadyForPickup().Where(o => o.CustomerId == customerId));
+            // get orders ready for pickup with this customer
+            var orders = GetOrdersReadyForPickup().Where(o => o.CustomerId == customerId).ToList();
+
+            return GetOrderDTOwithOrderList(orders);    // map orders to DTO
         }
 
         public void IncrementNotification(long orderId)
@@ -429,7 +440,8 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
         public List<OrderDTO> GetOrdersByCustomerId(long customerId)
         {
-            return _mapper.Map<List<OrderDTO>>(_dbContext.Order.Where(o => o.CustomerId == customerId));
+            // get all order entities with this customer, them map the list to DTO list
+            return GetOrderDTOwithOrderList(_dbContext.Order.Where(o => o.CustomerId == customerId).ToList());
         }
 
         public List<ItemPrintDetailsDTO> GetOrderPrintDetails(long orderId)
@@ -440,13 +452,38 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
         }
 
         //*     Helper functions     *//
+        /// <summary>Maps an order along with its items to DTO.</summary>
+        private OrderDTO MapOrderToDTO(Order order)
+        {
+            var dto = _mapper.Map<OrderDTO>(order);
+
+            // add customer name
+            dto.Customer = _dbContext.Customer.FirstOrDefault(c => c.Id == dto.CustomerId).Name;
+
+            // Loop through all items in the order and add them to the DTO
+            var itemList = _dbContext.ItemOrderConnection.Where(c => c.OrderId == order.Id).ToList();
+            dto.Items = new List<ItemDTO>();
+            foreach (var item in itemList)
+            {
+                var itemDto = _mapper.Map<ItemDTO>(_dbContext.Item.FirstOrDefault(i => i.Id == item.ItemId)); // get item dto
+                itemDto.OrderId = item.OrderId;
+                itemDto.Category = _dbContext.Category.FirstOrDefault(c => c.Id == itemDto.CategoryId).Name; // Find category name
+                itemDto.Service = _dbContext.Service.FirstOrDefault(s => s.Id == itemDto.ServiceId).Name;    // Find Service name
+                itemDto.State = _dbContext.State.FirstOrDefault(s => s.Id == itemDto.StateId).Name;          // Find state name
+
+                dto.Items.Add(itemDto);     // Add the itemDTO to the orderDTO
+            }
+
+            return dto;
+        }
+
         private void Archive(List<Order> toArchive)
         {
-            // input to handle archive input and all connections
-            var input = new List<OrderItemArchiveInput>();
-
             // just return if there aren't any orders
             if(!toArchive.Any()) { return; }
+
+            // input to handle archive input and all connections
+            var input = new List<OrderItemArchiveInput>();
 
             var ordersToDelete = new List<long>();  // create a list of orderIDs to remove those that are archived
             foreach (var order in toArchive)
@@ -473,7 +510,11 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
             foreach (var order in input)
             {
-                order.ArchivedOrder = _mapper.Map<OrderArchive>(order.Order);   // archive the order
+                var orderToArchive = _mapper.Map<OrderArchive>(order.Order);
+                orderToArchive.Customer = _dbContext.Customer.FirstOrDefault(c => c.Id == order.Order.CustomerId).Name;        // get the customers name
+                orderToArchive.OrderSize = order.Items.Count; // set the size of the order
+
+                order.ArchivedOrder = orderToArchive;   // add to archive in order, this will be used to track the ID of the orders after adding to the database
                 _dbContext.OrderArchive.Add(order.ArchivedOrder);   // add each order to archive
             }
 
@@ -484,7 +525,30 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 order.ArchivedItems = new List<ItemArchive>();
                 foreach (var item in order.Items)
                 {
-                    var addItem = _mapper.Map<ItemArchive>(item);       // map Item to archive
+                    var addItem = _mapper.Map<ItemArchive>(item);                                               // map Item to archive
+                    addItem.extraDataJSON = item.JSON;                                                          // get the json data
+                    addItem.Category = _dbContext.Category.FirstOrDefault(c => c.Id == item.CategoryId).Name;   // Get category name
+                    addItem.Service = _dbContext.Service.FirstOrDefault(s => s.Id == item.ServiceId).Name;      // Get service name
+
+                    var timestampList = _dbContext.ItemTimestamp.Where(its => its.ItemId == item.Id).OrderBy(state => state.StateId).ToList();   // get item timestamps in the "correct" order
+                    
+                    // Add the timestamps to the json
+                    var propName = "timestamps";                            // name of new json array
+                    JObject json = JObject.Parse(addItem.extraDataJSON);    // parse the json object we want to change
+                    json.Add(new JProperty(propName, new JArray()));        // Create a new array as a json property
+                    JArray timeStamps = (JArray)json[propName];             // Get the array we created
+
+                    // add all timestamps of the item to the json array
+                    foreach (var stamp in timestampList)
+                    {
+                        timeStamps.Add(JsonConvert.SerializeObject(new
+                        {
+                            StateId = stamp.StateId,
+                            TimeOfChange = stamp.TimeOfChange
+                        }));
+                    }
+
+                    addItem.extraDataJSON = json.ToString();            // update the json file
                     addItem.OrderArchiveId = order.ArchivedOrder.Id;    // set the archive order ID
                     
                     order.ArchivedItems.Add(addItem);   // set the archived items
