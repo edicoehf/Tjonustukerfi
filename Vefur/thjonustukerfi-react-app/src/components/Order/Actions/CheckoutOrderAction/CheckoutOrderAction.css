@@ -24,3 +24,9 @@ Button.checkout-order-button b {
 Button.checkout-order-button .checkout-icon {
     opacity: 0;
 }
+
+.checkout-order .checkout-error {
+    text-align: center;
+    font-weight: bold;
+    color: var(--error-color)
+}
