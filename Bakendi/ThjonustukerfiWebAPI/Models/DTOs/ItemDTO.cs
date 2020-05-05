@@ -5,7 +5,7 @@ namespace ThjonustukerfiWebAPI.Models.DTOs
     /// <summary>Data transfer object for Item entity, provides basic information of Item.</summary>
     public class ItemDTO
     {
-        public long Id { get; set; }//
+        public long Id { get; set; }
         public long OrderId { get; set; }
         public long CategoryId { get; set; }
         public string Category { get; set; }
