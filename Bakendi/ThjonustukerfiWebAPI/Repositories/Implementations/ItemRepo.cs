@@ -362,7 +362,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             if(currStep == maxStep) { entity.DateCompleted = timeNow; }
             else { entity.DateCompleted = null; }
 
-            //TODO: Min step with location 0, is company specific
+            //TODO: Min step with location empty string, is company specific
             // Get the json object and change it and write it back (making sure only to change the location property if there are any other properties there)
             if(entity.JSON != null && location != null && currStep != minStep && currStep != maxStep)
             {
