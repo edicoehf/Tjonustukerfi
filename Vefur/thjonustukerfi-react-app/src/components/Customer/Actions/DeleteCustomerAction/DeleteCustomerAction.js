@@ -6,17 +6,27 @@ import "./DeleteCustomerAction.css";
 import ForceDeleteCustomerAction from "../ForceDeleteCustomerAction/ForceDeleteCustomerAction";
 import { idType } from "../../../../types/index";
 import ProgressButton from "../../../Feedback/ProgressButton/ProgressButton";
+import { useHistory } from "react-router-dom";
+import ConfirmationDialog from "../../../Feedback/ConfirmationDialog/ConfirmationDialog";
 
 const DeleteCustomerAction = ({ id }) => {
+    const history = useHistory();
+
+    const redirect = () => {
+        history.push("/customers");
+    };
+
     const {
         error,
         handleDelete,
         isDeleting,
-        modalIsOpen,
+        forceModalOpen,
+        softModalOpen,
         handleClose,
         handleForceDelete,
+        handleSoftDelete,
         isForceDeleting,
-    } = useDeleteCustomerById(id);
+    } = useDeleteCustomerById(id, redirect);
 
     return (
         <div className="delete-customer">
@@ -34,9 +44,16 @@ const DeleteCustomerAction = ({ id }) => {
                 </Button>
             </ProgressButton>
             <ForceDeleteCustomerAction
-                open={modalIsOpen}
+                open={forceModalOpen}
                 handleDelete={handleForceDelete}
                 handleClose={handleClose}
+            />
+            <ConfirmationDialog
+                title="Eyða viðskiptavin"
+                description="Staðfestu að eyða eigi viðskiptavin"
+                handleClose={handleClose}
+                handleAccept={handleSoftDelete}
+                open={softModalOpen}
             />
             {error && (
                 <p className="delete-error">Gat ekki eytt viðskiptavin</p>
