@@ -9,8 +9,11 @@
     display: grid;
     grid-template-columns: 20% 50% 30%;
     grid-template-rows: auto;
-    grid-template-areas:
-        "id customer date";
+    grid-template-areas: "id customer date";
+}
+
+.order-list .order-row td.MuiTableCell-root {
+    padding: 8px 16px 8px 16px;
 }
 
 .order-list .MuiTableRow-root.order-row-body:hover {
@@ -33,12 +36,37 @@
 
 .order-list .order-row .order-cell-id {
     grid-area: id;
+    align-self: center;
 }
 
 .order-list .order-row .order-cell-customer {
     grid-area: customer;
+    align-self: center;
 }
 
 .order-list .order-row .order-cell-date {
     grid-area: date;
+    align-self: center;
 }
+
+.order-list .order-list-toolbar.MuiToolbar-root {
+    /* background-color: rgba(197, 198, 211, 0.829); */
+    background-color: rgba(224, 225, 238, 0.829);
+    align-content: center;
+    min-height: 50px;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 16px;
+}
+
+.order-list .order-list-toolbar.MuiToolbar-root .filter-toggle {
+    margin: 0;
+}
+/* 
+.order-list
+    .order-list-toolbar.MuiToolbar-root
+    .filter-toggle
+    .MuiFormControlLabel-label {
+    font-weight: bold;
+    color: #3f51b5;
+} */

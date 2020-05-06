@@ -1,4 +1,4 @@
-.main-container {
+.order-main {
     display: flex;
     flex-direction: column;
     align-content: space-around;
@@ -8,13 +8,31 @@
     padding-bottom: 1em;
 }
 .header {
-    align-self: center;
+    text-align: center;
 }
+
 .create-button {
     align-self: flex-end;
 }
+
 .no-order {
     display: flex;
     justify-content: center;
     color: rgb(102, 100, 0);
+}
+
+.order-main .main-item .search-bar .MuiFormControl-root {
+    width: 20em;
+}
+
+.order-main .search-bar {
+    padding: 0.5em 2.5em 1.5em 2.5em;
+}
+
+.order-main .order-search-paper {
+    margin: 0 auto;
+    width: fit-content;
+    background-color: var(--data-color);
+    border-radius: 10px;
+    margin-bottom: 1em;
 }
