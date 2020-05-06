@@ -75,6 +75,18 @@ const updateCustomer = (customer) => {
         .catch((error) => Promise.reject(error));
 };
 
+const getOrdersByCustomerId = (customerId) => {
+    return fetch(endpoint + customerId + "/orders", {
+        method: "GET",
+        headers: {
+            crossDomain: true,
+        },
+    })
+        .then(handleErrors)
+        .then(handleData)
+        .catch((error) => Promise.reject(error));
+};
+
 export default {
     getAllCustomers,
     deleteCustomerById,
@@ -82,4 +94,5 @@ export default {
     getCustomerById,
     updateCustomer,
     forceDeleteCustomerById,
+    getOrdersByCustomerId,
 };
