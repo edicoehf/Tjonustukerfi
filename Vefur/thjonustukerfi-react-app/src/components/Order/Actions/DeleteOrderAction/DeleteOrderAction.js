@@ -9,9 +9,37 @@ import {
 } from "../../../../types/index";
 import "./DeleteOrderAction.css";
 import ProgressButton from "../../../Feedback/ProgressButton/ProgressButton";
+import { useHistory } from "react-router-dom";
+import ConfirmationDialog from "../../../Feedback/ConfirmationDialog/ConfirmationDialog";
 
 const DeleteOrderAction = ({ id }) => {
-    const { error, handleDelete, isDeleting } = useDeleteOrderById(id);
+    const history = useHistory();
+
+    const redirect = () => {
+        history.push("/orders");
+    };
+
+    const { error, handleDelete, isDeleting } = useDeleteOrderById(
+        id,
+        redirect
+    );
+
+    const [open, setOpen] = React.useState(false);
+
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleAccept = () => {
+        handleClose();
+        if (!isDeleting) {
+            handleDelete();
+        }
+    };
 
     return (
         <div className="delete-order">
@@ -22,12 +50,19 @@ const DeleteOrderAction = ({ id }) => {
                     color="secondary"
                     variant="contained"
                     disabled={isDeleting}
-                    onClick={handleDelete}
+                    onClick={handleOpen}
                 >
                     <DeleteIcon className="delete-order-icon" size="small" />
                     <b>Eyða Pöntun</b>
                 </Button>
             </ProgressButton>
+            <ConfirmationDialog
+                title="Eyða pöntun"
+                description="Staðfestu að eyða eigi pöntun"
+                handleClose={handleClose}
+                handleAccept={handleAccept}
+                open={open}
+            />
             {error && <p className="delete-error">Gat ekki eytt pöntun</p>}
         </div>
     );
