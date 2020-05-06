@@ -3,10 +3,10 @@
 WebAPI for the service system created by Edico.<br />
 
 ### <p>SQL program</p>
-Local postgres server for development.
+Local postgres server for development. Postgres docker container for production.
 
 ### <p>Database type</p>
-    -posgresql
+* Postgresql
 
 ### <p>Database connection</p>
 Local postgres server <br />
