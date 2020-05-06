@@ -1,5 +1,5 @@
 import React from "react";
-import { TableRow, TableCell } from "@material-ui/core";
+import { TableRow, TableCell, ListItemText } from "@material-ui/core";
 import { orderType } from "../../../types/index";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
@@ -28,7 +28,10 @@ const OrderListItem = ({ order, border }) => {
             >
                 <TableCell className="order-cell-id">{order.id}</TableCell>
                 <TableCell align="right" className="order-cell-customer">
-                    {order.customer}
+                    <ListItemText
+                        primary={order.customer}
+                        secondary={order.customerEmail}
+                    />
                 </TableCell>
                 <TableCell align="right" className="order-cell-date">
                     {dateFormat(order.dateCreated)}
