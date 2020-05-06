@@ -16,6 +16,7 @@ This system has the following three containers:
 * React-app (node)
 
 The system is setup to work when docker-compose is spun up, given that the environmental variables are set up. <br />
+Note: Before doing the initial run make sure that the webApi has the initial migrations setup in the migrations folder in the web api project. See the web api documentation for more details on how to do that. <br />
 
 The open ports to the docker network are as follows:
 * Port 5000 is mapped to the WebApi
