@@ -12,7 +12,7 @@ Local postgres server for development. Postgres docker container for production.
 Local postgres server <br />
 Go to appsettings.json to change connection settings
 
-## <p align="center">Dependencies</p>
+### <p>Dependencies</p>
 Dotnet SDK version 3.1.200 <br />
 Postgres 10.10.x
 
@@ -27,34 +27,34 @@ Postgres 10.10.x
     * dotnet restore
     * dotnet ef migrations add InitMigration
     * dotnet ef database update
-    * dotnet run
+    * dotnet run <br />
 After the this has been done once you will only need to do the "dotnet run" command. <br />
 
 Note: If the project has migrations set up in the migrations folder you do not need to do these two steps when running the commands above as the program will migrate automatically:
 * dotnet ef migrations add InitMigration
 * dotnet ef database update
 
-## <p>Migrations (adding new tables or updating old ones)</p>
+## <p align="center">Migrations (adding new tables or updating old ones)</p>
 Add new table: <br />
-    Add model/s to DataContext (public DbSet<className> TableName {get; set;}) <br />
-    In terminal: <br />
-        dotnet ef migrations add NameofTheTableYouAreAdding <br />
-        dotnet ef database update (update the database witht the new table, might need to refresh postgres) <br />
+* Add model/s to DataContext (public DbSet<className> TableName {get; set;}) <br />
+* In terminal:
+    * dotnet ef migrations add NameofTheTableYouAreAdding <br />
+    * dotnet ef database update (update the database witht the new table, might need to refresh postgres) <br />
 
 Update table: <br />
-    Change the models and then do the same as when adding a new table <br />
+* Change the models and then do the same as when adding a new table <br />
 
 ## <p align="center">Tests</p>
-Tests are run with MSTests. If the test class depends on another class (e.g. service using a repository) the other class is Mocked which mocks the classes functionality. Each test class is used to for one class in the project. The test classes are setup to configure variables and things needed before each test is run, they also do a cleanup after each test.<br />
+Tests are run with MSTests. If the test class depends on another class (e.g. service using a repository) the other class is Mocked, which mocks the classes functionality. Each test class is used to for one class in the project. The test classes are setup to configure variables and things needed before each test is run, they also do a cleanup after each test.<br />
 ### How to run tests:<br />
 * Navigate to the ThjonustukerfiTests folder
 * Run: dotnet test
 
-## <p>Documentation</p>
-For documentation we used Swagger to dockument this Web api. This helps devolopers working with the api see what it has to offer. It also gives a convenient overview of the functionality of the api. Having good documentation makes it easier for others to jump in and start using and editing the api. <br />
+## <p align="center">Documentation</p>
+For documentation we used Swagger to document this web api. This helps devolopers working with the api see what it has to offer. It also gives a convenient overview of the functionality of the api. Having good documentation makes it easier for others to jump in and start using and editing the api. <br />
 To look at the swagger documentaion do the following:
 * Navigate to the ThjonustukerfiWebAPI folder in your terminal and execute: dotnet run
-* Open a browser and go to: http://<host>:<port>/swagger
+* Open a browser and go to: http://host:port/swagger
     * E.g. http://localhost:5000/swagger
 
 ## <p align="center">Packages</p>
