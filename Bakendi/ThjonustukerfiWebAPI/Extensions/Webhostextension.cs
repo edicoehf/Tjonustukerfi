@@ -20,23 +20,6 @@ namespace ThjonustukerfiWebAPI.Extensions
         /// </summary>
     public static class WebhostExtension
     {
-        // Maybe use later...
-        public static IHost MigrateDatabase<T>(this IHost webHost) where T:DbContext
-        {
-            var serviceScopeFactory =   (IServiceScopeFactory)webHost
-                                        .Services.GetService(typeof(IServiceScopeFactory));
-
-            using (var scope = serviceScopeFactory.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                var dbContext = services.GetRequiredService<T>();
-
-                dbContext.Database.Migrate();
-            }
-
-            return webHost;
-        }
-
         /// <summary>
         ///     Fills the tables required for the companies service. As well as various company information from the companies config file.
         ///     
