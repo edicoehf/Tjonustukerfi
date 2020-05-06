@@ -5,3 +5,44 @@ React Vefur:
 [![Build Status](https://dev.azure.com/edicoehf/Tjonustukerfi/_apis/build/status/.Net%20Bakendi%20Pipeline?branchName=master)](https://dev.azure.com/edicoehf/Tjonustukerfi/_build/latest?definitionId=7&branchName=master)
 # Þjónustukerfi Edico ehf.
 Lokaverkefni gert af nemendum úr Háskólanum í Reykjavík
+
+# Setup
+## React-app and dotnet Webapi
+This system uses docker and docker compose for setup. The host must support Docker and Docker-compsose. The database connection to postgres is used through environment variables that docker-compose reads from a .env file. Docker-compose runs each part in seperate containers. <br />
+
+This system has the following three containers: <br />
+* WebApi (dotnet)
+* Database (Postgres)
+* React-app (node)
+
+The system is setup to work when docker-compose is spun up, given that the environmental variables are set up. <br />
+
+The open ports to the docker network are as follows: <br />
+* Port 5000 is mapped to the WebApi
+* Port 80 is mapped to the react-app
+
+To run the system you have to do the following. <br />
+* Setup Docker (if not already set up)
+* Setup Docker-compose (if not already set up)
+* In the terminal where the docker-compose.yml is located run:
+    * docker-compose up
+* To run in detached mode run:
+    * docker-compose up -d
+
+How to turn off docker-compose: <br />
+* If ran in detached mode run:
+    * docker-compose down
+* If ran not in detacked mode use ctrl + c
+
+# Running in production
+## WebApi
+See the README.md in the folder Bakendi: <br />
+https://github.com/edicoehf/Tjonustukerfi/tree/master/Bakendi
+
+## React-app
+See the README.md in the folder thjonustukerfi-react-app:
+https://github.com/edicoehf/Tjonustukerfi/tree/master/Vefur/thjonustukerfi-react-app
+
+## Xamarin application
+See the README.md in the folder Handtolva:
+https://github.com/edicoehf/Tjonustukerfi/tree/master/Handtolva
