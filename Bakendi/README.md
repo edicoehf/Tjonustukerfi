@@ -24,7 +24,7 @@ Postgres 10.10.x
 ## <p align="center">How to run</p>
 * Install Dotnet SDK
 * Install Postgres
-* Clone/fork this repository
+* Clone this repository
 * Navigate to the ThjonustukerfiWebAPI folder
 * Go to appsettings.json to change connection settings to your postgres database
 * run following commands:
@@ -32,6 +32,10 @@ Postgres 10.10.x
     * dotnet ef migrations add InitMigration
     * dotnet ef database update
     * dotnet run
+
+Note: If the project has migrations set up in the migrations folder you do not need to do these two steps when running the commands above as the program will migrate automatically:
+* dotnet ef migrations add InitMigration
+* dotnet ef database update
 
 ## <p align="center">Tests</p>
 Test are run using MS tests.<br />

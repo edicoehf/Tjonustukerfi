@@ -19,17 +19,17 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
         }
         public IEnumerable<ServiceDTO> GetServices()
         {
-            return _mapper.Map<IEnumerable<ServiceDTO>>(_dbContext.Service.ToList());   // Get list and map to DTO list
+            return _mapper.Map<IEnumerable<ServiceDTO>>(_dbContext.Service.OrderBy(s => s.Id).ToList());   // Get list and map to DTO list
         }
 
         public IEnumerable<StateDTO> GetStates()
         {
-            return _mapper.Map<IEnumerable<StateDTO>>(_dbContext.State.ToList());   // Get list and map to DTO list
+            return _mapper.Map<IEnumerable<StateDTO>>(_dbContext.State.OrderBy(s => s.Id).ToList());   // Get list and map to DTO list
         }
 
         public IEnumerable<CategoryDTO> GetCategories()
         {
-            return _mapper.Map<IEnumerable<CategoryDTO>>(_dbContext.Category.ToList()); // Get list and map to DTO list
+            return _mapper.Map<IEnumerable<CategoryDTO>>(_dbContext.Category.OrderBy(s => s.Id).ToList()); // Get list and map to DTO list
         }
 
         public StateDTO GetStatebyId(long id)
@@ -55,6 +55,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             {
                 retVal.Add(_mapper.Map<StateDTO>(_dbContext.State.FirstOrDefault(s => s.Id == stateID)));
             }
+            retVal.OrderBy(rV => rV.Id);
 
             return retVal;
         }
