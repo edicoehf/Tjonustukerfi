@@ -4,6 +4,7 @@ using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Models.Entities;
 using ThjonustukerfiWebAPI.Extensions;
 using ThjonustukerfiWebAPI.Config;
+using Microsoft.EntityFrameworkCore;
 
 namespace ThjonustukerfiWebAPI.Setup
 {
@@ -24,6 +25,8 @@ namespace ThjonustukerfiWebAPI.Setup
         public void Run(ConfigClass config)
         {
             LoadConfig(config);
+
+            _dbContext.Database.Migrate();
 
             var DB_Services = _dbContext.Set<Service>().ToList();
             var DB_ServiceStates = _dbContext.Set<ServiceState>().ToList();
