@@ -89,6 +89,8 @@ namespace ThjonustukerfiWebAPI.Setup
             Constants.sendEmail = config.SendEmail;                                 // Set email option
             Constants.sendSMS = config.SendSMS;                                     // Set SMS option
             Constants.Locations = config.Locations;                                 // Set item possible locations
+            Constants.CompanyEmail = config.CompanyEmail;                           // Set the company email
+            Constants.CompanyName = config.CompanyName;                             // Set the company name
             BarcodeImageDimensions.Height = config.BarcodeImageDimensions.Height;   // Set barcode image height
             BarcodeImageDimensions.Width = config.BarcodeImageDimensions.Width;     // Set barcode image width
 
