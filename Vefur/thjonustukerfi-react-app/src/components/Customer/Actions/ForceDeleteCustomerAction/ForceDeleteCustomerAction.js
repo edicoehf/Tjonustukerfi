@@ -12,12 +12,19 @@ import {
 
 const ForceDeleteCustomerAction = ({ open, handleDelete, handleClose }) => {
     return (
-        <Modal open={open}>
-            <div className="modal-container">
+        <Modal
+            open={open}
+            onClose={handleClose}
+            onBackdropClick={handleClose}
+            className="force-modal"
+        >
+            <div className="modal-container" onClick={handleClose}>
                 <div className="modal-text">
                     <h3>
-                        Þessi viðskiptavinur er með pantanir í kerfinu, ertu
-                        viss um að þú viljir eyða?
+                        Þessi viðskiptavinur er með pantanir í kerfinu.
+                        <br />
+                        Staðfestu að eyði skuli viðskiptavini og öllum þeim
+                        pöntunum.
                     </h3>
                 </div>
                 <div className="modal-buttons">
