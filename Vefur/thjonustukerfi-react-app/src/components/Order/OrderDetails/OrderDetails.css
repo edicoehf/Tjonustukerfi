@@ -40,6 +40,7 @@
     width: 60rem;
     background-color: var(--data-color);
     border-radius: 10px;
+    margin: 0 auto;
 }
 
 .order-details .MuiPaper-root th {
