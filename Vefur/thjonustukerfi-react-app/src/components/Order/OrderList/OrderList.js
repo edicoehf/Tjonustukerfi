@@ -7,14 +7,19 @@ import {
     TableCell,
     TableBody,
     TableContainer,
+    FormControlLabel,
+    Switch,
+    Toolbar,
 } from "@material-ui/core";
 import OrderListItem from "../OrderListItem/OrderListItem";
 import "./OrderList.css";
 import { ordersType, isLoadingType } from "../../../types";
 import ProgressComponent from "../../Feedback/ProgressComponent/ProgressComponent";
+import useFilterOrders from "../../../hooks/useFilterOrders";
 
 const OrderList = ({ orders, isLoading, error }) => {
     orders = orders.sort((a, b) => (a.id < b.id ? 1 : b.id < a.id ? -1 : 0));
+    const { filtered, filterToggle, shouldFilter } = useFilterOrders(orders);
 
     return (
         <div>
@@ -26,6 +31,18 @@ const OrderList = ({ orders, isLoading, error }) => {
                     elevation={3}
                     className="order-list"
                 >
+                    <Toolbar className="order-list-toolbar">
+                        <FormControlLabel
+                            className="filter-toggle"
+                            control={
+                                <Switch
+                                    checked={!shouldFilter}
+                                    onChange={filterToggle}
+                                />
+                            }
+                            label="Birta sóttar pantanir"
+                        />
+                    </Toolbar>
                     <Table>
                         <TableHead>
                             <TableRow className="order-row">
@@ -47,7 +64,7 @@ const OrderList = ({ orders, isLoading, error }) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {orders.map((order, i) => (
+                            {filtered.map((order, i) => (
                                 <OrderListItem
                                     key={i}
                                     order={order}
