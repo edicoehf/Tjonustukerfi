@@ -4,6 +4,7 @@ using ThjonustukerfiWebAPI.Models;
 using ThjonustukerfiWebAPI.Models.Entities;
 using ThjonustukerfiWebAPI.Extensions;
 using ThjonustukerfiWebAPI.Config;
+using Microsoft.EntityFrameworkCore;
 
 namespace ThjonustukerfiWebAPI.Setup
 {
@@ -24,6 +25,8 @@ namespace ThjonustukerfiWebAPI.Setup
         public void Run(ConfigClass config)
         {
             LoadConfig(config);
+
+            _dbContext.Database.Migrate();
 
             var DB_Services = _dbContext.Set<Service>().ToList();
             var DB_ServiceStates = _dbContext.Set<ServiceState>().ToList();
@@ -89,6 +92,8 @@ namespace ThjonustukerfiWebAPI.Setup
             Constants.sendEmail = config.SendEmail;                                 // Set email option
             Constants.sendSMS = config.SendSMS;                                     // Set SMS option
             Constants.Locations = config.Locations;                                 // Set item possible locations
+            Constants.CompanyEmail = config.CompanyEmail;                           // Set the company email
+            Constants.CompanyName = config.CompanyName;                             // Set the company name
             BarcodeImageDimensions.Height = config.BarcodeImageDimensions.Height;   // Set barcode image height
             BarcodeImageDimensions.Width = config.BarcodeImageDimensions.Width;     // Set barcode image width
 

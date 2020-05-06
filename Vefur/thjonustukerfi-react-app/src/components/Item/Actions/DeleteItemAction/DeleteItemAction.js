@@ -5,9 +5,20 @@ import ConfirmationDialog from "../../../Feedback/ConfirmationDialog/Confirmatio
 import DeleteIcon from "@material-ui/icons/Delete";
 import "./DeleteItemAction.css";
 import ProgressButton from "../../../Feedback/ProgressButton/ProgressButton";
+import { useHistory } from "react-router-dom";
 
 const DeleteItemAction = ({ id }) => {
-    const { error, handleDelete, isDeleting } = useDeleteItemById(id);
+    const history = useHistory();
+
+    const redirect = (orderId) => {
+        if (orderId) {
+            history.push(`/order/${orderId}`);
+        } else {
+            history.push("/orders/");
+        }
+    };
+
+    const { error, handleDelete, isDeleting } = useDeleteItemById(id, redirect);
     const [open, setOpen] = React.useState(false);
 
     const handleOpen = () => {
@@ -39,7 +50,7 @@ const DeleteItemAction = ({ id }) => {
             </ProgressButton>
             <ConfirmationDialog
                 title="Eyða vöru"
-                description="Staðfestu að eyða skuli vöru úr pöntun"
+                description="Staðfestu að eyða eigi vöru úr pöntun"
                 handleClose={handleClose}
                 handleAccept={handleAccept}
                 open={open}

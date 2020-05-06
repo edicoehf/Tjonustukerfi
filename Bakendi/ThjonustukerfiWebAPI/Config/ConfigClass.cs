@@ -18,7 +18,7 @@ namespace ThjonustukerfiWebAPI.Config
         public List<Category> Categories { get; set; }
         public bool SendSMS { get; set; }
         public bool SendEmail { get; set; }
-        public int FinalStep { get; set; }
-        public int SendNotificationStep { get; set; }
+        public string CompanyEmail { get; set; }
+        public string CompanyName { get; set; }
     }
 }
