@@ -38,11 +38,11 @@ namespace ThjonustukerfiWebAPI.Extensions
         }
 
         /// <summary>
-        ///     Fills the tables required for the companies service.
+        ///     Fills the tables required for the companies service. As well as various company information from the companies config file.
         ///     
         ///     If there is no change, this will do nothing.
         /// </summary>
-        public static IHost FillTables(this IHost webHost)
+        public static IHost Setup(this IHost webHost, string company)
         {
             var serviceScopeFactory =   (IServiceScopeFactory)webHost
                                         .Services.GetService(typeof(IServiceScopeFactory));
@@ -52,8 +52,7 @@ namespace ThjonustukerfiWebAPI.Extensions
                 var services = scope.ServiceProvider;
                 IBaseSetup baseSetup = new BaseSetup(services.GetRequiredService<DataContext>());
 
-                var company = "Reykofninn";                                             // enter company name that has a config
-                var path = $"{AppContext.BaseDirectory}Config/{company}Config.json";   // get the path
+                var path = $"{AppContext.BaseDirectory}Config/{company}Config.json";    // get the path
                 var json = File.ReadAllText(path);                                      // read the file to json
                 var config = JsonConvert.DeserializeObject<ConfigClass>(json);          // Convert to config class for easy setup
 
