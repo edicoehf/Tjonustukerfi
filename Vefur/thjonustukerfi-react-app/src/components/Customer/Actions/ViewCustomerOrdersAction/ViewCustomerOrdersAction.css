@@ -1,0 +1,22 @@
+Button.view-button {
+    margin-left: 0.5em;
+    width: 10em;
+    color: black;
+}
+.view-button:hover b {
+    opacity: 0;
+}
+
+.view-button:hover .view-icon {
+    opacity: 1;
+    margin-left: 80%;
+}
+
+.view-button b {
+    margin-right: 20%;
+    opacity: 1;
+}
+
+.view-button .view-icon {
+    opacity: 0;
+}

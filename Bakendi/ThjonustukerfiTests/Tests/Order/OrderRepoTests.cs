@@ -892,28 +892,26 @@ namespace ThjonustukerfiTests.Tests
                 // Get stuff
                 var archivedOrder = mockContext.OrderArchive.First();
                 var archivedItems = mockContext.ItemArchive.ToList();
-                var customerName = mockContext.Customer.FirstOrDefault(c => c.Id == orderInput.CustomerId).Name;
+                var customer = mockContext.Customer.FirstOrDefault(c => c.Id == orderInput.CustomerId);
 
                 //* Assert
                 Assert.IsNotNull(archivedOrder);
                 Assert.IsNotNull(archivedItems);
 
-                Assert.AreEqual(orderInput.CustomerId, archivedOrder.CustomerId);
-                Assert.AreEqual(customerName, archivedOrder.Customer);
+                Assert.AreEqual(customer.Email, archivedOrder.CustomerEmail);
+                Assert.AreEqual(customer.Name, archivedOrder.Customer);
 
                 Assert.AreEqual(orderInput.Items.Count, archivedItems.Count);
+                var classProps = typeof(ItemArchive).GetProperties();   // getting all properties of the class
                 foreach (var item in archivedItems)
                 {
-                    // use this to check if the correct information was passed
-                    var check = new ItemInputModel() { CategoryId = item.CategoryId, ServiceId = item.ServiceId };
-                    Assert.IsTrue(orderInput.Items.Contains(check));    // uses the equals override
+                    // loop through all properties and assert that they are not null
+                    foreach (var prop in classProps)
+                    {
+                        Assert.IsNotNull(prop.GetValue(item));
+                    }
 
-                    // Making sure that service and category where correctly put in archive
-                    var category = mockContext.Category.FirstOrDefault(c => c.Id == item.CategoryId).Name;
-                    var service = mockContext.Service.FirstOrDefault(s => s.Id == item.ServiceId).Name;
-
-                    Assert.AreEqual(category, item.Category);
-                    Assert.AreEqual(service, item.Service);
+                    Assert.AreEqual(archivedOrder.Id, item.OrderArchiveId); // Correct order?
                 }
             }
         }
@@ -956,28 +954,26 @@ namespace ThjonustukerfiTests.Tests
                 // Get stuff
                 var archivedOrder = mockContext.OrderArchive.First();
                 var archivedItems = mockContext.ItemArchive.ToList();
-                var customerName = mockContext.Customer.FirstOrDefault(c => c.Id == orderInput.CustomerId).Name;
+                var customer = mockContext.Customer.FirstOrDefault(c => c.Id == orderInput.CustomerId);
 
                 //* Assert
                 Assert.IsNotNull(archivedOrder);
                 Assert.IsNotNull(archivedItems);
 
-                Assert.AreEqual(orderInput.CustomerId, archivedOrder.CustomerId);
-                Assert.AreEqual(customerName, archivedOrder.Customer);
+                Assert.AreEqual(customer.Email, archivedOrder.CustomerEmail);
+                Assert.AreEqual(customer.Name, archivedOrder.Customer);
 
                 Assert.AreEqual(orderInput.Items.Count, archivedItems.Count);
+                var classProps = typeof(ItemArchive).GetProperties();   // getting all properties of the class
                 foreach (var item in archivedItems)
                 {
-                    // use this to check if the correct information was passed
-                    var check = new ItemInputModel() { CategoryId = item.CategoryId, ServiceId = item.ServiceId };
-                    Assert.IsTrue(orderInput.Items.Contains(check));    // uses the equals override
+                    // loop through all properties and assert that they are not null
+                    foreach (var prop in classProps)
+                    {
+                        Assert.IsNotNull(prop.GetValue(item));
+                    }
 
-                    // Making sure that service and category where correctly put in archive
-                    var category = mockContext.Category.FirstOrDefault(c => c.Id == item.CategoryId).Name;
-                    var service = mockContext.Service.FirstOrDefault(s => s.Id == item.ServiceId).Name;
-
-                    Assert.AreEqual(category, item.Category);
-                    Assert.AreEqual(service, item.Service);
+                    Assert.AreEqual(archivedOrder.Id, item.OrderArchiveId);
                 }
             }
         }

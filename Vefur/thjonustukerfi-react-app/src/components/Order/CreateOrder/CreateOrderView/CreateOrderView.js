@@ -54,8 +54,6 @@ const CreateOrderView = () => {
         history.push(`/order/${orderId}`);
     };
 
-    console.log(orderId);
-
     return (
         <div className="create-order-view">
             <h1>Ný pöntun</h1>
