@@ -17,7 +17,7 @@ const ArchiveOrderMain = () => {
     return (
         <div className="order-archives-main">
             <div className="main-item header">
-                <h1>Eldri pantanir</h1>
+                <h1>Skjalasafn eldri pantanna</h1>
             </div>
             <div className="main-item">
                 <Paper elevation={3} className="order-archives-search-paper">
