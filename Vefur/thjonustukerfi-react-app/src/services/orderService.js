@@ -78,7 +78,7 @@ const checkoutOrderById = (id) => {
 };
 
 const getAllArchivedOrders = () => {
-    return fetch(`${api_endpoint}/api/info/orderarchives`, {
+    return fetch(`${endpoint}/api/info/orderarchives`, {
         method: "GET",
         headers: {
             crossDomain: true,
