@@ -13,32 +13,8 @@ namespace HandtolvuApp.Models
         public string Service { get; set; }
         public string Category { get; set; }
         public string State { get; set; }
-       
-        string barcode;
-        public string Barcode 
-        {
-            get => barcode;
-                    
-            set
-            {
-                barcode = value;
-
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(Barcode));
-            }
-        }
-
-        string json;
-        public string Json 
-        {
-            get => json;
-
-            set
-            {
-                json = value;
-
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(Json));
-            }
-        }
+        public string Barcode { get; set; }
+        public string Json { get; set; }
         public DateTime DateModified { get; set; }
     }
 }

@@ -16,8 +16,8 @@ namespace HandtolvuApp.Data.Implementations
         readonly HttpClient _client;
         public NextStates NextStates { get; private set; }
         public Item Item { get; private set; }
-        private static string BaseURI = "http://10.0.2.2:5000/api/items";
-        private static string InfoURI = "http://10.0.2.2:5000/api/info";
+        private static readonly string BaseURI = "http://10.0.2.2:5000/api/items";
+        private static readonly string InfoURI = "http://10.0.2.2:5000/api/info";
 
         public ItemService()
         {
