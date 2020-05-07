@@ -1,0 +1,78 @@
+.order-archives-item-list.MuiPaper-root {
+    margin: 0 auto;
+    background-color: var(--data-color);
+    border-radius: 10px;
+}
+
+.order-archives-item-list .order-info-row {
+    display: grid;
+    grid-template-columns: 40% 40% 20%;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "category service amount";
+}
+
+.order-archives-item-list .order-info-row td.MuiTableCell-root {
+    padding: 8px 16px 8px 16px;
+}
+
+.order-archives-item-list .MuiTableRow-root.order-info-row.with-border {
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.order-archives-item-list .order-info-row th {
+    font-weight: bold;
+    background-color: rgba(224, 225, 238, 0.829);
+}
+
+.order-archives-item-list .order-info-row .MuiTableCell-root {
+    border-bottom: none;
+}
+
+.order-archives-item-list .order-info-row .order-info-cell-category {
+    grid-area: category;
+    align-self: center;
+}
+
+.order-archives-item-list .order-info-row .order-info-cell-service {
+    grid-area: service;
+    align-self: center;
+}
+
+.order-archives-item-list .order-info-row .order-info-cell-amount {
+    grid-area: amount;
+    align-self: center;
+}
+
+.order-archives-item-list .order-info-row .order-archives-cell-expanded {
+    grid-area: expanded;
+    align-self: center;
+}
+
+.order-archives-item-list .order-info-row .order-archives-cell-info {
+    grid-area: info;
+    align-self: center;
+}
+
+.order-archives-item-list .order-archives-item-list-toolbar.MuiToolbar-root {
+    /* background-color: rgba(197, 198, 211, 0.829); */
+    background-color: rgba(224, 225, 238, 0.829);
+    align-content: center;
+    min-height: 50px;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 16px;
+}
+
+.order-archives-item-list .order-archives-item-list-toolbar.MuiToolbar-root .filter-toggle {
+    margin: 0;
+}
+
+/* 
+.order-archives-item-list
+    .order-archives-item-list-toolbar.MuiToolbar-root
+    .filter-toggle
+    .MuiFormControlLabel-label {
+    font-weight: bold;
+    color: #3f51b5;
+} */
