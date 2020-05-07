@@ -513,10 +513,11 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             foreach (var order in input)
             {
                 var orderToArchive = _mapper.Map<OrderArchive>(order.Order);
-                orderToArchive.Customer = _dbContext.Customer.FirstOrDefault(c => c.Id == order.Order.CustomerId).Name;        // get the customers name
-                orderToArchive.OrderSize = order.Items.Count; // set the size of the order
+                var customer = _dbContext.Customer.FirstOrDefault(c => c.Id == order.Order.CustomerId); // get customer
+                orderToArchive.Customer = customer.Name;                                                // get the customers name
+                orderToArchive.CustomerEmail = customer.Email;                                          // set the size of the order
 
-                order.ArchivedOrder = orderToArchive;   // add to archive in order, this will be used to track the ID of the orders after adding to the database
+                order.ArchivedOrder = orderToArchive;               // add to archive in order, this will be used to track the ID of the orders after adding to the database
                 _dbContext.OrderArchive.Add(order.ArchivedOrder);   // add each order to archive
             }
 
