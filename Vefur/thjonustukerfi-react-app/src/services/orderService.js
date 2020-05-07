@@ -76,6 +76,18 @@ const checkoutOrderById = (id) => {
         .catch((error) => Promise.reject(error));
 };
 
+const getAllArchivedOrders = () => {
+    return fetch("http://localhost:5000/api/info/orderarchives", {
+        method: "GET",
+        headers: {
+            crossDomain: true,
+        },
+    })
+        .then(handleErrors)
+        .then(handleData)
+        .catch((error) => Promise.reject(error));
+};
+
 export default {
     getOrderById,
     createOrder,
@@ -83,4 +95,5 @@ export default {
     deleteOrderById,
     updateOrderById,
     checkoutOrderById,
+    getAllArchivedOrders,
 };
