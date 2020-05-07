@@ -17,14 +17,14 @@ const ArchiveOrderMain = () => {
     return (
         <div className="order-archives-main">
             <div className="main-item header">
-                <h1>Skjalasafn eldri pantanna</h1>
+                <h1>Skjalasafn eldri pantana</h1>
             </div>
             <div className="main-item">
                 <Paper elevation={3} className="order-archives-search-paper">
                     <SearchBar
                         searchTerm={searchTerm}
                         handleChange={handleChange}
-                        placeHolder="Leita eftir nafni viðskiptavins"
+                        placeHolder="Leita eftir nafni viðskiptavinar"
                         htmlId="order-archives-searchbar"
                     />
                 </Paper>
