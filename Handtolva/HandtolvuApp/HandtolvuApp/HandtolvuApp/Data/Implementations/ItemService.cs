@@ -14,10 +14,10 @@ namespace HandtolvuApp.Data.Implementations
     public class ItemService : IItemService
     {
         readonly HttpClient _client;
-
         public NextStates NextStates { get; private set; }
-
         public Item Item { get; private set; }
+        private static string BaseURI = "http://10.0.2.2:5000/api/items";
+        private static string InfoURI = "http://10.0.2.2:5000/api/info";
 
         public ItemService()
         {
@@ -29,7 +29,7 @@ namespace HandtolvuApp.Data.Implementations
             //set Item to null for future use
             Item = null;
             // String for Api call, might want to change this to constant
-            string Uri = "http://10.0.2.2:5000/api/items/search?barcode=" + barcode;
+            string Uri = BaseURI + $"/search?barcode={barcode}";
             try
             {
                 var response = await _client.GetAsync(Uri);
@@ -51,7 +51,7 @@ namespace HandtolvuApp.Data.Implementations
         {
             NextStates = null;
 
-            string Uri = $"http://10.0.2.2:5000/api/items/nextstate?barcode={barcode}";
+            string Uri = BaseURI + $"/nextstate?barcode={barcode}";
 
             try
             {
@@ -61,6 +61,7 @@ namespace HandtolvuApp.Data.Implementations
                 {
                     var content = await response.Content.ReadAsStringAsync();
                     NextStates = JsonConvert.DeserializeObject<NextStates>(content);
+                    NextStates.NextAvailableStates.Reverse();
                 }
             }
             catch(Exception ex)
@@ -73,7 +74,7 @@ namespace HandtolvuApp.Data.Implementations
 
         public async Task<bool> StateChangeWithId(long id, string barcode)
         {
-            string stateUri = "http://10.0.2.2:5000/api/items/scanner/statechangebyid";
+            string stateUri = BaseURI + "/scanner/statechangebyid";
             var item = new[] { new { itemId = id, stateChangeBarcode = barcode } };
 
             try
@@ -102,7 +103,7 @@ namespace HandtolvuApp.Data.Implementations
 
         public async Task<List<LocationStateChange>> StateChangeByLocation(ObservableCollection<string> items, string barcode)
         {
-            string stateUri = "http://10.0.2.2:5000/api/items/scanner/statechangebybarcode";
+            string stateUri = BaseURI + "/scanner/statechangebybarcode";
             List<LocationStateChange> ret = new List<LocationStateChange>();
             var item = new List<LocationStateChange>();
             foreach(string i in items)
@@ -139,7 +140,7 @@ namespace HandtolvuApp.Data.Implementations
 
         public async Task<List<string>> GetAllLocations()
         {
-            string reqUri = "http://10.0.2.2:5000/api/info/itemlocations";
+            string reqUri = InfoURI + "/itemlocations";
             List<string> ret = new List<string>();
 
             try
@@ -162,7 +163,7 @@ namespace HandtolvuApp.Data.Implementations
 
         public async Task<List<State>> GetAllStates()
         {
-            string reqUri = "http://10.0.2.2:5000/api/info/states";
+            string reqUri = InfoURI + "/states";
             List<State> ret = new List<State>();
 
             try

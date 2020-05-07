@@ -46,6 +46,18 @@ namespace HandtolvuApp.ViewModels
             });
         }
 
+        string input;
+
+        public string Input
+        {
+            get => input;
+            set
+            {
+                input = value;
+                NotifyPropertyChanged(nameof(Input));
+            }
+        }
+
         public Command FindOrderCommand { get; }
 
     }

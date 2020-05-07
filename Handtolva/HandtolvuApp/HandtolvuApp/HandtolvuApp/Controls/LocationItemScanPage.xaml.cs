@@ -16,6 +16,12 @@ namespace HandtolvuApp.Controls
         public LocationItemScanPage()
         {
             InitializeComponent();
+            this.MyEditor.ReturnCommand = new Command(() =>
+            {
+                var vm = BindingContext as LocationItemScanViewModel;
+                vm.AddCommand.Execute(null);
+                MyEditor.Focus();
+            });
         }
 
         protected override void OnAppearing()
@@ -47,6 +53,12 @@ namespace HandtolvuApp.Controls
             var selected = button.BindingContext as string;
             var vm = BindingContext as LocationItemScanViewModel;
             vm.RemoveCommand.Execute(selected);
+        }
+
+        protected override void OnBindingContextChanged()
+        {
+            MyEditor.Focus();
+            base.OnBindingContextChanged();
         }
     }
 }

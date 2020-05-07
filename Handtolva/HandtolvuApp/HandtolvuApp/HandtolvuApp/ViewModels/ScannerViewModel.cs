@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Xamarin.Forms;
 
 namespace HandtolvuApp.ViewModels
 {
@@ -34,30 +35,9 @@ namespace HandtolvuApp.ViewModels
             }
         }
 
-        public IScannerService _scannerService;
-
         public ScannerViewModel()
         {
-            if(App.Scanner != null)
-            {
-                _scannerService = App.Scanner;
-                _scannerService.OnBarcodeScanned += _scannerService_OnBarcodeScanned;
-            }
-        }
-
-        void _scannerService_OnBarcodeScanned(object sender, Models.OnBarcodeScannedEventArgs e)
-        {
-            var scannedBarcode = e?.Barcodes?.FirstOrDefault();
-            if(scannedBarcode == null)
-            {
-                ScannedBarcodeText = "Invalid barcode";
-                return;
-            }
-
-            var barcodeScanned = scannedBarcode.Barcode;
-            var symbology = scannedBarcode.Symbology;
-
-            ScannedBarcodeText = barcodeScanned;
+            
         }
     }
 }

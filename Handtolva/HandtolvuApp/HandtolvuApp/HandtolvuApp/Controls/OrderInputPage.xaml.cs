@@ -27,12 +27,20 @@ namespace HandtolvuApp.Controls
                 await App.Current.MainPage.DisplayAlert("Villa", $"Pöntunarnúmer {message} er ekki til", "Ok");
             });
 
+            MessagingCenter.Subscribe<ScannerViewModel>(this, "BarcodeScanned", async (sender) =>
+            {
+                await App.Current.MainPage.DisplayAlert("Scanned", "Successful scan", "Ok");
+                var vm = BindingContext as OrderInputViewModel;
+                vm.FindOrderCommand.Execute(null);
+            });
+
             base.OnAppearing();
         }
 
         protected override void OnDisappearing()
         {
             MessagingCenter.Unsubscribe<OrderInputViewModel, string>(this, "NoOrder");
+            MessagingCenter.Unsubscribe<ScannerViewModel>(this, "BarcodeScanned");
             base.OnDisappearing();
         }
     }

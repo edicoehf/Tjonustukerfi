@@ -1,4 +1,5 @@
-﻿using HandtolvuApp.Models;
+﻿using HandtolvuApp.Data.Interfaces;
+using HandtolvuApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,8 +23,7 @@ namespace HandtolvuApp.ViewModels
 
             AddCommand = new Command( () =>
             {
-                AllItems.Insert(0, ScannedBarcodeText);
-                ScannedBarcodeText = "";
+                AddToList();
             });
 
             RemoveCommand = new Command<string>((item) =>
@@ -86,5 +86,11 @@ namespace HandtolvuApp.ViewModels
         public Command SendCommand { get; }
 
         public ObservableCollection<string> AllItems { get; set; }
+
+        public void AddToList()
+        {
+            AllItems.Insert(0, ScannedBarcodeText);
+            ScannedBarcodeText = "";
+        }
     }
 }

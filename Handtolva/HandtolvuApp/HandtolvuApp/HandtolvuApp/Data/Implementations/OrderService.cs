@@ -14,7 +14,7 @@ namespace HandtolvuApp.Data.Implementations
     public class OrderService : IOrderService
     {
         readonly HttpClient _client;
-
+        private static string BaseURI = "http://10.0.2.2:5000/api/orders";
         public Order Order { get; private set; }
 
         public OrderService()
@@ -26,7 +26,7 @@ namespace HandtolvuApp.Data.Implementations
         {
             Order = null;
 
-            string Uri = "http://10.0.2.2:5000/api/orders/search?barcode=" + barcode;
+            string Uri = BaseURI + $"/search?barcode={barcode}";
             try
             {
                 var response = await _client.GetAsync(Uri);
@@ -47,11 +47,10 @@ namespace HandtolvuApp.Data.Implementations
         public async Task<bool> CheckoutOrder(long id)
         {
             // uri to set order to completed state
-            string checkoutUri = "http://10.0.2.2:5000/api/orders/";
             try
             {
                 var method = new HttpMethod("PATCH");
-                checkoutUri = checkoutUri + id + "/complete";
+                string checkoutUri = BaseURI + $"{id}/complete";
 
                 var request = new HttpRequestMessage(method, checkoutUri);
                 var response = await _client.SendAsync(request);

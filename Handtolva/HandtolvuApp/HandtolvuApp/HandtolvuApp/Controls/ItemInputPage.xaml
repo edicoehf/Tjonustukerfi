@@ -40,7 +40,7 @@
 
         <Button Grid.Column="3" Text="Ok"
                 Grid.Row="2"
-                Margin="0, 5, 10, 5"
+                Margin="0, 5, 10, 5" CornerRadius="10"
                 BackgroundColor="Green" TextColor="White"
                 Command="{Binding ClickCommand}"/>
     </Grid>
