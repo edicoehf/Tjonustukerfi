@@ -1,34 +1,34 @@
 import React from "react";
-import useGetAllOrders from "../../../hooks/useGetAllOrders";
-import OrderList from "../OrderList/OrderList";
-import "./OrderMain.css";
-import { ordersType, isLoadingType } from "../../../types";
 import { Paper } from "@material-ui/core";
-import SearchBar from "../../SearchBar/SearchBar";
-import useSearchBar from "../../../hooks/useSearchBar";
+import useGetAllArchivedOrders from "../../../../hooks/useGetAllArchivedOrders";
+import useSearchBar from "../../../../hooks/useSearchBar";
+import SearchBar from "../../../SearchBar/SearchBar";
+import ArchiveOrderList from "../ArchiveOrderList/ArchiveOrderList";
+import { ordersType, isLoadingType } from "../../../../types";
+import "./ArchiveOrderMain.css";
 
-const OrderMain = () => {
-    const { orders, error, isLoading } = useGetAllOrders();
+const ArchiveOrderMain = () => {
+    const { orders, error, isLoading } = useGetAllArchivedOrders();
     const { searchResults, handleChange, searchTerm } = useSearchBar(
         orders,
         "customer"
     );
 
     return (
-        <div className="order-main">
+        <div className="order-archives-main">
             <div className="main-item header">
-                <h1>Pantanir</h1>
+                <h1>Skjalasafn eldri pantana</h1>
             </div>
             <div className="main-item">
-                <Paper elevation={3} className="order-search-paper">
+                <Paper elevation={3} className="order-archives-search-paper">
                     <SearchBar
                         searchTerm={searchTerm}
                         handleChange={handleChange}
                         placeHolder="Leita eftir nafni viðskiptavinar"
-                        htmlId="order-searchbar"
+                        htmlId="order-archives-searchbar"
                     />
                 </Paper>
-                <OrderList
+                <ArchiveOrderList
                     orders={searchResults}
                     error={error}
                     isLoading={isLoading}
@@ -38,9 +38,9 @@ const OrderMain = () => {
     );
 };
 
-OrderMain.propTypes = {
+ArchiveOrderMain.propTypes = {
     orders: ordersType,
     isLoading: isLoadingType,
 };
 
-export default OrderMain;
+export default ArchiveOrderMain;

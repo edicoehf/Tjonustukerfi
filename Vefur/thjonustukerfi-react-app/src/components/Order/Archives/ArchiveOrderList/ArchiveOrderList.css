@@ -1,0 +1,109 @@
+.order-archives-list.MuiPaper-root {
+    width: 40em;
+    margin: 0 auto;
+    background-color: var(--data-color);
+    border-radius: 10px;
+}
+
+.order-archives-list .order-row {
+    display: grid;
+    grid-template-columns: 50% 20% 20% 10%;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "customer created completed expanded"
+        "info info info info"
+    ;
+}
+
+.order-archives-list .order-row td.MuiTableCell-root {
+    padding: 8px 16px 8px 16px;
+}
+
+.order-archives-list .MuiTableRow-root.order-row-body:hover {
+    background-color: #9ba7f762;
+    cursor: pointer;
+}
+
+.order-archives-list .MuiTableRow-root.order-row.selected {
+    background-color: #9ba7f762;
+}
+
+.order-archives-list .MuiTableRow-root.order-row svg {
+    transform: rotate(0deg);
+    transition: transform 0.3s linear;
+}
+
+.order-archives-list .MuiTableRow-root.order-row.selected svg {
+    transform: rotate(180deg);
+    transition: transform 0.3s linear;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(180deg);
+    }
+}
+
+.order-archives-list .MuiTableRow-root.order-row-body.with-border {
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.order-archives-list .order-row.header-row {
+    background-color: rgba(224, 225, 238, 0.829);
+}
+
+.order-archives-list .order-row.header-row th {
+
+    font-weight: bold;
+}
+
+.order-archives-list .order-row .MuiTableCell-root {
+    border-bottom: none;
+}
+
+.order-archives-list .order-row .order-archives-cell-customer {
+    grid-area: customer;
+    align-self: center;
+}
+
+.order-archives-list .order-row .order-archives-cell-created {
+    grid-area: created;
+    align-self: center;
+}
+
+.order-archives-list .order-row .order-archives-cell-completed {
+    grid-area: completed;
+    align-self: center;
+}
+
+.order-archives-list .order-row .order-archives-cell-info {
+    grid-area: info;
+    align-self: center;
+}
+
+.order-archives-list .order-archives-list-toolbar.MuiToolbar-root {
+    /* background-color: rgba(197, 198, 211, 0.829); */
+    background-color: rgba(224, 225, 238, 0.829);
+    align-content: center;
+    min-height: 50px;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 16px;
+}
+
+.order-archives-list .order-archives-list-toolbar.MuiToolbar-root .filter-toggle {
+    margin: 0;
+}
+
+/* 
+.order-archives-list
+    .order-archives-list-toolbar.MuiToolbar-root
+    .filter-toggle
+    .MuiFormControlLabel-label {
+    font-weight: bold;
+    color: #3f51b5;
+} */
