@@ -1,12 +1,7 @@
 .create-customer h1 {
     text-align: center;
+    margin-top: 1em;
     margin-bottom: 1em;
-}
-
-
-
-.create-customer {
-    margin-top: 4em;
 }
 
 .create-customer .error {

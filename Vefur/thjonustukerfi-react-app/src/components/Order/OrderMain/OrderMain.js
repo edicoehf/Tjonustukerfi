@@ -25,7 +25,7 @@ const OrderMain = () => {
                         searchTerm={searchTerm}
                         handleChange={handleChange}
                         placeHolder="Leita eftir nafni viðskiptavins"
-                        htmlId="customer-searchbar"
+                        htmlId="order-searchbar"
                     />
                 </Paper>
                 <OrderList
