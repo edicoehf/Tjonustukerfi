@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace ThjonustukerfiWebAPI.Configurations
+namespace ThjonustukerfiWebAPI.Setup
 {
     public static class BarcodeImageDimensions
     {
@@ -14,5 +14,7 @@ namespace ThjonustukerfiWebAPI.Configurations
         public static bool sendEmail { get; set; }
         public static bool sendSMS { get; set; }
         public static List<string> Locations { get; set; }
+        public static string CompanyEmail { get; set; }
+        public static string CompanyName { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import customerService from "../services/customerService";
 
-const useUpdateCustomer = () => {
+const useUpdateCustomer = (cb) => {
     const [updateError, setError] = React.useState(null);
     const [isProcessing, setProcessing] = React.useState(false);
     const [values, setValues] = React.useState(null);
@@ -13,6 +13,9 @@ const useUpdateCustomer = () => {
                 .updateCustomer(values)
                 .then(() => {
                     setError(null);
+                    if (cb) {
+                        cb();
+                    }
                 })
                 .catch((error) => setError(error))
                 .finally(() => {
@@ -20,7 +23,7 @@ const useUpdateCustomer = () => {
                     setProcessing(false);
                 });
         }
-    }, [isProcessing, values]);
+    }, [isProcessing, values, cb]);
 
     const handleUpdate = (values) => {
         if (!isProcessing) {

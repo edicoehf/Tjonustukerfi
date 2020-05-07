@@ -1,60 +1,110 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using RestSharp;
-using RestSharp.Authenticators;
+using System.Drawing;
+using BarcodeLib;
+using MailKit.Net.Smtp;
+using MimeKit;
+using ThjonustukerfiWebAPI.Config.EnvironmentVariables;
 using ThjonustukerfiWebAPI.Models.DTOs;
+using ThjonustukerfiWebAPI.Models.Exceptions;
+using ThjonustukerfiWebAPI.Setup;
 
 namespace ThjonustukerfiWebAPI.Services.Implementations
 {
     public static class MailService
     {
+        /// <summary>Creates a html message to send as an email</summary>
         public static void SendOrderNotification(OrderDTO order, CustomerDetailsDTO customer, double weeksSinceReady)
         {
             var emailAddress = customer.Email;
-            var subject = "Reykofninn - Áminning fyrir tilbúna pöntun";
-            var body = $"Góðan daginn {order.Customer}\n";
-            body += $"Þetta er áminning um að þú eigir ósótta pöntun (nr. {order.Id}) sem kláraðist fyrir {weeksSinceReady} vikum.\nPöntun:\n";
+            var subject = $"{Constants.CompanyName} - Áminning um tilbúna pöntun";
+            var body = new BodyBuilder();
+            body.HtmlBody = $"<h2>Góðan daginn {order.Customer}.</h2>";
+            body.HtmlBody += $"<p>Þú átt ósótta pöntun hjá okkur (nr. {order.Id}) sem kláraðist fyrir {weeksSinceReady} vikum.<br>Pöntun:</p>";
+            
+            body.HtmlBody += "<ul>";
             foreach (var item in order.Items)
             {
-                body += $"\t\u2022 {item.Category} - {item.Service} - staða: {item.State}\n";
+                body.HtmlBody += $"<li> {item.Category} - {item.Service} - staða: {item.State}</li>";
             }
+            body.HtmlBody += "</ul><br>";
 
-            body += "\nKær kveðja Reykofninn";
+            // encode to image
+            var bCode = new Barcode(); // get barcode lib class
+            bCode.Encode(BarcodeLib.TYPE.CODE128, order.Barcode, Color.Black, Color.White, BarcodeImageDimensions.Width, BarcodeImageDimensions.Height);
+
+            var image = body.LinkedResources.Add("Barcode", bCode.Encoded_Image_Bytes);
+            image.ContentId = MimeKit.Utils.MimeUtils.GenerateMessageId();
+            body.HtmlBody += string.Format(@"<h3>Strikamerki:</h3> <img src=""cid:{0}"">", image.ContentId);
+
+            body.HtmlBody += $"<p>Kær kveðja {Constants.CompanyName}</p>";
 
             MailService.Sendmail(emailAddress, subject, body);
         }
 
+        /// <summary>Creates a html message to send as an email</summary>
         public static void sendOrderComplete(OrderDTO order, CustomerDetailsDTO customer)
         {
             var emailAddress = customer.Email;
-            var subject = "Reykofninn - pöntunin þín er klár.";
-            var body = $"Góðan daginn {order.Customer}\n";
-            // hérna kannski bæta við mynd af barkóða til að skanna, annars er order id númer pöntunarinnar sem viðskiptavinur gæti sagt við starfsmann
-            body += $"Pöntunin þín (nr. {order.Id}) er tilbúin til afhendingar.\nPöntun:\n";
+            var subject = $"{Constants.CompanyName} - pöntunin þín er klár.";
+            var body = new BodyBuilder();
+            body.HtmlBody = $"<h2>Góðan daginn {order.Customer}.</h2>";
+
+            body.HtmlBody += $"<p>Pöntunin þín (nr. {order.Id}) er tilbúin til afhendingar.<br>Pöntun:</p>";
+            body.HtmlBody += "<ul>";
             foreach (var item in order.Items)
             {
-                body += $"\t\u2022 {item.Category} - {item.Service} - staða: {item.State}\n";
+                body.HtmlBody += $"<li>{item.Category} - {item.Service} - staða: {item.State}</li>";
             }
+            body.HtmlBody += "</ul><br>";
 
-            body += "Kær kveðja Reykofninn";
-            
+            // encode to image
+            var bCode = new Barcode(); // get barcode lib class
+            bCode.Encode(BarcodeLib.TYPE.CODE128, order.Barcode, Color.Black, Color.White, BarcodeImageDimensions.Width, BarcodeImageDimensions.Height);
+
+            // Send image as attachment and embed it to the message
+            var image = body.LinkedResources.Add("Barcode", bCode.Encoded_Image_Bytes);
+            image.ContentId = MimeKit.Utils.MimeUtils.GenerateMessageId();
+            body.HtmlBody += string.Format(@"<h3>Strikamerki:</h3> <img src=""cid:{0}"">", image.ContentId);
+
+            body.HtmlBody += $"<p>Kær kveðja {Constants.CompanyName}</p>";
+
             MailService.Sendmail(emailAddress, subject, body);
         }
-        private static IRestResponse Sendmail (string emailAddress, string subject, string body)
+
+        /// <summary>Sends an email message via SMTP server with credentials from the environment variable file.</summary>
+        private static void Sendmail (string emailAddress, string subject, BodyBuilder bodyBuilder)
         {
-            RestClient client = new RestClient ();
-            client.BaseUrl = new Uri ("https://api.mailgun.net/v3/sandboxfd3dcd967775490d82138a8f336fb6b2.mailgun.org/messages");
-            client.Authenticator = new HttpBasicAuthenticator ("api", "97ee06aae75d080a18d280122fcadc89-816b23ef-ebe3f667");
+            var env = EnvironmentFileManager.LoadEvironmentFile();      // load env variables
+            string smtpUsername, smtpPassword, smtpServer, smtpPort;    // variables needed to connect and send
+            env.TryGetValue("SMTP_USERNAME", out smtpUsername);         // get username
+            env.TryGetValue("SMTP_PASSWORD", out smtpPassword);         // get password
+            env.TryGetValue("SMTP_SERVER", out smtpServer);             // get server address
+            env.TryGetValue("SMTP_PORT", out smtpPort);                 // get server port
+            
+            // if environmental variables are not set correctly throw exception
+            if(smtpUsername == null || smtpPassword == null || smtpServer == null || smtpPort == null)
+            {
+                throw new EmailException($"Could not send email. Could not find url or authentication key for the email request.");
+            }
 
-            RestRequest request = new RestRequest ();
-            request.AddParameter ("from", "Mailgun Sandbox <postmaster@sandboxfd3dcd967775490d82138a8f336fb6b2.mailgun.org>");
-            request.AddParameter ("to", emailAddress);
-            request.AddParameter ("subject", subject);
-            request.AddParameter ("text", body);
-            request.Method = Method.POST;
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress(Constants.CompanyName, Constants.CompanyEmail));    // Add company email info
+            message.To.Add(new MailboxAddress(emailAddress));                                       // Add customer email
+            message.Subject = subject;                                                              // Add email subject
+            message.Body = bodyBuilder.ToMessageBody();                                             // Constructs the message
 
-            return client.Execute (request);
+            using (var client = new SmtpClient())   // Mailkit SmtpClient
+            {
+                // connect  Note:   mailkit has a connect function with the 3rd parameter as useSSL that you can set to false. This is
+                //                  not enough when connecting to some servers, this method will make sure their is no secure socket connection (if needed)
+                client.Connect(smtpServer, int.Parse(smtpPort), MailKit.Security.SecureSocketOptions.None);
+
+                // authenticate
+                client.Authenticate(smtpUsername, smtpPassword);
+
+                // send and disconnect
+                client.Send(message);
+                client.Disconnect(true);
+            }
         }
     }
 }

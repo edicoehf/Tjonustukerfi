@@ -26,6 +26,10 @@
     align-self: center;
 }
 
+.customer-main .customer-list-view {
+    align-self: center;
+}
+
 .customer-main .no-customers {
     margin-top: 2em;
 }

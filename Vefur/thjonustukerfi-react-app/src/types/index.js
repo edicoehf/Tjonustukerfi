@@ -98,3 +98,4 @@ export const descriptionType = string;
 export const confirmTextType = string;
 export const declineTextType = string;
 export const titleType = string;
+export const nameType = string;

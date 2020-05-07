@@ -2,12 +2,13 @@ import React from "react";
 import customerService from "../services/customerService";
 import useGetAllOrders from "./useGetAllOrders";
 
-const useDeleteCustomerById = (id) => {
+const useDeleteCustomerById = (id, cb) => {
     const [error, setError] = React.useState(null);
     const [isProcessing, setProcessing] = React.useState(false);
     const [isDeleting, setDeleting] = React.useState(false);
     const [isForceDeleting, setIsForceDeleting] = React.useState(false);
-    const [modalIsOpen, setModalIsOpen] = React.useState(false);
+    const [forceModalOpen, setForceModalOpen] = React.useState(false);
+    const [softModalOpen, setSoftModalOpen] = React.useState(false);
     const { orders } = useGetAllOrders();
 
     React.useEffect(() => {
@@ -17,6 +18,9 @@ const useDeleteCustomerById = (id) => {
                 .deleteCustomerById(id)
                 .then(() => {
                     setError(null);
+                    if (cb !== undefined) {
+                        cb();
+                    }
                 })
                 .catch((error) => setError(error))
                 .finally(() => {
@@ -30,6 +34,9 @@ const useDeleteCustomerById = (id) => {
                 .forceDeleteCustomerById(id)
                 .then(() => {
                     setError(null);
+                    if (cb !== undefined) {
+                        cb();
+                    }
                 })
                 .catch((error) => setError(error))
                 .finally(() => {
@@ -37,39 +44,43 @@ const useDeleteCustomerById = (id) => {
                     setProcessing(false);
                 });
         }
-    }, [id, isDeleting, isProcessing, isForceDeleting]);
+    }, [id, isDeleting, isProcessing, isForceDeleting, cb]);
 
     const handleDelete = () => {
-        var hasOrders = false;
         if (!error) {
-            orders.forEach((order) => {
-                if (order.customerId === Number(id)) {
-                    setModalIsOpen(true);
-                    hasOrders = true;
-                }
-            });
-            if (!hasOrders) {
-                setDeleting(true);
+            if (orders.some((order) => order.customerId === Number(id))) {
+                setForceModalOpen(true);
+            } else {
+                setSoftModalOpen(true);
             }
         }
     };
 
     const handleForceDelete = () => {
+        setForceModalOpen(false);
         setIsForceDeleting(true);
-        setModalIsOpen(false);
+    };
+
+    const handleSoftDelete = () => {
+        setSoftModalOpen(false);
+        setDeleting(true);
     };
 
     const handleClose = () => {
-        setModalIsOpen(false);
+        setSoftModalOpen(false);
+        setForceModalOpen(false);
     };
 
     return {
         error,
         handleDelete,
         isDeleting,
-        modalIsOpen,
+        forceModalOpen,
+        softModalOpen,
         handleClose,
         handleForceDelete,
+        handleSoftDelete,
+        isForceDeleting,
     };
 };
 

@@ -10,6 +10,7 @@ namespace ThjonustukerfiWebAPI.Models.DTOs
         public string Phone { get; set; }
         public string Address { get; set; }
         public string PostalCode { get; set; }
+        public bool HasActiveOrder { get; set; }
         public string JSON { get; set; }
     }
 }

@@ -6,7 +6,9 @@ using ThjonustukerfiWebAPI.Services.Interfaces;
 
 namespace ThjonustukerfiWebAPI.Controllers
 {
-    /// <summary>Provides an Endpoint for all Customer actions</summary>
+    /// <summary>
+    ///     Provides endpoints for all Customer actions.
+    /// </summary>
     [Route("api/customers")]
     [ApiController]
     public class CustomerController : ControllerBase

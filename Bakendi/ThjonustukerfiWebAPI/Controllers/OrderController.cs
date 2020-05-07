@@ -5,7 +5,9 @@ using ThjonustukerfiWebAPI.Services.Interfaces;
 
 namespace ThjonustukerfiWebAPI.Controllers
 {
-    /// <summary>Provides an Endpoint for orders</summary>
+    /// <summary>
+    ///     Provides endpoints for all Order actions.
+    /// </summary>
     [Route("api/orders")]
     [ApiController]
     public class OrderController : ControllerBase

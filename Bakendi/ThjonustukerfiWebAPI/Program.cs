@@ -10,7 +10,8 @@ namespace ThjonustukerfiWebAPI
         {
             CreateHostBuilder(args)
                 .Build()
-                .FillTables()   // custom function
+                .Setup("Reykofninn")    // custom function, send in the name of the company, must be the same as the 
+                                        // name of the config file (Minus Config), e.g. "Reykofninn" where filename is "ReykofninnConfig.json"
                 .Run();
         }
 

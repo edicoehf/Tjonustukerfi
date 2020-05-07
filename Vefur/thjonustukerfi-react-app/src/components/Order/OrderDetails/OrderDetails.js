@@ -14,23 +14,29 @@ import {
     TableCell,
     TableBody,
 } from "@material-ui/core";
+import ProgressComponent from "../../Feedback/ProgressComponent/ProgressComponent";
 
 const OrderDetails = ({ id, update, receivedUpdate }) => {
-    const { order, error, fetchOrder } = useGetOrderById(id);
+    const { order, error, fetchOrder, isLoading } = useGetOrderById(id);
 
-    if (update && receivedUpdate) {
-        receivedUpdate();
-        fetchOrder();
-    }
+    React.useEffect(() => {
+        if (update && receivedUpdate) {
+            receivedUpdate();
+            fetchOrder();
+        }
+    }, [update, receivedUpdate, fetchOrder]);
 
     // Icelandic human readable format, e.g. 4. sep, 2020 08:
     const dateFormat = (date) => {
         moment.locale("is");
         return moment(date).format("LLL");
     };
+
     return (
         <div className="order-details">
-            {!error ? (
+            {isLoading ? (
+                <ProgressComponent isLoading={isLoading} />
+            ) : !error ? (
                 <TableContainer component={Paper} elevation={3}>
                     <h3 className="order-title">Pöntun {order.id}</h3>
                     <Table className="order-info">
@@ -68,7 +74,7 @@ const OrderDetails = ({ id, update, receivedUpdate }) => {
                     <OrderItemList items={order.items} />
                 </TableContainer>
             ) : (
-                <p className="error">Villa kom upp: Gat ekki sótt pöntun</p>
+                <p className="error">Gat ekki sótt pöntun</p>
             )}
         </div>
     );

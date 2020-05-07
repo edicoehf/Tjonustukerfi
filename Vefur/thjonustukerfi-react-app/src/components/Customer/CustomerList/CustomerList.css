@@ -11,3 +11,7 @@
 .customer-list .list-of-customers .customer-list-item {
     padding-left: 48px;
 }
+
+.customer-list-view .progress-component {
+    margin-top: 0.5em;
+}

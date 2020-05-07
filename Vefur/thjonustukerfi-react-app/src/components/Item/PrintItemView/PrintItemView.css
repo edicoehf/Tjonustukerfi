@@ -1,0 +1,22 @@
+.upper-line {
+    display: grid;
+    grid-template-columns: 25% 25% 50%;
+    justify-items: center;
+    padding: 0.5em;
+    border-bottom: 1px solid rgb(224, 224, 224);
+}
+.lower-line {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    padding: 1em;
+}
+.left-line {
+    display: grid;
+    grid-template-rows: 20% 20% 20% 20% 20%;
+    align-items: center;
+}
+.right-line {
+    display: grid;
+    grid-template-rows: 50% 50%;
+    justify-items: center;
+}

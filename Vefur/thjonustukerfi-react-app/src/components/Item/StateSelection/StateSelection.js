@@ -18,13 +18,20 @@ import useGetNextStatesById from "../../../hooks/useGetNextStatesById";
 import useGetItemLocations from "../../../hooks/useGetItemLocations";
 import useUpdateItemState from "../../../hooks/useUpdateItemState";
 import "./StateSelection.css";
+import ProgressComponent from "../../Feedback/ProgressComponent/ProgressComponent";
 
-const StateSelection = ({ id, hasUpdated }) => {
-    const { states, error, fetchNextStates } = useGetNextStatesById(id);
+const StateSelection = ({ id, hasUpdated, componentLoading }) => {
+    const {
+        states,
+        error,
+        fetchNextStates,
+        isLoading: statesLoading,
+    } = useGetNextStatesById(id);
     const {
         itemLocations,
         error: locationsError,
         fetchItemLocations,
+        isLoading: locationsLoading,
     } = useGetItemLocations();
     const [location, setLocation] = React.useState("");
     const [state, setState] = React.useState(null);
@@ -74,7 +81,10 @@ const StateSelection = ({ id, hasUpdated }) => {
                 states.nextAvailableStates.sort((a, b) => a.id - b.id)
             );
         }
-    }, [states]);
+        if (componentLoading !== undefined) {
+            componentLoading(statesLoading || locationsLoading);
+        }
+    }, [states, componentLoading, statesLoading, locationsLoading]);
 
     const [openSelection, setOpenSelection] = React.useState(false);
 
@@ -102,132 +112,145 @@ const StateSelection = ({ id, hasUpdated }) => {
 
     return (
         <div className="state-selection">
-            {!error && !locationsError ? (
+            {statesLoading || locationsLoading ? (
+                <ProgressComponent isLoading={componentLoading === undefined} />
+            ) : (
                 <>
-                    {nextStates.length > 0 && (
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleOpen}
-                            disabled={nextStates.length === 0}
-                            className="state-btn"
-                        >
-                            Færa í næstu stöðu
-                        </Button>
-                    )}
-                    <Dialog
-                        onClose={handleClose}
-                        open={openSelection}
-                        className="state-selection-modal"
-                    >
-                        <MobileStepper
-                            variant="dots"
-                            steps={3}
-                            position="static"
-                            activeStep={activeStep}
-                        />
-                        {activeStep === 0 && (
-                            <>
-                                <DialogTitle id="state-dialog-title">
-                                    Veldu næstu stöðu
-                                </DialogTitle>
-                                <DialogContent>
-                                    <List className="selection-list">
-                                        {nextStates.map((state) => (
-                                            <ListItem
-                                                button
-                                                onClick={() =>
-                                                    handleStateSelection(state)
-                                                }
-                                                key={state.id}
-                                            >
-                                                <ListItemAvatar>
-                                                    <Avatar>
-                                                        <LinearScaleIcon />
-                                                    </Avatar>
-                                                </ListItemAvatar>
-                                                <ListItemText
-                                                    primary={state.name}
-                                                />
-                                            </ListItem>
-                                        ))}
-                                    </List>
-                                </DialogContent>
-                            </>
-                        )}
-                        {activeStep === 1 && (
-                            <>
-                                <DialogTitle id="state-dialog-title">
-                                    Veldu staðsetningu
-                                </DialogTitle>
-                                <DialogContent>
-                                    <List className="selection-list">
-                                        {itemLocations.map((location) => (
-                                            <ListItem
-                                                button
-                                                key={location}
-                                                onClick={() =>
-                                                    handleLocationSelection(
-                                                        location
+                    {!error && !locationsError ? (
+                        <>
+                            {nextStates.length > 0 && (
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={handleOpen}
+                                    disabled={nextStates.length === 0}
+                                    className="state-btn"
+                                >
+                                    Færa í næstu stöðu
+                                </Button>
+                            )}
+                            <Dialog
+                                onClose={handleClose}
+                                open={openSelection}
+                                className="state-selection-modal"
+                            >
+                                <MobileStepper
+                                    variant="dots"
+                                    steps={3}
+                                    position="static"
+                                    activeStep={activeStep}
+                                />
+                                {activeStep === 0 && (
+                                    <>
+                                        <DialogTitle id="state-dialog-title">
+                                            Veldu næstu stöðu
+                                        </DialogTitle>
+                                        <DialogContent>
+                                            <List className="selection-list">
+                                                {nextStates.map((state) => (
+                                                    <ListItem
+                                                        button
+                                                        onClick={() =>
+                                                            handleStateSelection(
+                                                                state
+                                                            )
+                                                        }
+                                                        key={state.id}
+                                                    >
+                                                        <ListItemAvatar>
+                                                            <Avatar>
+                                                                <LinearScaleIcon />
+                                                            </Avatar>
+                                                        </ListItemAvatar>
+                                                        <ListItemText
+                                                            primary={state.name}
+                                                        />
+                                                    </ListItem>
+                                                ))}
+                                            </List>
+                                        </DialogContent>
+                                    </>
+                                )}
+                                {activeStep === 1 && (
+                                    <>
+                                        <DialogTitle id="state-dialog-title">
+                                            Veldu staðsetningu
+                                        </DialogTitle>
+                                        <DialogContent>
+                                            <List className="selection-list">
+                                                {itemLocations.map(
+                                                    (location) => (
+                                                        <ListItem
+                                                            button
+                                                            key={location}
+                                                            onClick={() =>
+                                                                handleLocationSelection(
+                                                                    location
+                                                                )
+                                                            }
+                                                        >
+                                                            <ListItemAvatar>
+                                                                <Avatar>
+                                                                    <LinearScaleIcon />
+                                                                </Avatar>
+                                                            </ListItemAvatar>
+                                                            <ListItemText
+                                                                primary={
+                                                                    location
+                                                                }
+                                                            />
+                                                        </ListItem>
                                                     )
-                                                }
+                                                )}
+                                            </List>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button
+                                                color="primary"
+                                                onClick={handleBack}
                                             >
-                                                <ListItemAvatar>
-                                                    <Avatar>
-                                                        <LinearScaleIcon />
-                                                    </Avatar>
-                                                </ListItemAvatar>
-                                                <ListItemText
-                                                    primary={location}
-                                                />
-                                            </ListItem>
-                                        ))}
-                                    </List>
-                                </DialogContent>
-                                <DialogActions>
-                                    <Button
-                                        color="primary"
-                                        onClick={handleBack}
-                                    >
-                                        Til baka
-                                    </Button>
-                                </DialogActions>
-                            </>
-                        )}
-                        {activeStep === 2 && (
-                            <>
-                                <DialogTitle id="state-dialog-title">
-                                    Staðfestu nýja stöðu
-                                </DialogTitle>
-                                <DialogContent>
-                                    <DialogContentText className="selection-list">
-                                        {stateName}
-                                        {location !== "" && `, ${location}`}
-                                    </DialogContentText>
-                                </DialogContent>
-                                <DialogActions>
-                                    <Button
-                                        color="primary"
-                                        onClick={handleBack}
-                                    >
-                                        Til baka
-                                    </Button>
-                                    <Button
-                                        color="primary"
-                                        onClick={handleSelection}
-                                    >
-                                        Staðfesta
-                                    </Button>
-                                </DialogActions>
-                            </>
-                        )}
-                    </Dialog>
-                    {updateError && (
-                        <p className="error">Gat ekki uppfært stöðu</p>
+                                                Til baka
+                                            </Button>
+                                        </DialogActions>
+                                    </>
+                                )}
+                                {activeStep === 2 && (
+                                    <>
+                                        <DialogTitle id="state-dialog-title">
+                                            Staðfestu nýja stöðu
+                                        </DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText className="selection-list">
+                                                {stateName}
+                                                {location !== "" &&
+                                                    `, ${location}`}
+                                            </DialogContentText>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button
+                                                color="primary"
+                                                onClick={handleBack}
+                                            >
+                                                Til baka
+                                            </Button>
+                                            <Button
+                                                color="primary"
+                                                onClick={handleSelection}
+                                            >
+                                                Staðfesta
+                                            </Button>
+                                        </DialogActions>
+                                    </>
+                                )}
+                            </Dialog>
+                            {updateError && (
+                                <p className="error">Gat ekki uppfært stöðu</p>
+                            )}
+                        </>
+                    ) : (
+                        <p className="error">Gat ekki sótt næstu stöður</p>
                     )}
                 </>
-            ) : (
-                <p className="error">Gat ekki sótt næstu stöður</p>
             )}
         </div>
     );

@@ -1,12 +1,13 @@
 import React from "react";
 import CancelIcon from "@material-ui/icons/Cancel";
 import CheckIcon from "@material-ui/icons/Check";
-import ConfirmationDialog from "../../../ConfirmationDialog/ConfirmationDialog";
+import ConfirmationDialog from "../../../Feedback/ConfirmationDialog/ConfirmationDialog";
 import { Button } from "@material-ui/core";
 import { createOrderType, cancelOrderType } from "../../../../types/index";
 import "./CreateOrderActions.css";
+import ProgressButton from "../../../Feedback/ProgressButton/ProgressButton";
 
-const CreateOrderActions = ({ createOrder, cancelOrder }) => {
+const CreateOrderActions = ({ createOrder, cancelOrder, isProcessing }) => {
     const [openSendDialog, setOpenSendDialog] = React.useState(false);
     const [openCancelDialog, setOpenCancelDialog] = React.useState(false);
 
@@ -43,21 +44,25 @@ const CreateOrderActions = ({ createOrder, cancelOrder }) => {
                 variant="contained"
                 color="secondary"
                 size="large"
+                disabled={isProcessing}
                 startIcon={<CancelIcon />}
                 onClick={handleCancelOpen}
             >
                 Hætta við
             </Button>
-            <Button
-                className="confirm-btn"
-                variant="contained"
-                color="primary"
-                size="large"
-                startIcon={<CheckIcon />}
-                onClick={handleSendOpen}
-            >
-                Senda inn pöntun
-            </Button>
+            <ProgressButton isLoading={isProcessing}>
+                <Button
+                    className="confirm-btn"
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    disabled={isProcessing}
+                    startIcon={<CheckIcon />}
+                    onClick={handleSendOpen}
+                >
+                    Senda inn pöntun
+                </Button>
+            </ProgressButton>
             <ConfirmationDialog
                 title="Senda inn pöntun"
                 description="Vinsamlegast staðfestu skráningu á nýrri pöntun"

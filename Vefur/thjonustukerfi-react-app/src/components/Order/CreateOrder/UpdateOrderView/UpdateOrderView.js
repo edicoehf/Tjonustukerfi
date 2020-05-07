@@ -7,17 +7,13 @@ import UpdateOrderActions from "../UpdateOrderActions/UpdateOrderActions";
 import useGetOrderById from "../../../../hooks/useGetOrderById";
 import useGetServices from "../../../../hooks/useGetServices";
 import useGetCategories from "../../../../hooks/useGetCategories";
-import {
-    orderType,
-    categoriesType,
-    servicesType,
-    idType,
-} from "../../../../types";
+import { orderType, idType } from "../../../../types";
 import useGetCustomerById from "../../../../hooks/useGetCustomerById";
 import { Redirect } from "react-router-dom";
 import "./UpdateOrderView.css";
+import ProgressComponent from "../../../Feedback/ProgressComponent/ProgressComponent";
 
-const UpdateOrder = ({ order, categories, services }) => {
+const UpdateOrder = ({ order }) => {
     const { customer: fetchedCustomer } = useGetCustomerById(order.customerId);
 
     const [cancel, setCancel] = React.useState(false);
@@ -25,30 +21,27 @@ const UpdateOrder = ({ order, categories, services }) => {
         setCancel(true);
     };
 
-    const getServiceId = (service) => {
-        return services[services.findIndex((s) => s.name === service)].id;
-    };
-
-    const getCategoryId = (category) => {
-        return categories[categories.findIndex((c) => c.name === category)].id;
-    };
-
     const initialState = {
         customer: null,
         items: order.items.map((item) => {
             return {
                 id: item.id,
-                category: getCategoryId(item.category).toString(),
-                service: getServiceId(item.service).toString(),
+                category: item.categoryId.toString(),
+                service: item.serviceId.toString(),
                 amount: 1,
                 categoryName: item.category,
                 serviceName: item.service,
+                details: item.details,
+                sliced: item.json.sliced,
+                filleted: item.json.filleted,
+                otherCategory: item.json.otherCategory,
+                otherService: item.json.otherService,
             };
         }),
     };
 
     const {
-        error: sendError,
+        updateError: sendError,
         handleUpdate,
         isProcessing,
         hasUpdated,
@@ -95,6 +88,7 @@ const UpdateOrder = ({ order, categories, services }) => {
             <UpdateOrderActions
                 updateOrder={updateOrder}
                 cancelUpdate={handleCancel}
+                isLoading={isProcessing}
             />
         </>
     );
@@ -103,15 +97,13 @@ const UpdateOrder = ({ order, categories, services }) => {
 UpdateOrder.prototype = {
     id: idType,
     order: orderType,
-    categories: categoriesType,
-    services: servicesType,
 };
 
 const UpdateOrderView = ({ match }) => {
     const id = match.params.id;
     const { order, error } = useGetOrderById(id);
-    const { services } = useGetServices();
-    const { categories } = useGetCategories();
+    const { services, error: serviceError } = useGetServices();
+    const { categories, error: categoryError } = useGetCategories();
 
     const loaded = (obj) => {
         return Object.keys(obj).length > 0;
@@ -119,22 +111,27 @@ const UpdateOrderView = ({ match }) => {
 
     return (
         <div className="update-order-view">
-            {!error ? (
-                <>
-                    <h1>Uppfæra pöntun</h1>
-                    {loaded(order) &&
-                        loaded(services) &&
-                        loaded(categories) && (
-                            <UpdateOrder
-                                order={order}
-                                services={services}
-                                categories={categories}
-                            />
-                        )}
-                </>
-            ) : (
-                <p className="error">Gat ekki sótt pöntun</p>
-            )}
+            <>
+                <h1>Uppfæra pöntun</h1>
+                {(order.id && loaded(services) && loaded(categories)) ||
+                error ? (
+                    !error && !categoryError && !serviceError ? (
+                        <UpdateOrder
+                            order={order}
+                            services={services}
+                            categories={categories}
+                        />
+                    ) : (
+                        <p className="error">Gat ekki sótt pöntun</p>
+                    )
+                ) : (
+                    <ProgressComponent
+                        isLoading={
+                            !order.id || loaded(services) || loaded(categories)
+                        }
+                    />
+                )}
+            </>
         </div>
     );
 };

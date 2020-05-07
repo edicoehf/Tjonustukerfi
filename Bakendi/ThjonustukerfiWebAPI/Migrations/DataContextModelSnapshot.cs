@@ -125,9 +125,6 @@ namespace ThjonustukerfiWebAPI.Migrations
                     b.Property<string>("Category")
                         .HasColumnType("text");
 
-                    b.Property<long?>("CategoryId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("DateCompleted")
                         .HasColumnType("timestamp without time zone");
 
@@ -139,9 +136,6 @@ namespace ThjonustukerfiWebAPI.Migrations
 
                     b.Property<string>("Service")
                         .HasColumnType("text");
-
-                    b.Property<long?>("ServiceId")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("extraDataJSON")
                         .HasColumnType("text");
@@ -257,8 +251,8 @@ namespace ThjonustukerfiWebAPI.Migrations
                     b.Property<string>("Customer")
                         .HasColumnType("text");
 
-                    b.Property<long?>("CustomerId")
-                        .HasColumnType("bigint");
+                    b.Property<string>("CustomerEmail")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("DateCompleted")
                         .HasColumnType("timestamp without time zone");
@@ -268,9 +262,6 @@ namespace ThjonustukerfiWebAPI.Migrations
 
                     b.Property<string>("JSON")
                         .HasColumnType("text");
-
-                    b.Property<int>("OrderSize")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

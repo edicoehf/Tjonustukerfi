@@ -30,8 +30,12 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 .UseInMemoryDatabase(databaseName: "ThjonuskerfiDB-Item")
                 .EnableSensitiveDataLogging()
                 .Options;
+
+            var myProfile = new MappingProfile();   // Create a new profile like the one we implemented
+            var myConfig = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));   // Setup a configuration with our profile
+            _mapper = new Mapper(myConfig); // Create a new mapper with our profile
             
-            FillDatabase(); // Fills database and updates the mapper with the current context
+            FillDatabase(); // Fills database
         }
 
         [TestCleanup]
@@ -235,9 +239,6 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
             using(var mockContext = new DataContext(_options))
             {
-                // Needs an updated automapper that has access to the current instance of db context
-                UpdateMapper(mockContext);
-
                 IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
 
                 var oldStateId = mockContext.Item.FirstOrDefault(i => i.Id == itemID).StateId;
@@ -278,7 +279,6 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             long itemID = 1;
             using(var mockContext = new DataContext(_options))
             {
-                UpdateMapper(mockContext);  // need to update mapper since it useses context
                 IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
 
                 var itemEntity = mockContext.Item.FirstOrDefault(i => i.Id == itemID);
@@ -446,9 +446,6 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                     }
                 };
 
-                // Needs an updated automapper that has access to the current instance of db context
-                UpdateMapper(mockContext);
-
                 IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
 
                 // get old states
@@ -507,9 +504,6 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
             using(var mockContext = new DataContext(_options))
             {
-                // Needs an updated automapper that has access to the current instance of db context
-                UpdateMapper(mockContext);
-
                 var itemRepo = new ItemRepo(mockContext, _mapper);
 
                 //* Act
@@ -540,9 +534,6 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
             using(var mockContext = new DataContext(_options))
             {
-                // Needs an updated automapper that has access to the current instance of db context
-                UpdateMapper(mockContext);
-
                 var itemRepo = new ItemRepo(mockContext, _mapper);
 
                 //* Act
@@ -692,9 +683,6 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
             using(var mockContext = new DataContext(_options))
             {
-                // Needs an updated automapper that has access to the current instance of db context
-                UpdateMapper(mockContext);
-
                 var itemRepo = new ItemRepo(mockContext, _mapper);
 
                 //* Act
@@ -725,9 +713,6 @@ namespace ThjonustukerfiTests.Tests.ItemTests
 
             using(var mockContext = new DataContext(_options))
             {
-                // Needs an updated automapper that has access to the current instance of db context
-                UpdateMapper(mockContext);
-
                 var itemRepo = new ItemRepo(mockContext, _mapper);
 
                 //* Act
@@ -831,35 +816,31 @@ namespace ThjonustukerfiTests.Tests.ItemTests
             }
         }
 
-        //? test doesn't work on azure because of System.Drawing.ImageConverter, seems to be windows platform specific?
-        // [TestMethod]
-        // public void GetItemPrintDetails_should_return_ItemPrintDetailsDTO()
-        // {
-        //     //* Arrange
-        //     using(var mockContext = new DataContext(_options))
-        //     {
-        //         UpdateMapper(mockContext);
-        //         IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+        [TestMethod]
+        public void GetItemPrintDetails_should_return_ItemPrintDetailsDTO()
+        {
+            //* Arrange
+            using(var mockContext = new DataContext(_options))
+            {
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
 
-        //         //* Act
-        //         var value = itemRepo.GetItemPrintDetails(1);
+                //* Act
+                var value = itemRepo.GetItemPrintDetails(1);
 
-        //         //* Assert
-        //         Assert.IsNotNull(value);
-        //         Assert.IsInstanceOfType(value, typeof(ItemPrintDetailsDTO));
-        //         Assert.IsNotNull(value.BarcodeImage);   // image is created
-        //         Assert.IsInstanceOfType(value.BarcodeImage, typeof(byte[]));
-        //     }
-        // }
+                //* Assert
+                Assert.IsNotNull(value);
+                Assert.IsInstanceOfType(value, typeof(ItemPrintDetailsDTO));
+                Assert.IsNotNull(value.BarcodeImage);   // image is created
+                Assert.IsInstanceOfType(value.BarcodeImage, typeof(string));
+            }
+        }
 
         //**********     Helper functions     **********//
         private void FillDatabase()
         {
             using(var mockContext = new DataContext(_options))
             {
-                UpdateMapper(mockContext);  // update the mapper with the new context
-
-                //! Building Db
+                 //! Building Db
                 // variables used
                 DateTime modifiedDate = DateTime.Now;
                 string serviceName = "Birkireyking";
@@ -988,6 +969,24 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                     }
                 };
 
+                // Adding service states
+                var mockServiceStateList = new List<ServiceState>()
+                {
+                    // for birkireykt
+                    new ServiceState { Id = 1, ServiceId = 1, StateId = 1, Step = 1 },
+                    new ServiceState { Id = 2, ServiceId = 1, StateId = 2, Step = 2 },
+                    new ServiceState { Id = 3, ServiceId = 1, StateId = 3, Step = 2 },
+                    new ServiceState { Id = 4, ServiceId = 1, StateId = 4, Step = 2 },
+                    new ServiceState { Id = 5, ServiceId = 1, StateId = 5, Step = 3 },
+
+                    // for taðreykt
+                    new ServiceState { Id = 6, ServiceId = 2, StateId = 1, Step = 1 },
+                    new ServiceState { Id = 7, ServiceId = 2, StateId = 2, Step = 2 },
+                    new ServiceState { Id = 8, ServiceId = 2, StateId = 3, Step = 2 },
+                    new ServiceState { Id = 9, ServiceId = 2, StateId = 4, Step = 2 },
+                    new ServiceState { Id = 10, ServiceId = 2, StateId = 5, Step = 3 }
+                };
+
                 // Build a list of size 20, make it queryable for the database mock
                 var orders = Builder<Order>.CreateListOfSize(20)
                     .All()
@@ -1028,20 +1027,12 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 mockContext.Item.AddRange(mockItems);
                 mockContext.ItemTimestamp.AddRange(mockTimestamps);
                 mockContext.Service.AddRange(MockServiceList);
+                mockContext.ServiceState.AddRange(mockServiceStateList);
                 mockContext.State.AddRange(states);
                 mockContext.Category.AddRange(categories);
                 mockContext.SaveChanges();
                 //! Building DB done
             }
-        }
-
-        /// <summary>Updates the private mapper to have the current mock data context</summary>
-        private void UpdateMapper(DataContext context)
-        {
-            // Needs a seperete automapper that has access to the current instance of db context
-            var myProfile = new MappingProfile(context);   // Create a new profile like the one we implemented
-            var myConfig = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));   // Setup a configuration with our profile
-            _mapper = new Mapper(myConfig); // Create a new mapper with our profile
         }
 
         private void ClearDatabase()
@@ -1054,6 +1045,7 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 mockContext.Item.RemoveRange(mockContext.Item);
                 mockContext.ItemTimestamp.RemoveRange(mockContext.ItemTimestamp);
                 mockContext.Service.RemoveRange(mockContext.Service);
+                mockContext.ServiceState.RemoveRange(mockContext.ServiceState);
                 mockContext.State.RemoveRange(mockContext.State);
                 mockContext.Category.RemoveRange(mockContext.Category);
                 mockContext.SaveChanges();

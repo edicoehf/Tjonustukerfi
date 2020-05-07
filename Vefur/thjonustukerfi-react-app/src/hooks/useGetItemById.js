@@ -12,10 +12,12 @@ const useGetItemById = (id) => {
             .then((item) => {
                 item.json = JSON.parse(item.json);
                 setItem(item);
-                setIsLoading(false);
                 setError(null);
             })
-            .catch((error) => setError(error));
+            .catch((error) => setError(error))
+            .finally(() => {
+                setIsLoading(false);
+            });
     }, [id]);
 
     React.useEffect(() => {

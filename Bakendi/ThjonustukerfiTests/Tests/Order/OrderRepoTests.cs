@@ -31,6 +31,10 @@ namespace ThjonustukerfiTests.Tests
                 .EnableSensitiveDataLogging()
                 .Options;
 
+            var myProfile = new MappingProfile();   // Create a new profile like the one we implemented
+            var myConfig = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));   // Setup a configuration with our profile
+            _mapper = new Mapper(myConfig); // Create a new mapper with our profile
+
             FillDatabase();
         }
 
@@ -49,7 +53,6 @@ namespace ThjonustukerfiTests.Tests
             using (var mockContext = new DataContext(_options))
             {
                 ClearDatabase();    // clear database since for this test it should be empty
-                UpdateMapper(mockContext); // setup mapper with the correct context
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
                 //* Act
@@ -92,9 +95,6 @@ namespace ThjonustukerfiTests.Tests
                 string customerName = "Viggi Siggi";
                 string OrderBarCode = "20200001";
                 DateTime modifiedDate = mockContext.Order.FirstOrDefault(o => o.Id == orderId).DateModified;
-
-                // Needs an updated automapper that has access to the current instance of db context
-                UpdateMapper(mockContext);
 
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
@@ -263,9 +263,6 @@ namespace ThjonustukerfiTests.Tests
             // These orders were created in the build database test. This person should have 2 orders
             using(var mockContext = new DataContext(_options))
             {
-                // Needs an updated automapper that has access to the current instance of db context
-                UpdateMapper(mockContext);
-
                 IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
 
                 //* Act
@@ -676,9 +673,6 @@ namespace ThjonustukerfiTests.Tests
 
             using(var mockContext = new DataContext(_options))
             {
-                // Needs an updated automapper that has access to the current instance of db context
-                UpdateMapper(mockContext);
-
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
                 var orderEntity = mockContext.Order.FirstOrDefault(o => o.Id == orderID);
@@ -851,9 +845,6 @@ namespace ThjonustukerfiTests.Tests
             //* Arrange
             using (var mockContext = new DataContext(_options))
             {
-                // Needs an updated automapper that has access to the current instance of db context
-                UpdateMapper(mockContext);
-
                 var orderRepo = new OrderRepo(mockContext, _mapper);
                 var DbSize = mockContext.Order.Count();
 
@@ -887,8 +878,6 @@ namespace ThjonustukerfiTests.Tests
 
             using(var mockContext = new DataContext(_options))
             {
-                UpdateMapper(mockContext);  // update mapper with the correct context, since this function uses automapper with context
-
                 // craeate repo
                 IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
 
@@ -903,28 +892,26 @@ namespace ThjonustukerfiTests.Tests
                 // Get stuff
                 var archivedOrder = mockContext.OrderArchive.First();
                 var archivedItems = mockContext.ItemArchive.ToList();
-                var customerName = mockContext.Customer.FirstOrDefault(c => c.Id == orderInput.CustomerId).Name;
+                var customer = mockContext.Customer.FirstOrDefault(c => c.Id == orderInput.CustomerId);
 
                 //* Assert
                 Assert.IsNotNull(archivedOrder);
                 Assert.IsNotNull(archivedItems);
 
-                Assert.AreEqual(orderInput.CustomerId, archivedOrder.CustomerId);
-                Assert.AreEqual(customerName, archivedOrder.Customer);
+                Assert.AreEqual(customer.Email, archivedOrder.CustomerEmail);
+                Assert.AreEqual(customer.Name, archivedOrder.Customer);
 
                 Assert.AreEqual(orderInput.Items.Count, archivedItems.Count);
+                var classProps = typeof(ItemArchive).GetProperties();   // getting all properties of the class
                 foreach (var item in archivedItems)
                 {
-                    // use this to check if the correct information was passed
-                    var check = new ItemInputModel() { CategoryId = item.CategoryId, ServiceId = item.ServiceId };
-                    Assert.IsTrue(orderInput.Items.Contains(check));    // uses the equals override
+                    // loop through all properties and assert that they are not null
+                    foreach (var prop in classProps)
+                    {
+                        Assert.IsNotNull(prop.GetValue(item));
+                    }
 
-                    // Making sure that service and category where correctly put in archive
-                    var category = mockContext.Category.FirstOrDefault(c => c.Id == item.CategoryId).Name;
-                    var service = mockContext.Service.FirstOrDefault(s => s.Id == item.ServiceId).Name;
-
-                    Assert.AreEqual(category, item.Category);
-                    Assert.AreEqual(service, item.Service);
+                    Assert.AreEqual(archivedOrder.Id, item.OrderArchiveId); // Correct order?
                 }
             }
         }
@@ -954,8 +941,6 @@ namespace ThjonustukerfiTests.Tests
 
             using(var mockContext = new DataContext(_options))
             {
-                UpdateMapper(mockContext);  // update mapper with the correct context, since this function uses automapper with context
-
                 // craeate repo
                 IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
 
@@ -969,28 +954,26 @@ namespace ThjonustukerfiTests.Tests
                 // Get stuff
                 var archivedOrder = mockContext.OrderArchive.First();
                 var archivedItems = mockContext.ItemArchive.ToList();
-                var customerName = mockContext.Customer.FirstOrDefault(c => c.Id == orderInput.CustomerId).Name;
+                var customer = mockContext.Customer.FirstOrDefault(c => c.Id == orderInput.CustomerId);
 
                 //* Assert
                 Assert.IsNotNull(archivedOrder);
                 Assert.IsNotNull(archivedItems);
 
-                Assert.AreEqual(orderInput.CustomerId, archivedOrder.CustomerId);
-                Assert.AreEqual(customerName, archivedOrder.Customer);
+                Assert.AreEqual(customer.Email, archivedOrder.CustomerEmail);
+                Assert.AreEqual(customer.Name, archivedOrder.Customer);
 
                 Assert.AreEqual(orderInput.Items.Count, archivedItems.Count);
+                var classProps = typeof(ItemArchive).GetProperties();   // getting all properties of the class
                 foreach (var item in archivedItems)
                 {
-                    // use this to check if the correct information was passed
-                    var check = new ItemInputModel() { CategoryId = item.CategoryId, ServiceId = item.ServiceId };
-                    Assert.IsTrue(orderInput.Items.Contains(check));    // uses the equals override
+                    // loop through all properties and assert that they are not null
+                    foreach (var prop in classProps)
+                    {
+                        Assert.IsNotNull(prop.GetValue(item));
+                    }
 
-                    // Making sure that service and category where correctly put in archive
-                    var category = mockContext.Category.FirstOrDefault(c => c.Id == item.CategoryId).Name;
-                    var service = mockContext.Service.FirstOrDefault(s => s.Id == item.ServiceId).Name;
-
-                    Assert.AreEqual(category, item.Category);
-                    Assert.AreEqual(service, item.Service);
+                    Assert.AreEqual(archivedOrder.Id, item.OrderArchiveId);
                 }
             }
         }
@@ -1095,8 +1078,6 @@ namespace ThjonustukerfiTests.Tests
             //* Arrange
             using(var mockContext = new DataContext(_options))
             {
-                UpdateMapper(mockContext);  // uses current context
-
                 IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
 
                 //* Act
@@ -1117,8 +1098,6 @@ namespace ThjonustukerfiTests.Tests
             //* Arrange
             using(var mockContext = new DataContext(_options))
             {
-                UpdateMapper(mockContext);
-
                 IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
 
                 // get order count
@@ -1134,38 +1113,35 @@ namespace ThjonustukerfiTests.Tests
             }
         }
 
-        //? test doesn't work on azure because of System.Drawing.ImageConverter, seems to be windows platform specific?
-        // [TestMethod]
-        // public void GetOrderPrintDetails_should_return_a_list_of_ItemPrintDetailsDTO()
-        // {
-        //     //* Arrange
-        //     long orderId = 100;
+        [TestMethod]
+        public void GetOrderPrintDetails_should_return_a_list_of_ItemPrintDetailsDTO()
+        {
+            //* Arrange
+            long orderId = 100;
 
-        //     using(var mockContext = new DataContext(_options))
-        //     {
-        //         // update mapper and create repo
-        //         UpdateMapper(mockContext);
-        //         IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
+            using(var mockContext = new DataContext(_options))
+            {
+                // update mapper and create repo
+                IOrderRepo orderRepo = new OrderRepo(mockContext, _mapper);
 
-        //         // Get the size of the list
-        //         var itemListSize = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderId).Count();
+                // Get the size of the list
+                var itemListSize = mockContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderId).Count();
 
-        //         //* Act
-        //         var orderItems = orderRepo.GetOrderPrintDetails(orderId);
+                //* Act
+                var orderItems = orderRepo.GetOrderPrintDetails(orderId);
 
-        //         //* Assert
-        //         Assert.IsNotNull(orderItems);
-        //         Assert.IsInstanceOfType(orderItems, typeof(List<ItemPrintDetailsDTO>));
-        //         Assert.AreEqual(itemListSize, orderItems.Count);
-        //     }
-        // }
+                //* Assert
+                Assert.IsNotNull(orderItems);
+                Assert.IsInstanceOfType(orderItems, typeof(List<ItemPrintDetailsDTO>));
+                Assert.AreEqual(itemListSize, orderItems.Count);
+            }
+        }
 
         //**********     Helper functions     **********//
         private void FillDatabase()
         {
             using(var mockContext = new DataContext(_options))
             {
-                UpdateMapper(mockContext);
                 //* Arrange
                 // variables evaluating
                 long orderId = 100;
@@ -1373,15 +1349,6 @@ namespace ThjonustukerfiTests.Tests
                 mockContext.SaveChanges();
                 //! Building DB done
             }
-        }
-
-        /// <summary>Updates the private mapper to have the current mock data context</summary>
-        private void UpdateMapper(DataContext context)
-        {
-            // Needs a seperete automapper that has access to the current instance of db context
-            var myProfile = new MappingProfile(context);   // Create a new profile like the one we implemented
-            var myConfig = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));   // Setup a configuration with our profile
-            _mapper = new Mapper(myConfig); // Create a new mapper with our profile
         }
 
         private void ClearDatabase()

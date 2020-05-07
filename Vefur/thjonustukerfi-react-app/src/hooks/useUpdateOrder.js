@@ -14,12 +14,12 @@ const useUpdateOrder = (id) => {
                 .updateOrderById(values, id)
                 .then(() => {
                     setError(null);
+                    setHasUpdated(true);
                 })
                 .catch((error) => setError(error))
                 .finally(() => {
                     setValues(null);
                     setProcessing(false);
-                    setHasUpdated(true);
                 });
         }
     }, [isProcessing, values, id]);
@@ -27,7 +27,6 @@ const useUpdateOrder = (id) => {
     const handleUpdate = (values) => {
         if (!isProcessing) {
             setHasUpdated(false);
-
             setValues(values);
         }
     };

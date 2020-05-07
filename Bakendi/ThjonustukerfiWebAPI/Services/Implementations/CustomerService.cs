@@ -20,7 +20,17 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             _orderRepo = orderRepo;
         }
         public long CreateCustomer(CustomerInputModel customer) => _customerRepo.CreateCustomer(customer);
-        public CustomerDetailsDTO GetCustomerById(long id) => _customerRepo.GetCustomerById(id);
+        public CustomerDetailsDTO GetCustomerById(long id)
+        {
+            var customerDTO = _customerRepo.GetCustomerById(id);
+
+            // Check if customer has active orders
+            var activeOrders = _orderRepo.GetActiveOrdersByCustomerId(id);
+            if(activeOrders.Any()) { customerDTO.HasActiveOrder = true; }
+            else { customerDTO.HasActiveOrder = false; }
+
+            return customerDTO;
+        }
         public void UpdateCustomerDetails(CustomerInputModel customer, long id) => _customerRepo.UpdateCustomerDetails(customer, id);
         public List<OrderDTO> DeleteCustomerById(long id)
         {
@@ -52,6 +62,9 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
                     _orderRepo.DeleteByOrderId(order.Id);
                 }
             }
+
+            // be sure to archive complete orders
+            _orderRepo.ArchiveCompleteOrdersByCustomerId(customerId);
 
             // After deleting orders (if any) delete the customer
             _customerRepo.DeleteCustomerById(customerId);

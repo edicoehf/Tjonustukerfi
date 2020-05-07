@@ -2,7 +2,7 @@ import React from "react";
 import { Modal, Backdrop, Fade, AppBar, Tabs, Tab } from "@material-ui/core";
 import CustomerSelectView from "../CustomerSelect/CustomerSelectView/CustomerSelectView";
 import "./PickCustomerModal.css";
-import AddNewCustomer from "../AddNewCustomer/AddNewCustomer";
+import AddNewCustomer from "../CustomerSelect/AddNewCustomer/AddNewCustomer";
 import {
     openType,
     handleCloseType,
@@ -59,7 +59,7 @@ const PickCustomerModal = ({ open, handleClose, addCustomer }) => {
                     </TabPanel>
                     <TabPanel index={1} value={tab}>
                         <div className="tab">
-                            <AddNewCustomer />
+                            <AddNewCustomer addCustomer={addCustomerAndClose} />
                         </div>
                     </TabPanel>
                 </div>

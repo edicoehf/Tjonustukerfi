@@ -10,6 +10,7 @@ import {
 } from "../../../types/index";
 import TextInput from "../../TextInput/TextInput";
 import { Button, Paper } from "@material-ui/core";
+import ProgressButton from "../../Feedback/ProgressButton/ProgressButton";
 
 const initialState = {
     name: "",
@@ -51,6 +52,15 @@ const CustomerInputForm = ({
                         onInput={handleChange}
                     />
                     <TextInput
+                        name="email"
+                        value={values.email}
+                        htmlId="email"
+                        className="email-input"
+                        label="Netfang *"
+                        errorMessage={errors.email}
+                        onInput={handleChange}
+                    />
+                    <TextInput
                         name="ssn"
                         value={values.ssn}
                         htmlId="ssn"
@@ -66,15 +76,6 @@ const CustomerInputForm = ({
                         className="phone-input"
                         label="Símanúmer"
                         errorMessage={errors.phone}
-                        onInput={handleChange}
-                    />
-                    <TextInput
-                        name="email"
-                        value={values.email}
-                        htmlId="email"
-                        className="email-input"
-                        label="Netfang *"
-                        errorMessage={errors.email}
                         onInput={handleChange}
                     />
                     <TextInput
@@ -96,18 +97,19 @@ const CustomerInputForm = ({
                         onInput={handleChange}
                     />
                 </Paper>
-                <Button
-                    className="input-submit"
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                    disabled={isProcessing}
-                    type="submit"
-                >
-                    {isExistingCustomer
-                        ? "Uppfæra viðskiptavin"
-                        : "Skrá nýjan viðskiptavin"}
-                </Button>
+                <ProgressButton isLoading={isProcessing}>
+                    <Button
+                        className="input-submit"
+                        variant="contained"
+                        color="primary"
+                        disabled={isProcessing}
+                        type="submit"
+                    >
+                        {isExistingCustomer
+                            ? "Uppfæra viðskiptavin"
+                            : "Skrá nýjan viðskiptavin"}
+                    </Button>
+                </ProgressButton>
             </Form>
         </div>
     );

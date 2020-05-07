@@ -3,11 +3,27 @@ import "./UpdateCustomer.css";
 import CustomerInputForm from "../CustomerInputForm/CustomerInputForm";
 import useUpdateCustomer from "../../../hooks/useUpdateCustomer";
 import useGetCustomerById from "../../../hooks/useGetCustomerById";
+import { useHistory } from "react-router-dom";
 
 const UpdateCustomer = ({ match }) => {
     const id = match.params.id;
+
+    const [success, setSuccess] = React.useState(false);
+
+    const handleSuccess = () => {
+        setSuccess(true);
+    };
+
+    const history = useHistory();
+    if (success) {
+        setSuccess(false);
+        history.push(`/customer/${id}`);
+    }
+
     const { customer, error } = useGetCustomerById(id);
-    const { updateError, handleUpdate, isProcessing } = useUpdateCustomer();
+    const { updateError, handleUpdate, isProcessing } = useUpdateCustomer(
+        handleSuccess
+    );
 
     return (
         <div className="body">
@@ -18,7 +34,7 @@ const UpdateCustomer = ({ match }) => {
                 <>
                     <div className="body">
                         <CustomerInputForm
-                            processing={isProcessing}
+                            isProcessing={isProcessing}
                             existingCustomer={customer}
                             submitHandler={handleUpdate}
                         />

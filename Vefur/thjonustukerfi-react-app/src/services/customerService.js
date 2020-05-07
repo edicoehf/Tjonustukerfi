@@ -46,6 +46,7 @@ const createCustomer = (customer) => {
         },
     })
         .then(handleErrors)
+        .then(handleData)
         .catch((error) => Promise.reject(error));
 };
 
@@ -62,7 +63,7 @@ const getCustomerById = (id) => {
 };
 
 const updateCustomer = (customer) => {
-    return fetch(endpoint + customer.id + "/update", {
+    return fetch(endpoint + customer.id, {
         method: "PATCH",
         body: JSON.stringify(customer),
         headers: {
@@ -74,6 +75,18 @@ const updateCustomer = (customer) => {
         .catch((error) => Promise.reject(error));
 };
 
+const getOrdersByCustomerId = (customerId) => {
+    return fetch(endpoint + customerId + "/orders", {
+        method: "GET",
+        headers: {
+            crossDomain: true,
+        },
+    })
+        .then(handleErrors)
+        .then(handleData)
+        .catch((error) => Promise.reject(error));
+};
+
 export default {
     getAllCustomers,
     deleteCustomerById,
@@ -81,4 +94,5 @@ export default {
     getCustomerById,
     updateCustomer,
     forceDeleteCustomerById,
+    getOrdersByCustomerId,
 };

@@ -4,7 +4,6 @@ import "./CustomerMain.css";
 import SearchBar from "../../SearchBar/SearchBar";
 import useGetAllCustomers from "../../../hooks/useGetAllCustomers";
 import useSearchBar from "../../../hooks/useSearchBar";
-import CreateCustomerAction from "../Actions/CreateCustomerAction/CreateCustomerAction";
 import { Paper } from "@material-ui/core";
 
 const CustomerMain = ({ history }) => {
@@ -21,9 +20,6 @@ const CustomerMain = ({ history }) => {
         <div className="customer-main">
             <div className="main-item header">
                 <h1>Viðskiptavinir</h1>
-            </div>
-            <div className="main-item create-button">
-                <CreateCustomerAction />
             </div>
             <Paper elevation={3} className="customer-search-paper">
                 <SearchBar

@@ -1,12 +1,24 @@
 import React from "react";
 import { Button } from "@material-ui/core";
 import useDeleteItemById from "../../../../hooks/useDeleteItemById";
-import ConfirmationDialog from "../../../ConfirmationDialog/ConfirmationDialog";
+import ConfirmationDialog from "../../../Feedback/ConfirmationDialog/ConfirmationDialog";
 import DeleteIcon from "@material-ui/icons/Delete";
 import "./DeleteItemAction.css";
+import ProgressButton from "../../../Feedback/ProgressButton/ProgressButton";
+import { useHistory } from "react-router-dom";
 
 const DeleteItemAction = ({ id }) => {
-    const { error, handleDelete, isDeleting } = useDeleteItemById(id);
+    const history = useHistory();
+
+    const redirect = (orderId) => {
+        if (orderId) {
+            history.push(`/order/${orderId}`);
+        } else {
+            history.push("/orders/");
+        }
+    };
+
+    const { error, handleDelete, isDeleting } = useDeleteItemById(id, redirect);
     const [open, setOpen] = React.useState(false);
 
     const handleOpen = () => {
@@ -24,19 +36,21 @@ const DeleteItemAction = ({ id }) => {
 
     return (
         <div className="delete-item">
-            <Button
-                className="delete-item-button"
-                variant="contained"
-                color="secondary"
-                disabled={isDeleting}
-                onClick={handleOpen}
-            >
-                <DeleteIcon className="delete-icon" size="small" />
-                <b>Eyða</b>
-            </Button>
+            <ProgressButton isLoading={isDeleting}>
+                <Button
+                    className="delete-item-button"
+                    variant="contained"
+                    color="secondary"
+                    disabled={isDeleting}
+                    onClick={handleOpen}
+                >
+                    <DeleteIcon className="delete-icon" size="small" />
+                    <b>Eyða</b>
+                </Button>
+            </ProgressButton>
             <ConfirmationDialog
                 title="Eyða vöru"
-                description="Staðfestu að eyða skuli vöru úr pöntun"
+                description="Staðfestu að eyða eigi vöru úr pöntun"
                 handleClose={handleClose}
                 handleAccept={handleAccept}
                 open={open}

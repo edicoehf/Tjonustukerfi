@@ -14,6 +14,7 @@ import ItemView from "./components/Item/ItemView/ItemView";
 import EditItem from "./components/Item/EditItem/EditItem";
 import UpdateOrderView from "./components/Order/CreateOrder/UpdateOrderView/UpdateOrderView";
 import ItemSearch from "./components/Item/ItemSearch/ItemSearch";
+import ArchiveOrderMain from "./components/Order/Archives/ArchiveOrderMain/ArchiveOrderMain";
 
 function App() {
     return (
@@ -55,6 +56,11 @@ function App() {
                     <Route exact path="/item/:id" component={ItemView} />
                     <Route exact path="/update-item/:id" component={EditItem} />
                     <Route exact path="/item-search" component={ItemSearch} />
+                    <Route
+                        exact
+                        path="/archives"
+                        component={ArchiveOrderMain}
+                    />
                 </Switch>
             </div>
         </div>

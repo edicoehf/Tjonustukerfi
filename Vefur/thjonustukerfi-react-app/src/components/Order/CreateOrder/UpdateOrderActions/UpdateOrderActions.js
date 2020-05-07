@@ -1,12 +1,13 @@
 import React from "react";
 import CancelIcon from "@material-ui/icons/Cancel";
 import CheckIcon from "@material-ui/icons/Check";
-import ConfirmationDialog from "../../../ConfirmationDialog/ConfirmationDialog";
+import ConfirmationDialog from "../../../Feedback/ConfirmationDialog/ConfirmationDialog";
 import { Button } from "@material-ui/core";
 import { createOrderType, cancelOrderType } from "../../../../types/index";
 import "./UpdateOrderActions.css";
+import ProgressButton from "../../../Feedback/ProgressButton/ProgressButton";
 
-const UpdateOrderActions = ({ updateOrder, cancelUpdate }) => {
+const UpdateOrderActions = ({ updateOrder, cancelUpdate, isLoading }) => {
     const [OpenUpdateDialog, setOpenUpdateDialog] = React.useState(false);
     const [openCancelDialog, setOpenCancelDialog] = React.useState(false);
 
@@ -43,21 +44,25 @@ const UpdateOrderActions = ({ updateOrder, cancelUpdate }) => {
                 variant="contained"
                 color="secondary"
                 size="large"
+                disabled={isLoading}
                 startIcon={<CancelIcon />}
                 onClick={handleCancelOpen}
             >
                 Hætta við
             </Button>
-            <Button
-                className="confirm-btn"
-                variant="contained"
-                color="primary"
-                size="large"
-                startIcon={<CheckIcon />}
-                onClick={handleUpdateOpen}
-            >
-                Uppfæra pöntun
-            </Button>
+            <ProgressButton isLoading={isLoading}>
+                <Button
+                    className="confirm-btn"
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    disabled={isLoading}
+                    startIcon={<CheckIcon />}
+                    onClick={handleUpdateOpen}
+                >
+                    Uppfæra pöntun
+                </Button>
+            </ProgressButton>
             <ConfirmationDialog
                 title="Uppfæra pöntun"
                 description="Vinsamlegast staðfestu breytingar á pöntun"

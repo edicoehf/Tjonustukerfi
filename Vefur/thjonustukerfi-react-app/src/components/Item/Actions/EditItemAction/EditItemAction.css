@@ -1,6 +1,9 @@
 Button.edit-item-button {
+    display: flex;
+    justify-content: space-evenly;
     background-color: rgb(209, 209, 30);
     color: black;
+    width: 9em;
 }
 
 Button.edit-item-button:hover {

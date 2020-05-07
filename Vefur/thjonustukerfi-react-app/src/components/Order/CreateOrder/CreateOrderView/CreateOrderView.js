@@ -4,6 +4,8 @@ import useCreateOrder from "../../../../hooks/useCreateOrder";
 import orderValidate from "../OrderValidate/OrderValidate";
 import useOrderForm from "../../../../hooks/useOrderForm";
 import OrderForm from "../OrderForm/OrderForm";
+import SuccessToaster from "../../../Feedback/SuccessToaster/SuccessToaster";
+import { useHistory } from "react-router-dom";
 import "./CreateOrderView.css";
 
 const initialState = {
@@ -12,7 +14,23 @@ const initialState = {
 };
 
 const CreateOrderView = () => {
-    const { error: sendError, handleCreate, isProcessing } = useCreateOrder();
+    const [success, setSuccess] = React.useState(false);
+
+    const receivedSuccess = () => {
+        setSuccess(false);
+    };
+
+    const handleSuccess = () => {
+        setSuccess(true);
+    };
+
+    const {
+        error: sendError,
+        handleCreate,
+        isProcessing,
+        orderId,
+    } = useCreateOrder(handleSuccess);
+
     const {
         addItems,
         removeItem,
@@ -30,6 +48,12 @@ const CreateOrderView = () => {
         }
     };
 
+    const history = useHistory();
+
+    const redirectToOrder = () => {
+        history.push(`/order/${orderId}`);
+    };
+
     return (
         <div className="create-order-view">
             <h1>Ný pöntun</h1>
@@ -43,6 +67,14 @@ const CreateOrderView = () => {
             <CreateOrderActions
                 createOrder={createOrder}
                 cancelOrder={resetFields}
+                isProcessing={isProcessing}
+            />
+            <SuccessToaster
+                success={success}
+                receivedSuccess={receivedSuccess}
+                message="Pöntun tókst!"
+                cb={redirectToOrder}
+                cbText="Skoða"
             />
         </div>
     );

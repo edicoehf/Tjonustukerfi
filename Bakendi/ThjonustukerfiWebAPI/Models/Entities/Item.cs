@@ -23,6 +23,7 @@ namespace ThjonustukerfiWebAPI.Models.Entities
         public DateTime DateModified { get; set; }
         public DateTime? DateCompleted { get; set; }
 
+        //TODO: Not a generic function as it specifically changes values that are a part of Reykofninn
         /// <summary>Takes an ItemInputModel and copies all variables as well as copy json objects correctly to its json string.</summary>
         public void CopyInputToSelf(ItemInputModel other)
         {

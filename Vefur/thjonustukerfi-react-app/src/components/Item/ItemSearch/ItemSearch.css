@@ -1,6 +1,6 @@
 .item-search h1 {
     text-align: center;
-    margin-top: 2rem;
+    margin-top: 1em;
 }
 
 .item-search-bars .form {
@@ -35,4 +35,8 @@
 
 .item-search .search-bar {
     padding: 0.5em 2.5em 1.5em 2.5em;
+}
+
+.item-search .progress-component {
+    margin-top: 1em;
 }
