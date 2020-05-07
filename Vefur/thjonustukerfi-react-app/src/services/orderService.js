@@ -66,7 +66,7 @@ const updateOrderById = (order, id) => {
 };
 
 const checkoutOrderById = (id) => {
-    return fetch(endpoint + id + "/complete", {
+    return fetch(api_endpoint + id + "/complete", {
         method: "PATCH",
         headers: {
             crossDomain: true,
@@ -78,7 +78,7 @@ const checkoutOrderById = (id) => {
 };
 
 const getAllArchivedOrders = () => {
-    return fetch("http://localhost:5000/api/info/orderarchives", {
+    return fetch(`${api_endpoint}/api/info/orderarchives`, {
         method: "GET",
         headers: {
             crossDomain: true,
