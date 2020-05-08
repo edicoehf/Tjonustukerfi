@@ -60,9 +60,6 @@
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.3</Version>
     </PackageReference>
-    <PackageReference Include="Symbol.XamarinEMDK">
-      <Version>6.0.0.51</Version>
-    </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="4.6.0.726" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.1" />
   </ItemGroup>

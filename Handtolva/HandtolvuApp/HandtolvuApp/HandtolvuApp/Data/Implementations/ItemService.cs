@@ -1,6 +1,7 @@
 ﻿using HandtolvuApp.Data.Interfaces;
 using HandtolvuApp.Models;
 using Newtonsoft.Json;
+using Polly;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -32,7 +33,12 @@ namespace HandtolvuApp.Data.Implementations
             string Uri = BaseURI + $"/search?barcode={barcode}";
             try
             {
-                var response = await _client.GetAsync(Uri);
+                var response = await Policy
+                                    .Handle<HttpRequestException>()
+                                    .WaitAndRetry(retryCount: 3,
+                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                    .Execute(async () => await _client.GetAsync(Uri));
+
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
@@ -55,9 +61,13 @@ namespace HandtolvuApp.Data.Implementations
 
             try
             {
-                var response = await _client.GetAsync(Uri);
-                
-                if(response.IsSuccessStatusCode)
+                var response = await Policy
+                                    .Handle<HttpRequestException>()
+                                    .WaitAndRetry(retryCount: 3,
+                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                    .Execute(async () => await _client.GetAsync(Uri));
+
+                if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
                     NextStates = JsonConvert.DeserializeObject<NextStates>(content);
@@ -83,9 +93,13 @@ namespace HandtolvuApp.Data.Implementations
                 var request = new HttpRequestMessage(method, stateUri) { 
                     Content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json") 
                 };
-                var response = await _client.SendAsync(request);
+                var response = await Policy
+                                    .Handle<HttpRequestException>()
+                                    .WaitAndRetry(retryCount: 3,
+                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                    .Execute(async () => await _client.SendAsync(request));
 
-                if(response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)
                 {
                     return true;
                 }
@@ -118,7 +132,11 @@ namespace HandtolvuApp.Data.Implementations
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json")
                 };
-                var response = await _client.SendAsync(request);
+                var response = await Policy
+                                    .Handle<HttpRequestException>()
+                                    .WaitAndRetry(retryCount: 3,
+                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                    .Execute(async () => await _client.SendAsync(request));
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -145,7 +163,11 @@ namespace HandtolvuApp.Data.Implementations
 
             try
             {
-                var response = await _client.GetAsync(reqUri);
+                var response = await Policy
+                                    .Handle<HttpRequestException>()
+                                    .WaitAndRetry(retryCount: 3,
+                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                    .Execute(async () => await _client.GetAsync(reqUri));
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -168,7 +190,11 @@ namespace HandtolvuApp.Data.Implementations
 
             try
             {
-                var response = await _client.GetAsync(reqUri);
+                var response = await Policy
+                                    .Handle<HttpRequestException>()
+                                    .WaitAndRetry(retryCount: 3,
+                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                    .Execute(async () => await _client.GetAsync(reqUri));
 
                 if (response.IsSuccessStatusCode)
                 {

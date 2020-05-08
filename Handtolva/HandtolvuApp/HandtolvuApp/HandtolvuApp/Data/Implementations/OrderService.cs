@@ -1,6 +1,7 @@
 ﻿using HandtolvuApp.Data.Interfaces;
 using HandtolvuApp.Models;
 using Newtonsoft.Json;
+using Polly;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -30,7 +31,12 @@ namespace HandtolvuApp.Data.Implementations
             string Uri = BaseURI + $"/search?barcode={barcode}";
             try
             {
-                var response = await _client.GetAsync(Uri);
+                var response = await Policy
+                                    .Handle<HttpRequestException>()
+                                    .WaitAndRetry(retryCount: 3,
+                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                    .Execute(async () => await _client.GetAsync(Uri));
+
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
@@ -54,7 +60,12 @@ namespace HandtolvuApp.Data.Implementations
                 string checkoutUri = BaseURI + $"/{id}/complete";
 
                 var request = new HttpRequestMessage(method, checkoutUri);
-                var response = await _client.SendAsync(request);
+
+                var response = await Policy
+                                    .Handle<HttpRequestException>()
+                                    .WaitAndRetry(retryCount: 3,
+                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                    .Execute(async () => await _client.SendAsync(request));
 
                 if (response.IsSuccessStatusCode)
                 {
