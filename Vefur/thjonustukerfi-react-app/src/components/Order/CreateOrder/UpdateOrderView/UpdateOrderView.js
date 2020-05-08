@@ -116,11 +116,7 @@ const UpdateOrderView = ({ match }) => {
                 {(order.id && loaded(services) && loaded(categories)) ||
                 error ? (
                     !error && !categoryError && !serviceError ? (
-                        <UpdateOrder
-                            order={order}
-                            services={services}
-                            categories={categories}
-                        />
+                        <UpdateOrder order={order} />
                     ) : (
                         <p className="error">Gat ekki sótt pöntun</p>
                     )
