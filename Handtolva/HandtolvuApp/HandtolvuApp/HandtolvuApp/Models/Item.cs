@@ -5,9 +5,8 @@ using System.Text;
 
 namespace HandtolvuApp.Models
 {
-    public class Item : INotifyPropertyChanged
+    public class Item
     {
-        public event PropertyChangedEventHandler PropertyChanged;
         public long Id { get; set; }
         public long OrderId { get; set; }
         public string Service { get; set; }

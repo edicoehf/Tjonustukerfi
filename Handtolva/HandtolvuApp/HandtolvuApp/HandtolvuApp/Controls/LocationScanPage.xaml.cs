@@ -20,11 +20,19 @@ namespace HandtolvuApp.Controls
 
         protected override void OnAppearing()
         {
+            var vm = BindingContext as LocationScanViewModel;
             MessagingCenter.Subscribe<LocationScanViewModel, string>(this, "Fail", async (sender, message) =>
             {
                 await App.Current.MainPage.DisplayAlert("Villa!", message, "Ok");
                 MyEditor.Focus();
             });
+
+            MessagingCenter.Subscribe<ScannerViewModel>(this, "ScannedBarcode", (sender) =>
+            {
+                vm.ClickCommand.Execute(null);
+            });
+
+            vm.Init();
 
             MyEditor.Focus();
             base.OnAppearing();
@@ -33,6 +41,9 @@ namespace HandtolvuApp.Controls
         protected override void OnDisappearing()
         {
             MessagingCenter.Unsubscribe<LocationScanViewModel, string>(this, "Fail");
+            MessagingCenter.Unsubscribe<ScannerViewModel>(this, "ScannedBarcode");
+            var vm = BindingContext as LocationScanViewModel;
+            vm.DeInit();
             base.OnDisappearing();
         }
     }

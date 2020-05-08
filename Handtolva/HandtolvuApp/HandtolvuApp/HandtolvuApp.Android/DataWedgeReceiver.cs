@@ -66,7 +66,7 @@ namespace HandtolvuApp.Droid
                             sLabelType = "Unknown";
                         }
 
-                        Out = data.ToString() + "\r\n";
+                        Out = data.ToString();
                     }
                 }
 

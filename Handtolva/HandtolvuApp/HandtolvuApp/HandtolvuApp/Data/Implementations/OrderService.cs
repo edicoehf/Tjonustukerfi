@@ -13,8 +13,9 @@ namespace HandtolvuApp.Data.Implementations
 {
     public class OrderService : IOrderService
     {
+        //10.0.2.2
         readonly HttpClient _client;
-        private static string BaseURI = "http://10.0.2.2:5000/api/orders";
+        private static readonly string BaseURI = "http://10.0.2.2:5000/api/orders";
         public Order Order { get; private set; }
 
         public OrderService()
@@ -50,7 +51,7 @@ namespace HandtolvuApp.Data.Implementations
             try
             {
                 var method = new HttpMethod("PATCH");
-                string checkoutUri = BaseURI + $"{id}/complete";
+                string checkoutUri = BaseURI + $"/{id}/complete";
 
                 var request = new HttpRequestMessage(method, checkoutUri);
                 var response = await _client.SendAsync(request);

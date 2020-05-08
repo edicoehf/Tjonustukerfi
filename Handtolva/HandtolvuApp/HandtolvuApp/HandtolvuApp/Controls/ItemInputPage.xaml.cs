@@ -21,6 +21,7 @@ namespace HandtolvuApp.Controls
         protected override void OnAppearing()
         {
             MyEditor.Focus();
+            var vm = BindingContext as ItemInputViewModel;
 
             MessagingCenter.Subscribe<ItemInputViewModel, string>(this, "Villa", async (sender, message) =>
             {
@@ -28,12 +29,22 @@ namespace HandtolvuApp.Controls
                 MyEditor.Focus();
             });
 
+            MessagingCenter.Subscribe<ScannerViewModel>(this, "ScannedBarcode", (sender) =>
+            {
+                vm.ClickCommand.Execute(null);
+            });
+
+            vm.Init();
+
             base.OnAppearing();
         }
 
         protected override void OnDisappearing()
         {
             MessagingCenter.Unsubscribe<ItemInputViewModel, string>(this, "Villa");
+            MessagingCenter.Unsubscribe<ScannerViewModel>(this, "ScannedBarcode");
+            var vm = BindingContext as ItemInputViewModel;
+            vm.DeInit();
             base.OnDisappearing();
         }
     }

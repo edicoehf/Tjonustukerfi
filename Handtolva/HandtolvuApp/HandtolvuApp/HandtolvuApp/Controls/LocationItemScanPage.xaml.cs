@@ -25,7 +25,9 @@ namespace HandtolvuApp.Controls
         }
 
         protected override void OnAppearing()
-        {
+        { 
+            var vm = BindingContext as LocationItemScanViewModel;
+
             MessagingCenter.Subscribe<LocationItemScanViewModel, string>(this, "Success", async (sender, message) =>
             {
                 await App.Current.MainPage.DisplayAlert("Klárað!", message, "Ok");
@@ -36,6 +38,13 @@ namespace HandtolvuApp.Controls
                 await App.Current.MainPage.DisplayAlert("Villa!", message, "Ok");
             });
 
+            MessagingCenter.Subscribe<ScannerViewModel>(this, "ScannedBarcode", (sender) =>
+            {
+                vm.AddCommand.Execute(null);
+            });
+
+            vm.Init();
+
             MyEditor.Focus();
             base.OnAppearing();
         }
@@ -44,6 +53,9 @@ namespace HandtolvuApp.Controls
         {
             MessagingCenter.Unsubscribe<LocationItemScanViewModel, string>(this, "Success");
             MessagingCenter.Unsubscribe<LocationItemScanViewModel, string>(this, "Fail");
+            MessagingCenter.Unsubscribe<ScannerViewModel>(this, "ScannedBarcode");
+            var vm = BindingContext as LocationItemScanViewModel;
+            vm.DeInit();
             base.OnDisappearing();
         }
 
