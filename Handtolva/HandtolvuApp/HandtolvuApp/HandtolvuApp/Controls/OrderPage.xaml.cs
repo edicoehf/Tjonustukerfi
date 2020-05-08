@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HandtolvuApp.Data.Implementations;
+using HandtolvuApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +17,29 @@ namespace HandtolvuApp.Controls
         public OrderPage()
         {
             InitializeComponent();
+        }
+
+        protected override void OnAppearing()
+        {
+            MessagingCenter.Subscribe<OrderPageViewModel, string>(this, "Success", async (sender, message) =>
+            {
+                await App.Current.MainPage.DisplayAlert("Klárað", message, "Ok");
+            });
+
+            MessagingCenter.Subscribe<OrderPageViewModel, string>(this, "Fail", async (sender, message) =>
+            {
+                await App.Current.MainPage.DisplayAlert("Villa", message, "Ok");
+            });
+
+            MyCollectionView.SelectedItem = null;
+            base.OnAppearing();
+        }
+
+        protected override void OnDisappearing()
+        {
+            MessagingCenter.Unsubscribe<OrderPageViewModel, string>(this, "Success");
+            MessagingCenter.Unsubscribe<OrderPageViewModel, string>(this, "Fail");
+            base.OnDisappearing();
         }
     }
 }

@@ -7,13 +7,15 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace HandtolvuApp.Data.Implementations
 {
     public class OrderService : IOrderService
     {
+        //10.0.2.2
         readonly HttpClient _client;
-
+        private static readonly string BaseURI = "http://10.0.2.2:5000/api/orders";
         public Order Order { get; private set; }
 
         public OrderService()
@@ -25,7 +27,7 @@ namespace HandtolvuApp.Data.Implementations
         {
             Order = null;
 
-            string Uri = "http://10.0.2.2:5000/api/orders/search?barcode=" + barcode;
+            string Uri = BaseURI + $"/search?barcode={barcode}";
             try
             {
                 var response = await _client.GetAsync(Uri);
@@ -43,27 +45,27 @@ namespace HandtolvuApp.Data.Implementations
             return Order;
         }
 
-        public async Task CheckoutOrder(long id)
+        public async Task<bool> CheckoutOrder(long id)
         {
             // uri to set order to completed state
-            string checkoutUri = "http://10.0.2.2:5000/api/orders/";
             try
             {
                 var method = new HttpMethod("PATCH");
-                checkoutUri = checkoutUri + id + "/complete";
+                string checkoutUri = BaseURI + $"/{id}/complete";
 
                 var request = new HttpRequestMessage(method, checkoutUri);
                 var response = await _client.SendAsync(request);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    Debug.WriteLine(@"\tOrder successfully completed");
+                    return true;
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(@"\rERROR {0}", ex.Message);
             }
+            return false;
         }
     }
 }
