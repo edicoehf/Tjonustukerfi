@@ -64,7 +64,7 @@ const ItemSearch = () => {
                             {Object.keys(item).length > 0 && (
                                 <div className="item-search-result-info">
                                     <ItemDetails id={item.id} />
-                                    <Link to={`/item/${item.id}`}>
+                                    <Link to={`/item/${item.id}`} className="item-link-button">
                                         <Button
                                             className="details-item-button"
                                             variant="contained"
