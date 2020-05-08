@@ -47,22 +47,14 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
         setOtherCategoryHiddenBool
     );
 
-    const getExistingItemWithIds = (item) => {
+    const getExistingItem = (item) => {
         let idItem = { ...item };
-        const s = services[services.findIndex((s) => s.name === item.service)];
-        const c =
-            categories[categories.findIndex((c) => c.name === item.category)];
-        if (s && c) {
-            if (c.id === categories.length) {
-                idItem.otherCategory = item.json.otherCategory;
-            }
-            idItem.service = s.id.toString();
-            idItem.category = c.id.toString();
-            idItem.filleted = item.json.filleted ? "filleted" : "notFilleted";
-            idItem.sliced = item.json.sliced ? "sliced" : "whole";
-            idItem.otherCategory = item.json.otherCategory || "";
-            idItem.otherService = item.json.otherService || "";
-        }
+        idItem.service = item.serviceId.toString();
+        idItem.category = item.categoryId.toString();
+        idItem.filleted = item.json.filleted ? "filleted" : "notFilleted";
+        idItem.sliced = item.json.sliced ? "sliced" : "whole";
+        idItem.otherCategory = item.json.otherCategory || "";
+        idItem.otherService = item.json.otherService || "";
         idItem.categories = categories;
         idItem.services = services;
         return idItem;
@@ -70,9 +62,7 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
 
     const isExistingItem = existingItem && Object.keys(existingItem).length > 0;
 
-    const state = isExistingItem
-        ? getExistingItemWithIds(existingItem)
-        : initialState;
+    const state = isExistingItem ? getExistingItem(existingItem) : initialState;
 
     React.useEffect(() => {
         state.categories = categories;
