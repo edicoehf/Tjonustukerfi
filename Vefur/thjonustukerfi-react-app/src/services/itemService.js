@@ -1,10 +1,11 @@
 import { handleErrors, handleData } from "./serviceHandlers";
+import endpoint from "./endpoint";
 
-const endpoint = "http://localhost:5000/api/items/";
+const api_endpoint = `${endpoint}/api/items/`;
 
 const getItemById = (id) => {
     console.log(typeof id);
-    return fetch(endpoint + id, {
+    return fetch(api_endpoint + id, {
         method: "GET",
         headers: {
             crossDomain: true,
@@ -16,7 +17,7 @@ const getItemById = (id) => {
 };
 
 const getItemByBarcode = (barcode) => {
-    return fetch(endpoint + "search?barcode=" + barcode, {
+    return fetch(api_endpoint + "search?barcode=" + barcode, {
         method: "GET",
         headers: {
             crossDomain: true,
@@ -28,7 +29,7 @@ const getItemByBarcode = (barcode) => {
 };
 
 const getNextStatesById = (id) => {
-    return fetch(endpoint + "nextstate?itemId=" + id, {
+    return fetch(api_endpoint + "nextstate?itemId=" + id, {
         method: "GET",
         headers: {
             crossDomain: true,
@@ -40,7 +41,7 @@ const getNextStatesById = (id) => {
 };
 
 const updateItemState = ({ item, state, location }) => {
-    return fetch(endpoint + "statechange", {
+    return fetch(api_endpoint + "statechange", {
         method: "PATCH",
         headers: {
             crossDomain: true,
@@ -61,7 +62,7 @@ const updateItemState = ({ item, state, location }) => {
 const updateItemById = (item) => {
     const id = item.id;
     delete item.id;
-    return fetch(endpoint + id, {
+    return fetch(api_endpoint + id, {
         method: "PATCH",
         body: JSON.stringify(item),
         headers: {
@@ -74,7 +75,7 @@ const updateItemById = (item) => {
 };
 
 const deleteItemById = (id) => {
-    return fetch(endpoint + id, {
+    return fetch(api_endpoint + id, {
         method: "DELETE",
         headers: {
             crossDomain: true,
@@ -85,7 +86,7 @@ const deleteItemById = (id) => {
 };
 
 const getItemHistoryById = (id) => {
-    return fetch(`http://localhost:5000/api/info/${id}/itemhistory`, {
+    return fetch(`${endpoint}/api/info/${id}/itemhistory`, {
         method: "GET",
         headers: {
             crossDomain: true,
@@ -97,7 +98,7 @@ const getItemHistoryById = (id) => {
 };
 
 const getItemLocations = () => {
-    return fetch(`http://localhost:5000/api/info/itemlocations`, {
+    return fetch(`${endpoint}/api/info/itemlocations`, {
         method: "GET",
         headers: {
             crossDomain: true,
@@ -109,7 +110,7 @@ const getItemLocations = () => {
 };
 
 const getItemPrintDetails = (id) => {
-    return fetch(`http://localhost:5000/api/items/printer/${id}`, {
+    return fetch(`${endpoint}/api/items/printer/${id}`, {
         method: "GET",
         headers: {
             crossDomain: true,

@@ -1,9 +1,10 @@
 import { handleErrors, handleData } from "./serviceHandlers";
+import endpoint from "./endpoint";
 
-const endpoint = "http://localhost:5000/api/customers/";
+const api_endpoint = `${endpoint}/api/customers/`;
 
 const getAllCustomers = () => {
-    return fetch(endpoint, {
+    return fetch(api_endpoint, {
         method: "GET",
         headers: {
             crossDomain: true,
@@ -15,7 +16,7 @@ const getAllCustomers = () => {
 };
 
 const deleteCustomerById = (id) => {
-    return fetch(endpoint + id, {
+    return fetch(api_endpoint + id, {
         method: "DELETE",
         headers: {
             crossDomain: true,
@@ -26,7 +27,7 @@ const deleteCustomerById = (id) => {
 };
 
 const forceDeleteCustomerById = (id) => {
-    return fetch(endpoint + id + "/confirm", {
+    return fetch(api_endpoint + id + "/confirm", {
         method: "DELETE",
         headers: {
             crossDomain: true,
@@ -37,7 +38,7 @@ const forceDeleteCustomerById = (id) => {
 };
 
 const createCustomer = (customer) => {
-    return fetch(endpoint, {
+    return fetch(api_endpoint, {
         method: "POST",
         body: JSON.stringify(customer),
         headers: {
@@ -51,7 +52,7 @@ const createCustomer = (customer) => {
 };
 
 const getCustomerById = (id) => {
-    return fetch(endpoint + id, {
+    return fetch(api_endpoint + id, {
         method: "GET",
         headers: {
             crossDomain: true,
@@ -63,7 +64,7 @@ const getCustomerById = (id) => {
 };
 
 const updateCustomer = (customer) => {
-    return fetch(endpoint + customer.id, {
+    return fetch(api_endpoint + customer.id, {
         method: "PATCH",
         body: JSON.stringify(customer),
         headers: {
@@ -76,7 +77,7 @@ const updateCustomer = (customer) => {
 };
 
 const getOrdersByCustomerId = (customerId) => {
-    return fetch(endpoint + customerId + "/orders", {
+    return fetch(api_endpoint + customerId + "/orders", {
         method: "GET",
         headers: {
             crossDomain: true,
