@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HandtolvuApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,12 @@ namespace HandtolvuApp.Controls
         public ItemPage()
         {
             InitializeComponent();
+        }
+
+        protected override void OnAppearing()
+        {
+            (this.BindingContext as ItemViewModel).UpdateViewModel();
+            base.OnAppearing();
         }
     }
 }

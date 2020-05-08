@@ -24,21 +24,21 @@
                Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" 
                Margin="0, 20, 0, 0"/>
 
-        <Label Text="Sláðu inn stöðu eða skannaðu Prufa." FontSize="18"
+        <Label Text="Sláðu inn stöðu eða skannaðu strikamerki." FontSize="18"
                Grid.Row="1" Grid.ColumnSpan="4"
                HorizontalTextAlignment="Center"
                VerticalOptions="Center" 
                />
 
-        <Editor Grid.Column="0" Grid.ColumnSpan="3"
-                Grid.Row="2"
+        <Entry  Grid.Column="0" Grid.ColumnSpan="3" ReturnCommand="{Binding StateScan}"
+                Grid.Row="2" x:Name="MyEditor"
                 Placeholder="{Binding Placeholder}" Margin="10,0"
                 AutomationId="inputEntry"
                 Text="{Binding ScannedBarcodeText}"/>
 
         <Button Grid.Column="3" Text="Ok"
-                Grid.Row="2"
-                Margin="0, 5, 10, 5"
+                Grid.Row="2" x:Name="MyButton"
+                Margin="0, 5, 10, 5" CornerRadius="10"
                 BackgroundColor="Green" TextColor="White"
                 Command="{Binding StateScan}"/>
     </Grid>

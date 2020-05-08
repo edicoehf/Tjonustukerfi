@@ -9,19 +9,22 @@ namespace HandtolvuApp.Data.Managers
 {
     public class OrderManager
     {
-        IOrderService orderService;
+        readonly IOrderService orderService;
 
         public OrderManager(IOrderService service)
         {
             orderService = service;
         }
 
+        /// <summary>Gets a given order</summary>
+        /// <param name="barcode">barcode of the given order</param>
+        /// <returns>Returns a Order model</returns>
         public Task<Order> GetOrderAsync(string barcode)
         {
             return orderService.GetOrderAsync(barcode);
         }
 
-        public Task CheckoutOrder(long id)
+        public Task<bool> CheckoutOrder(long id)
         {
             return orderService.CheckoutOrder(id);
         }
