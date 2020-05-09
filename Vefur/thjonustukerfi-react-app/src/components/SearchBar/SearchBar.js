@@ -21,7 +21,7 @@ const SearchBar = ({
             <FormControl>
                 <InputLabel htmlFor={htmlId}>{placeHolder}</InputLabel>
                 <Input
-                    id="item-id-search"
+                    id={htmlId}
                     type="text"
                     autoComplete="off"
                     value={searchTerm}

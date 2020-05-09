@@ -4,7 +4,6 @@ import endpoint from "./endpoint";
 const api_endpoint = `${endpoint}/api/items/`;
 
 const getItemById = (id) => {
-    console.log(typeof id);
     return fetch(api_endpoint + id, {
         method: "GET",
         headers: {
@@ -121,6 +120,18 @@ const getItemPrintDetails = (id) => {
         .catch((error) => Promise.reject(error));
 };
 
+const getAllStates = () => {
+    return fetch(`${endpoint}/api/info/states`, {
+        method: "GET",
+        headers: {
+            crossDomain: true,
+        },
+    })
+        .then(handleErrors)
+        .then(handleData)
+        .catch((error) => Promise.reject(error));
+};
+
 export default {
     getItemById,
     getItemByBarcode,
@@ -131,4 +142,5 @@ export default {
     getItemHistoryById,
     getItemLocations,
     getItemPrintDetails,
+    getAllStates,
 };
