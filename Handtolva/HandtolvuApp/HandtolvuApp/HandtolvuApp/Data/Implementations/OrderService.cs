@@ -1,6 +1,7 @@
 ﻿using HandtolvuApp.Data.Interfaces;
 using HandtolvuApp.Models;
 using Newtonsoft.Json;
+using Plugin.Connectivity;
 using Polly;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace HandtolvuApp.Data.Implementations
     {
         //10.0.2.2
         readonly HttpClient _client;
-        private static readonly string BaseURI = "http://10.0.2.2:5000/api/orders";
+        private static readonly string BaseURI = $"{Constants.ApiConnection}/api/orders";
         public Order Order { get; private set; }
 
         public OrderService()
@@ -27,25 +28,35 @@ namespace HandtolvuApp.Data.Implementations
         public async Task<Order> GetOrderAsync(string barcode)
         {
             Order = null;
-
-            string Uri = BaseURI + $"/search?barcode={barcode}";
-            try
+            
+            if(CheckConnection())
             {
-                var response = await Policy
-                                    .Handle<HttpRequestException>()
-                                    .WaitAndRetry(retryCount: 3,
-                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
-                                    .Execute(async () => await _client.GetAsync(Uri));
 
-                if (response.IsSuccessStatusCode)
+                string Uri = BaseURI + $"/search?barcode={barcode}";
+                try
                 {
-                    var content = await response.Content.ReadAsStringAsync();
-                    Order = JsonConvert.DeserializeObject<Order>(content);
+                    // Get response with retry policy in case of HttpRequestException
+                    var response = await Policy
+                                        .Handle<HttpRequestException>()
+                                        .WaitAndRetry(retryCount: 3,
+                                                        sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                        .Execute(async () => await _client.GetAsync(Uri));
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var content = await response.Content.ReadAsStringAsync();
+                        Order = JsonConvert.DeserializeObject<Order>(content);
+                    }
                 }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(@"\tERROR {0}", ex.Message);
+                }
+
             }
-            catch (Exception ex)
+            else
             {
-                Debug.WriteLine(@"\tERROR {0}", ex.Message);
+                // Handle connection issue
             }
 
             return Order;
@@ -53,30 +64,44 @@ namespace HandtolvuApp.Data.Implementations
 
         public async Task<bool> CheckoutOrder(long id)
         {
-            // uri to set order to completed state
-            try
+            if(CheckConnection())
             {
-                var method = new HttpMethod("PATCH");
-                string checkoutUri = BaseURI + $"/{id}/complete";
-
-                var request = new HttpRequestMessage(method, checkoutUri);
-
-                var response = await Policy
-                                    .Handle<HttpRequestException>()
-                                    .WaitAndRetry(retryCount: 3,
-                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
-                                    .Execute(async () => await _client.SendAsync(request));
-
-                if (response.IsSuccessStatusCode)
+                // uri to set order to completed state
+                try
                 {
-                    return true;
+                    var method = new HttpMethod("PATCH");
+                    string checkoutUri = BaseURI + $"/{id}/complete";
+
+                    var request = new HttpRequestMessage(method, checkoutUri);
+
+                    // Get response with retry policy in case of HttpRequestException
+                    var response = await Policy
+                                        .Handle<HttpRequestException>()
+                                        .WaitAndRetry(retryCount: 3,
+                                                        sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                        .Execute(async () => await _client.SendAsync(request));
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(@"\rERROR {0}", ex.Message);
                 }
             }
-            catch (Exception ex)
+            else
             {
-                Debug.WriteLine(@"\rERROR {0}", ex.Message);
+                // Handle connection issue
             }
+
             return false;
+        }
+
+        private bool CheckConnection()
+        {
+            return CrossConnectivity.Current.IsConnected;
         }
     }
 }

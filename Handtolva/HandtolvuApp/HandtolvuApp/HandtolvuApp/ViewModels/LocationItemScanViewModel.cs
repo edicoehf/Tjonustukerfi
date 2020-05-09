@@ -89,7 +89,11 @@ namespace HandtolvuApp.ViewModels
 
         public void AddToList()
         {
-            AllItems.Insert(0, ScannedBarcodeText);
+            if(!AllItems.Contains(ScannedBarcodeText))
+            {
+                AllItems.Insert(0, ScannedBarcodeText);
+            }
+
             ScannedBarcodeText = "";
         }
     }

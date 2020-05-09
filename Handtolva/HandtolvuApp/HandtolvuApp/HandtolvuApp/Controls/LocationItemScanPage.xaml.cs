@@ -16,6 +16,7 @@ namespace HandtolvuApp.Controls
         public LocationItemScanPage()
         {
             InitializeComponent();
+
             this.MyEditor.ReturnCommand = new Command(() =>
             {
                 var vm = BindingContext as LocationItemScanViewModel;
@@ -31,16 +32,21 @@ namespace HandtolvuApp.Controls
             MessagingCenter.Subscribe<LocationItemScanViewModel, string>(this, "Success", async (sender, message) =>
             {
                 await App.Current.MainPage.DisplayAlert("Klárað!", message, "Ok");
+                LoadingLayout.IsVisible = false;
+                NavigationPage.SetHasNavigationBar(this, true);
             });
 
             MessagingCenter.Subscribe<LocationItemScanViewModel, string>(this, "Fail", async (sender, message) =>
             {
                 await App.Current.MainPage.DisplayAlert("Villa!", message, "Ok");
+                LoadingLayout.IsVisible = false;
+                NavigationPage.SetHasNavigationBar(this, true);
             });
 
             MessagingCenter.Subscribe<ScannerViewModel>(this, "ScannedBarcode", (sender) =>
-            {
+            { 
                 vm.AddCommand.Execute(null);
+                MyEditor.Focus();
             });
 
             vm.Init();
@@ -65,6 +71,14 @@ namespace HandtolvuApp.Controls
             var selected = button.BindingContext as string;
             var vm = BindingContext as LocationItemScanViewModel;
             vm.RemoveCommand.Execute(selected);
+        }
+
+        public void ActivityShow(object sender, EventArgs e)
+        {
+            LoadingLayout.IsVisible = true;
+            NavigationPage.SetHasNavigationBar(this, false);
+            var vm = BindingContext as LocationItemScanViewModel;
+            vm.SendCommand.Execute(null);
         }
 
         protected override void OnBindingContextChanged()
