@@ -33,6 +33,16 @@ const OrderMain = () => {
                     error={error}
                     isLoading={isLoading}
                 />
+                {!isLoading && orders.length === 0 ? (
+                    <p className="error">Engar pantanir í gagnagrunni</p>
+                ) : (
+                    !isLoading &&
+                    searchResults.length === 0 && (
+                        <p className="error">
+                            Engar pantanir fundust með þessum leitarskilyrðum
+                        </p>
+                    )
+                )}
             </div>
         </div>
     );

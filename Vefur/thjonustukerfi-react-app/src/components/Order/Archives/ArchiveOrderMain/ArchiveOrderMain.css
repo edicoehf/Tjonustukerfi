@@ -38,3 +38,7 @@
     border-radius: 10px;
     margin-bottom: 1em;
 }
+
+.order-archives-main .error {
+    margin-top: 1em;
+}
