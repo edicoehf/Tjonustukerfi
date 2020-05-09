@@ -18,8 +18,8 @@ namespace HandtolvuApp.Data.Implementations
         readonly HttpClient _client;
         public NextStates NextStates { get; private set; }
         public Item Item { get; private set; }
-        private readonly string BaseURI = $"{Constants.ApiConnection}/api/items";
-        private readonly string InfoURI = $"{Constants.ApiConnection}/api/info";
+        private readonly string BaseURI = $"{Constants.ApiConnection}items";
+        private readonly string InfoURI = $"{Constants.ApiConnection}info";
 
         public ItemService()
         {
@@ -97,67 +97,20 @@ namespace HandtolvuApp.Data.Implementations
             return NextStates;
         }
 
-        public async Task<bool> StateChangeWithId(long id, string barcode)
-        {
-            if(CheckConnection())
-            {
-                string stateUri = BaseURI + "/scanner/statechangebyid";
-                var item = new[] { new { itemId = id, stateChangeBarcode = barcode } };
-
-                try
-                {
-                    var method = new HttpMethod("PATCH");
-                    var request = new HttpRequestMessage(method, stateUri) { 
-                        Content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json") 
-                    };
-                    var response = await Policy
-                                        .Handle<HttpRequestException>()
-                                        .WaitAndRetry(retryCount: 3,
-                                                        sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
-                                        .Execute(async () => await _client.SendAsync(request));
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(@"\tERROR {0}", ex.Message);
-                    return false;
-                }
-            }
-            else
-            {
-                // handle connection issues
-            }
-
-            return false;
-        }
-
-        public async Task<List<LocationStateChange>> StateChangeByLocation(ObservableCollection<string> items, string barcode)
+        public async Task<List<LocationStateChange>> StateChangeByLocation(List<LocationStateChange> items)
         {
             List<LocationStateChange> ret = new List<LocationStateChange>();
             
             if(CheckConnection())
             {
                 string stateUri = BaseURI + "/scanner/statechangebybarcode";
-                var item = new List<LocationStateChange>();
-                foreach(string i in items)
-                {
-                    item.Add(new LocationStateChange { ItemBarcode = i, StateChangeBarcode = barcode });
-                }
 
                 try
                 {
                     var method = new HttpMethod("PATCH");
                     var request = new HttpRequestMessage(method, stateUri)
                     {
-                        Content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json")
+                        Content = new StringContent(JsonConvert.SerializeObject(items), Encoding.UTF8, "application/json")
                     };
                     var response = await Policy
                                         .Handle<HttpRequestException>()

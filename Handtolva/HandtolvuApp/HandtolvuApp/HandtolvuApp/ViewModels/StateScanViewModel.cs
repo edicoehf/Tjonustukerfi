@@ -60,7 +60,8 @@ namespace HandtolvuApp.ViewModels
                     {
                         if (locations.Contains(locationCheck[1]) && states.Where(i => i.Name == locationCheck[0]).Count() > 0)
                         {
-                            if (await App.ItemManager.StateChangeWithId(Item.Id, ScannedBarcodeText))
+                            List<LocationStateChange> ret = await App.ItemManager.StateChangeByLocation(new List<LocationStateChange>() { new LocationStateChange { ItemBarcode = Item.Barcode, StateChangeBarcode = ScannedBarcodeText } });
+                            if (ret.Count == 0)
                             {
                                 MessagingCenter.Send<StateScanViewModel, string>(this, "Success", $"{Item.Barcode} hefur verið skannað í hólf {ScannedBarcodeText}");
                             }

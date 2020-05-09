@@ -6,6 +6,6 @@ namespace HandtolvuApp
 {
     public static class Constants
     {
-        public static string ApiConnection { get; set; } = "http://192.168.111.230:5000";
+        public static string ApiConnection { get; set; } = "http://192.168.111.230:5000/api/";
     }
 }

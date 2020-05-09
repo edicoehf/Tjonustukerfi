@@ -17,7 +17,7 @@ namespace HandtolvuApp.Data.Implementations
     {
         //10.0.2.2
         readonly HttpClient _client;
-        private static readonly string BaseURI = $"{Constants.ApiConnection}/api/orders";
+        private static readonly string BaseURI = $"{Constants.ApiConnection}orders";
         public Order Order { get; private set; }
 
         public OrderService()
@@ -56,7 +56,8 @@ namespace HandtolvuApp.Data.Implementations
             }
             else
             {
-                // Handle connection issue
+                // Handle Scanner has no internet connection
+                // add to list of api calls if needed
             }
 
             return Order;
