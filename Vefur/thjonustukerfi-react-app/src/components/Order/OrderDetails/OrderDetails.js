@@ -37,42 +37,51 @@ const OrderDetails = ({ id, update, receivedUpdate }) => {
             {isLoading ? (
                 <ProgressComponent isLoading={isLoading} />
             ) : !error ? (
-                <TableContainer component={Paper} elevation={3}>
-                    <h3 className="order-title">Pöntun {order.id}</h3>
-                    <Table className="order-info">
-                        <TableBody>
-                            <TableRow>
-                                <TableCell className="order-barcode">
-                                    <b>Strikamerki:</b> {order.barcode}
-                                </TableCell>
-                                <TableCell>
-                                    <b>Viðskiptavinur: </b>
-                                    <Link
-                                        className="customer-link"
-                                        to={`/customer/${order.customerId}`}
-                                    >
-                                        {order.customer}
-                                    </Link>
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell className="order-date">
-                                    <b>Dagsetning:</b>{" "}
-                                    {dateFormat(order.dateCreated)}
-                                </TableCell>
-                                <TableCell>
-                                    {order.dateCompleted && (
-                                        <>
-                                            <b>Sótt:</b>{" "}
-                                            {dateFormat(order.dateCompleted)}
-                                        </>
-                                    )}
-                                </TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
-                    <OrderItemList items={order.items} />
-                </TableContainer>
+                <>
+                    <TableContainer component={Paper} elevation={3}>
+                        <h3 className="order-title">Pöntun {order.id}</h3>
+                        <Table className="order-info">
+                            <TableBody>
+                                <TableRow>
+                                    <TableCell className="order-barcode">
+                                        <b>Strikamerki:</b> {order.barcode}
+                                    </TableCell>
+                                    <TableCell>
+                                        <b>Viðskiptavinur: </b>
+                                        <Link
+                                            className="customer-link"
+                                            to={`/customer/${order.customerId}`}
+                                        >
+                                            {order.customer}
+                                        </Link>
+                                    </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell className="order-date">
+                                        <b>Dagsetning:</b>{" "}
+                                        {dateFormat(order.dateCreated)}
+                                    </TableCell>
+                                    <TableCell>
+                                        {order.dateCompleted && (
+                                            <>
+                                                <b>Sótt:</b>{" "}
+                                                {dateFormat(
+                                                    order.dateCompleted
+                                                )}
+                                            </>
+                                        )}
+                                    </TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+                        <OrderItemList items={order.items} />
+                    </TableContainer>
+                    {order.items.length === 0 && (
+                        <p className="error">
+                            Þessi pöntun inniheldur engar vörur
+                        </p>
+                    )}
+                </>
             ) : (
                 <p className="error">Gat ekki sótt pöntun</p>
             )}
