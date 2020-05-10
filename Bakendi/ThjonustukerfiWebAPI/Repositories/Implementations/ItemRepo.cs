@@ -54,7 +54,12 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             if(input.StateId != null)
             {
                 if(_dbContext.State.FirstOrDefault(s => s.Id == input.StateId) == null) { throw new NotFoundException($"State with ID {input.StateId} was not found."); }
-                editState = true;
+
+                // get final state ID
+                var finalStateID = _dbContext.ServiceState.Where(ss => ss.ServiceId == entity.ServiceId).OrderByDescending(ss => ss.Step).FirstOrDefault().StateId;
+
+                // Negation of => Dont change if already at final step and changing to final step
+                if(input.StateId != finalStateID || entity.StateId != finalStateID) { editState = true; }
             }
 
             if(input.ServiceID != null)
@@ -73,6 +78,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 if(_dbContext.Category.FirstOrDefault(t => t.Id == input.CategoryId) == null) { throw new NotFoundException($"Category with ID {input.CategoryId} was not found."); }
                 editCategory = true;
             }
+            //TODO: Reykofninn specific functions with json
             if(input.Sliced != null) { editSlice = true; }
             if(input.Filleted != null) { editFilleted = true; }
             if(input.OtherCategory != null) { editOtherCategory = true; }
@@ -94,13 +100,11 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             {
                 entity.StateId = (long)input.StateId; 
 
-                // Update/create timestamp
-                var timestamp = _dbContext.ItemTimestamp.FirstOrDefault(ts => ts.ItemId == entity.Id && ts.StateId == entity.StateId);
-                if(timestamp == null) { _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(entity)); }
-                else { timestamp.TimeOfChange = DateTime.Now; }
+                // Create timestamp
+                _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(entity));
 
                 orderID = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == itemId).OrderId;   // get the id of the connected order
-                checkOrderComplete = true;
+                checkOrderComplete = true;  // state has changed, must check if whole order is complete
 
                 // get all steps for this order in ascending order
                 var steps = _dbContext.ServiceState.Where(ss => ss.ServiceId == entity.ServiceId).OrderBy(ss => ss.Step).ToList();
@@ -166,20 +170,21 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             return entity.Id;
         }
 
-        public void CompleteItem(long id)
+        public bool CompleteItem(long id)
         {
             var entity = _dbContext.Item.FirstOrDefault(i => i.Id == id);
             if(entity == null) { throw new NotFoundException($"Item with id {id} was not found."); }
 
             // Gets max (final) step and then the relevant stateID of the step
-            entity.StateId = _dbContext.ServiceState.Where(ss => ss.ServiceId == entity.ServiceId).OrderByDescending(ss => ss.Step).FirstOrDefault().StateId;
+            var finalStateID = _dbContext.ServiceState.Where(ss => ss.ServiceId == entity.ServiceId).OrderByDescending(ss => ss.Step).FirstOrDefault().StateId;
+            if(entity.StateId == finalStateID) { return false; }  // already at complete state, do nothing
+
+            entity.StateId = finalStateID;
             entity.DateModified = DateTime.Now;
             entity.DateCompleted = DateTime.Now;
 
-            // Update/create timestamp
-            var timestamp = _dbContext.ItemTimestamp.FirstOrDefault(ts => ts.ItemId == entity.Id && ts.StateId == entity.StateId);
-            if(timestamp == null) { _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(entity)); }
-            else { timestamp.TimeOfChange = DateTime.Now; }
+            // Create timestamp
+            _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(entity));
 
             // Update date modified of order connected to this
             var orderId = _dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == entity.Id).OrderId;
@@ -190,6 +195,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             _dbContext.SaveChanges();
 
             SetOrderCompleteStatus(new List<long>() { orderId });
+
+            // item updated
+            return true;
         }
 
         public long RemoveItem(long itemId)
@@ -252,11 +260,13 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
             foreach (var item in stateChanges)
             {
-                // change the state and check all things needed
-                changeState((long)item.ItemId, (long)item.StateChangeTo, item.Location);
+                // change the state and check all things needed, if item is changed then check order
+                if(changeState((long)item.ItemId, (long)item.StateChangeTo, item.Location))
+                {
+                    // add order ID if it has not been added before
+                    ordersToCheck.AddIfUnique(_dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == item.ItemId).OrderId);
+                }
 
-                // add order ID if it has not been added before
-                ordersToCheck.AddIfUnique(_dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == item.ItemId).OrderId);
             }
 
             _dbContext.SaveChanges();
@@ -292,11 +302,13 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 // parse the barcode - first item is state, second item is location
                 var parsedBarcode = item.StateChangeBarcode.Split("-");
 
-                // change the state and check all things needed
-                changeState((long)item.ItemId, _dbContext.State.FirstOrDefault(s => s.Name == parsedBarcode[0]).Id, parsedBarcode[1]);
+                // change the state and check all things neededm, if item is changed then check order
+                if(changeState((long)item.ItemId, _dbContext.State.FirstOrDefault(s => s.Name == parsedBarcode[0]).Id, parsedBarcode[1]))
+                {
+                    // add order ID if it has not been added before
+                    ordersToCheck.AddIfUnique(_dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == item.ItemId).OrderId);
+                }
 
-                // add order ID if it has not been added before
-                ordersToCheck.AddIfUnique(_dbContext.ItemOrderConnection.FirstOrDefault(ioc => ioc.ItemId == item.ItemId).OrderId);
             }
 
             _dbContext.SaveChanges();
@@ -341,29 +353,34 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
         //*     Helper functions     *//
 
-        private void changeState(long itemId, long stateId, string location = null)
+        private bool changeState(long itemId, long stateId, string location = null)
         {
             var timeNow = DateTime.Now;
 
             // get entity
             var entity = _dbContext.Item.FirstOrDefault(i => i.Id == itemId);
 
+            // find the final-step-id
+            var serviceSteps =  _dbContext.ServiceState.Where(ss => ss.ServiceId == entity.ServiceId)
+                                    .OrderByDescending(ss => ss.Step).ToList();  // get all service steps
+            
+            var StateComplete = serviceSteps.FirstOrDefault().StateId;  // get final step's state ID
+            if(stateId == StateComplete && entity.StateId == StateComplete) { return false; }       // if changing from final state to final state do nothing
+
             // update the entity itself
             entity.StateId = stateId;
             entity.DateModified = DateTime.Now;
 
-            // find the final-state-id
-            var serviceSteps = _dbContext.ServiceState.Where(ss => ss.ServiceId == entity.ServiceId).ToList();
-            var currStep = serviceSteps.FirstOrDefault(ss => ss.StateId == entity.StateId).Step;
-            var maxStep = serviceSteps.Max(ss => ss.Step);
-            var minStep = serviceSteps.Min(ss => ss.Step);
+            var currStep = serviceSteps.FirstOrDefault(ss => ss.StateId == entity.StateId).Step;                // get current step of state change
+            var maxStep = serviceSteps.Max(ss => ss.Step);                                                      // Find max step
+            var minStep = serviceSteps.Min(ss => ss.Step);                                                      // Find min step
 
             // is at last step
             if(currStep == maxStep) { entity.DateCompleted = timeNow; }
             else { entity.DateCompleted = null; }
 
             //TODO: Min step with location empty string, is company specific
-            // Get the json object and change it and write it back (making sure only to change the location property if there are any other properties there)
+            // Get the json object and change it and write it back (making sure to only change the location property if there are any other properties there)
             if(entity.JSON != null && location != null && currStep != minStep && currStep != maxStep)
             {
                 JObject rss = JObject.Parse(entity.JSON);           // parse the entity
@@ -371,7 +388,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 prop.Value = location;                              // set the location
                 entity.JSON = JsonConvert.SerializeObject(rss);     // serialize back
             }
-            else if(currStep == minStep || currStep == maxStep) // set location to empty string if in first or last step
+            else if(entity.JSON != null && (currStep == minStep || currStep == maxStep)) // set location to empty string if in first or last step
             {
                 JObject rss = JObject.Parse(entity.JSON);           // parse the entity
                 var prop = rss.Property("location");                // get the location property
@@ -380,9 +397,10 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             }
 
             // Update/create timestamp
-            var timestamp = _dbContext.ItemTimestamp.FirstOrDefault(ts => ts.ItemId == entity.Id && ts.StateId == entity.StateId);
-            if(timestamp == null) { _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(entity)); }
-            else { timestamp.TimeOfChange = timeNow; }
+            _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(entity));
+
+            // updated item return true
+            return true;
         }
 
         /// <summary>Sets all orders in list date completed, only if order is complete, else it sets it to null</summary>

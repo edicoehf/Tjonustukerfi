@@ -31,11 +31,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         public void DeleteByOrderId(long id) => _orderRepo.DeleteByOrderId(id);
         public IEnumerable GetAllOrders() => _orderRepo.GetAllOrders();
 
-        public void CompleteOrder(long orderId)
-        {
-            var order = _orderRepo.CompleteOrder(orderId);  // get order
-            var customer = _customerRepo.GetCustomerById(order.CustomerId); // get customer
-        }
+        public void CompleteOrder(long orderId) => _orderRepo.CompleteOrder(orderId);
 
         public OrderDTO SearchOrder(string barcode)
         {

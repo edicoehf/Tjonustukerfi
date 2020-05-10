@@ -78,7 +78,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             if(item == null) { throw new NotFoundException($"Item with ID {itemId} was not found."); }
 
             // get timestamps and order by state
-            var timestamps = _dbContext.ItemTimestamp.Where(its => its.ItemId == itemId).ToList().OrderBy(s => s.StateId);
+            var timestamps = _dbContext.ItemTimestamp.Where(its => its.ItemId == itemId).ToList().OrderBy(s => s.TimeOfChange);
 
             var dtoList = new List<ItemTimeStampDTO>();
             foreach (var stamp in timestamps)
