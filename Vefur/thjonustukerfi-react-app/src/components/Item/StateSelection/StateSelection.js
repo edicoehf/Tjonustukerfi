@@ -19,6 +19,8 @@ import useGetItemLocations from "../../../hooks/useGetItemLocations";
 import useUpdateItemState from "../../../hooks/useUpdateItemState";
 import "./StateSelection.css";
 import ProgressComponent from "../../Feedback/ProgressComponent/ProgressComponent";
+import useGetAllStates from "../../../hooks/useGetAllStates";
+import ProgressButton from "../../Feedback/ProgressButton/ProgressButton";
 
 const StateSelection = ({ id, hasUpdated, componentLoading }) => {
     const {
@@ -33,27 +35,48 @@ const StateSelection = ({ id, hasUpdated, componentLoading }) => {
         fetchItemLocations,
         isLoading: locationsLoading,
     } = useGetItemLocations();
+    const {
+        states: allStates,
+        error: allStatesError,
+        isLoading: allStatesLoading,
+    } = useGetAllStates();
+
+    const [selectFromAllStates, setSelectFromAllStates] = React.useState(false);
     const [location, setLocation] = React.useState("");
     const [state, setState] = React.useState(null);
     const [stateName, setStateName] = React.useState("");
     const [activeStep, setActiveStep] = React.useState(0);
-    const handleNext = () => {
-        if (states.nextAvailableStates.length > 1 && activeStep < 2) {
-            setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        } else if (activeStep === 0) {
+
+    const handleSelectFromAllStates = () => {
+        setSelectFromAllStates(true);
+    };
+
+    const handleSelectFromNextStates = () => {
+        setSelectFromAllStates(false);
+    };
+
+    const handleNext = (selectedState) => {
+        if (
+            selectedState &&
+            activeStep === 0 &&
+            (selectedState.id === 1 || selectedState.id === allStates.length)
+        ) {
             setActiveStep((prevActiveStep) => prevActiveStep + 2);
+        } else {
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
         }
     };
+
     const handleBack = () => {
-        if (activeStep > 0 && states.nextAvailableStates.length > 1) {
-            setActiveStep((prevActiveStep) => prevActiveStep - 1);
-        } else if (activeStep === 2) {
+        if (activeStep > 0 && (state === 1 || state === allStates.length)) {
             setActiveStep((prevActiveStep) => prevActiveStep - 2);
+        } else {
+            setActiveStep((prevActiveStep) => prevActiveStep - 1);
         }
     };
 
     const handleStateSelection = (state) => {
-        handleNext();
+        handleNext(state);
         setState(state.id);
         setStateName(state.name);
     };
@@ -82,18 +105,27 @@ const StateSelection = ({ id, hasUpdated, componentLoading }) => {
             );
         }
         if (componentLoading !== undefined) {
-            componentLoading(statesLoading || locationsLoading);
+            componentLoading(
+                statesLoading || locationsLoading || allStatesLoading
+            );
         }
-    }, [states, componentLoading, statesLoading, locationsLoading]);
+    }, [
+        states,
+        componentLoading,
+        statesLoading,
+        locationsLoading,
+        allStatesLoading,
+    ]);
 
     const [openSelection, setOpenSelection] = React.useState(false);
 
     const handleClose = () => {
+        setOpenSelection(false);
         setActiveStep(0);
         setLocation("");
         setState(null);
         setStateName("");
-        setOpenSelection(false);
+        setSelectFromAllStates(false);
     };
     const handleOpen = () => {
         setOpenSelection(true);
@@ -116,19 +148,19 @@ const StateSelection = ({ id, hasUpdated, componentLoading }) => {
                 <ProgressComponent isLoading={componentLoading === undefined} />
             ) : (
                 <>
-                    {!error && !locationsError ? (
+                    {!error && !locationsError && !allStatesError ? (
                         <>
-                            {nextStates.length > 0 && (
+                            <ProgressButton isLoading={isProcessing}>
                                 <Button
                                     variant="contained"
                                     color="primary"
                                     onClick={handleOpen}
-                                    disabled={nextStates.length === 0}
+                                    disabled={isProcessing}
                                     className="state-btn"
                                 >
-                                    Færa í næstu stöðu
+                                    Færa um stöðu
                                 </Button>
-                            )}
+                            </ProgressButton>
                             <Dialog
                                 onClose={handleClose}
                                 open={openSelection}
@@ -140,7 +172,7 @@ const StateSelection = ({ id, hasUpdated, componentLoading }) => {
                                     position="static"
                                     activeStep={activeStep}
                                 />
-                                {activeStep === 0 && (
+                                {activeStep === 0 && !selectFromAllStates && (
                                     <>
                                         <DialogTitle id="state-dialog-title">
                                             Veldu næstu stöðu
@@ -169,6 +201,57 @@ const StateSelection = ({ id, hasUpdated, componentLoading }) => {
                                                 ))}
                                             </List>
                                         </DialogContent>
+                                        <DialogActions>
+                                            <Button
+                                                color="primary"
+                                                onClick={
+                                                    handleSelectFromAllStates
+                                                }
+                                            >
+                                                Velja aðra stöðu
+                                            </Button>
+                                        </DialogActions>
+                                    </>
+                                )}
+                                {activeStep === 0 && selectFromAllStates && (
+                                    <>
+                                        <DialogTitle id="state-dialog-title">
+                                            Veldu stöðu
+                                        </DialogTitle>
+                                        <DialogContent>
+                                            <List className="selection-list">
+                                                {allStates.map((state) => (
+                                                    <ListItem
+                                                        button
+                                                        onClick={() =>
+                                                            handleStateSelection(
+                                                                state
+                                                            )
+                                                        }
+                                                        key={state.id}
+                                                    >
+                                                        <ListItemAvatar>
+                                                            <Avatar>
+                                                                <LinearScaleIcon />
+                                                            </Avatar>
+                                                        </ListItemAvatar>
+                                                        <ListItemText
+                                                            primary={state.name}
+                                                        />
+                                                    </ListItem>
+                                                ))}
+                                            </List>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button
+                                                color="primary"
+                                                onClick={
+                                                    handleSelectFromNextStates
+                                                }
+                                            >
+                                                Velja úr næstu stöðum
+                                            </Button>
+                                        </DialogActions>
                                     </>
                                 )}
                                 {activeStep === 1 && (
@@ -248,7 +331,7 @@ const StateSelection = ({ id, hasUpdated, componentLoading }) => {
                             )}
                         </>
                     ) : (
-                        <p className="error">Gat ekki sótt næstu stöður</p>
+                        <p className="error">Gat ekki sótt stöður</p>
                     )}
                 </>
             )}

@@ -29,22 +29,22 @@ const CustomerMain = ({ history }) => {
                     htmlId="customer-searchbar"
                 />
             </Paper>
-            {!(searchResults.length > 0) && customers.length > 0 ? (
-                <>
-                    <h4 className="main-item no-customers">
-                        Enginn viðskiptavinur fannst með þessum leitarskilyrðum
-                    </h4>
-                </>
+            {!isLoading && customers.length === 0 ? (
+                <p className="error">Engir viðskiptavinir í gagnagrunni</p>
             ) : (
-                <>
-                    <CustomerList
-                        customers={searchResults}
-                        error={error}
-                        isLoading={isLoading}
-                        cb={redirectToCustomerDetails}
-                    />
-                </>
+                !isLoading &&
+                searchResults.length === 0 && (
+                    <p className="error">
+                        Enginn viðskiptavinur fannst með þessum leitarskilyrðum
+                    </p>
+                )
             )}
+            <CustomerList
+                customers={searchResults}
+                error={error}
+                isLoading={isLoading}
+                cb={redirectToCustomerDetails}
+            />
         </div>
     );
 };

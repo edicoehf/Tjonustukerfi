@@ -50,3 +50,7 @@
 .order-details .MuiPaper-root td {
     border-bottom: none;
 }
+
+.order-details .error {
+    margin-top: 1em;
+}
