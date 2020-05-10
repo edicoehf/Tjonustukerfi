@@ -7,9 +7,10 @@
              x:Class="HandtolvuApp.Controls.FailedRequestPage">
     
     <AbsoluteLayout>
-        <Grid>
+        <Grid AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                        AbsoluteLayout.LayoutFlags="All">
             <Grid.RowDefinitions>
-                <RowDefinition Height=".3*" />
+                <RowDefinition Height=".4*" />
                 <RowDefinition Height=".3*" />
                 <RowDefinition Height=".3*" />
                 <RowDefinition Height="2*" />
@@ -41,7 +42,7 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width=".5*"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>

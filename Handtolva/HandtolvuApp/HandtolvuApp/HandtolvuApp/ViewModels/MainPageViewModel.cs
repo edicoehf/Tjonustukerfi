@@ -36,7 +36,7 @@ namespace HandtolvuApp.ViewModels
                 await App.Current.MainPage.Navigation.PushAsync(locationScanPage);
             });
 
-            FailedCommand = new Command(async () =>
+            FailedRequestCommand = new Command(async () =>
             {
                 var failedRequestVM = new FailedRequestViewModel();
                 var failedRequestPage = new FailedRequestPage();
@@ -47,7 +47,7 @@ namespace HandtolvuApp.ViewModels
 
         public Command OrderCommand { get; }
         public Command ItemCommand { get; }
-        public Command FailedCommand { get; }
+        public Command FailedRequestCommand { get; }
 
         public Command LocationCommand { get; }
     }
