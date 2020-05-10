@@ -20,7 +20,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
         long SearchItem(string search);
 
         /// <summary>Sets an item to complete state.</summary>
-        void CompleteItem(long id);
+        bool CompleteItem(long id);
 
         /// <summary>Removes Item with the given ID.</summary>
         /// <returns>Returns the ID of the order that the item was removed from</returns>
