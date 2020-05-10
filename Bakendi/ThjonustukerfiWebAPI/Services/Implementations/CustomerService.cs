@@ -24,10 +24,10 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         {
             var customerDTO = _customerRepo.GetCustomerById(id);
 
-            // Check if customer has active orders
-            var activeOrders = _orderRepo.GetActiveOrdersByCustomerId(id);
-            if(activeOrders.Any()) { customerDTO.HasActiveOrder = true; }
-            else { customerDTO.HasActiveOrder = false; }
+            // Check if customer has orders orders ready for pickup
+            var activeOrders = _orderRepo.GetOrdersReadyForPickupByCustomerID(id);
+            if(activeOrders.Any()) { customerDTO.HasReadyOrders = true; }
+            else { customerDTO.HasReadyOrders = false; }
 
             return customerDTO;
         }
