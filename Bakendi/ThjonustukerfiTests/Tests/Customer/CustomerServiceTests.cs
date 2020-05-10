@@ -70,7 +70,7 @@ namespace ThjonustukerfiTests.Tests
             };
             // setup mocked method
             _customerRepoMock.Setup(method => method.GetCustomerById(id)).Returns(mockCustomerDetailsDTO);
-            _orderRepoMock.Setup(method => method.GetActiveOrdersByCustomerId(It.IsAny<long>())).Returns(new List<OrderDTO>());
+            _orderRepoMock.Setup(method => method.GetOrdersReadyForPickupByCustomerID(It.IsAny<long>())).Returns(new List<OrderDTO>());
 
             // Create service
             _customerService = new CustomerService(_customerRepoMock.Object, _orderRepoMock.Object);
@@ -95,7 +95,7 @@ namespace ThjonustukerfiTests.Tests
             //* Arrange
             // setup and mock method
             _customerRepoMock.Setup(method => method.GetCustomerById(It.IsAny<long>())).Returns(new CustomerDetailsDTO());
-            _orderRepoMock.Setup(method => method.GetActiveOrdersByCustomerId(It.IsAny<long>())).Returns(new List<OrderDTO>()
+            _orderRepoMock.Setup(method => method.GetOrdersReadyForPickupByCustomerID(It.IsAny<long>())).Returns(new List<OrderDTO>()
             {
                 new OrderDTO()
             });
@@ -109,7 +109,7 @@ namespace ThjonustukerfiTests.Tests
             //* Assert
             Assert.IsNotNull(customerDto);
             Assert.IsInstanceOfType(customerDto, typeof(CustomerDetailsDTO));
-            Assert.IsTrue(customerDto.HasActiveOrder);
+            Assert.IsTrue(customerDto.HasReadyOrders);
         }
 
         [TestMethod]
@@ -118,7 +118,7 @@ namespace ThjonustukerfiTests.Tests
             //* Arrange
             // setup and mock method
             _customerRepoMock.Setup(method => method.GetCustomerById(It.IsAny<long>())).Returns(new CustomerDetailsDTO());
-            _orderRepoMock.Setup(method => method.GetActiveOrdersByCustomerId(It.IsAny<long>())).Returns(new List<OrderDTO>());
+            _orderRepoMock.Setup(method => method.GetOrdersReadyForPickupByCustomerID(It.IsAny<long>())).Returns(new List<OrderDTO>());
 
             // Create service
             _customerService = new CustomerService(_customerRepoMock.Object, _orderRepoMock.Object);
@@ -129,7 +129,7 @@ namespace ThjonustukerfiTests.Tests
             //* Assert
             Assert.IsNotNull(customerDto);
             Assert.IsInstanceOfType(customerDto, typeof(CustomerDetailsDTO));
-            Assert.IsFalse(customerDto.HasActiveOrder);
+            Assert.IsFalse(customerDto.HasReadyOrders);
         }
 
         [TestMethod]
