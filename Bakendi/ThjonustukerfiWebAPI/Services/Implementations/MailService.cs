@@ -70,6 +70,34 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             MailService.Sendmail(emailAddress, subject, body);
         }
 
+        public static void sendBarcodeEmail(OrderDTO order, CustomerDetailsDTO customer)
+        {
+            var emailAddress = customer.Email;
+            var subject = $"{Constants.CompanyName} - upplýsingar";
+            var body = new BodyBuilder();
+            body.HtmlBody = $"<h2>Góðan daginn {order.Customer}.</h2>";
+
+            body.HtmlBody += $"<p>Pöntunarnúmerið þitt er (nr. {order.Id})</p>";
+            
+            body.HtmlBody += "<h3>Strikamerki vöru:</h3>";
+            foreach (var item in order.Items)
+            {
+                // encode to image
+                var bCode = new Barcode(); // get barcode lib class
+                bCode.Encode(BarcodeLib.TYPE.CODE128, item.Barcode, Color.Black, Color.White, BarcodeImageDimensions.Width, BarcodeImageDimensions.Height);
+
+                // Send image as attachment and embed it to the message
+                var image = body.LinkedResources.Add("Barcode", bCode.Encoded_Image_Bytes);
+                image.ContentId = MimeKit.Utils.MimeUtils.GenerateMessageId();
+                body.HtmlBody += string.Format(@"<img src=""cid:{0}"">", image.ContentId);
+                body.HtmlBody += "<br>";
+            }
+
+            body.HtmlBody += $"<p>Kær kveðja {Constants.CompanyName}</p>";
+
+            MailService.Sendmail(emailAddress, subject, body);
+        }
+
         /// <summary>Sends an email message via SMTP server with credentials from the environment variable file.</summary>
         private static void Sendmail (string emailAddress, string subject, BodyBuilder bodyBuilder)
         {
