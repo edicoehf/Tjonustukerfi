@@ -4,9 +4,11 @@
     align-content: space-around;
     margin-top: 0%;
 }
+
 .main-item {
     padding-bottom: 1em;
 }
+
 .header {
     text-align: center;
 }
@@ -35,4 +37,8 @@
     background-color: var(--data-color);
     border-radius: 10px;
     margin-bottom: 1em;
+}
+
+.order-main .error {
+    margin-top: 1em;
 }

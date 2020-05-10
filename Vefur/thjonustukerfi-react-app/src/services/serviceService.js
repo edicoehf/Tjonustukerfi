@@ -1,9 +1,10 @@
 import { handleErrors, handleData } from "./serviceHandlers";
+import endpoint from "./endpoint";
 
-const endpoint = "http://localhost:5000/api/info/services";
+const api_endpoint = `${endpoint}/api/info/services/`;
 
 const getServices = () => {
-    return fetch(endpoint, {
+    return fetch(api_endpoint, {
         method: "GET",
         headers: {
             crossDomain: true

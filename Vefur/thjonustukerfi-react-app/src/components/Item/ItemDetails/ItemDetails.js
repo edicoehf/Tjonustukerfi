@@ -109,14 +109,16 @@ const ItemDetails = ({ id, updated, receivedUpdate, componentLoading }) => {
                                             {state}
                                         </TableCell>
                                     </TableRow>
-                                    <TableRow className="details-item-row">
-                                        <TableCell className="details-item-title-cell">
-                                            Staðsetning:
-                                        </TableCell>
-                                        <TableCell className="details-item-content-cell">
-                                            {other.location}
-                                        </TableCell>
-                                    </TableRow>
+                                    {other.location !== "" && (
+                                        <TableRow className="details-item-row">
+                                            <TableCell className="details-item-title-cell">
+                                                Staðsetning:
+                                            </TableCell>
+                                            <TableCell className="details-item-content-cell">
+                                                {other.location}
+                                            </TableCell>
+                                        </TableRow>
+                                    )}
                                     {details !== "" && (
                                         <TableRow className="details-item-row">
                                             <TableCell className="details-item-title-cell">

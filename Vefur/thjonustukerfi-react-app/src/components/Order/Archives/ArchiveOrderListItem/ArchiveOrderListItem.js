@@ -1,5 +1,5 @@
 import React from "react";
-import { TableRow, TableCell } from "@material-ui/core";
+import { TableRow, TableCell, ListItemText } from "@material-ui/core";
 import moment from "moment";
 import "moment/locale/is";
 import ArchiveOrderItems from "../ArchiveOrderItems/ArchiveOrderItems";
@@ -23,7 +23,10 @@ const ArchiveOrderListItem = ({ order, border, expand, expanded }) => {
             onClick={toggleShow}
         >
             <TableCell align="left" className="order-archives-cell-customer">
-                {order.customer}
+                <ListItemText
+                    primary={order.customer}
+                    secondary={order.customerEmail}
+                />
             </TableCell>
             <TableCell align="left" className="order-archives-cell-created">
                 {dateFormat(order.dateCreated)}
