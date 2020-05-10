@@ -1,12 +1,15 @@
-FROM node:latest
+FROM mhart/alpine-node:11 AS builder
 WORKDIR /app
 
-LABEL maintainer = "Edico ehf."
+LABEL maintainer="Edico ehf"
 
-COPY package.json package.json
+COPY . .
+RUN npm install react-scripts -g --silent
 RUN npm install
+RUN npm run build
 
-COPY . /app
-
-ENTRYPOINT ["npm", "run", "build"]
-ENTRYPOINT ["npm", "run", "serve", "-s", "build"]
+FROM mhart/alpine-node
+RUN npm install -g serve
+WORKDIR /app
+COPY --from=builder /app/build .
+CMD ["serve", "-p", "3000", "-s", "."]doc
