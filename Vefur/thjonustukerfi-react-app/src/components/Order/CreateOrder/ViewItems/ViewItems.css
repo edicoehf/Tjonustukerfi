@@ -21,8 +21,7 @@
 .view-items div.MuiPaper-root .item-row {
     display: grid;
     grid-template-columns: 28% 28% 15% 15% 7% 7%;
-    grid-template-areas:
-        "category service filleted sliced amount remove";
+    grid-template-areas: "category service filleted sliced amount remove";
 }
 
 .view-items div.MuiPaper-root .item-row.with-border {
@@ -37,25 +36,21 @@
 .view-items div.MuiPaper-root .item-row .item-cell-service {
     grid-area: service;
     align-self: center;
-
 }
 
 .view-items div.MuiPaper-root .item-row .item-cell-filleted {
     grid-area: filleted;
     align-self: center;
-
 }
 
 .view-items div.MuiPaper-root .item-row .item-cell-sliced {
     grid-area: sliced;
     align-self: center;
-
 }
 
 .view-items div.MuiPaper-root .item-row .item-cell-amount {
     grid-area: amount;
     align-self: center;
-
 }
 
 .view-items div.MuiPaper-root .item-row .item-cell-remove {
@@ -65,12 +60,10 @@
     padding: 0;
 }
 
-
 .view-items div.MuiPaper-root .item-row-details {
     display: grid;
     grid-template-columns: 8% 92%;
-    grid-template-areas:
-        "details-title details-content";
+    grid-template-areas: "details-title details-content";
 }
 
 .view-items div.MuiPaper-root .item-row-details .item-cell-details-title {

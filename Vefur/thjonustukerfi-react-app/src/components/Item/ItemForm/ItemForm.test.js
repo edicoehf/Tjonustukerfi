@@ -1,8 +1,9 @@
 import React from "react";
 import { shallow, mount } from "enzyme";
-import { fireEvent } from "@testing-library/react";
 import ItemForm from "./ItemForm";
 import { RadioGroup, TextField } from "@material-ui/core";
+import useItemStepper from "../../../hooks/useItemStepper";
+jest.mock("../../../hooks/useItemStepper");
 
 const findByName = (fields, name) => {
     for (var i = 0; i < fields.length; i++) {
@@ -44,7 +45,6 @@ describe("<ItemForm />", () => {
     ];
 
     let wrapper;
-    let checkWrapper;
     let testState;
     let radios;
     let textfields;
@@ -52,26 +52,8 @@ describe("<ItemForm />", () => {
     const useStateSpy = jest.spyOn(React, "useState");
     const handler = () => {};
     useStateSpy.mockImplementation((init) => [init, setState]);
-    checkWrapper = mount(
-        shallow(
-            <ItemForm
-                submitHandler={handler}
-                categories={categories}
-                services={services}
-            />
-        ).get(0)
-    );
 
     beforeEach(() => {
-        wrapper = mount(
-            shallow(
-                <ItemForm
-                    submitHandler={handler}
-                    categories={categories}
-                    services={services}
-                />
-            ).get(0)
-        );
         testState = {
             category: null,
             service: null,
@@ -84,8 +66,6 @@ describe("<ItemForm />", () => {
             categories: null,
             services: null,
         };
-        radios = wrapper.find(RadioGroup);
-        textfields = wrapper.find(TextField);
     });
 
     afterEach(() => {
@@ -93,6 +73,28 @@ describe("<ItemForm />", () => {
     });
 
     describe("Category select", () => {
+        beforeEach(() => {
+            useItemStepper.mockReturnValue({
+                activeStep: 0,
+            });
+
+            wrapper = mount(
+                shallow(
+                    <ItemForm
+                        submitHandler={handler}
+                        categories={categories}
+                        services={services}
+                    />
+                ).get(0)
+            );
+            radios = wrapper.find(RadioGroup);
+            textfields = wrapper.find(TextField);
+        });
+
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+
         it("Should be null at start", () => {
             const cat = findByName(radios, "category");
             expect(cat.props().value).toBe(null);
@@ -113,12 +115,40 @@ describe("<ItemForm />", () => {
     });
 
     describe("Service select", () => {
+        beforeEach(() => {
+            useItemStepper.mockReturnValue({
+                activeStep: 1,
+            });
+
+            wrapper = mount(
+                shallow(
+                    <ItemForm
+                        submitHandler={handler}
+                        categories={categories}
+                        services={services}
+                    />
+                ).get(0)
+            );
+            radios = wrapper.find(RadioGroup);
+            textfields = wrapper.find(TextField);
+        });
+
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+
         it("Should be null at start", () => {
+            useItemStepper.mockReturnValue({
+                activeStep: 1,
+            });
             const serv = findByName(radios, "service");
             expect(serv.props().value).toBe(null);
         });
 
         it("Should capture Service correctly onChange", () => {
+            useItemStepper.mockReturnValue({
+                activeStep: 1,
+            });
             const serv = findByName(radios, "service");
             serv.props().onChange({ target: { name: "service", value: "3" } });
             testState.service = "3";
@@ -126,6 +156,9 @@ describe("<ItemForm />", () => {
         });
 
         it("Should capture Service incorrectly onChange", () => {
+            useItemStepper.mockReturnValue({
+                activeStep: 1,
+            });
             const serv = findByName(radios, "service");
             serv.props().onChange({ target: { name: "service", value: "2" } });
             expect(serv.props().value).not.toBe("3");
@@ -133,6 +166,27 @@ describe("<ItemForm />", () => {
     });
 
     describe("Amount select", () => {
+        beforeEach(() => {
+            useItemStepper.mockReturnValue({
+                activeStep: 2,
+            });
+
+            wrapper = mount(
+                shallow(
+                    <ItemForm
+                        submitHandler={handler}
+                        categories={categories}
+                        services={services}
+                    />
+                ).get(0)
+            );
+            radios = wrapper.find(RadioGroup);
+            textfields = wrapper.find(TextField);
+        });
+
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
         it("Should be 1 at start", () => {
             const amnt = findByName(textfields, "amount");
             expect(amnt.props().value).toBe(1);
@@ -153,6 +207,28 @@ describe("<ItemForm />", () => {
     });
 
     describe("Filleted select", () => {
+        beforeEach(() => {
+            useItemStepper.mockReturnValue({
+                activeStep: 2,
+            });
+
+            wrapper = mount(
+                shallow(
+                    <ItemForm
+                        submitHandler={handler}
+                        categories={categories}
+                        services={services}
+                    />
+                ).get(0)
+            );
+            radios = wrapper.find(RadioGroup);
+            textfields = wrapper.find(TextField);
+        });
+
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+
         it("Should be empty string at start", () => {
             const fill = findByName(radios, "filleted");
             expect(fill.props().value).toBe("");
@@ -177,6 +253,28 @@ describe("<ItemForm />", () => {
     });
 
     describe("Sliced select", () => {
+        beforeEach(() => {
+            useItemStepper.mockReturnValue({
+                activeStep: 2,
+            });
+
+            wrapper = mount(
+                shallow(
+                    <ItemForm
+                        submitHandler={handler}
+                        categories={categories}
+                        services={services}
+                    />
+                ).get(0)
+            );
+            radios = wrapper.find(RadioGroup);
+            textfields = wrapper.find(TextField);
+        });
+
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+
         it("Should be empty string at start", () => {
             const sliced = findByName(radios, "sliced");
             expect(sliced.props().value).toBe("");
@@ -201,6 +299,28 @@ describe("<ItemForm />", () => {
     });
 
     describe("Details select", () => {
+        beforeEach(() => {
+            useItemStepper.mockReturnValue({
+                activeStep: 2,
+            });
+
+            wrapper = mount(
+                shallow(
+                    <ItemForm
+                        submitHandler={handler}
+                        categories={categories}
+                        services={services}
+                    />
+                ).get(0)
+            );
+            radios = wrapper.find(RadioGroup);
+            textfields = wrapper.find(TextField);
+        });
+
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+
         it("Should be empty string at start", () => {
             const det = findByName(textfields, "details");
             expect(det.props().value).toBe("");
