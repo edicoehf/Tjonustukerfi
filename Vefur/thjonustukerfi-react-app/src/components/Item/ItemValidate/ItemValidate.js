@@ -24,10 +24,10 @@ const itemValidate = (values) => {
     } else if (amount < 1) {
         errors.amount = "Fjöldi verður að vera stærri en 0";
     }
-    if (sliced === null) {
+    if (sliced === "") {
         errors.sliced = "Tilgreining á pökkun vantar";
     }
-    if (filleted === null) {
+    if (filleted === "") {
         errors.filleted = "Tilgreining á flökun vantar";
     }
     if (details.length > 100) {
