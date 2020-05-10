@@ -1,8 +1,10 @@
 ﻿using HandtolvuApp.Data.Interfaces;
+using HandtolvuApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Xamarin.Forms;
 
 namespace HandtolvuApp.ViewModels
 {
@@ -34,30 +36,50 @@ namespace HandtolvuApp.ViewModels
             }
         }
 
-        public IScannerService _scannerService;
-
         public ScannerViewModel()
         {
-            if(App.Scanner != null)
+            
+        }
+
+        public void Init()
+        {
+            var scanner = App.Scanner;
+            scanner.Enable();
+            scanner.OnScanDataCollected += ScannedDataCollected;
+            scanner.OnStatusChanged += ScannedStatusChanged;
+
+            var config = new ZebraScannerConfig();
+            scanner.SetConfig(config);
+        }
+
+        public void DeInit()
+        {
+            var scanner = App.Scanner;
+
+            if(scanner != null)
             {
-                _scannerService = App.Scanner;
-                _scannerService.OnBarcodeScanned += _scannerService_OnBarcodeScanned;
+                scanner.Disable();
+                scanner.OnScanDataCollected -= ScannedDataCollected;
+                scanner.OnStatusChanged -= ScannedStatusChanged;
             }
         }
 
-        void _scannerService_OnBarcodeScanned(object sender, Models.OnBarcodeScannedEventArgs e)
+        private void ScannedDataCollected(Object sender, StatusEventArgs e_status)
         {
-            var scannedBarcode = e?.Barcodes?.FirstOrDefault();
-            if(scannedBarcode == null)
+            ScannedBarcodeText = e_status.Data;
+            // if we want to handle barcode and symbology
+            Barcode Barcode = new Barcode
             {
-                ScannedBarcodeText = "Invalid barcode";
-                return;
-            }
+                Data = e_status.Data,
+                Symbol = e_status.BarcodeType
+            };
 
-            var barcodeScanned = scannedBarcode.Barcode;
-            var symbology = scannedBarcode.Symbology;
+            MessagingCenter.Send<ScannerViewModel>(this, "ScannedBarcode");
+        }
 
-            ScannedBarcodeText = barcodeScanned;
+        private void ScannedStatusChanged(Object sender, string message)
+        {
+            string status = message;
         }
     }
 }

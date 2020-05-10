@@ -1,9 +1,10 @@
 import { handleErrors, handleData } from "./serviceHandlers";
+import endpoint from "./endpoint";
 
-const endpoint = "http://localhost:5000/api/orders/";
+const api_endpoint = `${endpoint}/api/orders/`;
 
 const getOrderById = (id) => {
-    return fetch(endpoint + id, {
+    return fetch(api_endpoint + id, {
         method: "GET",
         headers: {
             crossDomain: true,
@@ -15,7 +16,7 @@ const getOrderById = (id) => {
 };
 
 const createOrder = (order) => {
-    return fetch(endpoint, {
+    return fetch(api_endpoint, {
         method: "POST",
         body: JSON.stringify(order),
         headers: {
@@ -29,7 +30,7 @@ const createOrder = (order) => {
 };
 
 const deleteOrderById = (id) => {
-    return fetch(endpoint + id, {
+    return fetch(api_endpoint + id, {
         method: "DELETE",
         headers: {
             crossDomain: true,
@@ -40,7 +41,7 @@ const deleteOrderById = (id) => {
 };
 
 const getAllOrders = () => {
-    return fetch(endpoint, {
+    return fetch(api_endpoint, {
         method: "GET",
         headers: {
             crossDomain: true,
@@ -52,7 +53,7 @@ const getAllOrders = () => {
 };
 
 const updateOrderById = (order, id) => {
-    return fetch(endpoint + id, {
+    return fetch(api_endpoint + id, {
         method: "PATCH",
         body: JSON.stringify(order),
         headers: {
@@ -65,7 +66,7 @@ const updateOrderById = (order, id) => {
 };
 
 const checkoutOrderById = (id) => {
-    return fetch(endpoint + id + "/complete", {
+    return fetch(api_endpoint + id + "/complete", {
         method: "PATCH",
         headers: {
             crossDomain: true,
@@ -76,6 +77,18 @@ const checkoutOrderById = (id) => {
         .catch((error) => Promise.reject(error));
 };
 
+const getAllArchivedOrders = () => {
+    return fetch(`${endpoint}/api/info/orderarchives`, {
+        method: "GET",
+        headers: {
+            crossDomain: true,
+        },
+    })
+        .then(handleErrors)
+        .then(handleData)
+        .catch((error) => Promise.reject(error));
+};
+
 export default {
     getOrderById,
     createOrder,
@@ -83,4 +96,5 @@ export default {
     deleteOrderById,
     updateOrderById,
     checkoutOrderById,
+    getAllArchivedOrders,
 };

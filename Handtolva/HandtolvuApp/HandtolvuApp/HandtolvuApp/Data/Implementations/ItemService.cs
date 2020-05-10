@@ -3,6 +3,7 @@ using HandtolvuApp.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
@@ -12,11 +13,11 @@ namespace HandtolvuApp.Data.Implementations
 {
     public class ItemService : IItemService
     {
-        HttpClient _client;
-
-        public NextStates nextStates { get; private set; }
-
+        readonly HttpClient _client;
+        public NextStates NextStates { get; private set; }
         public Item Item { get; private set; }
+        private readonly string BaseURI = "http://10.0.2.2:5000/api/items";
+        private readonly string InfoURI = "http://10.0.2.2:5000/api/info";
 
         public ItemService()
         {
@@ -28,7 +29,7 @@ namespace HandtolvuApp.Data.Implementations
             //set Item to null for future use
             Item = null;
             // String for Api call, might want to change this to constant
-            string Uri = "http://10.0.2.2:5000/api/items/search?barcode=" + barcode;
+            string Uri = BaseURI + $"/search?barcode={barcode}";
             try
             {
                 var response = await _client.GetAsync(Uri);
@@ -48,9 +49,9 @@ namespace HandtolvuApp.Data.Implementations
 
         public async Task<NextStates> GetNextStatesAsync(string barcode)
         {
-            nextStates = null;
+            NextStates = null;
 
-            string Uri = $"http://10.0.2.2:5000/api/items/nextstate?barcode={barcode}";
+            string Uri = BaseURI + $"/nextstate?barcode={barcode}";
 
             try
             {
@@ -59,7 +60,8 @@ namespace HandtolvuApp.Data.Implementations
                 if(response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    nextStates = JsonConvert.DeserializeObject<NextStates>(content);
+                    NextStates = JsonConvert.DeserializeObject<NextStates>(content);
+                    NextStates.NextAvailableStates.Reverse();
                 }
             }
             catch(Exception ex)
@@ -67,12 +69,12 @@ namespace HandtolvuApp.Data.Implementations
                 Debug.WriteLine(@"\tError {0}", ex.Message);
             }
 
-            return nextStates;
+            return NextStates;
         }
 
-        public async Task StateChangeWithId(long id, string barcode)
+        public async Task<bool> StateChangeWithId(long id, string barcode)
         {
-            string stateUri = "http://10.0.2.2:5000/api/items/statechangebyid";
+            string stateUri = BaseURI + "/scanner/statechangebyid";
             var item = new[] { new { itemId = id, stateChangeBarcode = barcode } };
 
             try
@@ -85,13 +87,102 @@ namespace HandtolvuApp.Data.Implementations
 
                 if(response.IsSuccessStatusCode)
                 {
-                    Debug.WriteLine(@"\tOrder successfully completed");
+                    return true;
+                }
+                else
+                {
+                    return false;
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(@"\tERROR {0}", ex.Message);
+                return false;
             }
         }
+
+        public async Task<List<LocationStateChange>> StateChangeByLocation(ObservableCollection<string> items, string barcode)
+        {
+            string stateUri = BaseURI + "/scanner/statechangebybarcode";
+            List<LocationStateChange> ret = new List<LocationStateChange>();
+            var item = new List<LocationStateChange>();
+            foreach(string i in items)
+            {
+                item.Add(new LocationStateChange { ItemBarcode = i, StateChangeBarcode = barcode });
+            }
+
+            try
+            {
+                var method = new HttpMethod("PATCH");
+                var request = new HttpRequestMessage(method, stateUri)
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json")
+                };
+                var response = await _client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    if(content != "")
+                    {
+                        ret = JsonConvert.DeserializeObject<List<LocationStateChange>>(content);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Debug.WriteLine(@"\tError {0}", ex.Message);
+            }
+
+            return ret;
+        }
+
+        public async Task<List<string>> GetAllLocations()
+        {
+            string reqUri = InfoURI + "/itemlocations";
+            List<string> ret = new List<string>();
+
+            try
+            {
+                var response = await _client.GetAsync(reqUri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    ret = JsonConvert.DeserializeObject<List<string>>(content);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(@"\tError {0}", ex.Message);
+            }
+
+            return ret;
+        }
+
+        public async Task<List<State>> GetAllStates()
+        {
+            string reqUri = InfoURI + "/states";
+            List<State> ret = new List<State>();
+
+            try
+            {
+                var response = await _client.GetAsync(reqUri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    ret = JsonConvert.DeserializeObject<List<State>>(content);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(@"\tError {0}", ex.Message);
+            }
+
+            return ret;
+        }
+
     }
 }

@@ -33,9 +33,9 @@ const NavigationLinks = () => {
                     Leita að vöru
                 </MenuItem>
             </Link>
-            <Link className="navbar-item" to="/statistics">
-                <MenuItem selected={router.pathname === "/statistics"}>
-                    Tölfræði Upplýsingar
+            <Link className="navbar-item" to="/archives">
+                <MenuItem selected={router.pathname === "/archives"}>
+                    Skjalasafn
                 </MenuItem>
             </Link>
         </MenuList>

@@ -12,7 +12,7 @@ namespace HandtolvuApp
     {
         public static ItemManager ItemManager { get; private set; }
         public static OrderManager OrderManager { get; private set; }
-        public static IScannerService Scanner;
+        public static IScanner Scanner;
         public App()
         {
             InitializeComponent();

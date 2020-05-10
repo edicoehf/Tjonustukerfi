@@ -11,10 +11,9 @@
     align-self: flex-end;
 }
 
-.no-customers {
-    display: flex;
-    justify-content: center;
-    color: rgb(102, 100, 0);
+.customer-main .error {
+    text-align: center;
+    margin-top: 1em;
 }
 
 .customer-main .search-bar {

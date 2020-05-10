@@ -37,8 +37,10 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         public ItemDTO SearchItem(string search) => _itemRepo.GetItemById(_itemRepo.SearchItem(search));
         public void CompleteItem(long id)
         {
-            _itemRepo.CompleteItem(id);
-            checkOrderPickupAndSend(_itemRepo.GetOrderIdWithItemId(id));  // send Notification if order is ready
+            if(_itemRepo.CompleteItem(id))  // only check if item was changed
+            {
+                checkOrderPickupAndSend(_itemRepo.GetOrderIdWithItemId(id));    // send Notification if order is ready
+            }
         }
         public void RemoveItem(long itemId)
         {

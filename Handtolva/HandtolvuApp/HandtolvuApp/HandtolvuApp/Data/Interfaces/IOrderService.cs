@@ -9,6 +9,6 @@ namespace HandtolvuApp.Data.Interfaces
     public interface IOrderService
     {
         Task<Order> GetOrderAsync(string barcode);
-        Task CheckoutOrder(long id);
+        Task<bool> CheckoutOrder(long id);
     }
 }

@@ -16,17 +16,28 @@ namespace HandtolvuApp.ViewModels
 
             SelectedItemChangedCommand = new Command(async () =>
             {
-                NextStates n = await App.ItemManager.GetNextStatesAsync(SelectedItem.Barcode);
-                SelectedItem.OrderId = Order.Id;
-                var itemVM = new ItemViewModel(SelectedItem, n);
-                var itemPage = new ItemPage();
-                itemPage.BindingContext = itemVM;
-                await App.Current.MainPage.Navigation.PushAsync(itemPage);
+                if(SelectedItem != null)
+                {
+                    //SelectedItem.OrderId = Order.Id;
+                    var itemVM = new ItemViewModel(SelectedItem);
+                    var itemPage = new ItemPage
+                    {
+                        BindingContext = itemVM
+                    };
+                    await App.Current.MainPage.Navigation.PushAsync(itemPage);
+                }
             });
 
             CheckoutCommand = new Command(async () =>
             {
-                await App.OrderManager.CheckoutOrder(Order.Id);
+                if(await App.OrderManager.CheckoutOrder(Order.Id))
+                {
+                    MessagingCenter.Send<OrderPageViewModel, string>(this, "Success", $"Allar vörur í pöntun {Order.Barcode} hafar verið skráðar sóttar");
+                }
+                else
+                {
+                    MessagingCenter.Send<OrderPageViewModel, string>(this, "Fail", $"Ekki var hægt að skrá {Order.Barcode} sem sótta");
+                }
             });
         }
 
