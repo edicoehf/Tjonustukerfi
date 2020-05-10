@@ -12,12 +12,15 @@ namespace HandtolvuApp
     {
         public static ItemManager ItemManager { get; private set; }
         public static OrderManager OrderManager { get; private set; }
+        public static InfoManager InfoManager { get; private set; }
         public static IScanner Scanner;
         public App()
         {
             InitializeComponent();
             ItemManager = new ItemManager(new ItemService());
             OrderManager = new OrderManager(new OrderService());
+            InfoManager = new InfoManager(new ItemService());
+            GetStateAndLocations();
             MainPage = new NavigationPage(new MainPage());
         }
 
@@ -31,6 +34,11 @@ namespace HandtolvuApp
 
         protected override void OnResume()
         {
+        }
+
+        private async void GetStateAndLocations()
+        {
+            await InfoManager.GetStateAndLocations();
         }
     }
 }

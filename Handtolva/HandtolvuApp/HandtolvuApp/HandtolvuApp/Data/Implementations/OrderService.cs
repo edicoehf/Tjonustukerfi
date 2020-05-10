@@ -29,80 +29,58 @@ namespace HandtolvuApp.Data.Implementations
         {
             Order = null;
             
-            if(CheckConnection())
+            string Uri = BaseURI + $"/search?barcode={barcode}";
+            try
             {
+                // Get response with retry policy in case of HttpRequestException
+                var response = await Policy
+                                    .Handle<HttpRequestException>()
+                                    .WaitAndRetry(retryCount: 3,
+                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                    .Execute(async () => await _client.GetAsync(Uri));
 
-                string Uri = BaseURI + $"/search?barcode={barcode}";
-                try
+                if (response.IsSuccessStatusCode)
                 {
-                    // Get response with retry policy in case of HttpRequestException
-                    var response = await Policy
-                                        .Handle<HttpRequestException>()
-                                        .WaitAndRetry(retryCount: 3,
-                                                        sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
-                                        .Execute(async () => await _client.GetAsync(Uri));
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var content = await response.Content.ReadAsStringAsync();
-                        Order = JsonConvert.DeserializeObject<Order>(content);
-                    }
+                    var content = await response.Content.ReadAsStringAsync();
+                    Order = JsonConvert.DeserializeObject<Order>(content);
                 }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(@"\tERROR {0}", ex.Message);
-                }
-
             }
-            else
+            catch (Exception ex)
             {
-                // Handle Scanner has no internet connection
-                // add to list of api calls if needed
-            }
+                Debug.WriteLine(@"\tERROR {0}", ex.Message);
+            } 
 
             return Order;
         }
 
         public async Task<bool> CheckoutOrder(long id)
         {
-            if(CheckConnection())
+            // uri to set order to completed state
+            try
             {
-                // uri to set order to completed state
-                try
+                var method = new HttpMethod("PATCH");
+                string checkoutUri = BaseURI + $"/{id}/complete";
+
+                var request = new HttpRequestMessage(method, checkoutUri);
+
+                // Get response with retry policy in case of HttpRequestException
+                var response = await Policy
+                                    .Handle<HttpRequestException>()
+                                    .WaitAndRetry(retryCount: 3,
+                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                    .Execute(async () => await _client.SendAsync(request));
+
+                if (response.IsSuccessStatusCode)
                 {
-                    var method = new HttpMethod("PATCH");
-                    string checkoutUri = BaseURI + $"/{id}/complete";
-
-                    var request = new HttpRequestMessage(method, checkoutUri);
-
-                    // Get response with retry policy in case of HttpRequestException
-                    var response = await Policy
-                                        .Handle<HttpRequestException>()
-                                        .WaitAndRetry(retryCount: 3,
-                                                        sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
-                                        .Execute(async () => await _client.SendAsync(request));
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        return true;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(@"\rERROR {0}", ex.Message);
+                    return true;
                 }
             }
-            else
+            catch (Exception ex)
             {
-                // Handle connection issue
+                Debug.WriteLine(@"\rERROR {0}", ex.Message);
             }
-
+            
             return false;
-        }
-
-        private bool CheckConnection()
-        {
-            return CrossConnectivity.Current.IsConnected;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using HandtolvuApp.Data.Interfaces;
+using HandtolvuApp.Extensions;
 using HandtolvuApp.FailRequestHandler;
 using HandtolvuApp.Models;
 using Plugin.Connectivity;
@@ -69,7 +70,7 @@ namespace HandtolvuApp.ViewModels
                     }
                     else
                     {
-                        FailedRequstCollection.ItemFailedRequests.AddRange(items);
+                        FailedRequstCollection.ItemFailedRequests.AddOrUpdate<LocationStateChange>(items);
                         MessagingCenter.Send<LocationItemScanViewModel, string>(this, "Fail", "Handskanni ótengdur\n\nHægt er að fara á forsíðu og senda aftur þegar handskanni er tengdur");
                     }
                 }

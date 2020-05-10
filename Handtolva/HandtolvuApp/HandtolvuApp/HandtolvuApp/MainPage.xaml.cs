@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HandtolvuApp.FailRequestHandler;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -16,6 +17,19 @@ namespace HandtolvuApp
         public MainPage()
         {
             InitializeComponent();
+        }
+
+        protected override void OnAppearing()
+        {
+            if(FailedRequstCollection.ItemFailedRequests.Count > 0)
+            {
+                FailedRequst.IsVisible = true;
+            }
+            else
+            {
+                FailedRequst.IsVisible = false;
+            }
+            base.OnAppearing();
         }
     }
 }

@@ -1,10 +1,6 @@
 ﻿using HandtolvuApp.Data.Interfaces;
 using HandtolvuApp.Models;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace HandtolvuApp.Data
@@ -41,20 +37,6 @@ namespace HandtolvuApp.Data
         public Task<List<LocationStateChange>> StateChangeByLocation(List<LocationStateChange> items)
         {
             return itemService.StateChangeByLocation(items);
-        }
-
-        /// <summary>Gets all locations</summary>
-        /// <returns>List of strings that are locations</returns>
-        public Task<List<string>> GetAllLoctions()
-        {
-            return itemService.GetAllLocations();
-        }
-
-        /// <summary>Gets all states</summary>
-        /// <returns>Returns a list of State model</returns>
-        public Task<List<State>> GetAllStates()
-        {
-            return itemService.GetAllStates();
         }
     }
 }
