@@ -7,13 +7,12 @@
     margin-top: 0;
 }
 
-
 .select.MuiFormControl-root {
     padding-left: 15px;
 }
 
-.item-form-paper input[type=number]::-webkit-inner-spin-button {
-    opacity: 1
+.item-form-paper input[type="number"]::-webkit-inner-spin-button {
+    opacity: 1;
 }
 
 .select.MuiFormGroup-root .MuiFormControlLabel-root {
@@ -43,10 +42,12 @@
 }
 
 .item-form-paper .details-input .MuiFormLabel-root {
+    margin-top: 0.1em;
     color: rgba(0, 0, 0, 0.9);
 }
 
 .item-form-paper .details-input .MuiFormLabel-root.Mui-focused {
+    margin-top: 0.4em;
     color: #3f51b5;
 }
 
@@ -54,4 +55,17 @@
 .item-form-paper .other-input input::placeholder {
     color: black;
     opacity: 1;
+}
+div.item-stepper {
+    background-color: transparent;
+    display: flex;
+    margin: 0 -2em -1em -2em;
+    justify-content: space-around;
+}
+.service-text {
+    margin-top: -1em;
+    margin-bottom: 2em;
+}
+.plus-icon {
+    margin-bottom: 0.2em;
 }
