@@ -18,6 +18,10 @@ services:
     environment:
       ASPNETCORE_URLS: https://+:6001;http://+:6000;
       DB_CONNECTION_STRING: Host=postgres_tjonustukerfi_image;Port=5432;Database=${postgresDatabase};Username=${postgresUser};Password=${postgresPassword}
+      SMTP_USERNAME: ${SMTP_USERNAME}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_SERVER: ${SMTP_SERVER}
+      SMTP_PORT: ${SMTP_PORT}
   
   postgres_tjonustukerfi_image:
     image: postgres:latest
