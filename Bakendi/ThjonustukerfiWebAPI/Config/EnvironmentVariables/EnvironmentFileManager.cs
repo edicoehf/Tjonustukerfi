@@ -13,26 +13,7 @@ namespace ThjonustukerfiWebAPI.Config.EnvironmentVariables
             string envFile = "Config/EnvironmentVariables/.env";
 
             if (File.Exists(envFile)) { return ParseEnvFile(envFile); }
-            else
-            {
-                string SMTP_USERNAME = Environment.GetEnvironmentVariable("SMTP_USERNAME");
-                string SMTP_PASSWORD = Environment.GetEnvironmentVariable("SMTP_PASSWORD");
-                string SMTP_SERVER = Environment.GetEnvironmentVariable("SMTP_SERVER");
-                string SMTP_PORT = Environment.GetEnvironmentVariable("SMTP_PORT");
-
-                var path = "Config/EnvironmentVariables";
-
-                using (StreamWriter outputFile = new StreamWriter(Path.Combine(path, ".env")))
-                {
-                    outputFile.WriteLine($"SMTP_USERNAME={SMTP_USERNAME}");
-                    outputFile.WriteLine($"SMTP_PASSWORD={SMTP_PASSWORD}");
-                    outputFile.WriteLine($"SMTP_SERVER={SMTP_SERVER}");
-                    outputFile.WriteLine($"SMTP_PORT={SMTP_PORT}");
-                }
-
-                if (File.Exists(envFile)) { return ParseEnvFile(envFile); }
-                else { return new Dictionary<string, string>(); }
-            }
+            else { return new Dictionary<string, string>(); }
         }
 
         private static Dictionary<string, string> ParseEnvFile(string envFile)

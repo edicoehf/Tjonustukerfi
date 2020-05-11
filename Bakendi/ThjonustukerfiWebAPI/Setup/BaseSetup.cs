@@ -5,6 +5,8 @@ using ThjonustukerfiWebAPI.Models.Entities;
 using ThjonustukerfiWebAPI.Extensions;
 using ThjonustukerfiWebAPI.Config;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
+using System;
 
 namespace ThjonustukerfiWebAPI.Setup
 {
@@ -25,6 +27,7 @@ namespace ThjonustukerfiWebAPI.Setup
         public void Run(ConfigClass config)
         {
             LoadConfig(config);
+            SetEnvironmentVariables();  // set environment variables for docker
 
             _dbContext.Database.Migrate();
 
@@ -101,6 +104,32 @@ namespace ThjonustukerfiWebAPI.Setup
             _serviceStates = config.ServiceStates;  // Set service states
             _states = config.States;                // Set states
             _categories = config.Categories;        // Set categories
+        }
+
+        /// <summary>Sets Env files for mail service</summary>
+        private void SetEnvironmentVariables()
+        {
+            string envFile = "Config/EnvironmentVariables/.env";
+            if(!File.Exists(envFile))
+            {
+                string SMTP_USERNAME = Environment.GetEnvironmentVariable("SMTP_USERNAME");
+                string SMTP_PASSWORD = Environment.GetEnvironmentVariable("SMTP_PASSWORD");
+                string SMTP_SERVER = Environment.GetEnvironmentVariable("SMTP_SERVER");
+                string SMTP_PORT = Environment.GetEnvironmentVariable("SMTP_PORT");
+
+                var path = "Config/EnvironmentVariables";
+
+                if(SMTP_USERNAME != null && SMTP_PASSWORD != null && SMTP_SERVER != null && SMTP_PORT != null)
+                {
+                    using (StreamWriter outputFile = new StreamWriter(Path.Combine(path, ".env")))
+                    {
+                        outputFile.WriteLine($"SMTP_USERNAME={SMTP_USERNAME}");
+                        outputFile.WriteLine($"SMTP_PASSWORD={SMTP_PASSWORD}");
+                        outputFile.WriteLine($"SMTP_SERVER={SMTP_SERVER}");
+                        outputFile.WriteLine($"SMTP_PORT={SMTP_PORT}");
+                    }
+                }
+            }
         }
     }
 }
