@@ -9,9 +9,9 @@ import CustomerPendingOrdersModal from "../CustomerPendingOrdersModal/CustomerPe
 
 const CustomerDetails = ({ id }) => {
     const { customer, error, isProcessing } = useGetCustomerById(id);
-    const [hasPendingOrders, setHasPendingOrders] = React.useState(true);
+    const [hasReadyOrders, setHasReadyOrders] = React.useState(true);
     const handleClose = () => {
-        setHasPendingOrders(false);
+        setHasReadyOrders(false);
     };
     return (
         <div className="customer-details">
@@ -54,10 +54,10 @@ const CustomerDetails = ({ id }) => {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    {customer.hasActiveOrder && (
+                    {customer.hasReadyOrders && (
                         <CustomerPendingOrdersModal
                             customerName={customer.name}
-                            open={hasPendingOrders}
+                            open={hasReadyOrders}
                             handleClose={handleClose}
                         />
                     )}

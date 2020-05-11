@@ -28,7 +28,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
 
         /// <summary>Sets all items to complete in order</summary>
         /// <returns>OrderDTO of the order set to complete</returns>
-        OrderDTO CompleteOrder(long orderId);
+        void CompleteOrder(long orderId);
 
         /// <summary>Finds ID of order with the given barcode.</summary>
         /// <returns>The orders ID</returns>
