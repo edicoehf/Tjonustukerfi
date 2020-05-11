@@ -269,10 +269,12 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             return GetOrderDTOwithOrderList(ordersEntity);
         }
 
-        public OrderDTO CompleteOrder(long orderId)
+        public void CompleteOrder(long orderId)
         {
             var orderEntity = _dbContext.Order.FirstOrDefault(o => o.Id == orderId);    // find entity
             if(orderEntity == null) { throw new NotFoundException($"Order with ID {orderId} was not found."); }
+
+            if(orderEntity.DateCompleted != null) { return; }   // order already completed, no need to complete it again
             
             var currentDate = DateTime.Now; // get current date once to use when updating item and order
             orderEntity.DateCompleted = currentDate;
@@ -287,25 +289,24 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 // get final state id
                 var finalStateId = _dbContext.ServiceState.Where(ss => ss.ServiceId == itemToChange.ServiceId).OrderByDescending(ss => ss.Step).FirstOrDefault().StateId;
 
-                itemToChange.StateId = finalStateId;    // set to final state
-                itemToChange.DateCompleted = currentDate;
-                itemToChange.DateModified = currentDate;
+                // only change if not already complete
+                if(itemToChange.StateId != finalStateId)
+                {
+                    itemToChange.StateId = finalStateId;    // set to final state
+                    itemToChange.DateCompleted = currentDate;
+                    itemToChange.DateModified = currentDate;
 
-                JObject rss = JObject.Parse(itemToChange.JSON);         // parse the entity
-                var prop = rss.Property("location");                    // get the location property
-                prop.Value = "";                                        // set the location to empty (complete)
-                itemToChange.JSON = JsonConvert.SerializeObject(rss);   // serialize back
+                    JObject rss = JObject.Parse(itemToChange.JSON);         // parse the entity
+                    var prop = rss.Property("location");                    // get the location property
+                    prop.Value = "";                                        // set the location to empty (complete)
+                    itemToChange.JSON = JsonConvert.SerializeObject(rss);   // serialize back
 
-                // Update the timestamp
-                // state and item need to be the same else create a new timestamp
-                var timeStamp = _dbContext.ItemTimestamp.FirstOrDefault(ts => ts.ItemId == itemToChange.Id && ts.StateId == itemToChange.StateId);
-                if (timeStamp == null) { _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(itemToChange)); }
-                else { timeStamp.TimeOfChange = currentDate; }
+                    // Create the timestamp
+                    _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(itemToChange));
+                }
             }
 
             _dbContext.SaveChanges();
-
-            return MapOrderToDTO(orderEntity);
         }
 
         public long SearchOrder(string barcode)

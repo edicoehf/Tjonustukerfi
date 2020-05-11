@@ -245,15 +245,44 @@ namespace ThjonustukerfiTests.Tests.ItemTests
                 var oldTimestampSize = mockContext.ItemTimestamp.Where(ts => ts.ItemId == itemID).Count();
 
                 //* Act
-                itemRepo.CompleteItem(itemID);
+                var retVal = itemRepo.CompleteItem(itemID);
 
                 //* Assert
                 var itemEntity = mockContext.Item.FirstOrDefault(i => i.Id == itemID);
 
                 Assert.IsNotNull(itemEntity);
+                Assert.IsNotNull(retVal);
+                Assert.IsTrue(retVal);
                 Assert.AreNotEqual(oldStateId, itemEntity.StateId);
                 Assert.AreEqual(5, itemEntity.StateId); //TODO: same as in the method in repo, too hardcoded state as five. Change later
                 Assert.AreEqual(oldTimestampSize + 1, mockContext.ItemTimestamp.Where(ts => ts.ItemId == itemID).Count());  // did we add one more timestamp?
+            }
+        }
+
+        [TestMethod]
+        public void CompleteItem_should_return_true_if_updated_else_false()
+        {
+            //* Arrange
+            long itemID = 1;
+
+            using(var mockContext = new DataContext(_options))
+            {
+                IItemRepo itemRepo = new ItemRepo(mockContext, _mapper);
+
+                var oldStateId = mockContext.Item.FirstOrDefault(i => i.Id == itemID).StateId;
+                var oldTimestampSize = mockContext.ItemTimestamp.Where(ts => ts.ItemId == itemID).Count();
+
+                //* Act
+                var retTrue = itemRepo.CompleteItem(itemID);  // first complete, this should return true
+                var retFalse = itemRepo.CompleteItem(itemID);  // second complete, this should return false
+
+                //* Assert
+                var itemEntity = mockContext.Item.FirstOrDefault(i => i.Id == itemID);
+
+                Assert.IsNotNull(retTrue);
+                Assert.IsNotNull(retFalse);
+                Assert.IsTrue(retTrue);
+                Assert.IsFalse(retFalse);
             }
         }
 
