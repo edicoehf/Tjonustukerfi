@@ -1,14 +1,13 @@
-FROM mhart/alpine-node:11 AS builder
+FROM node:11-alpine AS builder
 WORKDIR /app
 
 LABEL maintainer="Edico ehf"
 
 COPY . .
-RUN npm install react-scripts -g --silent
-RUN npm install
+RUN npm install --silent
 RUN npm run build
 
-FROM mhart/alpine-node
+FROM node:11-alpine
 RUN npm install -g serve
 WORKDIR /app
 COPY --from=builder /app/build .
