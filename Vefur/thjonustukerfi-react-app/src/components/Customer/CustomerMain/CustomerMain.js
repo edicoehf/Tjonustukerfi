@@ -29,11 +29,12 @@ const CustomerMain = ({ history }) => {
                     htmlId="customer-searchbar"
                 />
             </Paper>
-            {!isLoading && customers.length === 0 ? (
+            {!isLoading && customers.length === 0 && !error ? (
                 <p className="error">Engir viðskiptavinir í gagnagrunni</p>
             ) : (
                 !isLoading &&
-                searchResults.length === 0 && (
+                searchResults.length === 0 &&
+                !error && (
                     <p className="error">
                         Enginn viðskiptavinur fannst með þessum leitarskilyrðum
                     </p>
