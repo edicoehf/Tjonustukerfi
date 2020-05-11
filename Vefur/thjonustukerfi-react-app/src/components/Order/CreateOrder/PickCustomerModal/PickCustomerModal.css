@@ -28,6 +28,11 @@ h2 {
 }
 
 .fade-modal .tab {
+    min-height: 16em;
     max-height: calc(100% - 48px);
     overflow-y: auto;
+}
+
+.fade-modal .tab .progress-component {
+    margin-top: 1em;
 }
