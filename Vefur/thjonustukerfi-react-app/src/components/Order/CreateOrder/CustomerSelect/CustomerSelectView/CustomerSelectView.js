@@ -17,52 +17,42 @@ const CustomerSelectView = ({ addCustomer }) => {
 
     return (
         <>
-            {!isLoading ? (
-                error ? (
-                    <p className="error">Gat ekki sótt viðskiptavin</p>
+            <div className="customer-select-view">
+                <Paper elevation={3} className="customer-select-search-paper">
+                    <SearchBar
+                        searchTerm={searchTerm}
+                        handleChange={handleChange}
+                        placeHolder={searchBarPlaceHolder}
+                        htmlId="customer-select-searchbar"
+                    />
+                </Paper>
+                {isLoading ? (
+                    <ProgressComponent isLoading={isLoading} />
+                ) : error ? (
+                    <p className="error">Gat ekki sótt viðskiptavini</p>
+                ) : customers.length === 0 ? (
+                    <p className="error">Engir viðskiptavinir í gagnagrunni</p>
+                ) : searchResults.length === 0 ? (
+                    <p className="error">
+                        Engir viðskiptavinir fundust með þessum leitarskilyrðum
+                    </p>
                 ) : (
-                    <div className="customer-select-view">
-                        <Paper
-                            elevation={3}
-                            className="customer-select-search-paper"
-                        >
-                            <SearchBar
-                                searchTerm={searchTerm}
-                                handleChange={handleChange}
-                                placeHolder={searchBarPlaceHolder}
-                                htmlId="customer-select-searchbar"
-                            />
-                        </Paper>
-                        {searchResults.length === 0 ? (
-                            <p className="error no-customers">
-                                Enginn viðskiptavinur fannst
-                            </p>
-                        ) : (
-                            <Paper
-                                elevation={3}
-                                className="customer-select-list"
-                            >
-                                <List className="list-of-customers">
-                                    {searchResults.map((customer, i) => (
-                                        <React.Fragment key={customer.id}>
-                                            <CustomerListItem
-                                                customer={customer}
-                                                onClick={addCustomer}
-                                                icon={<AddIcon />}
-                                            />
-                                            {i < customers.length - 1 && (
-                                                <Divider />
-                                            )}
-                                        </React.Fragment>
-                                    ))}
-                                </List>
-                            </Paper>
-                        )}
-                    </div>
-                )
-            ) : (
-                <ProgressComponent isLoading={isLoading} />
-            )}
+                    <Paper elevation={3} className="customer-select-list">
+                        <List className="list-of-customers">
+                            {searchResults.map((customer, i) => (
+                                <React.Fragment key={customer.id}>
+                                    <CustomerListItem
+                                        customer={customer}
+                                        onClick={addCustomer}
+                                        icon={<AddIcon />}
+                                    />
+                                    {i < customers.length - 1 && <Divider />}
+                                </React.Fragment>
+                            ))}
+                        </List>
+                    </Paper>
+                )}
+            </div>
         </>
     );
 };
