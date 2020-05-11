@@ -3,6 +3,7 @@ import CustomerInputForm from "../../../../Customer/CustomerInputForm/CustomerIn
 import useCreateCustomer from "../../../../../hooks/useCreateCustomer";
 import { handleCreateType, isProcessingType } from "../../../../../types/index";
 import useGetCustomerCallback from "../../../../../hooks/useGetCustomerCallback";
+import "./AddNewCustomer.css";
 
 const AddNewCustomer = ({ addCustomer }) => {
     const [success, setSuccess] = React.useState(false);
