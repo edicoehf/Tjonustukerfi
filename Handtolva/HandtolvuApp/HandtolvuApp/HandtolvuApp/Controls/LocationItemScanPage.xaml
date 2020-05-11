@@ -5,88 +5,97 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="HandtolvuApp.Controls.LocationItemScanPage">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height=".3*" />
-            <RowDefinition Height=".3*" />
-            <RowDefinition Height=".3*" />
-            <RowDefinition Height="2*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width=".7*" />
-        </Grid.ColumnDefinitions>
-
-        <Grid Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="4">
+    <AbsoluteLayout>
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height=".3*" />
+                <RowDefinition Height=".3*" />
+                <RowDefinition Height=".3*" />
+                <RowDefinition Height="2*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width=".7*" />
             </Grid.ColumnDefinitions>
+
+            <Grid Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
             
-            <Label Text="{Binding Barcode}" FontSize="Title"
-                   Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4"
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center"
-                   VerticalOptions="CenterAndExpand" 
-                   />
+                <Label Text="{Binding Barcode}" FontSize="Title"
+                       Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       VerticalOptions="CenterAndExpand" 
+                       />
 
-            <Button Grid.Column="1" Text="Klára" FontSize="Large"
-                    Grid.Row="1" CornerRadius="10"
-                    Margin="0, 5, 10, 5" Grid.ColumnSpan="2"
+                <Button Grid.Column="1" Text="Klára" FontSize="Large"
+                        Grid.Row="1" CornerRadius="10"
+                        Margin="0, 5, 10, 5" Grid.ColumnSpan="2"
+                        BackgroundColor="Green" TextColor="White"
+                        Clicked="ActivityShow"/>
+            </Grid>
+
+            <Entry Grid.Column="0" Grid.ColumnSpan="3"
+                    Grid.Row="2" x:Name="MyEditor" Keyboard="Numeric"
+                    Placeholder="{Binding Placeholder}" Margin="10,0"
+                    AutomationId="inputEntry"
+                    Text="{Binding ScannedBarcodeText}"/>
+
+            <Button Grid.Column="3" Text="+" FontSize="Large"
+                    Grid.Row="2" CornerRadius="10"
+                    Margin="0, 5, 10, 5" x:Name="AddButton"
                     BackgroundColor="Green" TextColor="White"
-                    Command="{Binding SendCommand}"/>
-        </Grid>
-
-        <Entry Grid.Column="0" Grid.ColumnSpan="3"
-                Grid.Row="2" x:Name="MyEditor" Keyboard="Numeric"
-                Placeholder="{Binding Placeholder}" Margin="10,0"
-                AutomationId="inputEntry"
-                Text="{Binding ScannedBarcodeText}"/>
-
-        <Button Grid.Column="3" Text="+" FontSize="Large"
-                Grid.Row="2" CornerRadius="10"
-                Margin="0, 5, 10, 5" x:Name="AddButton"
-                BackgroundColor="Green" TextColor="White"
-                Command="{Binding AddCommand}"/>
-
-        <CollectionView ItemsSource="{Binding AllItems}" Grid.Row="3" Grid.ColumnSpan="4" 
-                        ItemsUpdatingScrollMode="KeepScrollOffset" VerticalScrollBarVisibility="Always">
-
-
-
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <StackLayout Padding="10, 10">
-                        <Frame HeightRequest="40" CornerRadius="20" HasShadow="True">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width=".5*"/>
-                                </Grid.ColumnDefinitions>
-                                <Label Text="{Binding .}" FontSize="Large" 
-                                           VerticalTextAlignment="Center" 
-                                           HorizontalTextAlignment="Center"
-                                       Grid.Column="0" Grid.ColumnSpan="3"/>
-                                <Button Grid.Column="3" Text="X"
-                                         BackgroundColor="Red"
-                                        TextColor="Black" CornerRadius="10"
-                                        Clicked="RemoveClicked"/>
-                            </Grid>
-                        </Frame>
-                    </StackLayout>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                    Command="{Binding AddCommand}"/>
         
-    </Grid>
+
+            <CollectionView ItemsSource="{Binding AllItems}" Grid.Row="3" Grid.ColumnSpan="4" 
+                            ItemsUpdatingScrollMode="KeepScrollOffset" VerticalScrollBarVisibility="Always">
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Padding="10, 10">
+                            <Frame HeightRequest="40" CornerRadius="20" HasShadow="True">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width=".5*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Text="{Binding .}" FontSize="Large" 
+                                               VerticalTextAlignment="Center" 
+                                               HorizontalTextAlignment="Center"
+                                           Grid.Column="0" Grid.ColumnSpan="3"/>
+                                    <Button Grid.Column="3" Text="X"
+                                             BackgroundColor="Red"
+                                            TextColor="Black" CornerRadius="10"
+                                            Clicked="RemoveClicked"/>
+                                </Grid>
+                            </Frame>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </Grid>
+        <StackLayout x:Name="LoadingLayout"
+                        AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                        AbsoluteLayout.LayoutFlags="All"
+                        IsVisible="False"
+                         
+                        BackgroundColor="Black" Opacity="0.7">
+            <ActivityIndicator IsRunning="True" Color="DodgerBlue" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+        </StackLayout>
+    </AbsoluteLayout>
 </ContentPage>

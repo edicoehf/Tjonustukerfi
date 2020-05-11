@@ -1,6 +1,8 @@
 ﻿using HandtolvuApp.Data.Interfaces;
 using HandtolvuApp.Models;
 using Newtonsoft.Json;
+using Plugin.Connectivity;
+using Polly;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,8 +18,8 @@ namespace HandtolvuApp.Data.Implementations
         readonly HttpClient _client;
         public NextStates NextStates { get; private set; }
         public Item Item { get; private set; }
-        private readonly string BaseURI = "http://10.0.2.2:5000/api/items";
-        private readonly string InfoURI = "http://10.0.2.2:5000/api/info";
+        private readonly string BaseURI = $"{Constants.ApiConnection}items";
+        private readonly string InfoURI = $"{Constants.ApiConnection}info";
 
         public ItemService()
         {
@@ -32,7 +34,12 @@ namespace HandtolvuApp.Data.Implementations
             string Uri = BaseURI + $"/search?barcode={barcode}";
             try
             {
-                var response = await _client.GetAsync(Uri);
+                var response = await Policy
+                                    .Handle<HttpRequestException>()
+                                    .WaitAndRetry(retryCount: 3,
+                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                    .Execute(async () => await _client.GetAsync(Uri));
+
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
@@ -55,9 +62,13 @@ namespace HandtolvuApp.Data.Implementations
 
             try
             {
-                var response = await _client.GetAsync(Uri);
-                
-                if(response.IsSuccessStatusCode)
+                var response = await Policy
+                                    .Handle<HttpRequestException>()
+                                    .WaitAndRetry(retryCount: 3,
+                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                    .Execute(async () => await _client.GetAsync(Uri));
+
+                if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
                     NextStates = JsonConvert.DeserializeObject<NextStates>(content);
@@ -72,53 +83,24 @@ namespace HandtolvuApp.Data.Implementations
             return NextStates;
         }
 
-        public async Task<bool> StateChangeWithId(long id, string barcode)
+        public async Task<List<LocationStateChange>> StateChangeByLocation(List<LocationStateChange> items)
         {
-            string stateUri = BaseURI + "/scanner/statechangebyid";
-            var item = new[] { new { itemId = id, stateChangeBarcode = barcode } };
-
-            try
-            {
-                var method = new HttpMethod("PATCH");
-                var request = new HttpRequestMessage(method, stateUri) { 
-                    Content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json") 
-                };
-                var response = await _client.SendAsync(request);
-
-                if(response.IsSuccessStatusCode)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(@"\tERROR {0}", ex.Message);
-                return false;
-            }
-        }
-
-        public async Task<List<LocationStateChange>> StateChangeByLocation(ObservableCollection<string> items, string barcode)
-        {
-            string stateUri = BaseURI + "/scanner/statechangebybarcode";
             List<LocationStateChange> ret = new List<LocationStateChange>();
-            var item = new List<LocationStateChange>();
-            foreach(string i in items)
-            {
-                item.Add(new LocationStateChange { ItemBarcode = i, StateChangeBarcode = barcode });
-            }
+            
+            string stateUri = BaseURI + "/scanner/statechangebybarcode";
 
             try
             {
                 var method = new HttpMethod("PATCH");
                 var request = new HttpRequestMessage(method, stateUri)
                 {
-                    Content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json")
+                    Content = new StringContent(JsonConvert.SerializeObject(items), Encoding.UTF8, "application/json")
                 };
-                var response = await _client.SendAsync(request);
+                var response = await Policy
+                                    .Handle<HttpRequestException>()
+                                    .WaitAndRetry(retryCount: 3,
+                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                    .Execute(async () => await _client.SendAsync(request));
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -145,7 +127,11 @@ namespace HandtolvuApp.Data.Implementations
 
             try
             {
-                var response = await _client.GetAsync(reqUri);
+                var response = await Policy
+                                    .Handle<HttpRequestException>()
+                                    .WaitAndRetry(retryCount: 3,
+                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                    .Execute(async () => await _client.GetAsync(reqUri));
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -156,7 +142,7 @@ namespace HandtolvuApp.Data.Implementations
             catch (Exception ex)
             {
                 Debug.WriteLine(@"\tError {0}", ex.Message);
-            }
+            }          
 
             return ret;
         }
@@ -165,10 +151,14 @@ namespace HandtolvuApp.Data.Implementations
         {
             string reqUri = InfoURI + "/states";
             List<State> ret = new List<State>();
-
+           
             try
             {
-                var response = await _client.GetAsync(reqUri);
+                var response = await Policy
+                                    .Handle<HttpRequestException>()
+                                    .WaitAndRetry(retryCount: 3,
+                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                    .Execute(async () => await _client.GetAsync(reqUri));
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -179,10 +169,9 @@ namespace HandtolvuApp.Data.Implementations
             catch (Exception ex)
             {
                 Debug.WriteLine(@"\tError {0}", ex.Message);
-            }
+            }  
 
             return ret;
         }
-
     }
 }

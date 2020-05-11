@@ -33,13 +33,14 @@ const ArchiveOrderMain = () => {
                     error={error}
                     isLoading={isLoading}
                 />
-                {!isLoading && orders.length === 0 ? (
+                {!isLoading && orders.length === 0 && !error ? (
                     <p className="error">
                         Engar skjalaðar pantanir í gagnagrunni
                     </p>
                 ) : (
                     !isLoading &&
-                    searchResults.length === 0 && (
+                    searchResults.length === 0 &&
+                    !error && (
                         <p className="error">
                             Engar pantanir fundust með þessum leitarskilyrðum
                         </p>
