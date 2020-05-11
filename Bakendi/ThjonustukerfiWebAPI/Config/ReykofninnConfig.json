@@ -59,7 +59,7 @@
         { "name": "Annað", "id": 4 }
     ],
     "sendSMS": false,
-    "sendEmail": true,
+    "sendEmail": false,
     "companyEmail": "rk@rk.is",
     "companyName": "Reykofninn"
 }
