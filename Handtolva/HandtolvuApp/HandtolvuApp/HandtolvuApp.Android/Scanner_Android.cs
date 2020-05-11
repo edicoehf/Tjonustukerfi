@@ -19,10 +19,10 @@ namespace HandtolvuApp.Droid
         private Context _context = null;
         private bool _bRegistered = false;
         private DataWedgeReceiver _broadcastReceiver = null;
-        private static string ACTION_DATAWEDGE_FROM_6_2 = "com.symbol.datawedge.api.ACTION";
-        private static string EXTRA_CREATE_PROFILE = "com.symbol.datawedge.api.CREATE_PROFILE";
-        private static string EXTRA_SET_CONFIG = "com.symbol.datawedge.api.SET_CONFIG";
-        private static string EXTRA_PROFILE_NAME = "Lokaverkefni Edico";
+        private static readonly string ACTION_DATAWEDGE_FROM_6_2 = "com.symbol.datawedge.api.ACTION";
+        private static readonly string EXTRA_CREATE_PROFILE = "com.symbol.datawedge.api.CREATE_PROFILE";
+        private static readonly string EXTRA_SET_CONFIG = "com.symbol.datawedge.api.SET_CONFIG";
+        private static readonly string EXTRA_PROFILE_NAME = "Lokaverkefni Edico";
 
         public Scanner_Android()
         {

@@ -42,6 +42,7 @@ namespace HandtolvuApp.Controls
             MessagingCenter.Unsubscribe<ScannerViewModel>(this, "ScannedBarcode");
             var vm = BindingContext as OrderInputViewModel;
             vm.DeInit();
+            MyEditor.Text = "";
             base.OnDisappearing();
         }
     }

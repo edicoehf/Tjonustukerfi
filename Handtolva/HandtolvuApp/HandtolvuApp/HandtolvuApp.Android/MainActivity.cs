@@ -8,7 +8,6 @@ using Android.Widget;
 using Android.OS;
 using Xamarin.Forms;
 using HandtolvuApp.Droid.Services;
-using Symbol.XamarinEMDK;
 using HandtolvuApp.Data.Interfaces;
 
 namespace HandtolvuApp.Droid

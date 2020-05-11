@@ -1,6 +1,8 @@
 ﻿using HandtolvuApp.Data.Interfaces;
 using HandtolvuApp.Models;
 using Newtonsoft.Json;
+using Plugin.Connectivity;
+using Polly;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,7 +17,7 @@ namespace HandtolvuApp.Data.Implementations
     {
         //10.0.2.2
         readonly HttpClient _client;
-        private static readonly string BaseURI = "http://10.0.2.2:5000/api/orders";
+        private static readonly string BaseURI = $"{Constants.ApiConnection}orders";
         public Order Order { get; private set; }
 
         public OrderService()
@@ -26,11 +28,17 @@ namespace HandtolvuApp.Data.Implementations
         public async Task<Order> GetOrderAsync(string barcode)
         {
             Order = null;
-
+            
             string Uri = BaseURI + $"/search?barcode={barcode}";
             try
             {
-                var response = await _client.GetAsync(Uri);
+                // Get response with retry policy in case of HttpRequestException
+                var response = await Policy
+                                    .Handle<HttpRequestException>()
+                                    .WaitAndRetry(retryCount: 3,
+                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                    .Execute(async () => await _client.GetAsync(Uri));
+
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
@@ -40,7 +48,7 @@ namespace HandtolvuApp.Data.Implementations
             catch (Exception ex)
             {
                 Debug.WriteLine(@"\tERROR {0}", ex.Message);
-            }
+            } 
 
             return Order;
         }
@@ -54,7 +62,13 @@ namespace HandtolvuApp.Data.Implementations
                 string checkoutUri = BaseURI + $"/{id}/complete";
 
                 var request = new HttpRequestMessage(method, checkoutUri);
-                var response = await _client.SendAsync(request);
+
+                // Get response with retry policy in case of HttpRequestException
+                var response = await Policy
+                                    .Handle<HttpRequestException>()
+                                    .WaitAndRetry(retryCount: 3,
+                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                    .Execute(async () => await _client.SendAsync(request));
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -65,6 +79,7 @@ namespace HandtolvuApp.Data.Implementations
             {
                 Debug.WriteLine(@"\rERROR {0}", ex.Message);
             }
+            
             return false;
         }
     }
