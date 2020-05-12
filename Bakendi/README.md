@@ -33,7 +33,7 @@ If this is not done then these values can be set in a .env file that should be l
 * Open appsettings.json to setup the database default connection string
 * Fill out the company config in Tjonustukerfi/Bakendi/ThjonustukerfiWebAPI/Config
 * Set the company config name in Program.cs
-* Setup the mail service variables as either environment variables or in the .env file, see [Environment variables](#<p>Enviroment-variables-for-the-mail-service</p>)
+* Setup the mail service variables as either environment variables or in the .env file, see [Environment variables](#Enviroment-variables-for-the-mail-service)
 * Make sure you are in the folder ThjonustukerfiWebAPI in the terminal and do the following:
     * dotnet restore
     * dotnet ef migrations add InitMigration
