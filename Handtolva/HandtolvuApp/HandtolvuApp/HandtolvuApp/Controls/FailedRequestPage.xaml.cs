@@ -1,4 +1,5 @@
-﻿using HandtolvuApp.ViewModels;
+﻿using HandtolvuApp.Models;
+using HandtolvuApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,6 +53,24 @@ namespace HandtolvuApp.Controls
             NavigationPage.SetHasNavigationBar(this, false);
             var vm = BindingContext as FailedRequestViewModel;
             vm.SendCommand.Execute(null);
+        }
+
+        public void RemoveClicked(object sender, EventArgs e)
+        {
+            var button = sender as Button;
+            var selected = button.BindingContext as LocationStateChange ;
+            var vm = BindingContext as FailedRequestViewModel;
+            vm.RemoveCommand.Execute(selected);
+        }
+
+        public async void RemoveAllCall(object sender, EventArgs e)
+        {
+            var res = await App.Current.MainPage.DisplayAlert("Hætta við!", "Ertu viss að þú viljir hætta við allar færslur?\n\nEkki verður hægt að sækja listann aftur ef það er staðfest", "Staðfesta", "Hætta við");
+            if(res)
+            {
+                var vm = BindingContext as FailedRequestViewModel;
+                vm.RemoveAllCommand.Execute(null);
+            }
         }
     }
 }

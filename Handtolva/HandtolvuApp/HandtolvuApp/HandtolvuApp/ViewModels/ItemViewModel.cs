@@ -20,8 +20,6 @@ namespace HandtolvuApp.ViewModels
             {
                 Item = i;
 
-                ItemJson = JsonConvert.DeserializeObject<ItemJson>(i.Json);
-
                 ScanStateCommand = new Command(async () =>
                 {
                     // send user to scan site
@@ -34,20 +32,6 @@ namespace HandtolvuApp.ViewModels
                 });
             }
 
-        }
-
-        ItemJson itemJson;
-
-        public ItemJson ItemJson
-        {
-            get => itemJson;
-
-            set
-            {
-                itemJson = value;
-
-                NotifyPropertyChanged(nameof(ItemJson));
-            }
         }
 
         Item item;
@@ -85,7 +69,6 @@ namespace HandtolvuApp.ViewModels
             if(Item != null)
             {
                 Item = await App.ItemManager.GetItemAsync(Item.Barcode);
-                ItemJson = JsonConvert.DeserializeObject<ItemJson>(Item.Json);
                 NextStates = await App.ItemManager.GetNextStatesAsync(Item.Barcode);
             }
         }

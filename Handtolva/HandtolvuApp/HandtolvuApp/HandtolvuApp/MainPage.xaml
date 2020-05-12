@@ -72,7 +72,7 @@
                 CornerRadius="20" />
 
             <Button Grid.Row="3" Grid.Column="1" IsVisible="False"
-                Grid.ColumnSpan="2" Text="Skanna í Hólf"
+                Grid.ColumnSpan="2" Text="Ósendar breytingar"
                 BackgroundColor="Red" TextColor="White"
                 Margin="5, 5, 5, 5" x:Name="FailedRequst"
                 Command="{Binding FailedRequestCommand}"

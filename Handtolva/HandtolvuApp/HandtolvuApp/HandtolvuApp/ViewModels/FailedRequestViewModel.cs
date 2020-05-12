@@ -16,6 +16,18 @@ namespace HandtolvuApp.ViewModels
             Items = new ObservableCollection<LocationStateChange>();
             FailedRequstCollection.ItemFailedRequests.ForEach(x => Items.Add(x));
 
+            RemoveCommand = new Command<LocationStateChange>((item) =>
+            {
+                Items.Remove(item);
+                FailedRequstCollection.ItemFailedRequests.Remove(item);
+            });
+
+            RemoveAllCommand = new Command(async () =>
+            {
+                FailedRequstCollection.ItemFailedRequests.Clear();
+                await App.Current.MainPage.Navigation.PopToRootAsync();
+            });
+
             SendCommand = new Command(async () => 
             {
                 List<LocationStateChange> invalidInput;
@@ -51,6 +63,8 @@ namespace HandtolvuApp.ViewModels
         }
 
         public Command SendCommand { get; }
+        public Command RemoveCommand { get; }
+        public Command RemoveAllCommand { get; }
         public ObservableCollection<LocationStateChange> Items { get; set; }
     }
 }

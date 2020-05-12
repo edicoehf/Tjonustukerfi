@@ -1,6 +1,7 @@
 ﻿using HandtolvuApp.Controls;
 using HandtolvuApp.Data.Interfaces;
 using HandtolvuApp.Models;
+using Plugin.Connectivity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -33,7 +34,14 @@ namespace HandtolvuApp.ViewModels
                     }
                     else
                     {
-                        MessagingCenter.Send<LocationScanViewModel, string>(this, "Fail", $"Staðsetningar barkóðinn {ScannedBarcodeText} er ekki til");
+                        if(CrossConnectivity.Current.IsConnected)
+                        {
+                            MessagingCenter.Send<LocationScanViewModel, string>(this, "Fail", $"Staðsetningar barkóðinn {ScannedBarcodeText} er ekki til");
+                        }
+                        else
+                        {
+                            MessagingCenter.Send<LocationScanViewModel, string>(this, "Fail", $"Handskanni er ekki tengdur");
+                        }
                     }
 
                     ScannedBarcodeText = "";
@@ -41,7 +49,7 @@ namespace HandtolvuApp.ViewModels
                 else
                 {
 
-                    Placeholder = "Staðsetning verður að vera gefin";
+                    Placeholder = "Staðsetningu vantar";
                 }
             });
         }

@@ -22,9 +22,9 @@ namespace HandtolvuApp.Controls
         {
             MyEditor.Focus();
             var vm = BindingContext as OrderInputViewModel;
-            MessagingCenter.Subscribe<OrderInputViewModel, string>(this, "NoOrder", async (sender, message) =>
+            MessagingCenter.Subscribe<OrderInputViewModel, string>(this, "Fail", async (sender, message) =>
             {
-                await App.Current.MainPage.DisplayAlert("Villa", $"Pöntunarnúmer {message} er ekki til", "Ok");
+                await App.Current.MainPage.DisplayAlert("Villa", message, "Ok");
             });
 
             MessagingCenter.Subscribe<ScannerViewModel>(this, "ScannedBarcode", (sender) =>
@@ -38,7 +38,7 @@ namespace HandtolvuApp.Controls
 
         protected override void OnDisappearing()
         {
-            MessagingCenter.Unsubscribe<OrderInputViewModel, string>(this, "NoOrder");
+            MessagingCenter.Unsubscribe<OrderInputViewModel, string>(this, "Fail");
             MessagingCenter.Unsubscribe<ScannerViewModel>(this, "ScannedBarcode");
             var vm = BindingContext as OrderInputViewModel;
             vm.DeInit();

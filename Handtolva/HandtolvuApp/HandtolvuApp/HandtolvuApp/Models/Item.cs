@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HandtolvuApp.Models.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
@@ -14,6 +15,7 @@ namespace HandtolvuApp.Models
         public string State { get; set; }
         public string Barcode { get; set; }
         public string Json { get; set; }
+        public ItemJson ItemJson { get; set; }
         public DateTime DateModified { get; set; }
     }
 }

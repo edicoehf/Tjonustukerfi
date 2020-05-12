@@ -82,7 +82,7 @@ namespace HandtolvuApp.ViewModels
             }
             else
             {
-                Placeholder = "Staðsetning verður að vera gefin";
+                Placeholder = "Staðsetningu vantar";
             }
         }
     }

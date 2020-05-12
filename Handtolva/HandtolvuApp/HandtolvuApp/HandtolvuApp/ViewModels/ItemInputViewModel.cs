@@ -1,6 +1,7 @@
 ﻿using HandtolvuApp.Controls;
 using HandtolvuApp.Data.Interfaces;
 using HandtolvuApp.Models;
+using Plugin.Connectivity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,29 +31,36 @@ namespace HandtolvuApp.ViewModels
         {
             if (ScannedBarcodeText != "")
             {
-                Item item = await App.ItemManager.GetItemAsync(ScannedBarcodeText);
-                if (item == null)
+                if(CrossConnectivity.Current.IsConnected)
                 {
-                    // handle that there is no item with this barcode
-                    MessagingCenter.Send<ItemInputViewModel, string>(this, "Villa", $"Vörunúmer {ScannedBarcodeText} er ekki til");
+                    Item item = await App.ItemManager.GetItemAsync(ScannedBarcodeText);
+                    if (item == null)
+                    {
+                        // handle that there is no item with this barcode
+                        MessagingCenter.Send<ItemInputViewModel, string>(this, "Villa", $"Vörunúmer {ScannedBarcodeText} er ekki til");
                     Placeholder = "Vörunúmer er ekki til";
                     ScannedBarcodeText = "";
+                    }
+                    else
+                    {
+                        item.Barcode = ScannedBarcodeText;
+                        var itemVM = new ItemViewModel(item);
+                        var itemPage = new ItemPage
+                        {
+                            BindingContext = itemVM
+                        };
+                        await Application.Current.MainPage.Navigation.PushAsync(itemPage);
+                        ScannedBarcodeText = "";
+                    }
                 }
                 else
                 {
-                    item.Barcode = ScannedBarcodeText;
-                    var itemVM = new ItemViewModel(item);
-                    var itemPage = new ItemPage
-                    {
-                        BindingContext = itemVM
-                    };
-                    await Application.Current.MainPage.Navigation.PushAsync(itemPage);
-                    ScannedBarcodeText = "";
+                    MessagingCenter.Send<ItemInputViewModel, string>(this, "Villa", $"Handskanni er ekki tengdur");
                 }
             }
             else
             {
-                Placeholder = "Vörunúmer verður að vera gefið";
+                Placeholder = "Vörunúmer vantar";
             }
         }
 

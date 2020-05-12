@@ -5,22 +5,13 @@ using System.Text;
 
 namespace HandtolvuApp.Models.Json
 {
-    public class ItemJson : INotifyPropertyChanged
+    public class ItemJson
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        string location;
-        public string Location
-        {
-            get => location;
-
-            set
-            {
-                location = value;
-
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(Location));
-            }
-        }
+        public string Location { get; set; }
+        public bool Sliced { get; set; }
+        public bool Filleted { get; set; }
+        public string OtherCategory { get; set; }
+        public string OtherService { get; set; }
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using HandtolvuApp.Data.Interfaces;
 using HandtolvuApp.Models;
+using HandtolvuApp.Models.Json;
 using Newtonsoft.Json;
 using Plugin.Connectivity;
 using Polly;
@@ -43,6 +44,18 @@ namespace HandtolvuApp.Data.Implementations
                 {
                     var content = await response.Content.ReadAsStringAsync();
                     Order = JsonConvert.DeserializeObject<Order>(content);
+                    foreach(var i in Order.Items)
+                    {
+                        i.ItemJson = JsonConvert.DeserializeObject<ItemJson>(i.Json);
+                        if(i.Category == "Annað")
+                        {
+                            i.Category = i.ItemJson.OtherCategory;
+                        }
+                        if(i.Service == "Annað")
+                        {
+                            i.Service = i.ItemJson.OtherService;
+                        }
+                    }
                 }
             }
             catch (Exception ex)
