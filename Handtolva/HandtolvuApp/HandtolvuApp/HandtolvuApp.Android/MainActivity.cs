@@ -26,6 +26,7 @@ namespace HandtolvuApp.Droid
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
+            // set scanner and connect it to the app
             _scanner = new Scanner_Android();
             App.Scanner = _scanner;
 

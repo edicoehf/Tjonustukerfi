@@ -5,6 +5,11 @@ using System.Text;
 
 namespace HandtolvuApp.Models.Json
 {
+    /// <summary>
+    ///     A model to represent additional information given about Items
+    ///     
+    ///     This changes depending on the user of the system
+    /// </summary>
     public class ItemJson
     {
         public string Location { get; set; }

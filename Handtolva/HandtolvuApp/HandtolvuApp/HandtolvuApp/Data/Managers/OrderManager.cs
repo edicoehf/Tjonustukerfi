@@ -24,6 +24,11 @@ namespace HandtolvuApp.Data.Managers
             return orderService.GetOrderAsync(barcode);
         }
 
+        /// <summary>
+        ///     Marks all item in order as "Sótt"
+        /// </summary>
+        /// <param name="id">id of the order to checkout</param>
+        /// <returns>Boolean for success or failure</returns>
         public Task<bool> CheckoutOrder(long id)
         {
             return orderService.CheckoutOrder(id);

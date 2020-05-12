@@ -25,24 +25,34 @@ namespace HandtolvuApp.ViewModels
             });
         }
 
+        /// <summary>
+        ///     Command to send a request to server
+        /// </summary>
         public Command ClickCommand { get; }
 
+        /// <summary>
+        ///     Handle the API request to server
+        /// </summary>
         public async void ScannedItem()
         {
+            // Check if there is some input
             if (ScannedBarcodeText != "")
             {
+                // Check for internet connection
                 if(CrossConnectivity.Current.IsConnected)
                 {
+                    // Send request to server
                     Item item = await App.ItemManager.GetItemAsync(ScannedBarcodeText);
                     if (item == null)
                     {
                         // handle that there is no item with this barcode
                         MessagingCenter.Send<ItemInputViewModel, string>(this, "Villa", $"Vörunúmer {ScannedBarcodeText} er ekki til");
-                    Placeholder = "Vörunúmer er ekki til";
-                    ScannedBarcodeText = "";
+                        Placeholder = "Vörunúmer er ekki til";
+                        ScannedBarcodeText = "";
                     }
                     else
                     {
+                        // Navigate to new page for given item
                         item.Barcode = ScannedBarcodeText;
                         var itemVM = new ItemViewModel(item);
                         var itemPage = new ItemPage
@@ -55,6 +65,7 @@ namespace HandtolvuApp.ViewModels
                 }
                 else
                 {
+                    // Message that device is not connected to internet
                     MessagingCenter.Send<ItemInputViewModel, string>(this, "Villa", $"Handskanni er ekki tengdur");
                 }
             }

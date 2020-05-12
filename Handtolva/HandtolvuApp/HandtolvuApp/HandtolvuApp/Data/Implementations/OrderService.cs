@@ -16,7 +16,6 @@ namespace HandtolvuApp.Data.Implementations
 {
     public class OrderService : IOrderService
     {
-        //10.0.2.2
         readonly HttpClient _client;
         private static readonly string BaseURI = $"{Constants.ApiConnection}orders";
         public Order Order { get; private set; }
@@ -42,8 +41,10 @@ namespace HandtolvuApp.Data.Implementations
 
                 if (response.IsSuccessStatusCode)
                 {
+                    // Convert response content to Order
                     var content = await response.Content.ReadAsStringAsync();
                     Order = JsonConvert.DeserializeObject<Order>(content);
+                    // For each item in order convert additional information to ItemJson and replace places With "Annað"
                     foreach(var i in Order.Items)
                     {
                         i.ItemJson = JsonConvert.DeserializeObject<ItemJson>(i.Json);

@@ -25,15 +25,18 @@ namespace HandtolvuApp.ViewModels
             {
                 if(ScannedBarcodeText != "")
                 {
+                    // Check if it is a valid state/location
                     if(await App.InfoManager.CheckLocationBarcode(ScannedBarcodeText))
                     {
-                            var locationItemScanVM = new LocationItemScanViewModel(ScannedBarcodeText);
-                            var locationItemScanPage = new LocationItemScanPage();
-                            locationItemScanPage.BindingContext = locationItemScanVM;
-                            await App.Current.MainPage.Navigation.PushAsync(locationItemScanPage);
+                        // navigate user to scan item page
+                        var locationItemScanVM = new LocationItemScanViewModel(ScannedBarcodeText);
+                        var locationItemScanPage = new LocationItemScanPage();
+                        locationItemScanPage.BindingContext = locationItemScanVM;
+                        await App.Current.MainPage.Navigation.PushAsync(locationItemScanPage);
                     }
                     else
                     {
+                        // Check if it failed because of lack of internet connection
                         if(CrossConnectivity.Current.IsConnected)
                         {
                             MessagingCenter.Send<LocationScanViewModel, string>(this, "Fail", $"Staðsetningar barkóðinn {ScannedBarcodeText} er ekki til");

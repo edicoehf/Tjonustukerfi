@@ -22,7 +22,7 @@ namespace HandtolvuApp.ViewModels
 
                 ScanStateCommand = new Command(async () =>
                 {
-                    // send user to scan site
+                    // send user to scan state site
                     var scanPageVM = new StateScanViewModel(item);
                     var scanPage = new StateScanPage
                     {
@@ -64,6 +64,9 @@ namespace HandtolvuApp.ViewModels
 
         public Command ScanStateCommand { get;  }
 
+        /// <summary>
+        ///     Update value for item and next states
+        /// </summary>
         public async void UpdateViewModel()
         {
             if(Item != null)

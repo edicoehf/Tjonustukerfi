@@ -6,6 +6,9 @@ using System.Text;
 
 namespace HandtolvuApp.Models
 {
+    /// <summary>
+    ///     Class to represent single item gotten from API
+    /// </summary>
     public class Item
     {
         public long Id { get; set; }

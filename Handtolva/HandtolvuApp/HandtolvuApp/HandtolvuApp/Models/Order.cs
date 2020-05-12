@@ -4,6 +4,11 @@ using System.Text;
 
 namespace HandtolvuApp.Models
 {
+    /// <summary>
+    ///     Model for orders gotten from API
+    ///     
+    ///     Allso holds list for all items in the order
+    /// </summary>
     public class Order
     {
         public long Id { get; set; }

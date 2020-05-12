@@ -5,6 +5,9 @@ using System.Text;
 
 namespace HandtolvuApp.Models
 {
+    /// <summary>
+    ///     Configures scanner on device to handle specific barcodes
+    /// </summary>
     public class ZebraScannerConfig : IScannerConfig
     {
         public TriggerType TriggerType { get; set; }

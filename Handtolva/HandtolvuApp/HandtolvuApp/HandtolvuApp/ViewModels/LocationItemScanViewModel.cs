@@ -42,17 +42,19 @@ namespace HandtolvuApp.ViewModels
                     var items = new List<LocationStateChange>();
                     List<LocationStateChange> invalidInput;
 
+                    // Transfer create a list of locationStateChange to send to API
                     foreach(var i in AllItems)
                     {
                         items.Add(new LocationStateChange { ItemBarcode = i, StateChangeBarcode = Barcode });
                     }
 
+                    // Check if device is connected to internet
                     if(CrossConnectivity.Current.IsConnected)
                     {
                         invalidInput = await App.ItemManager.StateChangeByLocation(items);
                         if(invalidInput.Count == 0)
                         {
-                            // success
+                            // Message to handle success
                             MessagingCenter.Send<LocationItemScanViewModel, string>(this, "Success", $"Allar vörur eru skannaðar í hólf {Barcode}");
                             AllItems.Clear();
                         }
@@ -62,6 +64,7 @@ namespace HandtolvuApp.ViewModels
                             MessagingCenter.Send<LocationItemScanViewModel, string>(this, "Fail", $"Ekki var hægt að setja allar vörur í hólf {Barcode}.\n\nEftir er listi af vörum sem ekki var hægt að setja í hólfið");
                             AllItems.Clear();
 
+                            // replace AllItems with failed state change items
                             foreach (LocationStateChange i in invalidInput)
                             {
                                 AllItems.Add(i.ItemBarcode);
@@ -70,6 +73,7 @@ namespace HandtolvuApp.ViewModels
                     }
                     else
                     {
+                        // Add to failed requests if device is not connected to internet
                         FailedRequstCollection.ItemFailedRequests.AddOrUpdate<LocationStateChange>(items);
                         MessagingCenter.Send<LocationItemScanViewModel, string>(this, "Fail", "Handskanni ótengdur\n\nHægt er að fara á forsíðu og senda aftur þegar handskanni er tengdur");
                     }
@@ -106,6 +110,9 @@ namespace HandtolvuApp.ViewModels
 
         public ObservableCollection<string> AllItems { get; set; }
 
+        /// <summary>
+        ///     Used to add item to list
+        /// </summary>
         public void AddToList()
         {
             if(!AllItems.Contains(ScannedBarcodeText))

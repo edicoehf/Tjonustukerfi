@@ -12,7 +12,7 @@ namespace HandtolvuApp.ViewModels
         {
             OrderCommand = new Command(async () =>
             {
-
+                // navigate to order scan page
                 var orderInputVM = new OrderInputViewModel();
                 var orderInputPage = new OrderInputPage();
                 orderInputPage.BindingContext = orderInputVM;
@@ -21,7 +21,7 @@ namespace HandtolvuApp.ViewModels
 
             ItemCommand = new Command(async () =>
             {
-
+                // navigate to item scan page
                 var itemInputVM = new ItemInputViewModel();
                 var itemInputPage = new ItemInputPage();
                 itemInputPage.BindingContext = itemInputVM;
@@ -30,6 +30,7 @@ namespace HandtolvuApp.ViewModels
 
             LocationCommand = new Command(async () =>
             {
+                // navigate to location scan page
                 var locationScanVM = new LocationScanViewModel();
                 var locationScanPage = new LocationScanPage();
                 locationScanPage.BindingContext = locationScanVM;
@@ -38,6 +39,7 @@ namespace HandtolvuApp.ViewModels
 
             FailedRequestCommand = new Command(async () =>
             {
+                // navigate to failed requests page
                 var failedRequestVM = new FailedRequestViewModel();
                 var failedRequestPage = new FailedRequestPage();
                 failedRequestPage.BindingContext = failedRequestVM;
@@ -48,7 +50,6 @@ namespace HandtolvuApp.ViewModels
         public Command OrderCommand { get; }
         public Command ItemCommand { get; }
         public Command FailedRequestCommand { get; }
-
         public Command LocationCommand { get; }
     }
 }

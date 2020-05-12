@@ -20,19 +20,24 @@ namespace HandtolvuApp.ViewModels
 
             FindOrderCommand = new Command(async () =>
             {
+                // Check if there is any input
                 if(ScannedBarcodeText != "")
                 {
+                    // Check if device is connected to internet
                     if(CrossConnectivity.Current.IsConnected)
                     {
+                        // Get order from server - null if order was not found
                         Order order = await App.OrderManager.GetOrderAsync(ScannedBarcodeText);
                         if(order == null)
                         {
+                            // Message fail message
                             MessagingCenter.Send<OrderInputViewModel, string>(this, "Fail", $"Pöntunarnúmer {ScannedBarcodeText} er ekki til");
                             Placeholder = "Pöntunarnúmer er ekki til";
                             ScannedBarcodeText = "";
                         }
                         else
                         {
+                            // navigate to order page
                             var orderVM = new OrderPageViewModel(order);
                             var orderPage = new OrderPage
                             {
