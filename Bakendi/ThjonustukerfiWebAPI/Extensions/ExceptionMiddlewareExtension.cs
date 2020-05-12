@@ -61,12 +61,6 @@ namespace ThjonustukerfiWebAPI.Extensions
 
                     return context.Response.WriteAsync(exception.Message);
                 }
-                if(exception is EmailException)
-                {
-                    context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
-
-                    return context.Response.WriteAsync(exception.Message);
-                }
             }
 
             logService.LogToDatabase(new ExceptionModel

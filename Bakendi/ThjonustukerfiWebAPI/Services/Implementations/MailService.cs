@@ -1,16 +1,20 @@
 using System.Drawing;
+using System.Threading.Tasks;
 using BarcodeLib;
 using MailKit.Net.Smtp;
 using MimeKit;
 using ThjonustukerfiWebAPI.Config.EnvironmentVariables;
 using ThjonustukerfiWebAPI.Models.DTOs;
 using ThjonustukerfiWebAPI.Models.Exceptions;
+using ThjonustukerfiWebAPI.Services.Interfaces;
 using ThjonustukerfiWebAPI.Setup;
 
 namespace ThjonustukerfiWebAPI.Services.Implementations
 {
     public static class MailService
     {
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(MailService));
+
         /// <summary>Creates a html message to send as an email</summary>
         public static void SendOrderNotification(OrderDTO order, CustomerDetailsDTO customer, double weeksSinceReady)
         {
@@ -99,39 +103,43 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         }
 
         /// <summary>Sends an email message via SMTP server with credentials from the environment variable file.</summary>
-        private static void Sendmail (string emailAddress, string subject, BodyBuilder bodyBuilder)
+        private static async void Sendmail (string emailAddress, string subject, BodyBuilder bodyBuilder)
         {
-            var env = EnvironmentFileManager.LoadEvironmentFile();      // load env variables
-            string smtpUsername, smtpPassword, smtpServer, smtpPort;    // variables needed to connect and send
-            env.TryGetValue("SMTP_USERNAME", out smtpUsername);         // get username
-            env.TryGetValue("SMTP_PASSWORD", out smtpPassword);         // get password
-            env.TryGetValue("SMTP_SERVER", out smtpServer);             // get server address
-            env.TryGetValue("SMTP_PORT", out smtpPort);                 // get server port
-            
-            // if environmental variables are not set correctly throw exception
-            if(smtpUsername == null || smtpPassword == null || smtpServer == null || smtpPort == null)
+            try
             {
-                throw new EmailException($"Could not send email. Could not find url or authentication key for the email request.");
+                await Task.Run(() => 
+                {
+                    var env = EnvironmentFileManager.LoadEvironmentFile();      // load env variables
+                    string smtpUsername, smtpPassword, smtpServer, smtpPort;    // variables needed to connect and send
+                    env.TryGetValue("SMTP_USERNAME", out smtpUsername);         // get username
+                    env.TryGetValue("SMTP_PASSWORD", out smtpPassword);         // get password
+                    env.TryGetValue("SMTP_SERVER", out smtpServer);             // get server address
+                    env.TryGetValue("SMTP_PORT", out smtpPort);                 // get server port
+
+                    var message = new MimeMessage();
+                    message.From.Add(new MailboxAddress(Constants.CompanyName, Constants.CompanyEmail));    // Add company email info
+                    message.To.Add(new MailboxAddress(emailAddress));                                       // Add customer email
+                    message.Subject = subject;                                                              // Add email subject
+                    message.Body = bodyBuilder.ToMessageBody();                                             // Constructs the message
+
+                    using (var client = new SmtpClient())   // Mailkit SmtpClient
+                    {
+                        // connect  Note:   mailkit has a connect function with the 3rd parameter as useSSL that you can set to false. This is
+                        //                  not enough when connecting to some servers, this method will make sure their is no secure socket connection (if needed)
+                        client.Connect(smtpServer, int.Parse(smtpPort), MailKit.Security.SecureSocketOptions.None);
+
+                        // authenticate
+                        client.Authenticate(smtpUsername, smtpPassword);
+
+                        // send and disconnect
+                        client.Send(message);
+                        client.Disconnect(true);
+                    }
+                }); 
             }
-
-            var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(Constants.CompanyName, Constants.CompanyEmail));    // Add company email info
-            message.To.Add(new MailboxAddress(emailAddress));                                       // Add customer email
-            message.Subject = subject;                                                              // Add email subject
-            message.Body = bodyBuilder.ToMessageBody();                                             // Constructs the message
-
-            using (var client = new SmtpClient())   // Mailkit SmtpClient
+            catch (System.Exception ex)
             {
-                // connect  Note:   mailkit has a connect function with the 3rd parameter as useSSL that you can set to false. This is
-                //                  not enough when connecting to some servers, this method will make sure their is no secure socket connection (if needed)
-                client.Connect(smtpServer, int.Parse(smtpPort), MailKit.Security.SecureSocketOptions.None);
-
-                // authenticate
-                client.Authenticate(smtpUsername, smtpPassword);
-
-                // send and disconnect
-                client.Send(message);
-                client.Disconnect(true);
+                _log.Error(new EmailException($"Could not send email.\nMessage from the caught exception:\n{ex.Message}\nStackTrace:\n{ex.StackTrace}"));
             }
         }
     }
