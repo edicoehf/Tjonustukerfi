@@ -46,5 +46,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "react-docgen-external-proptypes-handler": "^2.0.0",
+    "react-styleguidist": "^11.0.6"
   }
 }
