@@ -18,7 +18,7 @@ Postgres 10.10.x
 
 ### <p>Enviroment variables for the mail service</p>
 The application can use environment variables to setup the mail service. If you set your environment variables on your system the application will load them up and use them to connect to the smtp server with the setup from those environment variables. <br />
-The environment variables that need to be setup are as follows: <br />
+The environment variables that need to be setup are: <br />
 * SMTP_USERNAME
 * SMTP_PASSWORD
 * SMTP_SERVER
@@ -33,13 +33,14 @@ If this is not done then these values can be set in a .env file that should be l
 * Open appsettings.json to setup the database default connection string
 * Fill out the company config in Tjonustukerfi/Bakendi/ThjonustukerfiWebAPI/Config
 * Set the company config name in Program.cs
-* Setup the mail service variables as either environment variables or in the .env file, see [Environment variables](###<p>Enviroment-variables-for-the-mail-service</p>)
+* Setup the mail service variables as either environment variables or in the .env file, see [Environment variables](#<p>Enviroment-variables-for-the-mail-service</p>)
 * Make sure you are in the folder ThjonustukerfiWebAPI in the terminal and do the following:
     * dotnet restore
     * dotnet ef migrations add InitMigration
     * dotnet ef database update
-    * dotnet run <br />
-After the this has been done once you will only need to do the "dotnet run" command. <br />
+    * dotnet run<br />
+
+After this has been done once you will only need to do the "dotnet run" command. <br />
 
 **Note:** If the project has migrations set up in the migrations folder you do not need to do these two steps when running the commands above as the program will migrate automatically:
 * dotnet ef migrations add InitMigration
@@ -56,7 +57,7 @@ Update table: <br />
 * Change the models/tablenames and then do the same as when adding a new table <br />
 
 ## <p align="center">Tests</p>
-Tests are run with MSTests. If the test class depends on another class (e.g. service using a repository) the other class is Mocked, which in turn mocks the classes functionality. Each test class is used to for one class in the project. The test classes are setup to configure variables and things needed before each test is run, they also do a cleanup after each test.<br />
+Tests are run with MSTests. If the test class depends on another class (e.g. service using a repository) the other class is Mocked, which in turn mocks the classes functionality. Each test class is used for one class in the project. The test classes are setup to configure variables and things needed before each test is run, they also do a cleanup after each test.<br />
 ### How to run tests:<br />
 * Navigate to the ThjonustukerfiTests folder
 * Run: dotnet test
@@ -67,6 +68,8 @@ To look at the swagger documentaion do the following:
 * Navigate to the ThjonustukerfiWebAPI folder in your terminal and execute: dotnet run
 * Open a browser and go to: http://&#60;host&#62;:&#60;port&#62;/swagger
     * E.g. http://localhost:5000/swagger
+
+If you have the system up and running in docker-compose for example, you can also see the documentation by going to the WebApi address and append /swagger, e.g. http://the-url-of-the-api.net/swagger
 
 ## <p align="center">Packages</p>
 ### <p>Web Api</p>
