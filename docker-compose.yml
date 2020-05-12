@@ -9,17 +9,23 @@ services:
     image: thjonustukerfi-webapi:latest
     container_name: thjonustukerfi-webapi
     ports:
-      - "5000:5000"
+      - "${API_PORT}:6000"
+      - "5001:6001"
     depends_on: 
-      - "postgres_image"
+      - "postgres_tjonustukerfi_image"
     networks:
       - "thjonustukerfi-network"
     environment:
-      DB_CONNECTION_STRING: Host=postgres_image;Port=5432;Database=${postgresDatabase};Username=${postgresUser};Password=${postgresPassword}
+      ASPNETCORE_URLS: https://+:6001;http://+:6000;
+      DB_CONNECTION_STRING: Host=postgres_tjonustukerfi_image;Port=5432;Database=${postgresDatabase};Username=${postgresUser};Password=${postgresPassword}
+      SMTP_USERNAME: ${SMTP_USERNAME}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_SERVER: ${SMTP_SERVER}
+      SMTP_PORT: ${SMTP_PORT}
   
-  postgres_image:
+  postgres_tjonustukerfi_image:
     image: postgres:latest
-    container_name: postgres_image
+    container_name: postgres_tjonustukerfi_image
     restart: always
     volumes:
       - db_volume:/var/lib/postgresql/data
@@ -31,7 +37,11 @@ services:
       - "thjonustukerfi-network"
     
   thjonustukerfi-react-app:
-    build: ./Vefur/thjonustukerfi-react-app
+    build:
+      context: ./Vefur/thjonustukerfi-react-app
+      args: 
+        - API_URL=${API_URL}
+        - API_PORT=${API_PORT}
     image: thjonustukerfi-react-app:latest
     container_name: thjonustukerfi-react-app
     ports:

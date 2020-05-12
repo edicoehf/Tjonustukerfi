@@ -1,0 +1,9 @@
+*/node_modules/
+*/build/
+*/.git/
+.gitignore
+Dockerfile
+.editorconfig
+README.md
+.vs/
+.vscode/
