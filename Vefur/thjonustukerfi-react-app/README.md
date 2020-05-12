@@ -17,7 +17,6 @@ You will also see any lint errors in the console.
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `npm run build`
 
@@ -27,7 +26,6 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.<br />
 Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 ## How to run
 ### Prerequisite
@@ -42,6 +40,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 * In the project directory run `serve -s build`, this will serve the files from the /build
 * The app will then be available at [http://localhost:5000](http://localhost:5000)
 * To change the listening port, add `-l {port}` as an argument, e.g. `serve -s build -l 3500`
+* Refer to this section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 ## Tests
 The application is tested with Jest & Enzyme. Each component has a test file in it´s respective component folder with the same filename and a .test.js fileextension.
@@ -49,6 +48,7 @@ The application is tested with Jest & Enzyme. Each component has a test file in 
 * In the project directory run `npm test`
 * This will launch the tester in an interactive watch mode and run tests automatically on saved changes.
 * Pressing `w` will open up a menu of different actions for the tester, such as Running all tests, Running only the tests that failed in the last run, Run only tests that match a regular expression, etc.
+* Refer to this section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ## UI Framework
-Most of the interactive UI components are built using MaterialUI, for MaterialUI omponent API documentation and demos please refer to [https://material-ui.com](https://material-ui.com)
+Most of the interactive UI components are built using MaterialUI, for MaterialUI component API documentation and demos please refer to [https://material-ui.com](https://material-ui.com)
