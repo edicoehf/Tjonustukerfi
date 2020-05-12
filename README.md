@@ -52,7 +52,7 @@ How to turn off docker-compose:
     * docker-compose down
 * If not in detached mode use ctrl + c
 
-# Running in production
+# Running in development
 ## WebApi
 See the README.md in the folder Bakendi: <br />
 https://github.com/edicoehf/Tjonustukerfi/tree/master/Bakendi
