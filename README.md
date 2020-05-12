@@ -18,7 +18,7 @@ This system has the following three containers:
 * React-app (node)
 
 The system is setup to work when docker-compose is spun up, given that the environmental variables and company config are set up. <br />
-**Note:** Before doing the initial run make sure that the WebApi has the initial migrations in the migrations folder in the web api project. See the [web api documentation](https://github.com/edicoehf/Tjonustukerfi/tree/master/Bakendi) for more details on how to do that. <br />
+**Note:** Before doing the initial run make sure that the WebApi has the initial migrations in the migrations folder in the web api project. See the [web api documentation for migrations](https://github.com/edicoehf/Tjonustukerfi/tree/master/Bakendi#migrations-adding-new-tables-or-updating-old-ones) for more details on how to do that. <br />
 
 The (default) open ports to the docker network are as follows:
 * Port 5000 is mapped to the WebApi, but can be changed in the .env file (API_PORT)
