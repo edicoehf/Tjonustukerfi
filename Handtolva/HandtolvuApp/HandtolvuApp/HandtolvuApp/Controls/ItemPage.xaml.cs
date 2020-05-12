@@ -20,6 +20,7 @@ namespace HandtolvuApp.Controls
 
         protected override void OnAppearing()
         {
+            // Update item every time page appears
             (this.BindingContext as ItemViewModel).UpdateViewModel();
             base.OnAppearing();
         }
