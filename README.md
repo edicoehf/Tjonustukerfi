@@ -18,7 +18,7 @@ This system has the following three containers:
 * React-app (node)
 
 The system is setup to work when docker-compose is spun up, given that the environmental variables are set up. <br />
-Note: Before doing the initial run make sure that the WebApi has the initial migrations in the migrations folder in the web api project. See the [web api documentation](https://github.com/edicoehf/Tjonustukerfi/tree/master/Bakendi) for more details on how to do that. <br />
+**Note:** Before doing the initial run make sure that the WebApi has the initial migrations in the migrations folder in the web api project. See the [web api documentation](https://github.com/edicoehf/Tjonustukerfi/tree/master/Bakendi) for more details on how to do that. <br />
 
 The open ports to the docker network are as follows:
 * Port 5000 is mapped to the WebApi
@@ -27,13 +27,13 @@ The open ports to the docker network are as follows:
 
 **Environment variables need to be set in a .env file at the same place as docker-compose.yml** <br />
 The environment files that need to be set are:<br />
-* postgresUser=value
-* postgresPassword=value
-* postgresDatabase=value
-* SMTP_USERNAME=value
-* SMTP_PASSWORD=value
-* SMTP_SERVER=value
-* SMTP_PORT=value
+* postgresUser=&#60;value&#62;
+* postgresPassword=&#60;value&#62;
+* postgresDatabase=&#60;value&#62;
+* SMTP_USERNAME=&#60;value&#62;
+* SMTP_PASSWORD=&#60;value&#62;
+* SMTP_SERVER=&#60;value&#62;
+* SMTP_PORT=&#60;value&#62;
 
 To run the system you have to do the following:
 * Setup Docker (if not already set up)
