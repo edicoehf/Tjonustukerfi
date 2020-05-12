@@ -149,5 +149,13 @@ namespace ThjonustukerfiWebAPI.Controllers
         {
             return Ok(_orderService.GetOrderPrintDetails(id));
         }
+
+        [Route("emailbarcode/{id:long}")]
+        [HttpPost]
+        public IActionResult SendOrderBarcodeByEmail(long id)
+        {
+            _orderService.SendOrderBarcodeByEmail(id);
+            return Ok();
+        }
     }
 }

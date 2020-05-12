@@ -1,5 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
-WORKDIR app/
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1
 
 LABEL maintainer = "Edico ehf."
 
@@ -8,7 +7,7 @@ ENV ASPNETCORE_ENVIRONMENT Production
 
 COPY . /app
 WORKDIR /app
+RUN apt-get update && apt-get install -y libgdiplus
 RUN dotnet publish -c Release
-COPY /bin/Release/netcoreapp3.1/publish/ ./build
 
-ENTRYPOINT ["dotnet", "build/ThjonustukerfiWebAPI.dll"]
+ENTRYPOINT ["dotnet", "bin/Release/netcoreapp3.1/publish/ThjonustukerfiWebAPI.dll"]
