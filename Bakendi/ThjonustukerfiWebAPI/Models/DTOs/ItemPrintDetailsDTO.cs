@@ -1,5 +1,6 @@
 namespace ThjonustukerfiWebAPI.Models.DTOs
 {
+    /// <summary>DTO that provides printer information</summary>
     public class ItemPrintDetailsDTO
     {
         public long Id { get; set; }

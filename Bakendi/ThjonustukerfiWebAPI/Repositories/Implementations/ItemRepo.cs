@@ -353,6 +353,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
         //*     Helper functions     *//
 
+        /// <summary>Changtes the state of an item, location is only changed if provided. The state ID is the state that the item should be changed to.</summary>
         private bool changeState(long itemId, long stateId, string location = null)
         {
             var timeNow = DateTime.Now;

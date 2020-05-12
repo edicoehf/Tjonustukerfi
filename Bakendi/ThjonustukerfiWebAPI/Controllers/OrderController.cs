@@ -150,6 +150,7 @@ namespace ThjonustukerfiWebAPI.Controllers
             return Ok(_orderService.GetOrderPrintDetails(id));
         }
 
+        /// <summary>Made for demo purposes, sends all barcode images of all items in an order to the customers email.</summary>
         [Route("emailbarcode/{id:long}")]
         [HttpPost]
         public IActionResult SendOrderBarcodeByEmail(long id)
