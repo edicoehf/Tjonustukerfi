@@ -17,8 +17,6 @@ const findByName = (fields, name) => {
 describe("<CustomerDetails />", () => {
     let wrapper;
     let testCustomer;
-    let rows;
-    let error;
     const setState = jest.fn();
     const useStateSpy = jest.spyOn(React, "useState");
     useStateSpy.mockImplementation((init) => [init, setState]);
