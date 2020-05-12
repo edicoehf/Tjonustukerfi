@@ -7,12 +7,22 @@ import { idType } from "../../../types/index";
 import ProgressComponent from "../../Feedback/ProgressComponent/ProgressComponent";
 import CustomerPendingOrdersModal from "../CustomerPendingOrdersModal/CustomerPendingOrdersModal";
 
+/**
+ * A table containing all details of the customer with the given ID
+ */
+
 const CustomerDetails = ({ id }) => {
+    // Fetch details about customer
     const { customer, error, isProcessing } = useGetCustomerById(id);
-    const [hasReadyOrders, setHasReadyOrders] = React.useState(true);
+    // To display notification modal regarding ready orders
+    const [readyOrdersModalOpen, setReadyOrdersModalOpen] = React.useState(
+        true
+    );
+    // Set modal close
     const handleClose = () => {
-        setHasReadyOrders(false);
+        setReadyOrdersModalOpen(false);
     };
+
     return (
         <div className="customer-details">
             <ProgressComponent isLoading={isProcessing} />
@@ -57,7 +67,7 @@ const CustomerDetails = ({ id }) => {
                     {customer.hasReadyOrders && (
                         <CustomerPendingOrdersModal
                             customerName={customer.name}
-                            open={hasReadyOrders}
+                            open={readyOrdersModalOpen}
                             handleClose={handleClose}
                         />
                     )}
@@ -70,6 +80,7 @@ const CustomerDetails = ({ id }) => {
 };
 
 CustomerDetails.propTypes = {
+    /** Customer ID */
     id: idType,
 };
 

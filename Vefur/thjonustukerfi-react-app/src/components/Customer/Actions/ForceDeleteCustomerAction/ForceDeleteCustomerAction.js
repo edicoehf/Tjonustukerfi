@@ -10,6 +10,10 @@ import {
     handleCloseType,
 } from "../../../../types/index";
 
+/**
+ * Fullscreen modal for confirmation of deleting a customer
+ * which has active orders in the system.
+ */
 const ForceDeleteCustomerAction = ({ open, handleDelete, handleClose }) => {
     return (
         <Modal
@@ -51,8 +55,17 @@ const ForceDeleteCustomerAction = ({ open, handleDelete, handleClose }) => {
 };
 
 ForceDeleteCustomerAction.propTypes = {
-    opne: openType,
+    /**
+     * Boolean controlling if modal is displayed or not
+     */
+    open: openType,
+    /**
+     * Callback function triggered on modal confirm
+     */
     handleDelete: handleDeleteType,
+    /**
+     * Callback function triggered on modal close
+     */
     handleClose: handleCloseType,
 };
 

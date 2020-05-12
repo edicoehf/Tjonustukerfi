@@ -21,17 +21,23 @@ const initialState = {
     address: "",
 };
 
+/**
+ * Input form for creating and updating customers info
+ */
+
 const CustomerInputForm = ({
     existingCustomer,
     submitHandler,
     isProcessing,
     compact,
 }) => {
+    // Check if an existing customer was passed in props (and if it has loaded)
     const isExistingCustomer =
         existingCustomer && Object.keys(existingCustomer).length > 0;
+    // Init state for Form hook with existing customer if provided, else blank
     const state = isExistingCustomer ? existingCustomer : initialState;
 
-    // isSubmitting, resetFields
+    // Use Form hook, send inital state from above, the customer validation function and the submithandler that was passed down
     const { handleSubmit, handleChange, values, errors } = useForm(
         state,
         validateForm,
@@ -116,8 +122,11 @@ const CustomerInputForm = ({
 };
 
 CustomerInputForm.propTypes = {
+    /** Customer information to prefill if updating, skip for new customer */
     existingCustomer: existingCustomerType,
+    /** Status of submission, used to disable submit button while processing request */
     isProcessing: isProcessingType,
+    /** The callback function called on submission */
     submitHandler: submitHandlerType,
 };
 

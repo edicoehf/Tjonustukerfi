@@ -9,13 +9,23 @@ import ProgressButton from "../../../Feedback/ProgressButton/ProgressButton";
 import { useHistory } from "react-router-dom";
 import ConfirmationDialog from "../../../Feedback/ConfirmationDialog/ConfirmationDialog";
 
+/**
+ * A button which deletes the customer from the system.
+ * Display confirmation dialog on click.
+ * If customer has active orders, then fullscreen modal will be displayed,
+ * notifying user that the customer has active orders
+ */
+
 const DeleteCustomerAction = ({ id }) => {
+    // Get access to history
     const history = useHistory();
 
+    // Sends user to the /customer page
     const redirect = () => {
         history.push("/customers");
     };
 
+    // use Delete Customer hook, redirect func sent as CB on success
     const {
         error,
         handleDelete,
@@ -63,6 +73,7 @@ const DeleteCustomerAction = ({ id }) => {
 };
 
 DeleteCustomerAction.propTypes = {
+    /** Customer ID */
     id: idType,
 };
 

@@ -2,6 +2,12 @@ import React from "react";
 import { Button } from "@material-ui/core";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import "./ViewCustomerOrdersAction.css";
+import { handleOpenType } from "../../../../types";
+
+/**
+ * A button which triggers callback function from props.
+ * Used for opening the modal which displays a customers orderlist
+ */
 
 const ViewCustomerOrdersAction = ({ handleOpen }) => {
     return (
@@ -15,6 +21,11 @@ const ViewCustomerOrdersAction = ({ handleOpen }) => {
             <b>Pantanir</b>
         </Button>
     );
+};
+
+ViewCustomerOrdersAction.propTypes = {
+    /** CB function triggered when button is clicked */
+    handleOpen: handleOpenType,
 };
 
 export default ViewCustomerOrdersAction;

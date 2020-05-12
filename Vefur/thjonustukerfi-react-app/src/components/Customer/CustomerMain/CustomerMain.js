@@ -5,13 +5,23 @@ import SearchBar from "../../SearchBar/SearchBar";
 import useGetAllCustomers from "../../../hooks/useGetAllCustomers";
 import useSearchBar from "../../../hooks/useSearchBar";
 import { Paper } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 
-const CustomerMain = ({ history }) => {
+/**
+ * A page showing a searchable list of all the customers in the system
+ */
+
+const CustomerMain = () => {
+    // Fetch the customers
     const { customers, error, isLoading } = useGetAllCustomers();
+    // Sort the customers alphabetically
     customers.sort((a, b) => a.name.localeCompare(b.name));
+    // Filter customers with the searchbar input
     const { searchResults, handleChange, searchTerm } = useSearchBar(customers);
-    const searchBarPlaceHolder = "Leita eftir nafni";
 
+    // Get the history
+    const history = useHistory();
+    // Open page with customers details
     const redirectToCustomerDetails = (id) => {
         history.push(`/customer/${id}`);
     };
@@ -25,7 +35,7 @@ const CustomerMain = ({ history }) => {
                 <SearchBar
                     searchTerm={searchTerm}
                     handleChange={handleChange}
-                    placeHolder={searchBarPlaceHolder}
+                    placeHolder="Leita eftir nafni"
                     htmlId="customer-searchbar"
                 />
             </Paper>

@@ -4,6 +4,10 @@ import { Link } from "react-router-dom";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import "./CreateCustomerAction.css";
 
+/**
+ * A button which opens the page used to create a new customer.
+ */
+
 const CreateCustomerAction = () => {
     return (
         <div className="create-customer">
