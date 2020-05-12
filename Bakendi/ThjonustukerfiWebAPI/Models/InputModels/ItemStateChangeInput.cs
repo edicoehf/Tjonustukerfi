@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ThjonustukerfiWebAPI.Models.InputModels
 {
+    /// <summary>A model that represents the state change of an item and it's location</summary>
     public class ItemStateChangeInput
     {
         [Required]

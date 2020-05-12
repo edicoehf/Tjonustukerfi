@@ -16,6 +16,7 @@ namespace ThjonustukerfiWebAPI.Config.EnvironmentVariables
             else { return new Dictionary<string, string>(); }
         }
 
+        /// <summary>Takes a environment file (as string) and parses it to a dictionary, the environment file should be setup as key-value pairs.</summary>
         private static Dictionary<string, string> ParseEnvFile(string envFile)
         {
             var dic = new Dictionary<string, string>();

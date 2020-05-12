@@ -3,11 +3,14 @@ using ThjonustukerfiWebAPI.Models.Entities;
 
 namespace ThjonustukerfiWebAPI.Config
 {
+    /// <summary>Settings for the barcode image, read from company setup file</summary>
     public class BarcodeImage
     {
         public int Height { get; set; }
         public int Width { get; set; }
     }
+    
+    /// <summary>Representation of the company setup json file. Used to simplify the setup process.</summary>
     public class ConfigClass
     {
         public List<string> Locations { get; set; }
