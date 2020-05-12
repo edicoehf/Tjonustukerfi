@@ -51,4 +51,4 @@ The application is tested with Jest & Enzyme. Each component has a test file in 
 * Refer to this section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ## UI Framework
-Most of the interactive UI components are built using MaterialUI, for MaterialUI omponent API documentation and demos please refer to [https://material-ui.com](https://material-ui.com)
+Most of the interactive UI components are built using MaterialUI, for MaterialUI component API documentation and demos please refer to [https://material-ui.com](https://material-ui.com)
