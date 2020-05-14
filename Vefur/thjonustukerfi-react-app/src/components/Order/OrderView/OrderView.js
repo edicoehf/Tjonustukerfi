@@ -1,8 +1,15 @@
 import React from "react";
 import OrderDetails from "../OrderDetails/OrderDetails";
 import OrderActions from "../Actions/OrderActions/OrderActions";
-
 import "./OrderView.css";
+
+/**
+ * Page showing all information about a specific order
+ *
+ * @component
+ * @category Order
+ */
+
 const OrderView = ({ match }) => {
     const id = match.params.id;
     const [update, setUpdate] = React.useState(false);

@@ -37,6 +37,28 @@ export const orderType = shape({
     dateCompleted: string,
 });
 
+export const archivedOrderItemType = shape({
+    category: string,
+    service: string,
+    extraDataJSON: string,
+    dateCreated: string,
+    dateCompleted: string,
+});
+
+export const archivedOrderItemsType = arrayOf(archivedOrderItemType);
+
+export const archivedOrderType = shape({
+    id: idType,
+    customer: string,
+    customerEmail: string,
+    json: string,
+    dateCreated: string,
+    dateCompleted: string,
+    items: archivedOrderItemsType,
+});
+
+export const archivedOrdersType = arrayOf(archivedOrderType);
+
 export const ordersType = arrayOf(orderType);
 
 export const customerType = shape({
@@ -101,6 +123,8 @@ export const isProcessingType = bool;
 export const isDeletingType = bool;
 export const successType = bool;
 export const updatedType = bool;
+export const borderType = bool;
+export const expandedType = bool;
 
 export const descriptionType = string;
 export const confirmTextType = string;

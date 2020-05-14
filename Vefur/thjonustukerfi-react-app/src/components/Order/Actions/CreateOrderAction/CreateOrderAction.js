@@ -4,6 +4,12 @@ import { Link } from "react-router-dom";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import "./CreateOrderAction.css";
 
+/**
+ * Button that sends user to the page where new order is created
+ *
+ * @component
+ * @category Order
+ */
 const CreateOrderActions = () => {
     return (
         <div className="create-order">

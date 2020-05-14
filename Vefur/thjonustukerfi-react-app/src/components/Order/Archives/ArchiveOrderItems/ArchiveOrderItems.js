@@ -10,7 +10,14 @@ import {
     TableHead,
 } from "@material-ui/core";
 import "./ArchiveOrderItems.css";
+import { archivedOrderItemsType } from "../../../../types";
 
+/**
+ * Table showing the items of an archived order
+ *
+ * @component
+ * @category Order
+ */
 const ArchiveOrderItems = ({ order }) => {
     const [items, setItems] = React.useState([]);
 
@@ -89,6 +96,11 @@ const ArchiveOrderItems = ({ order }) => {
             </Table>
         </TableContainer>
     );
+};
+
+ArchiveOrderItems.propTypes = {
+    /** Items to show */
+    order: archivedOrderItemsType,
 };
 
 export default ArchiveOrderItems;

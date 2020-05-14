@@ -10,7 +10,14 @@ import {
 import { itemsType } from "../../../types";
 import "./OrderItemList.css";
 
+/**
+ * Table listing all items of an order
+ *
+ * @component
+ * @category Order
+ */
 const OrderItemList = ({ items }) => {
+    // Sort items by id
     items = items.sort((a, b) => (a.id > b.id ? 1 : b.id > a.id ? -1 : 0));
 
     return (
@@ -50,6 +57,7 @@ const OrderItemList = ({ items }) => {
 };
 
 OrderItemList.propTypes = {
+    /** Items to display in the table */
     items: itemsType,
 };
 

@@ -4,6 +4,12 @@ import EditIcon from "@material-ui/icons/Edit";
 import { Button } from "@material-ui/core";
 import "./UpdateOrderAction.css";
 
+/**
+ * Button that sends user to the page to update order.
+ *
+ * @component
+ * @category Order
+ */
 const UpdateOrderAction = ({ id }) => {
     return (
         <div className="update-order">
@@ -21,6 +27,7 @@ const UpdateOrderAction = ({ id }) => {
 };
 
 UpdateOrderAction.propTypes = {
+    /** Order ID */
     id: idType,
 };
 

@@ -7,12 +7,21 @@ import {
     servicesType,
 } from "../../../../types/index";
 
+/**
+ * Side panel for adding items to an order in createorder page
+ *
+ * @component
+ * @category Order
+ */
 const AddItems = ({ addItems, categories, services }) => {
+    // Adds item to an order
     const handleAdd = (newItem, cb) => {
+        // Get the name of the service so it can be displayed in the page
         newItem.serviceName =
             services[
                 services.findIndex((s) => s.id.toString() === newItem.service)
             ].name;
+        // Get the name of the category so it can be displayed in the page
         newItem.categoryName =
             categories[
                 categories.findIndex(
@@ -36,8 +45,11 @@ const AddItems = ({ addItems, categories, services }) => {
 };
 
 AddItems.propTypes = {
+    /** CB that adds an item to the order */
     addItems: addItemsType,
+    /** List of categories */
     categories: categoriesType,
+    /** List of services */
     services: servicesType,
 };
 

@@ -1,3 +1,12 @@
+/**
+ * Functions that validates order information
+ * @param {object} customer - Selected customer
+ * @param {array} items - Items in order
+ * @returns {object} Object with errors messages for failed tests
+ *
+ * @category Order
+ * @subcategory Validation
+ */
 const orderValidate = (customer, items) => {
     const errors = {};
     if (

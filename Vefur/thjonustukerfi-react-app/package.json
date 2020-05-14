@@ -32,7 +32,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "serve": "./node_modules/.bin/serve",
+    "serve": "./node_modules/.bin/serve -s build -l 3000",
     "docs": "jsdoc -c jsdoc.conf.json"
   },
   "eslintConfig": {

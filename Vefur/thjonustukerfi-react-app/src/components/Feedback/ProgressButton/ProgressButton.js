@@ -6,6 +6,7 @@ import { isLoadingType } from "../../../types";
 /**
  * Wraps a button and shows spinner inside it when loading
  *
+ * @component
  * @category Feedback
  */
 const ProgressButton = ({ isLoading, children }) => {
