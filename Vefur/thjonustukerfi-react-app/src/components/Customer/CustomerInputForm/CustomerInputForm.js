@@ -23,6 +23,9 @@ const initialState = {
 
 /**
  * Input form for creating and updating customers info
+ *
+ * @component
+ * @category Customer
  */
 
 const CustomerInputForm = ({

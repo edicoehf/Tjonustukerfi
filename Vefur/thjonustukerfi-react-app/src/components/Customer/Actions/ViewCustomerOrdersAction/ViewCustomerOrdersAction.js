@@ -7,6 +7,9 @@ import { handleOpenType } from "../../../../types";
 /**
  * A button which triggers callback function from props.
  * Used for opening the modal which displays a customers orderlist
+ *
+ * @component
+ * @category Customer
  */
 
 const ViewCustomerOrdersAction = ({ handleOpen }) => {

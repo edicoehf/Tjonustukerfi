@@ -4,6 +4,9 @@ import validator from "validator";
  * Functions that validates customer information
  * @param {object} values - Customer values
  * @returns {object} Object with errors messages for failed tests
+ *
+ * @category Customer
+ * @subcategory Validation
  */
 
 const validateForm = (values) => {

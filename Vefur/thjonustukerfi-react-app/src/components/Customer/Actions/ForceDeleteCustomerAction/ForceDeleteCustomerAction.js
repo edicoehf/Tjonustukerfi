@@ -13,6 +13,9 @@ import {
 /**
  * Fullscreen modal for confirmation of deleting a customer
  * which has active orders in the system.
+ *
+ * @component
+ * @category Customer
  */
 const ForceDeleteCustomerAction = ({ open, handleDelete, handleClose }) => {
     return (

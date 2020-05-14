@@ -10,6 +10,9 @@ import { nameType, handleCloseType, openType } from "../../../types/index";
 
 /**
  * A modal which notifies the user that a customer has orders ready to be picked up.
+ *
+ * @component
+ * @category Customer
  */
 
 const CustomerPendingOrdersModal = ({ customerName, open, handleClose }) => {

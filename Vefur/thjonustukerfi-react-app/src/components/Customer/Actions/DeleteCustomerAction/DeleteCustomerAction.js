@@ -14,6 +14,9 @@ import ConfirmationDialog from "../../../Feedback/ConfirmationDialog/Confirmatio
  * Display confirmation dialog on click.
  * If customer has active orders, then fullscreen modal will be displayed,
  * notifying user that the customer has active orders
+ *
+ * @component
+ * @category Customer
  */
 
 const DeleteCustomerAction = ({ id }) => {

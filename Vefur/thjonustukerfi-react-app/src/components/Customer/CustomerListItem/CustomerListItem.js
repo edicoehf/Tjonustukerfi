@@ -6,6 +6,9 @@ import "./CustomerListItem.css";
 /**
  * ListItem for the CustomerList.
  * Represents a single customer in the list by displaying the customers name and email
+ *
+ * @component
+ * @category Customer
  */
 
 const CustomerListItem = ({ customer, onClick, icon }) => {

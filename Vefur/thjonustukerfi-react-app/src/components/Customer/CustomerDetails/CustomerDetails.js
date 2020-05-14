@@ -9,6 +9,9 @@ import CustomerPendingOrdersModal from "../CustomerPendingOrdersModal/CustomerPe
 
 /**
  * A table containing all details of the customer with the given ID
+ *
+ * @component
+ * @category Customer
  */
 
 const CustomerDetails = ({ id }) => {

@@ -15,6 +15,9 @@ import ProgressComponent from "../../Feedback/ProgressComponent/ProgressComponen
  * A list displaying given customers.
  * Clicking an item on the list will call the given CB function with the customer id as a parameter,
  * CB intended for opening a page with the customers details
+ *
+ * @component
+ * @category Customer
  */
 
 const CustomerList = ({ customers, error, isLoading, cb }) => {

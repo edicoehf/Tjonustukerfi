@@ -3,6 +3,14 @@ import endpoint from "./endpoint";
 
 const api_endpoint = `${endpoint}/api/customers/`;
 
+/**
+ * Fetch all customers from API
+ *
+ * @returns List of all customers
+ *
+ * @category Customer
+ * @subcategory Services
+ */
 const getAllCustomers = () => {
     return fetch(api_endpoint, {
         method: "GET",
@@ -15,6 +23,14 @@ const getAllCustomers = () => {
         .catch((error) => Promise.reject(error));
 };
 
+/**
+ * Fetch all customers from API
+ *
+ * @param id - Customer ID
+ *
+ * @category Customer
+ * @subcategory Services
+ */
 const deleteCustomerById = (id) => {
     return fetch(api_endpoint + id, {
         method: "DELETE",

@@ -9,6 +9,9 @@ import { useHistory } from "react-router-dom";
 
 /**
  * A page showing a searchable list of all the customers in the system
+ *
+ * @component
+ * @category Customer
  */
 
 const CustomerMain = () => {

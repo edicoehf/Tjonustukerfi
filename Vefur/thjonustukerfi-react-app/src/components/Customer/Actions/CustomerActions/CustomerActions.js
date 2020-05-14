@@ -7,6 +7,9 @@ import ViewCustomerOrdersAction from "../ViewCustomerOrdersAction/ViewCustomerOr
 
 /**
  * A row of actions (buttons) available for a Customer
+ *
+ * @component
+ * @category Customer
  */
 
 const CustomerActions = ({ id, handleOpen }) => {

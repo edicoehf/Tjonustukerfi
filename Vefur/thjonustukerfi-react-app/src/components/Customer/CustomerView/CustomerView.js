@@ -6,6 +6,9 @@ import CustomerOrderListModal from "../CustomerOrderListModal/CustomerOrderListM
 
 /**
  * A page which displays all details on a customer and available actions (delete, update..)
+ *
+ * @component
+ * @category Customer
  */
 
 const CustomerView = ({ match }) => {

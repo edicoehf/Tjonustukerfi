@@ -11,6 +11,9 @@ import useGetOrdersByCustomerId from "../../../hooks/useGetOrdersByCustomerId";
 
 /**
  * A modal that displays all the orders connected to a customer
+ *
+ * @component
+ * @category Customer
  */
 
 const CustomerOrderListModal = ({ customerId, open, handleClose }) => {

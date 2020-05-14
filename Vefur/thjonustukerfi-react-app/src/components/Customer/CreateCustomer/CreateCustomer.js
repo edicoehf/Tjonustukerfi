@@ -6,6 +6,9 @@ import { useHistory } from "react-router-dom";
 
 /**
  * A page for creating a new customer
+ *
+ * @component
+ * @category Customer
  */
 
 const CreateCustomer = () => {

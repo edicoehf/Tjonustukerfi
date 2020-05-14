@@ -7,6 +7,9 @@ import { useHistory } from "react-router-dom";
 
 /**
  * A page which is used to update customers information
+ *
+ * @component
+ * @category Customer
  */
 
 const UpdateCustomer = ({ match }) => {

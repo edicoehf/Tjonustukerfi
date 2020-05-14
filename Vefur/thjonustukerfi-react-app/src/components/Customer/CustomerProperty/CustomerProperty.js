@@ -6,6 +6,9 @@ import { titleType, nameType, valueType } from "../../../types";
  * A table row for properties of a customer, e.g. name or phone
  * Only rendered if value is present, so it can be used for all properties, but only rendered if it has value.
  * This is because some of the customer properties are optional.
+ *
+ * @component
+ * @category Customer
  */
 
 const CustomerProperty = ({ title, name, value }) => {

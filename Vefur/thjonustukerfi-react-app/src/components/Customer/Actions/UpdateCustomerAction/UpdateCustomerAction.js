@@ -8,6 +8,9 @@ import "./UpdateCustomerAction.css";
 /**
  * Button which opens the page used for updating customers info.
  * /update-customer
+ *
+ * @component
+ * @category Customer
  */
 const UpdateCustomerAction = ({ id }) => {
     return (
