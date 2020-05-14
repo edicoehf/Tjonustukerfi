@@ -12,6 +12,8 @@ NETstandard.Library 2.0.3 or greater
 * Clone this repository
 * Restore NuGet packages for the solution
 * Open Constant.cs file and update the connection URL
+   * If you are using an emulator you can use http://10.0.2.2:PORT
+   * If you are using connected device make sure your server is running on local network
 * If using other API then ThjonustukerfiWebAPI or setting up for a new customer do the following:
     * Make sure the models correspond to the modal delivered from API
     * Make sure the JSON files for each Modal correspond to the Json delivered from API

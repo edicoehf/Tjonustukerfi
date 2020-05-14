@@ -159,79 +159,6 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             _dbContext.SaveChanges();
         }
 
-        /// <summary>Gets the next barcode number</summary>
-        private string GetItemBarcode()
-        {
-            string code = "";
-            
-            // This try-catch block is only used for the tests since in memory Db does not work the same
-            // way as a regular Db connection when searching for max value of string
-            try { code = _dbContext.Item.Max(i => i.Barcode); }
-            catch (System.Exception)
-            {
-                var maxItem = _dbContext.Item.OrderByDescending(i => i.Barcode).FirstOrDefault();
-                if(maxItem == null) { code = null; }
-                else { code = maxItem.Barcode; }
-            }
-
-            if(code == null) { code = "50500000"; }
-
-            var barcode = int.Parse(code);
-            barcode++;
-
-            return barcode.ToString();
-
-        }
-
-        /// <summary>Used to add multiple items in order input</summary>
-        private void AddMultipleItems(List<ItemInputModel> inpItems, long orderId)
-        {
-            // Get new barcode
-            int newItemBarcode = int.Parse(GetItemBarcode());
-
-            var addItems = new List<Item>();
-
-            // Ready Items for DB input
-            foreach(var item in inpItems)
-            {
-                var itemToAdd = _mapper.Map<Item>(item);
-                itemToAdd.Barcode = newItemBarcode.ToString();
-                
-                //TODO: Not generic, this is reykofninn specific
-                itemToAdd.JSON = JsonConvert.SerializeObject(new
-                {
-                    location = "",
-                    sliced = item.Sliced,
-                    filleted = item.Filleted,
-                    otherCategory = item.OtherCategory == null ? "" : item.OtherCategory,
-                    otherService = item.OtherService == null ? "" : item.OtherService
-                });
-
-                addItems.Add(itemToAdd);
-
-                // Increment barcode
-                newItemBarcode++;
-            }
-
-            _dbContext.Item.AddRange(addItems);
-            _dbContext.SaveChanges();   // Save changes and get Item IDs
-
-            foreach (var item in addItems)
-            {
-                // Create Timestamp
-                _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(item));
-                
-                // Add connection
-                _dbContext.ItemOrderConnection.Add(new ItemOrderConnection
-                {
-                    OrderId = orderId,
-                    ItemId = item.Id
-                });
-            }
-
-            _dbContext.SaveChanges();   // Save changes to ItemOrderConnections and Timestamp
-        }
-
         public void DeleteByOrderId(long id)
         {
             // find order
@@ -340,23 +267,6 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             return activeOrders;    // Active orders, empty list if there are none
         }
 
-        /// <summary>Gets a list of orderDTO with a list of order entity</summary>
-        private List<OrderDTO> GetOrderDTOwithOrderList(List<Order> ordersEntity)
-        {
-            var orders = new List<OrderDTO>();
-
-            // If the list is empty, just return it
-            if(!ordersEntity.Any()) { return orders; }
-
-            // Loop through all orders
-            foreach (var order in ordersEntity)
-            {
-                orders.Add(MapOrderToDTO(order));
-            }
-            
-            return orders;
-        }
-
         public void ArchiveOldOrders()
         {
             var completeOrders = _dbContext.Order.Where(o => o.DateCompleted != null).ToList(); // Get all complete orders
@@ -453,6 +363,97 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
         }
 
         //*     Helper functions     *//
+
+        /// <summary>Gets the next barcode number</summary>
+        private string GetItemBarcode()
+        {
+            string code = "";
+            
+            // This try-catch block is only used for the tests since in memory Db does not work the same
+            // way as a regular Db connection when searching for max value of string
+            try { code = _dbContext.Item.Max(i => i.Barcode); }
+            catch (System.Exception)
+            {
+                var maxItem = _dbContext.Item.OrderByDescending(i => i.Barcode).FirstOrDefault();
+                if(maxItem == null) { code = null; }
+                else { code = maxItem.Barcode; }
+            }
+
+            if(code == null) { code = "50500000"; }
+
+            var barcode = int.Parse(code);
+            barcode++;
+
+            return barcode.ToString();
+
+        }
+
+        /// <summary>Used to add multiple items in order input</summary>
+        private void AddMultipleItems(List<ItemInputModel> inpItems, long orderId)
+        {
+            // Get new barcode
+            int newItemBarcode = int.Parse(GetItemBarcode());
+
+            var addItems = new List<Item>();
+
+            // Ready Items for DB input
+            foreach(var item in inpItems)
+            {
+                var itemToAdd = _mapper.Map<Item>(item);
+                itemToAdd.Barcode = newItemBarcode.ToString();
+                
+                //TODO: Not generic, this is reykofninn specific
+                itemToAdd.JSON = JsonConvert.SerializeObject(new
+                {
+                    location = "",
+                    sliced = item.Sliced,
+                    filleted = item.Filleted,
+                    otherCategory = item.OtherCategory == null ? "" : item.OtherCategory,
+                    otherService = item.OtherService == null ? "" : item.OtherService
+                });
+
+                addItems.Add(itemToAdd);
+
+                // Increment barcode
+                newItemBarcode++;
+            }
+
+            _dbContext.Item.AddRange(addItems);
+            _dbContext.SaveChanges();   // Save changes and get Item IDs
+
+            foreach (var item in addItems)
+            {
+                // Create Timestamp
+                _dbContext.ItemTimestamp.Add(_mapper.Map<ItemTimestamp>(item));
+                
+                // Add connection
+                _dbContext.ItemOrderConnection.Add(new ItemOrderConnection
+                {
+                    OrderId = orderId,
+                    ItemId = item.Id
+                });
+            }
+
+            _dbContext.SaveChanges();   // Save changes to ItemOrderConnections and Timestamp
+        }
+
+        /// <summary>Gets a list of orderDTO with a list of order entity</summary>
+        private List<OrderDTO> GetOrderDTOwithOrderList(List<Order> ordersEntity)
+        {
+            var orders = new List<OrderDTO>();
+
+            // If the list is empty, just return it
+            if(!ordersEntity.Any()) { return orders; }
+
+            // Loop through all orders
+            foreach (var order in ordersEntity)
+            {
+                orders.Add(MapOrderToDTO(order));
+            }
+            
+            return orders;
+        }
+
         /// <summary>Maps an order along with its items to DTO.</summary>
         private OrderDTO MapOrderToDTO(Order order)
         {
@@ -480,6 +481,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             return dto;
         }
 
+        /// <summary>Archives all orders in a list of orders</summary>
         private void Archive(List<Order> toArchive)
         {
             // just return if there aren't any orders

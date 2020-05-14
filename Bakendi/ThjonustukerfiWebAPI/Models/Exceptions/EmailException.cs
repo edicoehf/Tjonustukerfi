@@ -1,5 +1,6 @@
 namespace ThjonustukerfiWebAPI.Models.Exceptions
 {
+    /// <summary>Exception to handle email failures</summary>
     [System.Serializable]
     public class EmailException : System.Exception
     {

@@ -29,42 +29,37 @@ const PrintItemView = ({ id, width, height }) => {
                         component={Paper}
                     >
                         <div className="upper-line">
-                            <div>
-                                <b>Pöntunar nr: </b> {item.orderId}
+                            <div className="print-order-id">
+                                <b>Pöntunar nr: </b>
+                                {item.orderId}
                             </div>
-                            <div>
-                                <b>Vöru nr: </b> {item.id}
+                            <div className="print-item-id">
+                                <b>Vöru nr: </b>
+                                {item.id}
                             </div>
-                            <div>
+                            <div className="print-date-created">
                                 <b>Komudagur: </b>
                                 {dateFormat(item.dateCreated)}
                             </div>
                         </div>
                         <div className="lower-line">
                             <div className="left-line">
-                                <div>
+                                <div className="print-item-category">
                                     <b>Tegund: </b>
                                     {item.json.otherCategory || item.category}
                                 </div>
-                                <div>
+                                <div className="print-item-service">
                                     <b>Þjónusta: </b>
                                     {item.json.otherService || item.service}
                                 </div>
-                                <div>
+                                <div className="print-item-filleted">
                                     <b>Flökun: </b>
                                     {item.json.filleted ? "Flakað" : "Óflakað"}
                                 </div>
-                                <div>
+                                <div className="print-item-sliced">
                                     <b>Pökkun: </b>
                                     {item.json.sliced ? "Bitar" : "Heilt Flak"}
                                 </div>
-                                {item.details ? (
-                                    <div>
-                                        <b>Annað: </b> {"lol"}
-                                    </div>
-                                ) : (
-                                    <></>
-                                )}
                             </div>
                             <div className="right-line">
                                 <img
