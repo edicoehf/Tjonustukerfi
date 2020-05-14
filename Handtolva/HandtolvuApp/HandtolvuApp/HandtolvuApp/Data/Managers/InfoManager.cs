@@ -23,8 +23,9 @@ namespace HandtolvuApp.Data.Managers
 
         /// <summary>
         ///             Gets All States and locations for the system
+        ///             
+        ///             Puts it in StateLocationvariable
         /// </summary>
-        /// <returns></returns>
         public async Task GetStateAndLocations()
         {
             if(CrossConnectivity.Current.IsConnected)

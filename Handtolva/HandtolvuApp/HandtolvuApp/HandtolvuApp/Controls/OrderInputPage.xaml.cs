@@ -22,23 +22,28 @@ namespace HandtolvuApp.Controls
         {
             MyEditor.Focus();
             var vm = BindingContext as OrderInputViewModel;
-            MessagingCenter.Subscribe<OrderInputViewModel, string>(this, "NoOrder", async (sender, message) =>
+
+            // Message for failed requests
+            MessagingCenter.Subscribe<OrderInputViewModel, string>(this, "Fail", async (sender, message) =>
             {
-                await App.Current.MainPage.DisplayAlert("Villa", $"Pöntunarnúmer {message} er ekki til", "Ok");
+                await App.Current.MainPage.DisplayAlert("Villa", message, "Ok");
             });
 
+            // Message that handles barcode scanned from device
             MessagingCenter.Subscribe<ScannerViewModel>(this, "ScannedBarcode", (sender) =>
             {
                 vm.FindOrderCommand.Execute(null);
             });
 
+            // Initialize scanner
             vm.Init();
             base.OnAppearing();
         }
 
         protected override void OnDisappearing()
         {
-            MessagingCenter.Unsubscribe<OrderInputViewModel, string>(this, "NoOrder");
+            // Unsubscribe from all messages and deinitialize scanner
+            MessagingCenter.Unsubscribe<OrderInputViewModel, string>(this, "Fail");
             MessagingCenter.Unsubscribe<ScannerViewModel>(this, "ScannedBarcode");
             var vm = BindingContext as OrderInputViewModel;
             vm.DeInit();

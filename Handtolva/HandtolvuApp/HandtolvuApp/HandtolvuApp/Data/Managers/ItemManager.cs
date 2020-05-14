@@ -9,6 +9,10 @@ namespace HandtolvuApp.Data
     {
         readonly IItemService itemService;
         
+        /// <summary>
+        /// Initialize the ItemManager
+        /// </summary>
+        /// <param name="service">ItemService required for manager</param>
         public ItemManager(IItemService service)
         {
             itemService = service;

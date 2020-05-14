@@ -49,15 +49,24 @@ namespace HandtolvuApp.ViewModels
             }
         }
 
+        /// <summary>
+        /// Used to handle api call to change states given the barcode scanned/typed
+        /// </summary>
         public async void StateChange()
         {
+            // check if there is any input
             if(ScannedBarcodeText != "")
             {
+                // Check if location is valid
                 if(await App.InfoManager.CheckLocationBarcode(ScannedBarcodeText))
                 {
+                    // set data to right format to be sent to API
                     List<LocationStateChange> sendChange = new List<LocationStateChange>() { new LocationStateChange { ItemBarcode = Item.Barcode, StateChangeBarcode = ScannedBarcodeText } };
+                    
+                    // Check if device is connected to internet
                     if (CrossConnectivity.Current.IsConnected)
                     {
+                        // Send data to server
                         List<LocationStateChange> ret = await App.ItemManager.StateChangeByLocation(sendChange);
                         if (ret.Count == 0)
                         {
@@ -70,7 +79,7 @@ namespace HandtolvuApp.ViewModels
                     }
                     else
                     {
-                        // handle no connection
+                        // handle no connection adding failed request to list
                         FailedRequstCollection.ItemFailedRequests.AddOrUpdate<LocationStateChange>(sendChange);
                         MessagingCenter.Send<StateScanViewModel, string>(this, "Fail", "Handskanni ótengdur\n\nHægt er að fara á forsíðu og senda aftur þegar handskanni er tengdur");
                     }
@@ -82,7 +91,7 @@ namespace HandtolvuApp.ViewModels
             }
             else
             {
-                Placeholder = "Staðsetning verður að vera gefin";
+                Placeholder = "Staðsetningu vantar";
             }
         }
     }

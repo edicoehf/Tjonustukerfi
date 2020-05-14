@@ -1,5 +1,6 @@
 ﻿using HandtolvuApp.Data.Interfaces;
 using HandtolvuApp.Models;
+using HandtolvuApp.Models.Json;
 using Newtonsoft.Json;
 using Plugin.Connectivity;
 using Polly;
@@ -34,6 +35,7 @@ namespace HandtolvuApp.Data.Implementations
             string Uri = BaseURI + $"/search?barcode={barcode}";
             try
             {
+                // Request with retry policy on exceptions, retries 3 times with 2 second delay between
                 var response = await Policy
                                     .Handle<HttpRequestException>()
                                     .WaitAndRetry(retryCount: 3,
@@ -42,8 +44,19 @@ namespace HandtolvuApp.Data.Implementations
 
                 if (response.IsSuccessStatusCode)
                 {
+                    // Convert response to string and convert to Json
                     var content = await response.Content.ReadAsStringAsync();
                     Item = JsonConvert.DeserializeObject<Item>(content);
+                    // Convert additional information to ItemJson and replace category and service if "Annað"
+                    Item.ItemJson = JsonConvert.DeserializeObject<ItemJson>(Item.Json);
+                    if (Item.Category == "Annað")
+                    {
+                        Item.Category = Item.ItemJson.OtherCategory;
+                    }
+                    if (Item.Service == "Annað")
+                    {
+                        Item.Service = Item.ItemJson.OtherService;
+                    }
                 }
             }
             catch (Exception ex)
@@ -62,6 +75,7 @@ namespace HandtolvuApp.Data.Implementations
 
             try
             {
+                // Request with retry policy on exceptions, retries 3 times with 2 second delay betweens
                 var response = await Policy
                                     .Handle<HttpRequestException>()
                                     .WaitAndRetry(retryCount: 3,
@@ -70,6 +84,7 @@ namespace HandtolvuApp.Data.Implementations
 
                 if (response.IsSuccessStatusCode)
                 {
+                    // Convert response data to NextStates
                     var content = await response.Content.ReadAsStringAsync();
                     NextStates = JsonConvert.DeserializeObject<NextStates>(content);
                     NextStates.NextAvailableStates.Reverse();
@@ -91,11 +106,14 @@ namespace HandtolvuApp.Data.Implementations
 
             try
             {
+                // Patch is not one of the default methods so we create our own request with content
                 var method = new HttpMethod("PATCH");
                 var request = new HttpRequestMessage(method, stateUri)
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(items), Encoding.UTF8, "application/json")
                 };
+
+                // Request with retry policy on exceptions, retries 3 times with 2 second delay between
                 var response = await Policy
                                     .Handle<HttpRequestException>()
                                     .WaitAndRetry(retryCount: 3,
@@ -105,6 +123,7 @@ namespace HandtolvuApp.Data.Implementations
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
+                    // There is only response content if patch did not work
                     if(content != "")
                     {
                         ret = JsonConvert.DeserializeObject<List<LocationStateChange>>(content);
@@ -127,6 +146,7 @@ namespace HandtolvuApp.Data.Implementations
 
             try
             {
+                // Request with retry policy on exceptions, retries 3 times with 2 second delay between
                 var response = await Policy
                                     .Handle<HttpRequestException>()
                                     .WaitAndRetry(retryCount: 3,
@@ -135,6 +155,7 @@ namespace HandtolvuApp.Data.Implementations
 
                 if (response.IsSuccessStatusCode)
                 {
+                    // Converts response content to list of string
                     var content = await response.Content.ReadAsStringAsync();
                     ret = JsonConvert.DeserializeObject<List<string>>(content);
                 }
@@ -154,6 +175,7 @@ namespace HandtolvuApp.Data.Implementations
            
             try
             {
+                // Request with retry policy on exceptions, retries 3 times with 2 second delay between
                 var response = await Policy
                                     .Handle<HttpRequestException>()
                                     .WaitAndRetry(retryCount: 3,
@@ -162,6 +184,7 @@ namespace HandtolvuApp.Data.Implementations
 
                 if (response.IsSuccessStatusCode)
                 {
+                    // Changes response content to list of State
                     var content = await response.Content.ReadAsStringAsync();
                     ret = JsonConvert.DeserializeObject<List<State>>(content);
                 }

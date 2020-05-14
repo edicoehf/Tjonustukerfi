@@ -1,5 +1,6 @@
 ﻿using HandtolvuApp.Controls;
 using HandtolvuApp.Models;
+using Plugin.Connectivity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,7 +19,7 @@ namespace HandtolvuApp.ViewModels
             {
                 if(SelectedItem != null)
                 {
-                    //SelectedItem.OrderId = Order.Id;
+                    // Navigate to the item page for selected item
                     var itemVM = new ItemViewModel(SelectedItem);
                     var itemPage = new ItemPage
                     {
@@ -30,13 +31,22 @@ namespace HandtolvuApp.ViewModels
 
             CheckoutCommand = new Command(async () =>
             {
-                if(await App.OrderManager.CheckoutOrder(Order.Id))
+                // Check if device has connection
+                if(CrossConnectivity.Current.IsConnected)
                 {
-                    MessagingCenter.Send<OrderPageViewModel, string>(this, "Success", $"Allar vörur í pöntun {Order.Barcode} hafar verið skráðar sóttar");
+                    // Check if order can be checkout out
+                    if(await App.OrderManager.CheckoutOrder(Order.Id))
+                    {
+                        MessagingCenter.Send<OrderPageViewModel, string>(this, "Success", $"Allar vörur í pöntun {Order.Barcode} hafar verið skráðar sóttar");
+                    }
+                    else
+                    {
+                        MessagingCenter.Send<OrderPageViewModel, string>(this, "Fail", $"Ekki var hægt að skrá {Order.Barcode} sem sótta");
+                    }
                 }
                 else
                 {
-                    MessagingCenter.Send<OrderPageViewModel, string>(this, "Fail", $"Ekki var hægt að skrá {Order.Barcode} sem sótta");
+                    MessagingCenter.Send<OrderPageViewModel, string>(this, "Fail", $"Handskanni er ekki tengdur");
                 }
             });
         }

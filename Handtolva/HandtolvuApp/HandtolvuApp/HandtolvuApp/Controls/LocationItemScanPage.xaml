@@ -9,7 +9,7 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height=".3*" />
-                <RowDefinition Height=".3*" />
+                <RowDefinition Height=".4*" />
                 <RowDefinition Height=".3*" />
                 <RowDefinition Height="2*" />
             </Grid.RowDefinitions>
@@ -53,7 +53,7 @@
                     Text="{Binding ScannedBarcodeText}"/>
 
             <Button Grid.Column="3" Text="+" FontSize="Large"
-                    Grid.Row="2" CornerRadius="10"
+                    Grid.Row="2" CornerRadius="10" Padding="0, 0"
                     Margin="0, 5, 10, 5" x:Name="AddButton"
                     BackgroundColor="Green" TextColor="White"
                     Command="{Binding AddCommand}"/>
@@ -65,7 +65,7 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <StackLayout Padding="10, 10">
-                            <Frame HeightRequest="40" CornerRadius="20" HasShadow="True">
+                            <Frame HeightRequest="35" CornerRadius="10" HasShadow="True" Padding="5, 5">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
@@ -73,12 +73,12 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width=".5*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Label Text="{Binding .}" FontSize="Large" 
+                                    <Label Text="{Binding .}" FontSize="Body" 
                                                VerticalTextAlignment="Center" 
                                                HorizontalTextAlignment="Center"
                                            Grid.Column="0" Grid.ColumnSpan="3"/>
-                                    <Button Grid.Column="3" Text="X"
-                                             BackgroundColor="Red"
+                                    <Button Grid.Column="3" Text="X" FontSize='Micro' Padding="0, 0"
+                                             BackgroundColor="Red" FontAttributes="Bold"
                                             TextColor="Black" CornerRadius="10"
                                             Clicked="RemoveClicked"/>
                                 </Grid>

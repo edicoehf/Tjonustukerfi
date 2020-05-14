@@ -21,14 +21,10 @@ namespace HandtolvuApp
 
         protected override void OnAppearing()
         {
-            if(FailedRequstCollection.ItemFailedRequests.Count > 0)
-            {
-                FailedRequst.IsVisible = true;
-            }
-            else
-            {
-                FailedRequst.IsVisible = false;
-            }
+            // If there is any items in failed requests show button to send them to server
+            if(FailedRequstCollection.ItemFailedRequests.Count > 0) { FailedRequst.IsVisible = true; }
+            else { FailedRequst.IsVisible = false; }
+
             base.OnAppearing();
         }
     }

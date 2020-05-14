@@ -1,6 +1,7 @@
 ﻿using HandtolvuApp.Controls;
 using HandtolvuApp.Data.Interfaces;
 using HandtolvuApp.Models;
+using Plugin.Connectivity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,29 +20,41 @@ namespace HandtolvuApp.ViewModels
 
             FindOrderCommand = new Command(async () =>
             {
+                // Check if there is any input
                 if(ScannedBarcodeText != "")
                 {
-                    Order order = await App.OrderManager.GetOrderAsync(ScannedBarcodeText);
-                    if(order == null)
+                    // Check if device is connected to internet
+                    if(CrossConnectivity.Current.IsConnected)
                     {
-                        MessagingCenter.Send<OrderInputViewModel, string>(this, "NoOrder", ScannedBarcodeText);
-                        Placeholder = "Pöntunarnúmer er ekki til";
-                        ScannedBarcodeText = "";
+                        // Get order from server - null if order was not found
+                        Order order = await App.OrderManager.GetOrderAsync(ScannedBarcodeText);
+                        if(order == null)
+                        {
+                            // Message fail message
+                            MessagingCenter.Send<OrderInputViewModel, string>(this, "Fail", $"Pöntunarnúmer {ScannedBarcodeText} er ekki til");
+                            Placeholder = "Pöntunarnúmer er ekki til";
+                            ScannedBarcodeText = "";
+                        }
+                        else
+                        {
+                            // navigate to order page
+                            var orderVM = new OrderPageViewModel(order);
+                            var orderPage = new OrderPage
+                            {
+                                BindingContext = orderVM
+                            };
+                            await App.Current.MainPage.Navigation.PushAsync(orderPage);
+                        }
                     }
                     else
                     {
-                        var orderVM = new OrderPageViewModel(order);
-                        var orderPage = new OrderPage
-                        {
-                            BindingContext = orderVM
-                        };
-                        await App.Current.MainPage.Navigation.PushAsync(orderPage);
+                        MessagingCenter.Send<OrderInputViewModel, string>(this, "Fail", "Handskanni er ekki tengdur");
                     }
                 }
                 else
                 {
                     // athuga lengd a message, er of langt fyrir nuverandi staerd
-                    Placeholder = "Pöntunarnúmer verður að vera gefið";
+                    Placeholder = "Pöntunarnúmer vantar";
                 }
             });
         }

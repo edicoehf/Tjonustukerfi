@@ -37,9 +37,9 @@
         <Button Text="Skrá út pöntun" Grid.Row="3"  Grid.Column="1"
                 Grid.ColumnSpan="3" Command="{Binding CheckoutCommand}" 
                 Margin="10, 10, 10, 10" BackgroundColor="DodgerBlue"
-                CornerRadius="20"/>
+                CornerRadius="10"/>
 
-        <CollectionView x:Name="MyCollectionView" ItemsSource="{Binding Order.Items}" Grid.Row="2" Grid.ColumnSpan="5" 
+        <CollectionView x:Name="MyCollectionView" ItemsSource="{Binding Order.Items}" Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="1" 
                         SelectionMode="Single"
                         SelectionChangedCommand="{Binding SelectedItemChangedCommand}"
                         SelectedItem="{Binding SelectedItem}"
@@ -47,9 +47,9 @@
             
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout Padding="10, 10">
-                        <Frame HasShadow="True" CornerRadius="10" BackgroundColor="LightSlateGray">
-                            <Label Text="{Binding Category}" FontSize="Large" 
+                    <StackLayout Padding="5, 5">
+                        <Frame HasShadow="True" CornerRadius="10" BackgroundColor="DodgerBlue">
+                            <Label Text="{Binding Category}" FontSize="Body" 
                                    VerticalTextAlignment="Center" 
                                    HorizontalTextAlignment="Center"/>
                         </Frame>

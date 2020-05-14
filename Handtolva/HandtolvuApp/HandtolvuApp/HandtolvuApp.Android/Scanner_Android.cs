@@ -14,6 +14,9 @@ using HandtolvuApp.Models;
 
 namespace HandtolvuApp.Droid
 {
+    /// <summary>
+    ///     Class around the scanner in a given device
+    /// </summary>
     public class Scanner_Android : IScanner
     {
         private Context _context = null;
@@ -22,24 +25,29 @@ namespace HandtolvuApp.Droid
         private static readonly string ACTION_DATAWEDGE_FROM_6_2 = "com.symbol.datawedge.api.ACTION";
         private static readonly string EXTRA_CREATE_PROFILE = "com.symbol.datawedge.api.CREATE_PROFILE";
         private static readonly string EXTRA_SET_CONFIG = "com.symbol.datawedge.api.SET_CONFIG";
-        private static readonly string EXTRA_PROFILE_NAME = "Lokaverkefni Edico";
+        private static readonly string EXTRA_PROFILE_NAME = "Lokaverkefni Edico";                           // Name of the DataWedge profile that will be created on the device
 
         public Scanner_Android()
         {
             _context = Application.Context;
             _broadcastReceiver = new DataWedgeReceiver();
 
+            // handles data from scanner event
             _broadcastReceiver.scanDataReceived += (s, scanData) =>
             {
                 OnScanDataCollected?.Invoke(this, scanData);
             };
 
+            // create a profile to use
             CreateProfile();
         }
 
         public event EventHandler<StatusEventArgs> OnScanDataCollected;
         public event EventHandler<string> OnStatusChanged;
 
+        /// <summary>
+        ///     Disable DataWedge profile and receiver
+        /// </summary>
         public void Disable()
         {
             if(_broadcastReceiver != null && _context != null && _bRegistered)
@@ -51,6 +59,9 @@ namespace HandtolvuApp.Droid
             DisableProfile();
         }
 
+        /// <summary>
+        ///     Enable DataWedge profile and reset receiver
+        /// </summary>
         public void Enable()
         {
             _context = Application.Context;
@@ -66,12 +77,19 @@ namespace HandtolvuApp.Droid
             EnableProfile();
         }
 
+        /// <summary>
+        ///     Can be used for soft trigger scan - scan by pressing button in UI
+        /// </summary>
         public void Read()
         {
             // can be used for soft trigger scan
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        ///     Used to configure DataWedge profile and connect it to this app
+        /// </summary>
+        /// <param name="a_config">Scanner config interface </param>
         public void SetConfig(IScannerConfig a_config)
         {
             ZebraScannerConfig config = (ZebraScannerConfig)a_config;
@@ -101,6 +119,9 @@ namespace HandtolvuApp.Droid
             SendDataWedgeIntentWithExtra(ACTION_DATAWEDGE_FROM_6_2, EXTRA_SET_CONFIG, profileConfig);
         }
 
+        /// <summary>
+        ///     Enable the DataWedge profile
+        /// </summary>
         private void EnableProfile()
         {
             //  Now configure that created profile to apply to our application
@@ -111,6 +132,9 @@ namespace HandtolvuApp.Droid
             SendDataWedgeIntentWithExtra(ACTION_DATAWEDGE_FROM_6_2, EXTRA_SET_CONFIG, profileConfig);
         }
 
+        /// <summary>
+        ///     Disable the DataWedge profile
+        /// </summary>
         private void DisableProfile()
         {
             //  Now configure that created profile to apply to our application
@@ -121,6 +145,9 @@ namespace HandtolvuApp.Droid
             SendDataWedgeIntentWithExtra(ACTION_DATAWEDGE_FROM_6_2, EXTRA_SET_CONFIG, profileConfig);
         }
 
+        /// <summary>
+        ///     Create DataWedge profile
+        /// </summary>
         private void CreateProfile()
         {
             String profileName = EXTRA_PROFILE_NAME;
@@ -157,6 +184,12 @@ namespace HandtolvuApp.Droid
             SendDataWedgeIntentWithExtra(ACTION_DATAWEDGE_FROM_6_2, EXTRA_SET_CONFIG, profileConfig);
         }
 
+        /// <summary>
+        ///     Broadcast DataWedge profile to the device to set/update it with bundle
+        /// </summary>
+        /// <param name="action">Action you want to set</param>
+        /// <param name="extraKey">What kind of extra information you want to use, example config</param>
+        /// <param name="extras">the extra information to use, like config specifications</param>
         private void SendDataWedgeIntentWithExtra(String action, String extraKey, Bundle extras)
         {
             Intent dwIntent = new Intent();
@@ -165,6 +198,12 @@ namespace HandtolvuApp.Droid
             _context.SendBroadcast(dwIntent);
         }
 
+        /// <summary>
+        ///     Broadcast DataWedge profile to the device to set/update with string
+        /// </summary>
+        /// <param name="action">Action you want to set</param>
+        /// <param name="extraKey">What kind of extra information you want to use, example config</param>
+        /// <param name="extraValue">he extra information to use, like config specifications but only string</param>
         private void SendDataWedgeIntentWithExtra(String action, String extraKey, String extraValue)
         {
             Intent dwIntent = new Intent();

@@ -21,13 +21,14 @@ namespace HandtolvuApp.Controls
 
         protected override void OnAppearing()
         {
+            // Message that handles success requests
             MessagingCenter.Subscribe<StateScanViewModel, string>(this, "Success", async (sender, message) =>
             {
-               // DependencyService.Get<IToast>().Show("Success!");
                 await App.Current.MainPage.DisplayAlert("Klárað!", message, "OK");
                 MyEditor.Focus();
             });
 
+            // Message that handles failed requests
             MessagingCenter.Subscribe<StateScanViewModel, string>(this, "Fail", async (sender, message) =>
             {
                 await App.Current.MainPage.DisplayAlert("Villa!", message, "OK");
@@ -40,6 +41,7 @@ namespace HandtolvuApp.Controls
 
         protected override void OnDisappearing()
         {
+            // Unsubscribe from all messages
             MessagingCenter.Unsubscribe<StateScanViewModel, string>(this, "Success");
             MessagingCenter.Unsubscribe<StateScanViewModel, string>(this, "Fail");
             base.OnDisappearing();

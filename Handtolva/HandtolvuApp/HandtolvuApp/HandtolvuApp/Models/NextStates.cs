@@ -4,6 +4,11 @@ using System.Text;
 
 namespace HandtolvuApp.Models
 {
+    /// <summary>
+    ///     Model for state information for items
+    ///     
+    ///     Current state and list of next states
+    /// </summary>
     public class NextStates
     {
         public State CurrentState { get; set; }

@@ -4,6 +4,9 @@ using System.Text;
 
 namespace HandtolvuApp.Models
 {
+    /// <summary>
+    ///     Used to store all possible states and locations
+    /// </summary>
     public class StateLocation
     {
         public List<string> States { get; set; } = new List<string>();

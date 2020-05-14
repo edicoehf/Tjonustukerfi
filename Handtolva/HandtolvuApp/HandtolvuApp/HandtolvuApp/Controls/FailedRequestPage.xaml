@@ -10,7 +10,7 @@
         <Grid AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                         AbsoluteLayout.LayoutFlags="All">
             <Grid.RowDefinitions>
-                <RowDefinition Height=".4*" />
+                <RowDefinition Height=".5*" />
                 <RowDefinition Height=".3*" />
                 <RowDefinition Height=".3*" />
                 <RowDefinition Height="2*" />
@@ -24,11 +24,17 @@
 
 
 
-            <Button Grid.Column="1" Text="Klára" FontSize="Large"
+            <Button Grid.Column="0" Text="Klára" FontSize="Large"
                     Grid.Row="0" CornerRadius="10"
-                    Margin="0, 5, 10, 5" Grid.ColumnSpan="2"
+                    Margin="10, 10" Grid.ColumnSpan="2"
                     BackgroundColor="Green" TextColor="White"
                     Clicked="ActivityShow"/>
+
+            <Button Grid.Column="2" Text="Hætta við" FontSize="Large"
+                    Grid.Row="0" CornerRadius="10"
+                    Margin="10, 10" Grid.ColumnSpan="2"
+                    BackgroundColor="Red" TextColor="White"
+                    Clicked="RemoveAllCall"/>
 
 
             <CollectionView ItemsSource="{Binding Items}" Grid.Row="1" Grid.ColumnSpan="4" Grid.RowSpan="3"
@@ -36,8 +42,8 @@
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout Padding="10, 10">
-                            <Frame HeightRequest="40" CornerRadius="20" HasShadow="True">
+                        <StackLayout Padding="10, 5">
+                            <Frame HeightRequest="40" CornerRadius="10" HasShadow="True" Padding="0, 0">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
@@ -45,19 +51,24 @@
                                         <ColumnDefinition Width=".5*"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width=".7*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Label Text="{Binding ItemBarcode}" FontSize="Large" 
+                                    <Label Text="{Binding ItemBarcode}" FontSize="Body" 
                                             VerticalTextAlignment="Center" 
                                             HorizontalTextAlignment="Center"
                                             Grid.Column="0" Grid.ColumnSpan="2"/>
-                                    <Label Text="->" FontSize="Large" 
+                                    <Label Text="->" FontSize="Body" 
                                             VerticalTextAlignment="Center" 
                                             HorizontalTextAlignment="Center"
                                             Grid.Column="2"/>
-                                    <Label Text="{Binding StateChangeBarcode}" FontSize="Large" 
+                                    <Label Text="{Binding StateChangeBarcode}" FontSize="Body" 
                                             VerticalTextAlignment="Center" 
                                             HorizontalTextAlignment="Center"
                                             Grid.Column="3" Grid.ColumnSpan="2"/>
+                                    <Button Grid.Column="5" Text="X" FontSize='Micro' Padding="0, 0"
+                                             BackgroundColor="Red" FontAttributes="Bold"
+                                            TextColor="Black" CornerRadius="10"
+                                            Clicked="RemoveClicked"/>
                                 </Grid>
                             </Frame>
                         </StackLayout>
