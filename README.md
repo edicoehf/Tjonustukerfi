@@ -55,7 +55,7 @@ How to turn off docker-compose:
 ## Xamarin app
 This application is made using Zebra TC57 as a reference. It works on most android devices but is not optimized for them.
 This application needs internet connection, but handles connection loss during use<br/>
-** NOTE:** If setting up for a new company make sure to change the modals and UI to be suited to that company<br/>
+**NOTE:** If setting up for a new company make sure to change the modals and UI to be suited to that company<br/>
 
 To run the system you have to do the following:
 * Make sure the connection URI is the same as the one as your server has
