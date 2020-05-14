@@ -59,7 +59,7 @@ This application needs internet connection, but handles connection loss during u
 
 To run the system you have to do the following:
 * Make sure the connection URI is the same as the one as your server has
-* Make sure that Modals are set to mimick the response from server
+* Make sure that Modals are set to mimic the response from server
 * Archive the project to an .apk file
 * Install the file on desired Anroid device
 Then the application is ready for use
