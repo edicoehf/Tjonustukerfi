@@ -52,6 +52,18 @@ How to turn off docker-compose:
     * docker-compose down
 * If not in detached mode use ctrl + c
 
+## Xamarin app
+This application is made using Zebra TC57 as a reference. It works on most android devices but is not optimized for them.
+This application needs internet connection, but handles connection loss during use<br/>
+** NOTE:** If setting up for a new company make sure to change the modals and UI to be suited to that company<br/>
+
+To run the system you have to do the following:
+* Make sure the connection URI is the same as the one as your server has
+* Make sure that Modals are set to mimick the response from server
+* Archive the project to an .apk file
+* Install the file on desired Anroid device
+Then the application is ready for use
+
 # Running in development
 ## WebApi
 See the README.md in the folder Bakendi: <br />
