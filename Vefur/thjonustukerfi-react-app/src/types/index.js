@@ -98,6 +98,7 @@ export const isLoadingType = bool;
 export const openType = bool;
 export const isProcessingType = bool;
 export const isDeletingType = bool;
+export const successType = bool;
 
 export const descriptionType = string;
 export const confirmTextType = string;
@@ -106,3 +107,5 @@ export const titleType = string;
 export const nameType = string;
 export const errorType = string;
 export const valueType = string;
+
+export const sizeType = number;

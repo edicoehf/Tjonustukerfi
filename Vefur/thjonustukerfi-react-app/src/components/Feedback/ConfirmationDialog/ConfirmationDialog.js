@@ -17,6 +17,12 @@ import {
     openType,
 } from "../../../types/index";
 
+/**
+ * Display a confirmation dialog with custom text and handlers
+ *
+ * @component
+ * @category Feedback
+ */
 const ConfirmationDialog = ({
     title,
     description,
@@ -51,12 +57,33 @@ const ConfirmationDialog = ({
 };
 
 ConfirmationDialog.propTypes = {
+    /**
+     * Displayed title in dialog
+     */
     title: titleType,
+    /**
+     * Displayed description in dialog
+     */
     description: descriptionType,
+    /**
+     * Callback function for accept
+     */
     handleAccept: handleAcceptType,
+    /**
+     * Callback function for close/decline
+     */
     handleClose: handleCloseType,
+    /**
+     * Is dialog displayed/open
+     */
     open: openType,
+    /**
+     * Custom text for decline button
+     */
     declineText: declineTextType,
+    /**
+     * Custom text for confirm button
+     */
     confirmText: confirmTextType,
 };
 
