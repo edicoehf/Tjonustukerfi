@@ -4,6 +4,13 @@ import { MenuList, MenuItem } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import "./NavigationLinks.css";
 
+/**
+ * Links to be displayed in the navbar
+ *
+ * @component
+ * @category Navigation
+ */
+
 const NavigationLinks = () => {
     const router = useLocation();
     return (

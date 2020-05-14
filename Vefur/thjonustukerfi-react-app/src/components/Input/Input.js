@@ -2,7 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import "./Input.css";
 
-const Input = props => {
+/**
+ * Custom input controlled by states
+ *
+ * @component
+ * @category Input
+ */
+
+const Input = (props) => {
     const { value, onInput, type, errorMessage, label, name, htmlId } = props;
     return (
         <div className="form-group">
@@ -30,13 +37,20 @@ const Input = props => {
 };
 
 Input.propTypes = {
-    value: PropTypes.string.isRequired,
-    htmlId: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    onInput: PropTypes.func.isRequired,
+    /** Value to be displayed */
+    value: PropTypes.string,
+    /** Element ID */
+    htmlId: PropTypes.string,
+    /** Element name */
+    name: PropTypes.string,
+    /** Function called onInput */
+    onInput: PropTypes.func,
+    /** Type of input */
     type: PropTypes.oneOf(["text"]),
+    /** Error message to be displayed */
     errorMessage: PropTypes.string,
-    label: PropTypes.string
+    /** Input label */
+    label: PropTypes.string,
 };
 
 export default Input;

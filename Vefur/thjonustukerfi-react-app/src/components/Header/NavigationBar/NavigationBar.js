@@ -5,6 +5,13 @@ import { AppBar, Toolbar } from "@material-ui/core";
 import "./NavigationBar.css";
 import { Link } from "react-router-dom";
 
+/**
+ * Displays Navigationbar at top of page
+ *
+ * @component
+ * @category Navigation
+ */
+
 const NavigationBar = () => {
     return (
         <AppBar position="static">

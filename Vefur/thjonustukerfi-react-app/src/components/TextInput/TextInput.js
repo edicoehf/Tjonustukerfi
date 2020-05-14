@@ -2,6 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import { TextField } from "@material-ui/core";
 
+/**
+ * Custom Textfield input using mUI
+ *
+ * @component
+ * @category Input
+ */
+
 const TextInput = (props) => {
     const {
         value,
@@ -28,11 +35,17 @@ const TextInput = (props) => {
 };
 
 TextInput.propTypes = {
-    value: PropTypes.string.isRequired,
-    htmlId: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    onInput: PropTypes.func.isRequired,
+    /** Value to be displayed */
+    value: PropTypes.string,
+    /** Element ID */
+    htmlId: PropTypes.string,
+    /** Element name */
+    name: PropTypes.string,
+    /** Function called onInput */
+    onInput: PropTypes.func,
+    /** Error message to be displayed */
     errorMessage: PropTypes.string,
+    /** Input label */
     label: PropTypes.string,
 };
 

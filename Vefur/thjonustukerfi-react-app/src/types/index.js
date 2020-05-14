@@ -93,6 +93,7 @@ export const createOrderType = func;
 export const cancelOrderType = func;
 export const submitHandlerType = func;
 export const cbType = func;
+export const onSubmitType = func;
 
 export const isLoadingType = bool;
 export const openType = bool;
