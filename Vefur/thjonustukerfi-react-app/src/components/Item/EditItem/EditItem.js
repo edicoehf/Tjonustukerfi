@@ -7,16 +7,33 @@ import useUpdateItem from "../../../hooks/useUpdateItem";
 import "./EditItem.css";
 import ProgressComponent from "../../Feedback/ProgressComponent/ProgressComponent";
 
+/**
+ * Page where the information of an item can be edited
+ *
+ * @component
+ * @category Item
+ */
+
 const EditItem = ({ match, history }) => {
+    // Get id from url
     const id = match.params.id;
+
+    // Fetch services
     const { services } = useGetServices();
+    // Fetch categories
     const { categories } = useGetCategories();
+    // Fetch Item
     const { item, error } = useGetItemById(id);
+
+    // Send user to details page for item
     const redirect = () => {
         history.push(`/item/${id}`);
     };
+
+    // Use update item hook, send redirect function as cb to be called on success
     const { updateError, handleUpdate, isProcessing } = useUpdateItem(redirect);
 
+    // Call update function with correctly structured data
     const editItem = (item) => {
         if (!isProcessing) {
             handleUpdate({
@@ -32,6 +49,8 @@ const EditItem = ({ match, history }) => {
         }
     };
 
+    // Check if object has loaded
+    // Itemform can have unexpected behaviour if not all items are loaded prior mounting
     const loaded = (obj) => {
         return Object.keys(obj).length > 0;
     };

@@ -100,6 +100,7 @@ export const openType = bool;
 export const isProcessingType = bool;
 export const isDeletingType = bool;
 export const successType = bool;
+export const updatedType = bool;
 
 export const descriptionType = string;
 export const confirmTextType = string;

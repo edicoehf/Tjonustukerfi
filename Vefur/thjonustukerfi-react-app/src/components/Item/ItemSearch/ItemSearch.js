@@ -8,8 +8,17 @@ import SearchBar from "../../SearchBar/SearchBar";
 import "./ItemSearch.css";
 import ProgressComponent from "../../Feedback/ProgressComponent/ProgressComponent";
 
+/**
+ * A page for searching for a specific item, by id or barcode
+ *
+ * @component
+ * @category Item
+ */
 const ItemSearch = () => {
+    // Values in the searchbars
     const [values, setValues] = React.useState({ id: "", barcode: "" });
+
+    // Use find item hook, we use the callbacks from it to refetch on search
     const {
         item,
         error,
@@ -18,18 +27,22 @@ const ItemSearch = () => {
         isLoading,
     } = useFindItem();
 
+    // Handle change in the id searchbar input
     const handleIdChange = (event) => {
         setValues({ ...values, id: event.target.value });
     };
 
+    // Handle change in the barcode searchbar input
     const handleBarcodeChange = (event) => {
         setValues({ ...values, barcode: event.target.value });
     };
 
+    // Try to fetch an item with the id in the searchbar
     const handleIdFetch = () => {
         fetchItemById(values.id);
     };
 
+    // Try to fetch an item with the barcode in the searchbar
     const handleBarcodeFetch = () => {
         fetchItemByBarcode(values.barcode);
     };
@@ -64,7 +77,10 @@ const ItemSearch = () => {
                             {Object.keys(item).length > 0 && (
                                 <div className="item-search-result-info">
                                     <ItemDetails id={item.id} />
-                                    <Link to={`/item/${item.id}`} className="item-link-button">
+                                    <Link
+                                        to={`/item/${item.id}`}
+                                        className="item-link-button"
+                                    >
                                         <Button
                                             className="details-item-button"
                                             variant="contained"

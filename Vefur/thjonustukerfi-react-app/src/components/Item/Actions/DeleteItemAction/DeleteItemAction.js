@@ -6,10 +6,18 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import "./DeleteItemAction.css";
 import ProgressButton from "../../../Feedback/ProgressButton/ProgressButton";
 import { useHistory } from "react-router-dom";
+import { idType } from "../../../../types";
 
+/**
+ * Button that deletes a given item from the system
+ *
+ * @component
+ * @category Item
+ */
 const DeleteItemAction = ({ id }) => {
+    // Get history
     const history = useHistory();
-
+    // Send user to order details page if orderId is known, else orders page
     const redirect = (orderId) => {
         if (orderId) {
             history.push(`/order/${orderId}`);
@@ -18,17 +26,23 @@ const DeleteItemAction = ({ id }) => {
         }
     };
 
+    // Use delete item hook, send redirect function as cb to be called on success
     const { error, handleDelete, isDeleting } = useDeleteItemById(id, redirect);
+
+    // Is confirmation dialog open
     const [open, setOpen] = React.useState(false);
 
+    // Open confirmation dialog
     const handleOpen = () => {
         setOpen(true);
     };
 
+    // Close confirmation dialog
     const handleClose = () => {
         setOpen(false);
     };
 
+    // Close dialog and delete item, for confirm button
     const handleAccept = () => {
         handleClose();
         handleDelete();
@@ -58,6 +72,11 @@ const DeleteItemAction = ({ id }) => {
             {error && <p className="error">Gat ekki eytt vöru</p>}
         </div>
     );
+};
+
+DeleteItemAction.propTypes = {
+    /** Item ID */
+    id: idType,
 };
 
 export default DeleteItemAction;
