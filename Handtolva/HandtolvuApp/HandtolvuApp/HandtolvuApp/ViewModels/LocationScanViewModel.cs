@@ -1,11 +1,13 @@
 ﻿using HandtolvuApp.Controls;
 using HandtolvuApp.Data.Interfaces;
 using HandtolvuApp.Models;
+using Plugin.Connectivity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace HandtolvuApp.ViewModels
@@ -23,51 +25,39 @@ namespace HandtolvuApp.ViewModels
             {
                 if(ScannedBarcodeText != "")
                 {
-
-                    List<string> locations = await App.ItemManager.GetAllLoctions();
-                    List<State> states = await App.ItemManager.GetAllStates();
-
-                    if (locations.Count != 0 && states.Count != 0)
+                    // Check if it is a valid state/location
+                    if(await App.InfoManager.CheckLocationBarcode(ScannedBarcodeText))
                     {
-                        string[] locationCheck = ScannedBarcodeText.Split('-');
-
-                        if(locationCheck.Length == 2)
-                        {
-                            if(locations.Contains(locationCheck[1]) && states.Where(i => i.Name == locationCheck[0]).Count() > 0)
-                            {
-                                var locationItemScanVM = new LocationItemScanViewModel(ScannedBarcodeText);
-                                var locationItemScanPage = new LocationItemScanPage();
-                                locationItemScanPage.BindingContext = locationItemScanVM;
-                                await App.Current.MainPage.Navigation.PushAsync(locationItemScanPage);
-
-                            }
-                            else
-                            {
-                                MessagingCenter.Send<LocationScanViewModel, string>(this, "Fail", $"Staðsetningar barkóðinn {ScannedBarcodeText} er ekki til");
-                                // not a valid location
-                            }
-                        }
-                        else
-                        {
-                            MessagingCenter.Send<LocationScanViewModel, string>(this, "Fail", $"Staðsetningar barkóðinn {ScannedBarcodeText} er ekki til");
-                            // barcode not in correct format
-                        }
-
+                        // navigate user to scan item page
+                        var locationItemScanVM = new LocationItemScanViewModel(ScannedBarcodeText);
+                        var locationItemScanPage = new LocationItemScanPage();
+                        locationItemScanPage.BindingContext = locationItemScanVM;
+                        await App.Current.MainPage.Navigation.PushAsync(locationItemScanPage);
                     }
                     else
                     {
-                        MessagingCenter.Send<LocationScanViewModel, string>(this, "Fail", $"Það eru ekki til neinar staðsetningar til");
-                        // can not find state or location
+                        // Check if it failed because of lack of internet connection
+                        if(CrossConnectivity.Current.IsConnected)
+                        {
+                            MessagingCenter.Send<LocationScanViewModel, string>(this, "Fail", $"Staðsetningar barkóðinn {ScannedBarcodeText} er ekki til");
+                        }
+                        else
+                        {
+                            MessagingCenter.Send<LocationScanViewModel, string>(this, "Fail", $"Handskanni er ekki tengdur");
+                        }
                     }
 
+                    ScannedBarcodeText = "";
                 }
                 else
                 {
-                    Placeholder = "Staðsetning verður að vera gefin";
+
+                    Placeholder = "Staðsetningu vantar";
                 }
             });
         }
 
         public Command ClickCommand { get; }
+
     }
 }

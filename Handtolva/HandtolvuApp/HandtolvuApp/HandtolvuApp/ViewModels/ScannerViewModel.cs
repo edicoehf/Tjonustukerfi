@@ -8,6 +8,11 @@ using Xamarin.Forms;
 
 namespace HandtolvuApp.ViewModels
 {
+    /// <summary>
+    ///     Handles scanning from device
+    ///     
+    ///     All view models using scanner need to inherit this class
+    /// </summary>
     public class ScannerViewModel : BaseViewModel
     {
         private string _scannedBarcodeText;
@@ -41,6 +46,9 @@ namespace HandtolvuApp.ViewModels
             
         }
 
+        /// <summary>
+        ///     Initialize the scanner and set events
+        /// </summary>
         public void Init()
         {
             var scanner = App.Scanner;
@@ -52,6 +60,9 @@ namespace HandtolvuApp.ViewModels
             scanner.SetConfig(config);
         }
 
+        /// <summary>
+        ///     Deinitialize scanner and remove events
+        /// </summary>
         public void DeInit()
         {
             var scanner = App.Scanner;
@@ -64,6 +75,11 @@ namespace HandtolvuApp.ViewModels
             }
         }
 
+        /// <summary>
+        ///             Handle scanned data from device
+        /// </summary>
+        /// <param name="sender">Device that sends the data</param>
+        /// <param name="e_status">The arguments sent with event, contains the data for the barcode</param>
         private void ScannedDataCollected(Object sender, StatusEventArgs e_status)
         {
             ScannedBarcodeText = e_status.Data;
@@ -77,6 +93,11 @@ namespace HandtolvuApp.ViewModels
             MessagingCenter.Send<ScannerViewModel>(this, "ScannedBarcode");
         }
 
+        /// <summary>
+        ///     Used if status of the scanning device is required
+        /// </summary>
+        /// <param name="sender">device that sends the data</param>
+        /// <param name="message">The status message</param>
         private void ScannedStatusChanged(Object sender, string message)
         {
             string status = message;

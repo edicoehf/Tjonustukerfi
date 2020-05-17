@@ -38,7 +38,7 @@
             <Label Text="{Binding Item.State}" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" FontSize="Title" 
                    VerticalTextAlignment="Center" HorizontalTextAlignment="End" FontAttributes="Bold"/>
 
-            <Label Text="{Binding ItemJson.Location}" Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" FontSize="Title" 
+            <Label Text="{Binding Item.ItemJson.Location}" Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" FontSize="Title" 
                    VerticalTextAlignment="Center" HorizontalTextAlignment="Start" FontAttributes="Bold"/>
 
             <BoxView BackgroundColor="Black" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4"/>

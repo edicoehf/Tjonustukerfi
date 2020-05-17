@@ -4,6 +4,11 @@ using System.Text;
 
 namespace HandtolvuApp.Models
 {
+    /// <summary>
+    ///     Used to handle scanning from device
+    ///     
+    ///     Gives the barcode value and typing
+    /// </summary>
     public class StatusEventArgs : EventArgs
     {
         private string barcodeData;

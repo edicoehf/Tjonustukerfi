@@ -1,7 +1,10 @@
 ﻿using HandtolvuApp.Data.Interfaces;
+using HandtolvuApp.Extensions;
+using HandtolvuApp.FailRequestHandler;
 using HandtolvuApp.Models;
 using HandtolvuApp.Models.Json;
 using Newtonsoft.Json;
+using Plugin.Connectivity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -46,48 +49,49 @@ namespace HandtolvuApp.ViewModels
             }
         }
 
+        /// <summary>
+        /// Used to handle api call to change states given the barcode scanned/typed
+        /// </summary>
         public async void StateChange()
         {
+            // check if there is any input
             if(ScannedBarcodeText != "")
             {
-                List<string> locations = await App.ItemManager.GetAllLoctions();
-                List<State> states = await App.ItemManager.GetAllStates();
-                
-                if(locations.Count != 0 && states.Count != 0)
+                // Check if location is valid
+                if(await App.InfoManager.CheckLocationBarcode(ScannedBarcodeText))
                 {
-                    string[] locationCheck = ScannedBarcodeText.Split('-');
-                    if(locationCheck.Length == 2)
+                    // set data to right format to be sent to API
+                    List<LocationStateChange> sendChange = new List<LocationStateChange>() { new LocationStateChange { ItemBarcode = Item.Barcode, StateChangeBarcode = ScannedBarcodeText } };
+                    
+                    // Check if device is connected to internet
+                    if (CrossConnectivity.Current.IsConnected)
                     {
-                        if (locations.Contains(locationCheck[1]) && states.Where(i => i.Name == locationCheck[0]).Count() > 0)
+                        // Send data to server
+                        List<LocationStateChange> ret = await App.ItemManager.StateChangeByLocation(sendChange);
+                        if (ret.Count == 0)
                         {
-                            if (await App.ItemManager.StateChangeWithId(Item.Id, ScannedBarcodeText))
-                            {
-                                MessagingCenter.Send<StateScanViewModel, string>(this, "Success", $"{Item.Barcode} hefur verið skannað í hólf {ScannedBarcodeText}");
-                            }
-                            else
-                            {
-                                MessagingCenter.Send<StateScanViewModel, string>(this, "Fail", $"Ekki var hægt að skanna {Item.Barcode} í hólf {ScannedBarcodeText}");
-                            }
+                            MessagingCenter.Send<StateScanViewModel, string>(this, "Success", $"{Item.Barcode} hefur verið skannað í hólf {ScannedBarcodeText}");
                         }
                         else
                         {
-                            MessagingCenter.Send<StateScanViewModel, string>(this, "Fail", $"Staðsetningar barkóðinn {ScannedBarcodeText} er ekki til");
+                            MessagingCenter.Send<StateScanViewModel, string>(this, "Fail", $"Ekki var hægt að skanna {Item.Barcode} í hólf {ScannedBarcodeText}");
                         }
-
                     }
                     else
                     {
-                        MessagingCenter.Send<StateScanViewModel, string>(this, "Fail", $"Staðsetningar barkóðinn {ScannedBarcodeText} er ekki til");
+                        // handle no connection adding failed request to list
+                        FailedRequstCollection.ItemFailedRequests.AddOrUpdate<LocationStateChange>(sendChange);
+                        MessagingCenter.Send<StateScanViewModel, string>(this, "Fail", "Handskanni ótengdur\n\nHægt er að fara á forsíðu og senda aftur þegar handskanni er tengdur");
                     }
                 }
                 else
                 {
-                    MessagingCenter.Send<StateScanViewModel, string>(this, "Fail", $"Það eru ekki til neinar staðsetningar til");
+                    MessagingCenter.Send<StateScanViewModel, string>(this, "Fail", $"Staðsetningar barkóðinn {ScannedBarcodeText} er ekki til");
                 }
             }
             else
             {
-                Placeholder = "Staðsetning verður að vera gefin";
+                Placeholder = "Staðsetningu vantar";
             }
         }
     }

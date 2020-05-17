@@ -1,8 +1,12 @@
 ﻿using HandtolvuApp.Data.Interfaces;
+using HandtolvuApp.Extensions;
+using HandtolvuApp.FailRequestHandler;
 using HandtolvuApp.Models;
+using Plugin.Connectivity;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using Xamarin.Forms;
 
@@ -35,30 +39,49 @@ namespace HandtolvuApp.ViewModels
             {
                 if(AllItems.Count > 0)
                 {
-                    List<LocationStateChange> invalidInput = await App.ItemManager.StateChangeByLocation(AllItems, Barcode);
+                    var items = new List<LocationStateChange>();
+                    List<LocationStateChange> invalidInput;
 
-                    if(invalidInput.Count == 0)
+                    // Transfer create a list of locationStateChange to send to API
+                    foreach(var i in AllItems)
                     {
-                        // success
-                        MessagingCenter.Send<LocationItemScanViewModel, string>(this, "Success", $"Allar vörur eru skannaðar í hólf {Barcode}");
-                        AllItems.Clear();
+                        items.Add(new LocationStateChange { ItemBarcode = i, StateChangeBarcode = Barcode });
+                    }
+
+                    // Check if device is connected to internet
+                    if(CrossConnectivity.Current.IsConnected)
+                    {
+                        invalidInput = await App.ItemManager.StateChangeByLocation(items);
+                        if(invalidInput.Count == 0)
+                        {
+                            // Message to handle success
+                            MessagingCenter.Send<LocationItemScanViewModel, string>(this, "Success", $"Allar vörur eru skannaðar í hólf {Barcode}");
+                            AllItems.Clear();
+                        }
+                        else
+                        {
+                            // display alert that something failed
+                            MessagingCenter.Send<LocationItemScanViewModel, string>(this, "Fail", $"Ekki var hægt að setja allar vörur í hólf {Barcode}.\n\nEftir er listi af vörum sem ekki var hægt að setja í hólfið");
+                            AllItems.Clear();
+
+                            // replace AllItems with failed state change items
+                            foreach (LocationStateChange i in invalidInput)
+                            {
+                                AllItems.Add(i.ItemBarcode);
+                            }
+                        }
                     }
                     else
                     {
-                        // display alert that something failed
-                        MessagingCenter.Send<LocationItemScanViewModel, string>(this, "Fail", $"Ekki var hægt að setja allar vörur í hólf {Barcode}.\n\nEftir er listi af vörum sem ekki var hægt að setja í hólfið");
-                        AllItems.Clear();
-
-                        foreach (LocationStateChange i in invalidInput)
-                        {
-                            AllItems.Add(i.ItemBarcode);
-                        }
+                        // Add to failed requests if device is not connected to internet
+                        FailedRequstCollection.ItemFailedRequests.AddOrUpdate<LocationStateChange>(items);
+                        MessagingCenter.Send<LocationItemScanViewModel, string>(this, "Fail", "Handskanni ótengdur\n\nHægt er að fara á forsíðu og senda aftur þegar handskanni er tengdur");
                     }
                 }
                 else
                 {
                     // must be some items on the list
-                    MessagingCenter.Send<LocationItemScanViewModel, string>(this, $"Fail", "Það verður að vera einhverjar vörur til að skanna í hólf");
+                    MessagingCenter.Send<LocationItemScanViewModel, string>(this, "Fail", "Það verður að vera einhverjar vörur til að skanna í hólf");
 
                 }
             });
@@ -87,9 +110,16 @@ namespace HandtolvuApp.ViewModels
 
         public ObservableCollection<string> AllItems { get; set; }
 
+        /// <summary>
+        ///     Used to add item to list
+        /// </summary>
         public void AddToList()
         {
-            AllItems.Insert(0, ScannedBarcodeText);
+            if(!AllItems.Contains(ScannedBarcodeText))
+            {
+                AllItems.Insert(0, ScannedBarcodeText);
+            }
+
             ScannedBarcodeText = "";
         }
     }

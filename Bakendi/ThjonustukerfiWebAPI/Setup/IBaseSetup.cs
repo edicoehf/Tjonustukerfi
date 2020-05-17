@@ -2,7 +2,9 @@ using ThjonustukerfiWebAPI.Config;
 
 namespace ThjonustukerfiWebAPI.Setup
 {
-    /// <summary>Sets up the database for services that the company provides</summary>
+    /// <summary>
+    ///     Setup all tables for the company with the company config. Also sets up constants and environmental variables.
+    /// </summary>
     public interface IBaseSetup
     {
         /// <summary>

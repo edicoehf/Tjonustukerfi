@@ -1,6 +1,9 @@
 ﻿using HandtolvuApp.Data.Interfaces;
 using HandtolvuApp.Models;
+using HandtolvuApp.Models.Json;
 using Newtonsoft.Json;
+using Plugin.Connectivity;
+using Polly;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,8 +19,8 @@ namespace HandtolvuApp.Data.Implementations
         readonly HttpClient _client;
         public NextStates NextStates { get; private set; }
         public Item Item { get; private set; }
-        private readonly string BaseURI = "http://10.0.2.2:5000/api/items";
-        private readonly string InfoURI = "http://10.0.2.2:5000/api/info";
+        private readonly string BaseURI = $"{Constants.ApiConnection}items";
+        private readonly string InfoURI = $"{Constants.ApiConnection}info";
 
         public ItemService()
         {
@@ -32,11 +35,28 @@ namespace HandtolvuApp.Data.Implementations
             string Uri = BaseURI + $"/search?barcode={barcode}";
             try
             {
-                var response = await _client.GetAsync(Uri);
+                // Request with retry policy on exceptions, retries 3 times with 2 second delay between
+                var response = await Policy
+                                    .Handle<HttpRequestException>()
+                                    .WaitAndRetry(retryCount: 3,
+                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                    .Execute(async () => await _client.GetAsync(Uri));
+
                 if (response.IsSuccessStatusCode)
                 {
+                    // Convert response to string and convert to Json
                     var content = await response.Content.ReadAsStringAsync();
                     Item = JsonConvert.DeserializeObject<Item>(content);
+                    // Convert additional information to ItemJson and replace category and service if "Annað"
+                    Item.ItemJson = JsonConvert.DeserializeObject<ItemJson>(Item.Json);
+                    if (Item.Category == "Annað")
+                    {
+                        Item.Category = Item.ItemJson.OtherCategory;
+                    }
+                    if (Item.Service == "Annað")
+                    {
+                        Item.Service = Item.ItemJson.OtherService;
+                    }
                 }
             }
             catch (Exception ex)
@@ -55,10 +75,16 @@ namespace HandtolvuApp.Data.Implementations
 
             try
             {
-                var response = await _client.GetAsync(Uri);
-                
-                if(response.IsSuccessStatusCode)
+                // Request with retry policy on exceptions, retries 3 times with 2 second delay betweens
+                var response = await Policy
+                                    .Handle<HttpRequestException>()
+                                    .WaitAndRetry(retryCount: 3,
+                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                    .Execute(async () => await _client.GetAsync(Uri));
+
+                if (response.IsSuccessStatusCode)
                 {
+                    // Convert response data to NextStates
                     var content = await response.Content.ReadAsStringAsync();
                     NextStates = JsonConvert.DeserializeObject<NextStates>(content);
                     NextStates.NextAvailableStates.Reverse();
@@ -72,57 +98,32 @@ namespace HandtolvuApp.Data.Implementations
             return NextStates;
         }
 
-        public async Task<bool> StateChangeWithId(long id, string barcode)
+        public async Task<List<LocationStateChange>> StateChangeByLocation(List<LocationStateChange> items)
         {
-            string stateUri = BaseURI + "/scanner/statechangebyid";
-            var item = new[] { new { itemId = id, stateChangeBarcode = barcode } };
-
-            try
-            {
-                var method = new HttpMethod("PATCH");
-                var request = new HttpRequestMessage(method, stateUri) { 
-                    Content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json") 
-                };
-                var response = await _client.SendAsync(request);
-
-                if(response.IsSuccessStatusCode)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(@"\tERROR {0}", ex.Message);
-                return false;
-            }
-        }
-
-        public async Task<List<LocationStateChange>> StateChangeByLocation(ObservableCollection<string> items, string barcode)
-        {
-            string stateUri = BaseURI + "/scanner/statechangebybarcode";
             List<LocationStateChange> ret = new List<LocationStateChange>();
-            var item = new List<LocationStateChange>();
-            foreach(string i in items)
-            {
-                item.Add(new LocationStateChange { ItemBarcode = i, StateChangeBarcode = barcode });
-            }
+            
+            string stateUri = BaseURI + "/scanner/statechangebybarcode";
 
             try
             {
+                // Patch is not one of the default methods so we create our own request with content
                 var method = new HttpMethod("PATCH");
                 var request = new HttpRequestMessage(method, stateUri)
                 {
-                    Content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json")
+                    Content = new StringContent(JsonConvert.SerializeObject(items), Encoding.UTF8, "application/json")
                 };
-                var response = await _client.SendAsync(request);
+
+                // Request with retry policy on exceptions, retries 3 times with 2 second delay between
+                var response = await Policy
+                                    .Handle<HttpRequestException>()
+                                    .WaitAndRetry(retryCount: 3,
+                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                    .Execute(async () => await _client.SendAsync(request));
 
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
+                    // There is only response content if patch did not work
                     if(content != "")
                     {
                         ret = JsonConvert.DeserializeObject<List<LocationStateChange>>(content);
@@ -145,10 +146,16 @@ namespace HandtolvuApp.Data.Implementations
 
             try
             {
-                var response = await _client.GetAsync(reqUri);
+                // Request with retry policy on exceptions, retries 3 times with 2 second delay between
+                var response = await Policy
+                                    .Handle<HttpRequestException>()
+                                    .WaitAndRetry(retryCount: 3,
+                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                    .Execute(async () => await _client.GetAsync(reqUri));
 
                 if (response.IsSuccessStatusCode)
                 {
+                    // Converts response content to list of string
                     var content = await response.Content.ReadAsStringAsync();
                     ret = JsonConvert.DeserializeObject<List<string>>(content);
                 }
@@ -156,7 +163,7 @@ namespace HandtolvuApp.Data.Implementations
             catch (Exception ex)
             {
                 Debug.WriteLine(@"\tError {0}", ex.Message);
-            }
+            }          
 
             return ret;
         }
@@ -165,13 +172,19 @@ namespace HandtolvuApp.Data.Implementations
         {
             string reqUri = InfoURI + "/states";
             List<State> ret = new List<State>();
-
+           
             try
             {
-                var response = await _client.GetAsync(reqUri);
+                // Request with retry policy on exceptions, retries 3 times with 2 second delay between
+                var response = await Policy
+                                    .Handle<HttpRequestException>()
+                                    .WaitAndRetry(retryCount: 3,
+                                                    sleepDurationProvider: (attempt) => TimeSpan.FromSeconds(2))
+                                    .Execute(async () => await _client.GetAsync(reqUri));
 
                 if (response.IsSuccessStatusCode)
                 {
+                    // Changes response content to list of State
                     var content = await response.Content.ReadAsStringAsync();
                     ret = JsonConvert.DeserializeObject<List<State>>(content);
                 }
@@ -179,10 +192,9 @@ namespace HandtolvuApp.Data.Implementations
             catch (Exception ex)
             {
                 Debug.WriteLine(@"\tError {0}", ex.Message);
-            }
+            }  
 
             return ret;
         }
-
     }
 }

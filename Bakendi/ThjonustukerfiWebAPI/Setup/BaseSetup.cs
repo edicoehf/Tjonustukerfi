@@ -5,6 +5,9 @@ using ThjonustukerfiWebAPI.Models.Entities;
 using ThjonustukerfiWebAPI.Extensions;
 using ThjonustukerfiWebAPI.Config;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
+using System;
+using ThjonustukerfiWebAPI.Config.EnvironmentVariables;
 
 namespace ThjonustukerfiWebAPI.Setup
 {
@@ -25,6 +28,7 @@ namespace ThjonustukerfiWebAPI.Setup
         public void Run(ConfigClass config)
         {
             LoadConfig(config);
+            SetEnvironmentVariables();  // set environment variables for docker
 
             _dbContext.Database.Migrate();
 
@@ -101,6 +105,66 @@ namespace ThjonustukerfiWebAPI.Setup
             _serviceStates = config.ServiceStates;  // Set service states
             _states = config.States;                // Set states
             _categories = config.Categories;        // Set categories
+        }
+
+        /// <summary>
+        ///     Sets Environment files for mail service, also updates them if there were any changes. Mainly used for docker.
+        ///     
+        ///     In production you should have these variables already in the .env file. You can also set your environment variables
+        ///     on your operating system. This will also update the env file given that the variable names are correct.
+        /// </summary>
+        private void SetEnvironmentVariables()
+        {
+            // .env path
+            string envPath = "Config/EnvironmentVariables/.env";
+
+            // get environment variables
+            string SMTP_USERNAME = Environment.GetEnvironmentVariable("SMTP_USERNAME");
+            string SMTP_PASSWORD = Environment.GetEnvironmentVariable("SMTP_PASSWORD");
+            string SMTP_SERVER = Environment.GetEnvironmentVariable("SMTP_SERVER");
+            string SMTP_PORT = Environment.GetEnvironmentVariable("SMTP_PORT");
+
+            // if any of these variables are not set, then do not continue
+            if(SMTP_USERNAME == null || SMTP_PASSWORD == null || SMTP_SERVER == null || SMTP_PORT == null) { return; }
+
+            // if the file doesn't exist, use the .env variables
+            if(!File.Exists(envPath))
+            {
+                var path = "Config/EnvironmentVariables";
+
+                using (StreamWriter outputFile = new StreamWriter(Path.Combine(path, ".env")))
+                {
+                    outputFile.WriteLine($"SMTP_USERNAME={SMTP_USERNAME}");
+                    outputFile.WriteLine($"SMTP_PASSWORD={SMTP_PASSWORD}");
+                    outputFile.WriteLine($"SMTP_SERVER={SMTP_SERVER}");
+                    outputFile.WriteLine($"SMTP_PORT={SMTP_PORT}");
+                }
+            }
+            else    // if it does exist, check if the environment variables have changed
+            {
+                var envVar = EnvironmentFileManager.LoadEvironmentFile();
+
+                string smtpUsername, smtpPassword, smtpServer, smtpPort;
+                envVar.TryGetValue("SMTP_USERNAME", out smtpUsername);         // get username
+                envVar.TryGetValue("SMTP_PASSWORD", out smtpPassword);         // get password
+                envVar.TryGetValue("SMTP_SERVER", out smtpServer);             // get server address
+                envVar.TryGetValue("SMTP_PORT", out smtpPort);                 // get server port
+
+                // reset env file if any values are not equal or set
+                if(SMTP_USERNAME != smtpUsername || SMTP_PASSWORD != smtpPassword || SMTP_SERVER != smtpServer || SMTP_PORT != smtpPort)
+                {
+                    File.WriteAllText(envPath, string.Empty);
+
+                    var path = "Config/EnvironmentVariables";
+                    using (StreamWriter outputFile = new StreamWriter(Path.Combine(path, ".env")))
+                    {
+                        outputFile.WriteLine($"SMTP_USERNAME={SMTP_USERNAME}");
+                        outputFile.WriteLine($"SMTP_PASSWORD={SMTP_PASSWORD}");
+                        outputFile.WriteLine($"SMTP_SERVER={SMTP_SERVER}");
+                        outputFile.WriteLine($"SMTP_PORT={SMTP_PORT}");
+                    }
+                }
+            }
         }
     }
 }

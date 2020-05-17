@@ -38,5 +38,8 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
         /// <summary>Gets all item information from order for printing.</summary>
         /// <returns>List of item print information and image of barcode as a byte array.</returns>
         List<ItemPrintDetailsDTO> GetOrderPrintDetails(long orderId);
+
+        /// <summary>Sends all item barcode images in an order to the customer that owns the order, used for demo purposes.</summary>
+        void SendOrderBarcodeByEmail(long id);
     }
 }

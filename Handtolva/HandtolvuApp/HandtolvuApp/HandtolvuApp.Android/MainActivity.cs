@@ -8,7 +8,6 @@ using Android.Widget;
 using Android.OS;
 using Xamarin.Forms;
 using HandtolvuApp.Droid.Services;
-using Symbol.XamarinEMDK;
 using HandtolvuApp.Data.Interfaces;
 
 namespace HandtolvuApp.Droid
@@ -27,6 +26,7 @@ namespace HandtolvuApp.Droid
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
+            // set scanner and connect it to the app
             _scanner = new Scanner_Android();
             App.Scanner = _scanner;
 

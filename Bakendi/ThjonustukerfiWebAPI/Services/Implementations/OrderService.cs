@@ -43,5 +43,13 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         public void RemoveOrderQuery(string barcode) => _orderRepo.DeleteByOrderId(_orderRepo.SearchOrder(barcode));
 
         public List<ItemPrintDetailsDTO> GetOrderPrintDetails(long orderId) => _orderRepo.GetOrderPrintDetails(orderId);
+
+        public void SendOrderBarcodeByEmail(long id)
+        {
+            var order = _orderRepo.GetOrderbyId(id);
+            var customer = _customerRepo.GetCustomerById(order.CustomerId);
+
+            MailService.sendBarcodeEmail(order, customer);
+        }
     }
 }

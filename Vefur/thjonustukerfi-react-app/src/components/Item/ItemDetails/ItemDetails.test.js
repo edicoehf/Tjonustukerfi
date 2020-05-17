@@ -129,7 +129,6 @@ describe("<ItemDetails />", () => {
     });
 
     it("Should display item details correctly", () => {
-        console.log(wrapper.find(".details-item-content-cell").length)
         expect(wrapper.find(".details-item-content-cell").at(15).text()).toBe(
             testItem.details
         );

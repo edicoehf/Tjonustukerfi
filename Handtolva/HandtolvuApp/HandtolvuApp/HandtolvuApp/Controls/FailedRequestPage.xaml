@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="HandtolvuApp.Controls.FailedRequestPage">
+    
+    <AbsoluteLayout>
+        <Grid AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                        AbsoluteLayout.LayoutFlags="All">
+            <Grid.RowDefinitions>
+                <RowDefinition Height=".5*" />
+                <RowDefinition Height=".3*" />
+                <RowDefinition Height=".3*" />
+                <RowDefinition Height="2*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+
+
+            <Button Grid.Column="0" Text="Klára" FontSize="Large"
+                    Grid.Row="0" CornerRadius="10"
+                    Margin="10, 10" Grid.ColumnSpan="2"
+                    BackgroundColor="Green" TextColor="White"
+                    Clicked="ActivityShow"/>
+
+            <Button Grid.Column="2" Text="Hætta við" FontSize="Large"
+                    Grid.Row="0" CornerRadius="10"
+                    Margin="10, 10" Grid.ColumnSpan="2"
+                    BackgroundColor="Red" TextColor="White"
+                    Clicked="RemoveAllCall"/>
+
+
+            <CollectionView ItemsSource="{Binding Items}" Grid.Row="1" Grid.ColumnSpan="4" Grid.RowSpan="3"
+                            ItemsUpdatingScrollMode="KeepScrollOffset" VerticalScrollBarVisibility="Always">
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Padding="10, 5">
+                            <Frame HeightRequest="40" CornerRadius="10" HasShadow="True" Padding="0, 0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width=".5*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width=".7*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Text="{Binding ItemBarcode}" FontSize="Body" 
+                                            VerticalTextAlignment="Center" 
+                                            HorizontalTextAlignment="Center"
+                                            Grid.Column="0" Grid.ColumnSpan="2"/>
+                                    <Label Text="->" FontSize="Body" 
+                                            VerticalTextAlignment="Center" 
+                                            HorizontalTextAlignment="Center"
+                                            Grid.Column="2"/>
+                                    <Label Text="{Binding StateChangeBarcode}" FontSize="Body" 
+                                            VerticalTextAlignment="Center" 
+                                            HorizontalTextAlignment="Center"
+                                            Grid.Column="3" Grid.ColumnSpan="2"/>
+                                    <Button Grid.Column="5" Text="X" FontSize='Micro' Padding="0, 0"
+                                             BackgroundColor="Red" FontAttributes="Bold"
+                                            TextColor="Black" CornerRadius="10"
+                                            Clicked="RemoveClicked"/>
+                                </Grid>
+                            </Frame>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </Grid>
+        <StackLayout x:Name="LoadingLayout"
+                        AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                        AbsoluteLayout.LayoutFlags="All"
+                        IsVisible="False"
+                         
+                        BackgroundColor="Black" Opacity="0.7">
+            <ActivityIndicator IsRunning="True" Color="DodgerBlue" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+        </StackLayout>
+    </AbsoluteLayout>
+</ContentPage>

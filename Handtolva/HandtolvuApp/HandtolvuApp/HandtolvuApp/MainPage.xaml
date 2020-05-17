@@ -4,9 +4,12 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             xmlns:local="clr-namespace:HandtolvuApp.Controls"
+             xmlns:local="clr-namespace:HandtolvuApp.ViewModels"
              x:Class="HandtolvuApp.MainPage">
-
+    <ContentPage.BindingContext>
+        <local:MainPageViewModel />
+    </ContentPage.BindingContext>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -32,8 +35,50 @@
                VerticalOptions="CenterAndExpand" 
                />
 
-        <local:LandingPage Grid.Row="2" Grid.ColumnSpan="4"
-                           Grid.RowSpan="3"/>
+        <Grid Grid.Row="2" Grid.RowSpan="3" Grid.ColumnSpan="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".5*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width=".5*" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Row="0" Grid.Column="1"
+                Grid.ColumnSpan="2" Text="Skanna Pöntun"
+                BackgroundColor="Blue" TextColor="White"
+                Margin="5, 5, 5, 5"
+                Command="{Binding OrderCommand}" 
+                CornerRadius="20" />
+
+            <Button Grid.Row="1" Grid.Column="1"
+                Grid.ColumnSpan="2" Text="Skanna Vöru"
+                BackgroundColor="Blue" TextColor="White"
+                Margin="5, 5, 5, 5"
+                Command="{Binding ItemCommand}"
+                CornerRadius="20" />
+
+            <Button Grid.Row="2" Grid.Column="1"
+                Grid.ColumnSpan="2" Text="Skanna í Hólf"
+                BackgroundColor="Blue" TextColor="White"
+                Margin="5, 5, 5, 5"
+                Command="{Binding LocationCommand}"
+                CornerRadius="20" />
+
+            <Button Grid.Row="3" Grid.Column="1" IsVisible="False"
+                Grid.ColumnSpan="2" Text="Ósendar breytingar"
+                BackgroundColor="Red" TextColor="White"
+                Margin="5, 5, 5, 5" x:Name="FailedRequst"
+                Command="{Binding FailedRequestCommand}"
+                CornerRadius="20" />
+
+        </Grid>
 
     </Grid>
 
