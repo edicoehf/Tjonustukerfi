@@ -6,7 +6,7 @@ import serviceService from "../services/serviceService";
  *
  * @returns services, error, isLoading
  *
- * @catgegory Info
+ * @category Info
  * @subcategory Hooks
  */
 const useGetServices = () => {
