@@ -9,6 +9,7 @@ const {
     number,
     oneOfType,
     object,
+    element,
 } = PropTypes;
 
 export const idType = oneOfType([number, string]);
@@ -35,6 +36,28 @@ export const orderType = shape({
     dateModified: string,
     dateCompleted: string,
 });
+
+export const archivedOrderItemType = shape({
+    category: string,
+    service: string,
+    extraDataJSON: string,
+    dateCreated: string,
+    dateCompleted: string,
+});
+
+export const archivedOrderItemsType = arrayOf(archivedOrderItemType);
+
+export const archivedOrderType = shape({
+    id: idType,
+    customer: string,
+    customerEmail: string,
+    json: string,
+    dateCreated: string,
+    dateCompleted: string,
+    items: archivedOrderItemsType,
+});
+
+export const archivedOrdersType = arrayOf(archivedOrderType);
 
 export const ordersType = arrayOf(orderType);
 
@@ -78,8 +101,11 @@ export const orderFormFunctionsType = shape({
     addCustomer: func,
 });
 
+export const iconType = element;
+
 export const removeType = func;
 export const handleCloseType = func;
+export const handleOpenType = func;
 export const handleCreateType = func;
 export const handleDeleteType = func;
 export const handleAcceptType = func;
@@ -88,14 +114,24 @@ export const addItemsType = func;
 export const createOrderType = func;
 export const cancelOrderType = func;
 export const submitHandlerType = func;
+export const cbType = func;
+export const onSubmitType = func;
 
 export const isLoadingType = bool;
 export const openType = bool;
 export const isProcessingType = bool;
 export const isDeletingType = bool;
+export const successType = bool;
+export const updatedType = bool;
+export const borderType = bool;
+export const expandedType = bool;
 
 export const descriptionType = string;
 export const confirmTextType = string;
 export const declineTextType = string;
 export const titleType = string;
 export const nameType = string;
+export const errorType = string;
+export const valueType = string;
+
+export const sizeType = number;

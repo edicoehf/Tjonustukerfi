@@ -1,0 +1,27 @@
+{
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc","closure"]
+    },
+    "source": {
+        "include": ["src"],
+        "includePattern": ".+\\.js(doc|x)?$",
+        "excludePattern": "(^|\\/|\\\\)_"
+    },
+    "plugins": [
+        "plugins/markdown",
+        "node_modules/better-docs/component",
+        "node_modules/better-docs/category"
+    ],
+     "templates": {
+      "better-docs": {
+          "name": "Þjónustukerfi Edico React App"
+        }
+    },
+    "opts": {
+        "template": "node_modules/better-docs",
+        "destination": "docs",
+        "recurse": true,
+        "readme": "README.md"
+    }
+}

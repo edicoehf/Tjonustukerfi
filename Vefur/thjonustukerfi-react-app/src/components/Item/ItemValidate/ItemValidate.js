@@ -1,3 +1,11 @@
+/**
+ * Functions that validates item information
+ * @param {object} values - Item values
+ * @returns {object} Object with errors messages for failed tests
+ *
+ * @category Item
+ * @subcategory Validation
+ */
 const itemValidate = (values) => {
     const {
         category,

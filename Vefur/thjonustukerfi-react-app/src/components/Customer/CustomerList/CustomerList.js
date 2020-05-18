@@ -2,10 +2,26 @@ import React from "react";
 import CustomerListItem from "../CustomerListItem/CustomerListItem";
 import { List, Divider, Paper } from "@material-ui/core";
 import "./CustomerList.css";
-import { customersType, isLoadingType } from "../../../types";
+import {
+    customersType,
+    isLoadingType,
+    cbType,
+    errorType,
+} from "../../../types";
 import PersonIcon from "@material-ui/icons/Person";
 import ProgressComponent from "../../Feedback/ProgressComponent/ProgressComponent";
+
+/**
+ * A list displaying given customers.
+ * Clicking an item on the list will call the given CB function with the customer id as a parameter,
+ * CB intended for opening a page with the customers details
+ *
+ * @component
+ * @category Customer
+ */
+
 const CustomerList = ({ customers, error, isLoading, cb }) => {
+    // Call the redirection CB with the customers id
     const redirect = (customer) => {
         cb(customer.id);
     };
@@ -36,8 +52,17 @@ const CustomerList = ({ customers, error, isLoading, cb }) => {
 };
 
 CustomerList.propTypes = {
+    /** List of customers */
     customers: customersType,
+    /** Whether an error occured fetching fetching customers */
+    error: errorType,
+    /** Whether the customers are being fetched */
     isLoading: isLoadingType,
+    /** Callback function to be called when customer is clicked
+     * Should send user to customers detail page
+     * @param id = Customer ID
+     */
+    cb: cbType,
 };
 
 export default CustomerList;

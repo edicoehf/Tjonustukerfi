@@ -21,40 +21,59 @@ import "./StateSelection.css";
 import ProgressComponent from "../../Feedback/ProgressComponent/ProgressComponent";
 import useGetAllStates from "../../../hooks/useGetAllStates";
 import ProgressButton from "../../Feedback/ProgressButton/ProgressButton";
+import { idType, cbType } from "../../../types";
 
+/**
+ * Select new state for item. Button which opens a modal with the available next states for an item.
+ * Also has the option to select from any other state via small modal button, incase of human error
+ *
+ * @component
+ * @category Item
+ */
 const StateSelection = ({ id, hasUpdated, componentLoading }) => {
+    // Get the next states for an item
     const {
         states,
         error,
         fetchNextStates,
         isLoading: statesLoading,
     } = useGetNextStatesById(id);
+    // Get the locations that exists
     const {
         itemLocations,
         error: locationsError,
         fetchItemLocations,
         isLoading: locationsLoading,
     } = useGetItemLocations();
+    // Get all possible states
     const {
         states: allStates,
         error: allStatesError,
         isLoading: allStatesLoading,
     } = useGetAllStates();
 
+    // Select state from all possible states or the next available states
     const [selectFromAllStates, setSelectFromAllStates] = React.useState(false);
-    const [location, setLocation] = React.useState("");
+    // Which stgate is the item going in
     const [state, setState] = React.useState(null);
+    // Which location in the state is the item going in
+    const [location, setLocation] = React.useState("");
+    // What is the name of the state that was picked
     const [stateName, setStateName] = React.useState("");
+    // Which step in the stepper is active
     const [activeStep, setActiveStep] = React.useState(0);
 
+    // Pick state from all possible steps instead
     const handleSelectFromAllStates = () => {
         setSelectFromAllStates(true);
     };
 
+    // Pick state from the next available steps for this item
     const handleSelectFromNextStates = () => {
         setSelectFromAllStates(false);
     };
 
+    // Move to the next step in the modal, skip location selection if first or last state was picked
     const handleNext = (selectedState) => {
         if (
             selectedState &&
@@ -67,6 +86,7 @@ const StateSelection = ({ id, hasUpdated, componentLoading }) => {
         }
     };
 
+    // Move to the previous step in the modal, skip location selection if first or last state was picked
     const handleBack = () => {
         if (activeStep > 0 && (state === 1 || state === allStates.length)) {
             setActiveStep((prevActiveStep) => prevActiveStep - 2);
@@ -75,50 +95,56 @@ const StateSelection = ({ id, hasUpdated, componentLoading }) => {
         }
     };
 
+    // Select a state and move to next step
     const handleStateSelection = (state) => {
         handleNext(state);
         setState(state.id);
         setStateName(state.name);
     };
 
+    // Select location and move to next step
     const handleLocationSelection = (location) => {
         handleNext();
         setLocation(location);
     };
 
+    // Refetch next states and locations as the item has updated
     const handleStateUpdate = () => {
         hasUpdated();
         fetchNextStates();
         fetchItemLocations();
     };
 
+    // use update item state hook, send handlestateupdate as cb to be called on success
     const { updateError, handleUpdate, isProcessing } = useUpdateItemState(
         handleStateUpdate
     );
 
+    // List of the next available states
     const [nextStates, setNextStates] = React.useState([]);
 
+    // Sort next available states
     React.useEffect(() => {
         if (states.nextAvailableStates) {
             setNextStates(
                 states.nextAvailableStates.sort((a, b) => a.id - b.id)
             );
         }
+    }, [states]);
+
+    // Tell parent component whether its loading or not, but only if parent provides such function
+    React.useEffect(() => {
         if (componentLoading !== undefined) {
             componentLoading(
                 statesLoading || locationsLoading || allStatesLoading
             );
         }
-    }, [
-        states,
-        componentLoading,
-        statesLoading,
-        locationsLoading,
-        allStatesLoading,
-    ]);
+    }, [statesLoading, locationsLoading, allStatesLoading, componentLoading]);
 
+    // Is modal open
     const [openSelection, setOpenSelection] = React.useState(false);
 
+    // Reset everything and close modal
     const handleClose = () => {
         setOpenSelection(false);
         setActiveStep(0);
@@ -127,10 +153,14 @@ const StateSelection = ({ id, hasUpdated, componentLoading }) => {
         setStateName("");
         setSelectFromAllStates(false);
     };
+
+    // Open modal
     const handleOpen = () => {
         setOpenSelection(true);
     };
 
+    // Send the selected state and location to be updated in api
+    // then close the modal
     const handleSelection = () => {
         if (!isProcessing) {
             handleUpdate({
@@ -337,6 +367,17 @@ const StateSelection = ({ id, hasUpdated, componentLoading }) => {
             )}
         </div>
     );
+};
+
+StateSelection.propTypes = {
+    /** Item ID */
+    id: idType,
+    /** CB to let parent know that the item has been updated, this is incase a parent has multiple components that display info on the item, so they can refetch */
+    hasUpdated: cbType,
+    /** CB to let parent know if item is still being fetched
+     * @param {bool} isLoading - Is component still loading
+     */
+    componentLoading: cbType,
 };
 
 export default StateSelection;

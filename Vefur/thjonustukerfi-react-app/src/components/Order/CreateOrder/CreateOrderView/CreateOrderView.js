@@ -13,17 +13,27 @@ const initialState = {
     items: [],
 };
 
+/**
+ * Page for creating a new order
+ *
+ * @component
+ * @category Order
+ */
 const CreateOrderView = () => {
+    // Was the creation of the order successful
     const [success, setSuccess] = React.useState(false);
 
+    // The creation has been marked successful, time for newone (reset)
     const receivedSuccess = () => {
         setSuccess(false);
     };
 
+    // Set the creation of the order successful
     const handleSuccess = () => {
         setSuccess(true);
     };
 
+    // Use create order hook, send handlesuccess as cb to be called on success
     const {
         error: sendError,
         handleCreate,
@@ -31,6 +41,7 @@ const CreateOrderView = () => {
         orderId,
     } = useCreateOrder(handleSuccess);
 
+    // Use order form, validates and calls uses handleCreate on submit
     const {
         addItems,
         removeItem,
@@ -42,14 +53,16 @@ const CreateOrderView = () => {
         errors,
     } = useOrderForm(initialState, orderValidate, handleCreate);
 
+    // Create order if not processing
     const createOrder = () => {
         if (!isProcessing) {
             handleSubmit();
         }
     };
 
+    // Get history
     const history = useHistory();
-
+    // Send user to order details page, used for toaster - can click the toaster to navigate there.
     const redirectToOrder = () => {
         history.push(`/order/${orderId}`);
     };

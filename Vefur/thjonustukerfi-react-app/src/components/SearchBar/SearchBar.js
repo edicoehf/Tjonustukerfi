@@ -9,6 +9,12 @@ import {
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 
+/**
+ * Searchbar - a styled input component
+ *
+ * @component
+ * @category Input
+ */
 const SearchBar = ({
     searchTerm,
     handleChange,

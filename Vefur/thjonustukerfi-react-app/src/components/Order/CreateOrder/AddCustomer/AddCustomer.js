@@ -7,11 +7,20 @@ import "./AddCustomer.css";
 import CustomerDetails from "../../../Customer/CustomerDetails/CustomerDetails";
 import { customerType, addCustomerType } from "../../../../types/index";
 
+/**
+ * Side panel for create order page, shows the selected customer and or button to select a customer
+ *
+ * @component
+ * @category Order
+ */
 const AddCustomer = ({ customer, addCustomer }) => {
+    // Is the selectcustomer modal open
     const [modalOpen, setModalOpen] = React.useState(false);
+    // Open the modal
     const handleOpen = () => {
         setModalOpen(true);
     };
+    // Close the modal
     const handleClose = () => {
         setModalOpen(false);
     };
@@ -57,7 +66,9 @@ const AddCustomer = ({ customer, addCustomer }) => {
 };
 
 AddCustomer.propTypes = {
+    /** The selected customer */
     customer: customerType,
+    /** CB function that adds the selected customer to the order */
     addCustomer: addCustomerType,
 };
 

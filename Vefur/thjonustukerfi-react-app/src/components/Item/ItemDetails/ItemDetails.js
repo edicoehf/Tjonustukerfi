@@ -12,10 +12,22 @@ import {
 import { Link } from "react-router-dom";
 import "./ItemDetails.css";
 import ProgressComponent from "../../Feedback/ProgressComponent/ProgressComponent";
+import { idType, updatedType, cbType } from "../../../types";
+
+/**
+ * Displays all information available about an item in a table
+ *
+ * @component
+ * @category Item
+ */
 
 const ItemDetails = ({ id, updated, receivedUpdate, componentLoading }) => {
+    // Get item info
     const { item, error, fetchItem, isLoading } = useGetItemById(id);
+    // Destruct item
     const { category, service, orderId, state, json, barcode, details } = item;
+
+    // Init extra info from json
     const [other, setOther] = React.useState({
         location: "",
         sliced: false,
@@ -23,17 +35,23 @@ const ItemDetails = ({ id, updated, receivedUpdate, componentLoading }) => {
         otherCategory: "",
         otherService: "",
     });
+
+    // Set other info from json if provided
     React.useEffect(() => {
         if (json) {
             setOther(json);
         }
     }, [json]);
 
-    if (updated) {
-        receivedUpdate();
-        fetchItem();
-    }
+    // Refetch item if it has been updated
+    React.useEffect(() => {
+        if (updated) {
+            receivedUpdate();
+            fetchItem();
+        }
+    }, [updated, fetchItem, receivedUpdate]);
 
+    // Tell parent component whether its loading or not, but only if parent provides such function
     React.useEffect(() => {
         if (componentLoading !== undefined) {
             componentLoading(isLoading);
@@ -143,6 +161,21 @@ const ItemDetails = ({ id, updated, receivedUpdate, componentLoading }) => {
             )}
         </>
     );
+};
+
+ItemDetails.propTypes = {
+    /** Item ID */
+    id: idType,
+    /** Has item been updated */
+    updated: updatedType,
+    /** CB to let parent know that child knows it Item has updated,
+     * if this is provided then the component will not display a spinner while loading but instead leaves that responsibility with the parent.
+     * Used for scenarios where parent displays multiple api dependant components */
+    receivedUpdate: cbType,
+    /** CB to let parent know if item is still being fetched
+     * @param {bool} isLoading - Is component still loading
+     */
+    componentLoading: cbType,
 };
 
 export default ItemDetails;

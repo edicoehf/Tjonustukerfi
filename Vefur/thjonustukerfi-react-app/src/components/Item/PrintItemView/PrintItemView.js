@@ -8,10 +8,18 @@ import useItemPrintDetails from "../../../hooks/useItemPrintDetails";
 import { Button } from "@material-ui/core";
 import PrintIcon from "@material-ui/icons/Print";
 
+/**
+ * Printable item component, triggers a print of item information
+ *
+ * @component
+ * @category Item
+ */
 const PrintItemView = ({ id, width, height }) => {
     const componentRef = useRef();
+    // Get item print details
     const { item, isLoading } = useItemPrintDetails(id);
 
+    // Parse datetime to (icelandic) Human readable format
     const dateFormat = (date) => {
         moment.locale("is");
         return moment(date).format("ll");

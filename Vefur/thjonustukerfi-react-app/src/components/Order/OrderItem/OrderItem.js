@@ -1,14 +1,23 @@
 import React from "react";
-import { itemType } from "../../../types/index";
+import { itemType, borderType } from "../../../types/index";
 import { useHistory } from "react-router-dom";
 import { TableRow, TableCell } from "@material-ui/core";
 
+/**
+ * A row representing an item of an order.
+ *
+ * @component
+ * @category Order
+ */
 const OrderItem = ({ item, border }) => {
+    // Destruct item to get its properties
     const { id, category, service, barcode, state, json, details } = item;
+    // Destruct json to get extra info
     const { sliced, filleted, otherCategory, otherService } = json;
 
+    // Get history
     const history = useHistory();
-
+    // Send user to item details page
     const handleRedirect = () => {
         history.push(`/item/${id}`);
     };
@@ -49,7 +58,10 @@ const OrderItem = ({ item, border }) => {
 };
 
 OrderItem.propTypes = {
+    /** Item to represent */
     item: itemType,
+    /** Should row display a top-border */
+    border: borderType,
 };
 
 export default OrderItem;

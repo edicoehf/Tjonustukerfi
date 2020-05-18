@@ -10,10 +10,15 @@ import {
     IconButton,
 } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
-
 import "./ViewItems.css";
 import { itemsType, removeType } from "../../../../types";
 
+/**
+ * Display table of the items that have been added to the order, with the option of removing an item
+ *
+ * @component
+ * @category Order
+ */
 const ViewItems = ({ items, remove }) => {
     return (
         <div className="view-items">

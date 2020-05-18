@@ -11,11 +11,26 @@ import {
 import ArchiveOrderListItem from "../ArchiveOrderListItem/ArchiveOrderListItem";
 import ProgressComponent from "../../../Feedback/ProgressComponent/ProgressComponent";
 import "./ArchiveOrderList.css";
+import {
+    archivedOrdersType,
+    errorType,
+    isLoadingType,
+} from "../../../../types";
 
+/**
+ * Curtain List of archived orders, order expands and shows items of the order onclick
+ *
+ * @component
+ * @category Order
+ */
 const ArchiveOrderList = ({ orders, isLoading, error }) => {
+    // sort orders by id, so newest first
     orders = orders.sort((a, b) => (a.id < b.id ? 1 : b.id < a.id ? -1 : 0));
 
+    // Which order is expanded
     const [expanded, setExpanded] = React.useState(null);
+
+    // Expand an order, or shrink if the expanded one is clicked
     const expand = (key) => {
         if (expanded === key) {
             setExpanded(null);
@@ -81,6 +96,15 @@ const ArchiveOrderList = ({ orders, isLoading, error }) => {
             )}
         </div>
     );
+};
+
+ArchiveOrderList.propTypes = {
+    /** List of archived orders */
+    orders: archivedOrdersType,
+    /** Are the orders still loading */
+    isLoading: isLoadingType,
+    /** The error that occured while fetching */
+    error: errorType,
 };
 
 export default ArchiveOrderList;

@@ -8,6 +8,13 @@ import {
 } from "@material-ui/core";
 import { nameType, handleCloseType, openType } from "../../../types/index";
 
+/**
+ * A modal which notifies the user that a customer has orders ready to be picked up.
+ *
+ * @component
+ * @category Customer
+ */
+
 const CustomerPendingOrdersModal = ({ customerName, open, handleClose }) => {
     return (
         <Dialog open={open} onClose={handleClose}>
@@ -26,8 +33,11 @@ const CustomerPendingOrdersModal = ({ customerName, open, handleClose }) => {
 };
 
 CustomerPendingOrdersModal.propTypes = {
+    /** The name of the customer */
     customerName: nameType,
+    /** CB function that closes modal */
     handleClose: handleCloseType,
+    /** Should modal be displayed */
     open: openType,
 };
 

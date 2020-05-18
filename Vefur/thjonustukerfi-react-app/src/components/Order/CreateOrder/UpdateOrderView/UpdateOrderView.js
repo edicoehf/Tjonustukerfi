@@ -7,16 +7,20 @@ import UpdateOrderActions from "../UpdateOrderActions/UpdateOrderActions";
 import useGetOrderById from "../../../../hooks/useGetOrderById";
 import useGetServices from "../../../../hooks/useGetServices";
 import useGetCategories from "../../../../hooks/useGetCategories";
-import { orderType, idType } from "../../../../types";
+import { orderType } from "../../../../types";
 import useGetCustomerById from "../../../../hooks/useGetCustomerById";
 import { Redirect } from "react-router-dom";
 import "./UpdateOrderView.css";
 import ProgressComponent from "../../../Feedback/ProgressComponent/ProgressComponent";
 
+// Component used in the update order page -> see below
 const UpdateOrder = ({ order }) => {
+    // Get customers details from the order so it can be displayed in the orderform
     const { customer: fetchedCustomer } = useGetCustomerById(order.customerId);
 
+    // Was the update cancelled
     const [cancel, setCancel] = React.useState(false);
+    // Cancel the update
     const handleCancel = () => {
         setCancel(true);
     };
@@ -40,6 +44,7 @@ const UpdateOrder = ({ order }) => {
         }),
     };
 
+    // Use update order hook
     const {
         updateError: sendError,
         handleUpdate,
@@ -47,6 +52,7 @@ const UpdateOrder = ({ order }) => {
         hasUpdated,
     } = useUpdateOrder(order.id);
 
+    // Use orderform hook
     const {
         addItems,
         removeItem,
@@ -57,18 +63,21 @@ const UpdateOrder = ({ order }) => {
         errors,
     } = useOrderForm(initialState, orderValidate, handleUpdate);
 
+    // Add the customer to the orderform once its loaded
     React.useEffect(() => {
         if (!customer && Object.keys(fetchedCustomer).length > 0) {
             addCustomer(fetchedCustomer);
         }
     });
 
+    // Submit the order update if not processing
     const updateOrder = () => {
         if (!isProcessing) {
             handleSubmit();
         }
     };
 
+    // Redirect to order if update is successful
     const renderRedirect = () => {
         if (hasUpdated || cancel) {
             return <Redirect to={`/order/${order.id}`} />;
@@ -95,16 +104,27 @@ const UpdateOrder = ({ order }) => {
 };
 
 UpdateOrder.prototype = {
-    id: idType,
+    /** Order to update */
     order: orderType,
 };
 
+/**
+ * Page for updating order
+ *
+ * @component
+ * @category Order
+ */
 const UpdateOrderView = ({ match }) => {
+    // Get id from url
     const id = match.params.id;
+    // Get order
     const { order, error } = useGetOrderById(id);
+    // Get services
     const { services, error: serviceError } = useGetServices();
+    // Get categories
     const { categories, error: categoryError } = useGetCategories();
 
+    // Check if objects are loaded
     const loaded = (obj) => {
         return Object.keys(obj).length > 0;
     };

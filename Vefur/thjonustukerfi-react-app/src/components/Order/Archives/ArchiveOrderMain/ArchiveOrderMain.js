@@ -4,11 +4,18 @@ import useGetAllArchivedOrders from "../../../../hooks/useGetAllArchivedOrders";
 import useSearchBar from "../../../../hooks/useSearchBar";
 import SearchBar from "../../../SearchBar/SearchBar";
 import ArchiveOrderList from "../ArchiveOrderList/ArchiveOrderList";
-import { ordersType, isLoadingType } from "../../../../types";
 import "./ArchiveOrderMain.css";
 
+/**
+ * Page that displays the list of all archived orders and a searchbar
+ *
+ * @component
+ * @category Order
+ */
 const ArchiveOrderMain = () => {
+    // Get all archived orders
     const { orders, error, isLoading } = useGetAllArchivedOrders();
+    // Filter orders by input in searchbar
     const { searchResults, handleChange, searchTerm } = useSearchBar(
         orders,
         "customer"
@@ -49,11 +56,6 @@ const ArchiveOrderMain = () => {
             </div>
         </div>
     );
-};
-
-ArchiveOrderMain.propTypes = {
-    orders: ordersType,
-    isLoading: isLoadingType,
 };
 
 export default ArchiveOrderMain;

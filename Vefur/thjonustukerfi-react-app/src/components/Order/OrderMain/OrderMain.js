@@ -2,13 +2,20 @@ import React from "react";
 import useGetAllOrders from "../../../hooks/useGetAllOrders";
 import OrderList from "../OrderList/OrderList";
 import "./OrderMain.css";
-import { ordersType, isLoadingType } from "../../../types";
 import { Paper } from "@material-ui/core";
 import SearchBar from "../../SearchBar/SearchBar";
 import useSearchBar from "../../../hooks/useSearchBar";
 
+/**
+ * Page which displays list of all orders and a searchbar
+ *
+ * @component
+ * @category Order
+ */
 const OrderMain = () => {
+    // Get all orders
     const { orders, error, isLoading } = useGetAllOrders();
+    // Use search bar hook, filter all orders using the searchbar input
     const { searchResults, handleChange, searchTerm } = useSearchBar(
         orders,
         "customer"
@@ -47,11 +54,6 @@ const OrderMain = () => {
             </div>
         </div>
     );
-};
-
-OrderMain.propTypes = {
-    orders: ordersType,
-    isLoading: isLoadingType,
 };
 
 export default OrderMain;

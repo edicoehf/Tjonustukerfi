@@ -4,17 +4,26 @@ import "./CustomerView.css";
 import CustomerActions from "../Actions/CustomerActions/CustomerActions";
 import CustomerOrderListModal from "../CustomerOrderListModal/CustomerOrderListModal";
 
+/**
+ * A page which displays all details on a customer and available actions (delete, update..)
+ *
+ * @component
+ * @category Customer
+ */
+
 const CustomerView = ({ match }) => {
+    // Get the Customer ID from the url
     const id = match.params.id;
+    // Should order modal be displayed
     const [
         isCustomerOrderModalOpen,
         setCustomerOrderModalOpen,
     ] = React.useState(false);
-
+    // Close the order modal
     const handleClose = () => {
         setCustomerOrderModalOpen(false);
     };
-
+    // Open the order modal
     const handleOpen = () => {
         setCustomerOrderModalOpen(true);
     };

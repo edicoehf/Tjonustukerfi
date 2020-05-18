@@ -5,6 +5,13 @@ import { Link } from "react-router-dom";
 import { idType } from "../../../../types/index";
 import "./UpdateCustomerAction.css";
 
+/**
+ * Button which opens the page used for updating customers info.
+ * /update-customer
+ *
+ * @component
+ * @category Customer
+ */
 const UpdateCustomerAction = ({ id }) => {
     return (
         <div className="update-customer">
@@ -23,6 +30,7 @@ const UpdateCustomerAction = ({ id }) => {
 };
 
 UpdateCustomerAction.propTypes = {
+    /** Customer ID */
     id: idType,
 };
 

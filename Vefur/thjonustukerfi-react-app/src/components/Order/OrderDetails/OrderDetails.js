@@ -5,7 +5,7 @@ import useGetOrderById from "../../../hooks/useGetOrderById";
 import moment from "moment";
 import "moment/locale/is";
 import "./OrderDetails.css";
-import { orderType } from "../../../types/index";
+import { updatedType, cbType, idType } from "../../../types/index";
 import {
     TableContainer,
     Table,
@@ -16,9 +16,17 @@ import {
 } from "@material-ui/core";
 import ProgressComponent from "../../Feedback/ProgressComponent/ProgressComponent";
 
+/**
+ * Display all available information of an order
+ *
+ * @component
+ * @category Order
+ */
 const OrderDetails = ({ id, update, receivedUpdate }) => {
+    // Fetch order
     const { order, error, fetchOrder, isLoading } = useGetOrderById(id);
 
+    // Refetch order if the order has been updates
     React.useEffect(() => {
         if (update && receivedUpdate) {
             receivedUpdate();
@@ -90,7 +98,12 @@ const OrderDetails = ({ id, update, receivedUpdate }) => {
 };
 
 OrderDetails.propTypes = {
-    order: orderType,
+    /** Order ID */
+    id: idType,
+    /** Has the order been updated */
+    update: updatedType,
+    /** CB that is called when order has been refetched due to update */
+    receivedUpdate: cbType,
 };
 
 export default OrderDetails;

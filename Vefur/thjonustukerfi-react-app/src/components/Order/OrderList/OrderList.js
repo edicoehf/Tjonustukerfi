@@ -13,12 +13,21 @@ import {
 } from "@material-ui/core";
 import OrderListItem from "../OrderListItem/OrderListItem";
 import "./OrderList.css";
-import { ordersType, isLoadingType } from "../../../types";
+import { ordersType, isLoadingType, errorType } from "../../../types";
 import ProgressComponent from "../../Feedback/ProgressComponent/ProgressComponent";
 import useFilterOrders from "../../../hooks/useFilterOrders";
 
+/**
+ * List orders as table
+ *
+ * @component
+ * @category Order
+ */
+
 const OrderList = ({ orders, isLoading, error }) => {
+    // Sort orders by id, so newest come first
     orders = orders.sort((a, b) => (a.id < b.id ? 1 : b.id < a.id ? -1 : 0));
+    // Use filter orders, when used it toggles whether orders that have been picked up are shown or not
     const { filtered, filterToggle, shouldFilter } = useFilterOrders(orders);
 
     return (
@@ -82,8 +91,12 @@ const OrderList = ({ orders, isLoading, error }) => {
 };
 
 OrderList.propTypes = {
+    /** List of orders */
     orders: ordersType,
+    /** Is data still loading */
     isLoading: isLoadingType,
+    /** Error that occurred */
+    error: errorType,
 };
 
 export default OrderList;

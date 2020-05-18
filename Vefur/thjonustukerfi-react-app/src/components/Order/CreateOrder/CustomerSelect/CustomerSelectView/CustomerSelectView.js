@@ -9,9 +9,19 @@ import AddIcon from "@material-ui/icons/AddCircleOutline";
 import "./CustomerSelectView.css";
 import ProgressComponent from "../../../../Feedback/ProgressComponent/ProgressComponent";
 
+/**
+ * A list of customers that can be selected for an order, in the create order process.
+ * Made to be displayed in the pickcustomermodal.
+ *
+ * @component
+ * @category Order
+ */
 const CustomerSelectView = ({ addCustomer }) => {
+    // Get all the customers
     const { customers, error, isLoading } = useGetAllCustomers();
+    // Order customers by name
     customers.sort((a, b) => a.name.localeCompare(b.name));
+    // Filter customers by searchbar inpu
     const { searchResults, handleChange, searchTerm } = useSearchBar(customers);
     const searchBarPlaceHolder = "Leita eftir nafni";
 
@@ -58,6 +68,7 @@ const CustomerSelectView = ({ addCustomer }) => {
 };
 
 CustomerSelectView.propTypes = {
+    /** CB that adds a customer to an order */
     addCustomer: addCustomerType,
 };
 
