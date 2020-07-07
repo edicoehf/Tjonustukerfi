@@ -1,4 +1,4 @@
 window._env_ = {
-  API_URL: "http://localhost",
-  API_PORT: "5000",
+  API_URL: "https://tjonustukerfi.herokuapp.com/",
+  API_PORT: "80",
 }
