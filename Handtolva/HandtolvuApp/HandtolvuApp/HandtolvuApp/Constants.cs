@@ -9,6 +9,6 @@ namespace HandtolvuApp
     /// </summary>
     public static class Constants
     {
-        public static string ApiConnection { get; set; } = "http://192.168.0.106:5000/api/";
+        public static string ApiConnection { get; set; } = "https://tjonustukerfi.herokuapp.com/api/";
     }
 }
