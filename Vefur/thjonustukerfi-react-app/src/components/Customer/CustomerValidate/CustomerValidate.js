@@ -25,10 +25,10 @@ const validateForm = (values) => {
     if (email === "") {
         errors.email = "Netfang vantar";
     }
-    const re = /^(0?[1-9]|[12][0-9]|3[01])(1[0-2]|0?[1-9])[0-9]{2}(-?)([0-9]{3})[890]$/;
-    if (ssn !== "" && re.exec(ssn)) {
-        errors.ssn = "Ógild kennitala";
-    }
+    //const re = /^(0?[1-9]|[12][0-9]|3[01])(1[0-2]|0?[1-9])[0-9]{2}(-?)([0-9]{3})[890]$/;
+    //if (ssn !== "" && re.exec(ssn)) {
+    //    errors.ssn = "Ógild kennitala";
+    //}
     // if (ssn === '') { errors.ssn = 'Kennitölu vantar' }
     // if (telephone === '') { errors.telephone = 'Símanúmer vantar; }
     // if (postalCode === '') { errors.postalCode = 'Póstnúmer vantar'; }
