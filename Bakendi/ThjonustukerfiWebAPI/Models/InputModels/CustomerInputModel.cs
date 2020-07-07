@@ -10,7 +10,7 @@ namespace ThjonustukerfiWebAPI.Models.InputModels
         [Required]
         [MaxLength(100)]
         public string Name { get; set; }
-        [RegularExpression(@"^(0?[1-9]|[12][0-9]|3[01])(1[0-2]|0?[1-9])[0-9]{2}(-?)([0-9]{3})[890]$")]
+        //[RegularExpression(@"^(0?[1-9]|[12][0-9]|3[01])(1[0-2]|0?[1-9])[0-9]{2}(-?)([0-9]{3})[890]$")]
         public string SSN { get; set; }
         [Required]
         [EmailAddress]
