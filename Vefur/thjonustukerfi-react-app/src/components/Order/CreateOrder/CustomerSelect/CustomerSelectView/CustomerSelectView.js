@@ -22,8 +22,8 @@ const CustomerSelectView = ({ addCustomer }) => {
     // Order customers by name
     customers.sort((a, b) => a.name.localeCompare(b.name));
     // Filter customers by searchbar inpu
-    const { searchResults, handleChange, searchTerm } = useSearchBar(customers);
-    const searchBarPlaceHolder = "Leita eftir nafni";
+    const { searchResults, handleChange, searchTerm } = useSearchBar(customers, "name,phone");
+    const searchBarPlaceHolder = "Leita eftir nafni eða síma";
 
     return (
         <>

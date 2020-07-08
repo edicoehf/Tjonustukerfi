@@ -36,13 +36,13 @@ const PrintItemView = ({ id, width, height }) => {
                         maxHeight={height}
                         component={Paper}
                     >
-                        <div className="upper-line">
+                        <div className="print-label-header">
                             <div className="print-order-id">
-                                <b>Pöntunar nr: </b>
+                                <b>Pöntun nr: </b>
                                 {item.orderId}
                             </div>
                             <div className="print-item-id">
-                                <b>Vöru nr: </b>
+                                <b>Vara nr: </b>
                                 {item.id}
                             </div>
                             <div className="print-date-created">
@@ -50,7 +50,7 @@ const PrintItemView = ({ id, width, height }) => {
                                 {dateFormat(item.dateCreated)}
                             </div>
                         </div>
-                        <div className="lower-line">
+                        <div className="print-label-item-info">
                             <div className="left-line">
                                 <div className="print-item-category">
                                     <b>Tegund: </b>
@@ -69,7 +69,7 @@ const PrintItemView = ({ id, width, height }) => {
                                     {item.json.sliced ? "Bitar" : "Heilt Flak"}
                                 </div>
                             </div>
-                            <div className="right-line">
+                            <div className="print-label-barcode">
                                 <img
                                     src={
                                         `data:image/jpeg;base64, ` +

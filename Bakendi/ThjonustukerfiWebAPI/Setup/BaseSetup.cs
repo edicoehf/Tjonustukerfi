@@ -132,6 +132,8 @@ namespace ThjonustukerfiWebAPI.Setup
             {
                 var path = "Config/EnvironmentVariables";
 
+                System.IO.Directory.CreateDirectory(path);
+
                 using (StreamWriter outputFile = new StreamWriter(Path.Combine(path, ".env")))
                 {
                     outputFile.WriteLine($"SMTP_USERNAME={SMTP_USERNAME}");

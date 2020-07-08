@@ -16,15 +16,26 @@ const useSearchBar = (filterList, initKey) => {
     const [searchResults, setSearchResults] = React.useState([]);
     // Use 'name' key if nothing is provided
     const key = initKey || "name";
+    var keys = [];
+    if (key.includes(",")) {
+        keys = key.split(",");
+    }
     // Watch for changes in the input
     const handleChange = (event) => {
         setSearchTerm(event.target.value);
     };
     React.useEffect(() => {
         // Filter by searchterm
-        const results = filterList.filter((filterListItem) =>
+        var results = [];
+        if (keys.length === 2) {
+            results = filterList.filter((filterListItem) =>
+            filterListItem[keys[0]].toLowerCase().includes(searchTerm.toLowerCase()) || filterListItem[keys[1]].toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        } else {
+            results = filterList.filter((filterListItem) =>
             filterListItem[key].toLowerCase().includes(searchTerm.toLowerCase())
-        );
+            );
+        }
         // Set the results
         setSearchResults(results);
     }, [searchTerm, filterList, key]);
