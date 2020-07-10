@@ -47,6 +47,7 @@ const internalPrintOrder = (order, device) => {
 };
 
 const internalPrintSingleLabel = (item, device) => {
+
     var strPrintData = `^XA
 ^CI28
 
@@ -68,12 +69,14 @@ const internalPrintSingleLabel = (item, device) => {
 
 ^FX Third section with barcode.
 ^BY5,2,140
-^FO100,420^BC^${item.barcode}^FS
+^FO0,420^BC^FD${item.barcode}^FS
 
 ^XZ`;
 
     console.log("About to print the following ZPL:");
     console.log(strPrintData);
+    console.log("from the following item:");
+    console.log(item);
 
     device.send(strPrintData, function(success){
         console.log("Sent to printer");

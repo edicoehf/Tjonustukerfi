@@ -57,7 +57,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
                 body.HtmlBody += "<ul>";
                 foreach (var item in order.Items)
                 {
-                    body.HtmlBody += $"<li>{item.Category} - {item.Service}</li>";
+                    body.HtmlBody += $"<li>{item.Category} - {item.Service}, magn: {item.Quantity}</li>";
                 }
                 body.HtmlBody += "</ul><br>";
 
@@ -88,7 +88,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             body.HtmlBody += "<ul>";
             foreach (var item in order.Items)
             {
-                body.HtmlBody += $"<li>{item.Category} - {item.Service} - staða: {item.State}</li>";
+                body.HtmlBody += $"<li>{item.Category} - {item.Service}, magn: {item.Quantity} - staða: {item.State}</li>";
             }
             body.HtmlBody += "</ul><br>";
 
