@@ -20,7 +20,7 @@ const CreateOrderActions = () => {
                     variant="contained"
                 >
                     <AddCircleIcon className="create-order-icon" />
-                    <b>Bæta Við Pöntun</b>
+                    <b>Bæta við pöntun</b>
                 </Button>
             </Link>
         </div>

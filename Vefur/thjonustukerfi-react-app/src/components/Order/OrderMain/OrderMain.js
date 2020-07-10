@@ -18,7 +18,7 @@ const OrderMain = () => {
     // Use search bar hook, filter all orders using the searchbar input
     const { searchResults, handleChange, searchTerm } = useSearchBar(
         orders,
-        "customer"
+        "customer,id"
     );
 
     return (
@@ -31,7 +31,7 @@ const OrderMain = () => {
                     <SearchBar
                         searchTerm={searchTerm}
                         handleChange={handleChange}
-                        placeHolder="Leita eftir nafni viðskiptavinar"
+                        placeHolder="Leita eftir nafni viðsk.vinar eða pnr."
                         htmlId="order-searchbar"
                     />
                 </Paper>

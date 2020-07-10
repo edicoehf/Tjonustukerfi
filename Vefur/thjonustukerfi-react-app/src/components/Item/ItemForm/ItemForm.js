@@ -33,8 +33,8 @@ const initialState = {
     otherCategory: "",
     otherService: "",
     amount: 1,
-    sliced: "",
-    filleted: "",
+    sliced: "sliced",
+    filleted: "notFilleted",
     details: "",
     categories: null,
     services: null,
@@ -264,12 +264,12 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
                             <FormControlLabel
                                 value="filleted"
                                 control={<Radio />}
-                                label="Flakað"
+                                label="Já"
                             />
                             <FormControlLabel
                                 value="notFilleted"
                                 control={<Radio />}
-                                label="Óflakað"
+                                label="Nei"
                             />
                         </RadioGroup>
                         <FormLabel component="legend">Pökkun:</FormLabel>

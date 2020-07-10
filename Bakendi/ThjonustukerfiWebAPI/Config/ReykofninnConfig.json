@@ -1,18 +1,40 @@
 {
     "locations": [
         "holf1", "holf2", "holf3", "holf4", "holf5",
-        "holf6", "holf7", "holf8", "holf9", "holf10"
+        "holf6", "holf7", "holf8", "holf9", "holf10",
+        "holf11", "holf12", "holf13", "holf14", "holf15",
+        "holf16", "holf17", "holf18", "holf19", "holf20",
+
+        "holf21", "holf22", "holf23", "holf24", "holf25",
+        "holf26", "holf27", "holf28", "holf29", "holf30",
+
+        "holf31", "holf32", "holf33", "holf34", "holf35",
+        "holf36", "holf37", "holf38", "holf39", "holf40",
+
+        "holf41", "holf42", "holf43", "holf44", "holf45",
+        "holf46", "holf47", "holf48", "holf49", "holf50",
+
+        "holf51", "holf52", "holf53", "holf54", "holf55",
+        "holf56", "holf57", "holf58", "holf59", "holf60",
+
+        "holf61", "holf62", "holf63", "holf64", "holf65",
+        "holf66", "holf67", "holf68", "holf69", "holf70",
+
+        "holf71", "holf72", "holf73", "holf74", "holf75",
+        "holf76", "holf77", "holf78", "holf79", "holf80",
+
+        "holf81", "holf82", "holf83", "holf84", "holf85",
+        "holf86", "holf87", "holf88", "holf89", "holf90"
     ],
     "BarcodeImageDimensions": {
         "height": 100,
-        "width": 200
+        "width":  200
     },
     "services": [
-        { "name": "Birkireyking", "id": 1 },
-        { "name": "Taðreyking", "id": 2 },
-        { "name": "ViðarReyking", "id": 3 },
-        { "name": "Salt pækill", "id": 4 },
-        { "name": "Annað", "id": 5 }
+        { "name": "Beykireyking", "id": 1 },
+        { "name": "Taðreyking",   "id": 2 },
+        { "name": "Graf",         "id": 3 },
+        { "name": "Annað",        "id": 4 }
     ],
     "serviceStates": [
         { "Id": 1, "serviceId": 1, "stateId": 1, "step": 1 },
@@ -46,20 +68,26 @@
         { "Id": 25, "serviceId": 5, "stateId": 5, "step": 3 }
     ],
     "states": [
-        { "name": "Vinnslu", "id": 1 },
-        { "name": "Kælir1", "id": 2 },
-        { "name": "Kælir2", "id": 3 },
+        { "name": "Vinnsla", "id": 1 },
+        { "name": "Kaelir1", "id": 2 },
+        { "name": "Kaelir2", "id": 3 },
         { "name": "Frystir", "id": 4 },
-        { "name": "Sótt", "id": 5 }
+        { "name": "Sott",    "id": 5 }
     ],
     "categories": [
-        { "name": "Lax", "id": 1 },
-        { "name": "Silungur", "id": 2 },
-        { "name": "Lambakjöt", "id": 3 },
-        { "name": "Annað", "id": 4 }
+        { "name": "Lax",          "id": 1 },
+        { "name": "Silungur",     "id": 2 },
+        { "name": "Bleikja",      "id": 3 },
+        { "name": "Urriði",       "id": 4 },
+        { "name": "Sjóbirtingur", "id": 5 },
+        { "name": "Fiskur",       "id": 6 },
+        { "name": "Lamb",         "id": 7 },
+        { "name": "Svín",         "id": 8 },
+        { "name": "Fugl",         "id": 9 },
+        { "name": "Annað",        "id": 10 }
     ],
-    "sendSMS": false,
-    "sendEmail": false,
+    "sendSMS":      false,
+    "sendEmail":    true,
     "companyEmail": "rk@rk.is",
-    "companyName": "Reykofninn"
+    "companyName":  "Reykofninn"
 }

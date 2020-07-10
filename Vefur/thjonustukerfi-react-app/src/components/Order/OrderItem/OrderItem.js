@@ -11,7 +11,7 @@ import { TableRow, TableCell } from "@material-ui/core";
  */
 const OrderItem = ({ item, border }) => {
     // Destruct item to get its properties
-    const { id, category, service, barcode, state, json, details } = item;
+    const { id, category, service, barcode, state, json, details, quantity } = item;
     // Destruct json to get extra info
     const { sliced, filleted, otherCategory, otherService } = json;
 
@@ -53,6 +53,7 @@ const OrderItem = ({ item, border }) => {
                 </TableCell>
             )}
             <TableCell className="order-item-state">{state}</TableCell>
+            <TableCell className="order-item-quantity">{quantity}</TableCell>
         </TableRow>
     );
 };

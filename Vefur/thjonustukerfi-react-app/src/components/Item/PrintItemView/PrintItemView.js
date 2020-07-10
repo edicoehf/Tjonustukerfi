@@ -51,7 +51,7 @@ const PrintItemView = ({ id, width, height }) => {
                             </div>
                         </div>
                         <div className="print-label-item-info">
-                            <div className="left-line">
+                            <div className="print-label-text-info">
                                 <div className="print-item-category">
                                     <b>Tegund: </b>
                                     {item.json.otherCategory || item.category}
@@ -59,6 +59,10 @@ const PrintItemView = ({ id, width, height }) => {
                                 <div className="print-item-service">
                                     <b>Þjónusta: </b>
                                     {item.json.otherService || item.service}
+                                </div>
+                                <div className="print-item-qty"> 
+                                    <b>Magn:</b>
+                                    {1}
                                 </div>
                                 <div className="print-item-filleted">
                                     <b>Flökun: </b>
@@ -105,3 +109,6 @@ const PrintItemView = ({ id, width, height }) => {
 };
 
 export default PrintItemView;
+
+
+/* Miðastærð: 10.1 cm */

@@ -11,7 +11,7 @@ import validator from "validator";
 
 const validateForm = (values) => {
     //  name, ssn, email, telephone, postalCode, address
-    const { name, email, ssn } = values;
+    const { name, email } = values;
     const errors = {};
     if (name === "") {
         errors.name = "Nafn vantar";

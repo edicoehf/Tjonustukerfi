@@ -24,6 +24,7 @@ const useItemPrintDetails = (id) => {
         itemService
             .getItemPrintDetails(id)
             .then((item) => {
+                console.log("Print item has been fetched!")
                 // Parse the extra json info
                 item.json = JSON.parse(item.json);
                 // Set details that was fetched

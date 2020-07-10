@@ -33,9 +33,14 @@ const useCreateOrder = (initCb) => {
             orderService
                 .createOrder(order)
                 .then((data) => {
+
+                    console.log("Order created:");
+                    console.log(data);
+
                     // Success, so set the new order ID for export
-                    setOrderId(data.orderId);
-                    // Set error as null incase it was earlier set due to error
+                    setOrderId(data.id);
+                    //console.log(orderId);
+                    // Set error as null in case it was earlier set due to error
                     setError(null);
 
                     // If a callback function was provided as an argument in the handleCreate function
@@ -44,9 +49,9 @@ const useCreateOrder = (initCb) => {
                         cb();
                     }
 
-                    // If callback function was provided in initialiaztion its called now
+                    // If callback function was provided in initialization its called now
                     if (initCb) {
-                        initCb();
+                        initCb(data);
                     }
                 })
                 .catch((error) => setError(error)) // Catch error and set error msg

@@ -30,7 +30,7 @@ const useOrderForm = (initialState, validate, submitHandler) => {
             };
             order.customerId = customer.id;
             items.forEach((item) => {
-                for (var i = 0; i < item.amount; i++) {
+           //     for (var i = 0; i < item.amount; i++) {
                     order.items.push({
                         categoryId: parseInt(item.category),
                         serviceId: parseInt(item.service),
@@ -39,8 +39,9 @@ const useOrderForm = (initialState, validate, submitHandler) => {
                         sliced: item.sliced === "sliced" ? true : false,
                         filleted: item.filleted === "filleted" ? true : false,
                         details: item.details,
+                        quantity: parseInt(item.amount)
                     });
-                }
+            //    }
             });
             return order;
         };

@@ -20,7 +20,7 @@ const CustomerMain = () => {
     // Sort the customers alphabetically
     customers.sort((a, b) => a.name.localeCompare(b.name));
     // Filter customers with the searchbar input
-    const { searchResults, handleChange, searchTerm } = useSearchBar(customers);
+    const { searchResults, handleChange, searchTerm } = useSearchBar(customers, "name,phone");
 
     // Get the history
     const history = useHistory();
@@ -38,7 +38,7 @@ const CustomerMain = () => {
                 <SearchBar
                     searchTerm={searchTerm}
                     handleChange={handleChange}
-                    placeHolder="Leita eftir nafni"
+                    placeHolder="Leita eftir nafni eða síma"
                     htmlId="customer-searchbar"
                 />
             </Paper>

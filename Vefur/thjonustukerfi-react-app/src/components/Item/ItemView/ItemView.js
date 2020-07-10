@@ -4,8 +4,11 @@ import StateSelection from "../StateSelection/StateSelection";
 import ItemStates from "../ItemStates/ItemStates";
 import ItemActions from "../Actions/ItemActions/ItemActions";
 import ProgressComponent from "../../Feedback/ProgressComponent/ProgressComponent";
-import PrintItemView from "../PrintItemView/PrintItemView";
+import PrintService from "../../../services/printService";
 import "./ItemView.css";
+import useItemPrintDetails from "../../../hooks/useItemPrintDetails";
+import { Button } from "@material-ui/core";
+import PrintIcon from "@material-ui/icons/Print";
 
 /**
  * Page which displays all information on an item and the available actions for it
@@ -28,9 +31,8 @@ const ItemView = ({ match }) => {
     const [prevStatesLoading, setPrevStatesLoading] = React.useState(false);
     // Is something loading
     const [isLoading, setIsLoading] = React.useState(true);
-    // Size of printable ticket
-    const ticketWidth = "15cm";
-    const ticketHeight = "10cm";
+
+    const { printItemObj, isPrintError, isPrintItemLoading } = useItemPrintDetails(id);
 
     // Set that the item has updated, details and state need to update
     const hasUpdated = () => {
@@ -47,6 +49,11 @@ const ItemView = ({ match }) => {
     const statesReceivedUpdate = () => {
         setStatesUpdate(false);
     };
+
+    const handlePrint = () => {
+        console.log(printItemObj);
+        PrintService.printItem(printItemObj);
+    }
 
     // Check if anything is loading, keep track of this so only one spinner can be used instead of multiple spinners
     React.useEffect(() => {
@@ -80,11 +87,15 @@ const ItemView = ({ match }) => {
             />
             <div className="button-area">
                 <ItemActions id={id} />{" "}
-                <PrintItemView
-                    id={id}
-                    width={ticketWidth}
-                    height={ticketHeight}
-                />
+                <Button
+                    className="print-item-button"
+                    variant="contained"
+                    size="medium"
+                    onClick={handlePrint}
+                >
+                    <PrintIcon className="print-icon" size="small" />
+                    <b>Prenta</b>
+                </Button>
             </div>
         </div>
     );

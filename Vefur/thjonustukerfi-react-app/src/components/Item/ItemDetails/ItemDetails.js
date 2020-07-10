@@ -25,7 +25,7 @@ const ItemDetails = ({ id, updated, receivedUpdate, componentLoading }) => {
     // Get item info
     const { item, error, fetchItem, isLoading } = useGetItemById(id);
     // Destruct item
-    const { category, service, orderId, state, json, barcode, details } = item;
+    const { category, service, orderId, state, json, barcode, details, quantity } = item;
 
     // Init extra info from json
     const [other, setOther] = React.useState({
@@ -127,6 +127,16 @@ const ItemDetails = ({ id, updated, receivedUpdate, componentLoading }) => {
                                             {state}
                                         </TableCell>
                                     </TableRow>
+
+                                    <TableRow className="details-item-row">
+                                        <TableCell className="details-item-title-cell">
+                                            Magn:
+                                        </TableCell>
+                                        <TableCell className="details-item-content-cell">
+                                            {quantity}
+                                        </TableCell>
+                                    </TableRow>
+
                                     {other.location !== "" && (
                                         <TableRow className="details-item-row">
                                             <TableCell className="details-item-title-cell">

@@ -45,6 +45,9 @@ const OrderItemList = ({ items }) => {
                     <TableCell className="order-item-list-id">
                         <b>Staða</b>
                     </TableCell>
+                    <TableCell className="order-item-list-quantity">
+                        <b>Magn</b>
+                    </TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>

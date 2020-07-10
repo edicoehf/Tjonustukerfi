@@ -16,6 +16,7 @@ namespace ThjonustukerfiWebAPI.Models.DTOs
         public string Barcode { get; set; }
         public string Details { get; set; }
         public string JSON { get; set; }
+        public int Quantity { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
         public DateTime? DateCompleted { get; set; }

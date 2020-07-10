@@ -44,11 +44,43 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             MailService.Sendmail(emailAddress, subject, body);
         }
 
+        public static void sendOrderReceived(OrderDTO order, CustomerDetailsDTO customer)
+        {
+            var emailAddress = customer.Email;
+            if (!string.IsNullOrEmpty(emailAddress))
+            {
+                var subject = $"{Constants.CompanyName} - pöntun móttekin";
+                var body = new BodyBuilder();
+                body.HtmlBody = $"<h2>Góðan daginn {customer.Name}.</h2>";
+
+                body.HtmlBody += $"<p>Pöntunin þín (nr. {order.Id}) er móttekin.<br>Pöntun:</p>";
+                body.HtmlBody += "<ul>";
+                foreach (var item in order.Items)
+                {
+                    body.HtmlBody += $"<li>{item.Category} - {item.Service}</li>";
+                }
+                body.HtmlBody += "</ul><br>";
+
+                // encode to image
+                var bCode = new Barcode(); // get barcode lib class
+                bCode.Encode(BarcodeLib.TYPE.CODE128, order.Barcode, Color.Black, Color.White, BarcodeImageDimensions.Width, BarcodeImageDimensions.Height);
+
+                // Send image as attachment and embed it to the message
+                var image = body.LinkedResources.Add("Barcode", bCode.Encoded_Image_Bytes);
+                image.ContentId = MimeKit.Utils.MimeUtils.GenerateMessageId();
+                body.HtmlBody += string.Format(@"<h3>Strikamerki:</h3> <img src=""cid:{0}"">", image.ContentId);
+
+                body.HtmlBody += $"<p>Kær kveðja {Constants.CompanyName}</p>";
+
+                MailService.Sendmail(emailAddress, subject, body);
+            }
+        }
+
         /// <summary>Creates a html message to send as an email</summary>
         public static void sendOrderComplete(OrderDTO order, CustomerDetailsDTO customer)
         {
             var emailAddress = customer.Email;
-            var subject = $"{Constants.CompanyName} - pöntunin þín er klár.";
+            var subject = $"{Constants.CompanyName} - pöntunin þín er klár";
             var body = new BodyBuilder();
             body.HtmlBody = $"<h2>Góðan daginn {order.Customer}.</h2>";
 
@@ -121,6 +153,9 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
                     message.To.Add(new MailboxAddress(emailAddress));                                       // Add customer email
                     message.Subject = subject;                                                              // Add email subject
                     message.Body = bodyBuilder.ToMessageBody();                                             // Constructs the message
+
+                    //_log.Info("About to send email to:" + emailAddress);
+                    //_log.Info(message.Body);
 
                     using (var client = new SmtpClient())   // Mailkit SmtpClient
                     {

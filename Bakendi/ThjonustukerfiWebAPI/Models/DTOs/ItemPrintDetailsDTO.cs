@@ -11,5 +11,6 @@ namespace ThjonustukerfiWebAPI.Models.DTOs
         public string Details { get; set; }
         public string JSON { get; set; }
         public string BarcodeImage { get; set; }
+        public int Quantity { get; set; }
     }
 }

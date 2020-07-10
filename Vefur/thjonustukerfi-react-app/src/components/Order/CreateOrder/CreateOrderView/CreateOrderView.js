@@ -6,6 +6,7 @@ import useOrderForm from "../../../../hooks/useOrderForm";
 import OrderForm from "../OrderForm/OrderForm";
 import SuccessToaster from "../../../Feedback/SuccessToaster/SuccessToaster";
 import { useHistory } from "react-router-dom";
+import PrintService from "../../../../services/printService"
 import "./CreateOrderView.css";
 
 const initialState = {
@@ -23,14 +24,17 @@ const CreateOrderView = () => {
     // Was the creation of the order successful
     const [success, setSuccess] = React.useState(false);
 
-    // The creation has been marked successful, time for newone (reset)
+    // The creation has been marked successful, time for a new one (reset)
     const receivedSuccess = () => {
         setSuccess(false);
     };
 
     // Set the creation of the order successful
-    const handleSuccess = () => {
+    const handleSuccess = (data) => {
         setSuccess(true);
+        console.log("CreateOrderView:handleSuccess");
+        console.log(data);
+        PrintService.printOrder(data);
     };
 
     // Use create order hook, send handlesuccess as cb to be called on success
@@ -38,7 +42,7 @@ const CreateOrderView = () => {
         error: sendError,
         handleCreate,
         isProcessing,
-        orderId,
+        orderId
     } = useCreateOrder(handleSuccess);
 
     // Use order form, validates and calls uses handleCreate on submit

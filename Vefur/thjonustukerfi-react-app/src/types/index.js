@@ -66,7 +66,8 @@ export const customerType = shape({
     name: string.isRequired,
     ssn: string,
     telephone: string,
-    email: string.isRequired,
+    email: string,
+    //email: string.isRequired, Most of the initial data is without an email address
     postalCode: string,
     address: string,
 });

@@ -1,9 +1,9 @@
 .order-details div.MuiPaper-root .order-item-list-row {
     display: grid;
-    grid-template-columns: 8% 21% 21% 12% 11% 11% 16%;
+    grid-template-columns: 8% 17% 17% 12% 11% 11% 16% 8%;
     grid-template-areas:
-        "id category service filleted sliced barcode state"
-        ". details details details details details details";
+        "id category service filleted sliced barcode state quantity"
+        ". details details details details details details details";
 
 }
 
@@ -42,10 +42,16 @@
     align-self: center;
 }
 
+.order-details div.MuiPaper-root .order-item-quantity {
+    grid-area: quantity;
+    align-self: center;
+}
+
 .order-details div.MuiPaper-root .order-item-details {
     grid-area: details;
     padding-top: 0;
 }
+
 
 .order-details .order-item-list-row.with-border {
     border-top: 1px solid rgba(0, 0, 0, 0.12);

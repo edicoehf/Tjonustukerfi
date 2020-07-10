@@ -23,8 +23,19 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
 
         public long CreateOrder(OrderInputModel order) 
         {
-            if(!_customerRepo.CustomerExists(order.CustomerId)) { throw new NotFoundException($"Customer with id {order.CustomerId} was not found"); }
-            return _orderRepo.CreateOrder(order);
+            if(!_customerRepo.CustomerExists(order.CustomerId)) 
+            { 
+                throw new NotFoundException($"Customer with id {order.CustomerId} was not found"); 
+            }
+
+            var customer = _customerRepo.GetCustomerById(order.CustomerId);
+            var id       = _orderRepo.CreateOrder(order);
+            var orderDTO = _orderRepo.GetOrderbyId(id);
+
+            // TODO: only if configured to do so? And what if the customer doesn't have an email address?
+            MailService.sendOrderReceived(orderDTO, customer);
+
+            return id;
         }
 
         public void UpdateOrder(OrderInputModel order, long id) => _orderRepo.UpdateOrder(order, id);

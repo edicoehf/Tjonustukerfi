@@ -18,6 +18,7 @@ namespace ThjonustukerfiWebAPI.Models.Entities
         public string Barcode { get; set; }
         public string JSON { get; set; }    // extra information
         public string Details { get; set; } // for extra details needed for the item
+        public int Quantity { get; set; }
         // Auto generated
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
@@ -27,10 +28,11 @@ namespace ThjonustukerfiWebAPI.Models.Entities
         /// <summary>Takes an ItemInputModel and copies all variables as well as copy json objects correctly to its json string.</summary>
         public void CopyInputToSelf(ItemInputModel other)
         {
-            this.CategoryId = (long)other.CategoryId;
-            this.ServiceId = (long)other.ServiceId;
+            this.CategoryId   = (long)other.CategoryId;
+            this.ServiceId    = (long)other.ServiceId;
             this.DateModified = DateTime.Now;
-            this.Details = other.Details;
+            this.Details      = other.Details;
+            this.Quantity     = other.Quantity;
 
             JObject rss = JObject.Parse(this.JSON);
             rss.Property("sliced").Value = other.Sliced;

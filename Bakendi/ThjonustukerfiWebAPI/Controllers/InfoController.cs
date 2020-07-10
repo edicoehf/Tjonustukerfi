@@ -78,7 +78,7 @@ namespace ThjonustukerfiWebAPI.Controllers
 
         /// <summary>Gets all locations available.</summary>
         /// <returns>A list of locations for items.</returns>
-        /// <response code="200">Returns a list of locations for items. Empty list if their are none.</response>
+        /// <response code="200">Returns a list of locations for items. Empty list if there are none.</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Route("itemlocations")]
         [HttpGet]
