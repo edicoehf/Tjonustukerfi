@@ -48,6 +48,31 @@ const internalPrintOrder = (order, device) => {
 
 const internalPrintSingleLabel = (item, device) => {
 
+//    var jsonData = JSON.parse(item.JSON);
+    var jsonData = item.json;
+    var category = item.category;
+    if (jsonData && jsonData.otherCategory && jsonData.otherCategory.length > 0) {
+        category = jsonData.otherCategory;
+    }
+
+    var service = item.service;
+    if (jsonData && jsonData.otherService && jsonData.otherService.length > 0){
+        service = jsonData.otherService;
+    }
+
+    // Flökun:
+    var filleted = "Nei";
+    if (jsonData && jsonData.filleted === true){
+        filleted = "Já";
+    }
+
+    // Pökkun:
+    var sliced = "Bitar";
+    if (jsonData && jsonData.sliced === false) {
+        sliced = "Heilt flak";
+    }
+
+
     var strPrintData = `^XA
 ^CI28
 
@@ -59,10 +84,10 @@ const internalPrintSingleLabel = (item, device) => {
 
 ^FX Second section with recipient address and permit information.
 ^CFA,30
-^FO50,180^FDTegund:   ${item.category}^FS
-^FO50,220^FDÞjónusta: ${item.service}^FS
-^FO50,260^FDFlökun:   ${item.json.sliced === true ? "Já" : "Nei"}^FS
-^FO50,300^FDPökkun:   ${item.json.filleted === true ? "Heilt flak" : "Bitar"}^FS
+^FO50,180^FDTegund:   ${category}^FS
+^FO50,220^FDÞjónusta: ${service}^FS
+^FO50,260^FDFlökun:   ${filleted}^FS
+^FO50,300^FDPökkun:   ${sliced}^FS
 ^FO50,340^FDMagn:     ${item.quantity}^FS
 ^CFA,15
 ^FO50,390^GB700,1,3^FS
