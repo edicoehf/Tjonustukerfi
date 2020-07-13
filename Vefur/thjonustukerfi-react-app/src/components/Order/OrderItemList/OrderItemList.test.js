@@ -46,10 +46,10 @@ describe("<OrderItemList />", () => {
         );
     });
 
-    it("Should have 7 columns", () => {
+    it("Should have 8 columns", () => {
         expect(
             wrapper.find("tr.order-item-list-row").at(0).instance().children
                 .length
-        ).toBe(7);
+        ).toBe(8);
     });
 });

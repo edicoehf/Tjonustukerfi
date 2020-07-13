@@ -58,8 +58,8 @@ describe("<ItemForm />", () => {
             category: null,
             service: null,
             amount: 1,
-            sliced: "",
-            filleted: "",
+            sliced: "sliced",
+            filleted: "notFilleted",
             details: "",
             otherCategory: "",
             otherService: "",
@@ -229,9 +229,9 @@ describe("<ItemForm />", () => {
             jest.clearAllMocks();
         });
 
-        it("Should be empty string at start", () => {
+        it("Should be nonempty string at start", () => {
             const fill = findByName(radios, "filleted");
-            expect(fill.props().value).toBe("");
+            expect(fill.props().value).toBe("notFilleted");
         });
 
         it("Should capture filleted correctly onChange", () => {
@@ -275,9 +275,9 @@ describe("<ItemForm />", () => {
             jest.clearAllMocks();
         });
 
-        it("Should be empty string at start", () => {
+        it("Should be non empty string at start", () => {
             const sliced = findByName(radios, "sliced");
-            expect(sliced.props().value).toBe("");
+            expect(sliced.props().value).toBe("sliced");
         });
 
         it("Should capture sliced correctly onChange", () => {
