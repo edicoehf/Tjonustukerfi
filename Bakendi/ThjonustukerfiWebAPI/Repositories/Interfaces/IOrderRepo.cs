@@ -10,7 +10,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
     {
         /// <summary>Gets an order with the given ID from the database.</summary>
         /// <returns>An OrderDTO object.</returns>
-        OrderDTO GetOrderbyId(long id);
+        OrderDTO GetOrderById(long id);
 
         /// <summary>Creates a new order and adds it to the database.</summary>
         /// <returns>The ID of the entity created.</returns>

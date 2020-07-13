@@ -158,7 +158,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         {
             if (_orderRepo.OrderPickupReady(orderId))
             {
-                var order = _orderRepo.GetOrderbyId(orderId);   // get order
+                var order = _orderRepo.GetOrderById(orderId);   // get order
                 var customer = _customerRepo.GetCustomerById(order.CustomerId); // get customer
 
                 if(Constants.sendEmail) { MailService.sendOrderComplete(order, customer); }

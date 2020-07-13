@@ -19,7 +19,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             _customerRepo = customerRepo;
         }
 
-        public OrderDTO GetOrderbyId(long id) => _orderRepo.GetOrderbyId(id);
+        public OrderDTO GetOrderById(long id) => _orderRepo.GetOrderById(id);
 
         public long CreateOrder(OrderInputModel order) 
         {
@@ -30,7 +30,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
 
             var customer = _customerRepo.GetCustomerById(order.CustomerId);
             var id       = _orderRepo.CreateOrder(order);
-            var orderDTO = _orderRepo.GetOrderbyId(id);
+            var orderDTO = _orderRepo.GetOrderById(id);
 
             // TODO: only if configured to do so? And what if the customer doesn't have an email address?
             MailService.sendOrderReceived(orderDTO, customer);
@@ -48,7 +48,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         {
             var orderID = _orderRepo.SearchOrder(barcode);  // Throws not found exception if no order has this barcode
 
-            return _orderRepo.GetOrderbyId(orderID);
+            return _orderRepo.GetOrderById(orderID);
         }
 
         public void RemoveOrderQuery(string barcode) => _orderRepo.DeleteByOrderId(_orderRepo.SearchOrder(barcode));
@@ -57,7 +57,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
 
         public void SendOrderBarcodeByEmail(long id)
         {
-            var order = _orderRepo.GetOrderbyId(id);
+            var order = _orderRepo.GetOrderById(id);
             var customer = _customerRepo.GetCustomerById(order.CustomerId);
 
             MailService.sendBarcodeEmail(order, customer);

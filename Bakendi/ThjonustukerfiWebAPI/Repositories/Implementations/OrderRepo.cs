@@ -23,7 +23,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             _mapper = mapper;
         }
 
-        public OrderDTO GetOrderbyId(long id)
+        public OrderDTO GetOrderById(long id)
         {
             // Get order
             var entity = _dbContext.Order.FirstOrDefault(o => o.Id == id);
@@ -357,7 +357,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
         public List<ItemPrintDetailsDTO> GetOrderPrintDetails(long orderId)
         {
-            var order = GetOrderbyId(orderId);  // Get order
+            var order = GetOrderById(orderId);  // Get order
 
             return _mapper.Map<List<ItemPrintDetailsDTO>>(order.Items); // return all items in order
         }

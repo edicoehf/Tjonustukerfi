@@ -113,7 +113,7 @@ namespace ThjonustukerfiTests.Tests
                 }
 
                 //* Act
-                OrderDTO orderDTO = orderRepo.GetOrderbyId(orderId);
+                OrderDTO orderDTO = orderRepo.GetOrderById(orderId);
 
                 //* Assert
                 // Asserting order
@@ -134,7 +134,7 @@ namespace ThjonustukerfiTests.Tests
         }
 
         [TestMethod]
-        public void GetOrderbyId_should_throw_NotFoundException()
+        public void GetOrderById_should_throw_NotFoundException()
         {
             //* Arrange
             using (var mockContext = new DataContext(_options))
@@ -142,7 +142,7 @@ namespace ThjonustukerfiTests.Tests
                 var orderRepo = new OrderRepo(mockContext, _mapper);
 
                 //* Act and Assert
-                Assert.ThrowsException<NotFoundException>(() => orderRepo.GetOrderbyId(-1));
+                Assert.ThrowsException<NotFoundException>(() => orderRepo.GetOrderById(-1));
             }
         }
 

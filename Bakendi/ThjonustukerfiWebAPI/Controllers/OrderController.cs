@@ -37,11 +37,11 @@ namespace ThjonustukerfiWebAPI.Controllers
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Route("{id:long}", Name="GetOrderbyId")]
+        [Route("{id:long}", Name="GetOrderById")]
         [HttpGet]
-        public IActionResult GetOrderbyId(long id)
+        public IActionResult GetOrderById(long id)
         {
-            return Ok(_orderService.GetOrderbyId(id));
+            return Ok(_orderService.GetOrderById(id));
         }
 
         /// <summary>Creates a new order</summary>
@@ -59,9 +59,9 @@ namespace ThjonustukerfiWebAPI.Controllers
         {
             if(!ModelState.IsValid) { return BadRequest("Input model is not valid"); }
             var entityId = _orderService.CreateOrder(order);
-            var orderDTO = _orderService.GetOrderbyId(entityId);
+            var orderDTO = _orderService.GetOrderById(entityId);
 
-            return CreatedAtRoute("GetOrderbyId", new { id = entityId }, orderDTO);
+            return CreatedAtRoute("GetOrderById", new { id = entityId }, orderDTO);
         }
 
         /// <summary>Updates Order data</summary>

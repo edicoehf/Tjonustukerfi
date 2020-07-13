@@ -41,10 +41,23 @@ namespace ThjonustukerfiTests.Tests
                 }
             };
 
-            long mockOrderDTO = 1;
+            var mockOrderDTO = new OrderDTO
+            {
+                Items = new List<ItemDTO>()
+            };
 
-            _orderRepoMock.Setup(method => method.CreateOrder(order)).Returns(mockOrderDTO);
+            var mockCustomer = new CustomerDetailsDTO
+            {
+                Id = 1,
+                Email = ""
+            };
+
+            long mockOrderDTOId = 1;
+
+            _orderRepoMock.Setup(method => method.CreateOrder(order)).Returns(mockOrderDTOId);
+            _orderRepoMock.Setup(method => method.GetOrderById(1)).Returns(mockOrderDTO);
             _customerRepoMock.Setup(method => method.CustomerExists(order.CustomerId)).Returns(true);
+            _customerRepoMock.Setup(method => method.GetCustomerById(order.CustomerId)).Returns(mockCustomer);
 
             _orderService = new OrderService(_orderRepoMock.Object, _customerRepoMock.Object);
 
@@ -53,7 +66,7 @@ namespace ThjonustukerfiTests.Tests
 
             //* Assert
             Assert.IsNotNull(orderDTOReturn);
-            Assert.AreEqual(orderDTOReturn, mockOrderDTO);
+            Assert.AreEqual(orderDTOReturn, mockOrderDTOId);
         }
 
         [TestMethod]
@@ -103,13 +116,13 @@ namespace ThjonustukerfiTests.Tests
                     DateModified = DateTime.MinValue,
                     DateCompleted = DateTime.MaxValue
             };
-            _orderRepoMock.Setup(method => method.GetOrderbyId(id)).Returns(mockOrderDTO);
+            _orderRepoMock.Setup(method => method.GetOrderById(id)).Returns(mockOrderDTO);
 
             // Create service
             _orderService = new OrderService(_orderRepoMock.Object, _customerRepoMock.Object);
 
             //* Act
-            var response = _orderService.GetOrderbyId(id);
+            var response = _orderService.GetOrderById(id);
 
             //* Assert
             Assert.IsNotNull(response);
@@ -150,7 +163,7 @@ namespace ThjonustukerfiTests.Tests
 
             // mock
             _orderRepoMock.Setup(method => method.SearchOrder(barcode)).Returns(orderID);
-            _orderRepoMock.Setup(method => method.GetOrderbyId(orderID)).Returns(retDTO);
+            _orderRepoMock.Setup(method => method.GetOrderById(orderID)).Returns(retDTO);
 
             // Create controller
             _orderService = new OrderService(_orderRepoMock.Object, _customerRepoMock.Object);
