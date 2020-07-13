@@ -88,6 +88,11 @@
     ],
     "sendSMS":      false,
     "sendEmail":    true,
-    "companyEmail": "rk@rk.is",
-    "companyName":  "Reykofninn"
+    "companyEmail": "noreply@reykofninn.is",
+    "companyCC":    "kari@reykofninn.is",
+    "companyName":  "Reykofninn",
+    "companyEmailDisclaimer": "Reykofninn geymir reyktar og grafnar afurðir í kæli.
+    Athugið að geymsluþol er misjafnt (ca 3 vikur í kæli / upp undir ár í frysti) og fer að mestu leiti eftir því hvert ástand aflans var áður en hann kom til vinnslu.
+    Reykofninn áskilur sér rétt til að henda ósóttri vöru eftir 3ja vikna geymslu í kæli.
+    Ef Reykofninn flakar, þá eru pin beinin alltaf skilin eftir en afar auðvelt er fyrir veiðimenn að plokka þau úr (sjá nánar www.reykofninn.is/fyrirveidimenn)."
 }

@@ -19,4 +19,9 @@ namespace ThjonustukerfiWebAPI.Models.InputModels
         public string Address { get; set; }
         public string PostalCode { get; set; }
     }
+
+    public class CustomerEmailInputModel
+    {
+        public string Email { get; set; }
+    }
 }

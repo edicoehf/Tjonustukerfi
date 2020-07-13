@@ -32,7 +32,9 @@ const ItemView = ({ match }) => {
     // Is something loading
     const [isLoading, setIsLoading] = React.useState(true);
 
-    const { printItemObj, isPrintError, isPrintItemLoading } = useItemPrintDetails(id);
+    const [printObjectEx, setPrintObjectEx] = React.useState(null);
+
+    const { printItemObj } = useItemPrintDetails(id, setPrintObjectEx);
 
     // Set that the item has updated, details and state need to update
     const hasUpdated = () => {
@@ -51,8 +53,8 @@ const ItemView = ({ match }) => {
     };
 
     const handlePrint = () => {
-        console.log(printItemObj);
-        PrintService.printItem(printItemObj);
+        console.log(printObjectEx);
+        PrintService.printItem(printObjectEx);
     }
 
     // Check if anything is loading, keep track of this so only one spinner can be used instead of multiple spinners

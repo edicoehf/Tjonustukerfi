@@ -85,6 +85,23 @@ namespace ThjonustukerfiWebAPI.Controllers
         
         }
 
+        /// <summary>Updates customer detailes.</summary>
+        /// <returns>OK 200 status.</returns>
+        /// <response code="200">Customer has been successfully updated.</response>
+        /// <response code="400">The input model was not valid.</response>
+        /// <response code="404">The customer with the given ID was not found.</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("{id:int}/email")]
+        [HttpPatch]
+        public IActionResult UpdateCustomerEmail([FromBody] CustomerEmailInputModel customer, long id)
+        {
+            _customerService.UpdateCustomerEmail(customer, id);
+            return Ok();
+        
+        }
+
         /// <summary>Deletes a customer with the given ID.</summary>
         /// <returns>Returns no content.</returns>
         /// <response code="204">Customer successfully deleted.</response>

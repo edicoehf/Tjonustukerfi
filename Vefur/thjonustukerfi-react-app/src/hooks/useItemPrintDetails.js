@@ -10,7 +10,7 @@ import itemService from "../services/itemService";
  * @category Item
  * @subcategory Hooks
  */
-const useItemPrintDetails = (id) => {
+const useItemPrintDetails = (id, setFn) => {
     // Item details were fetched
     const [item, setItem] = React.useState({});
     // Error that occurred
@@ -26,9 +26,11 @@ const useItemPrintDetails = (id) => {
             .then((item) => {
                 console.log("Print item has been fetched!")
                 // Parse the extra json info
+                console.log(item);
                 item.json = JSON.parse(item.json);
                 // Set details that was fetched
                 setItem(item);
+                setFn(item);
                 // Set error as null incase it was earlier set due to error
                 setError(null);
             })

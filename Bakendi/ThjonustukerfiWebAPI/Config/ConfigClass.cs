@@ -23,5 +23,7 @@ namespace ThjonustukerfiWebAPI.Config
         public bool SendEmail { get; set; }
         public string CompanyEmail { get; set; }
         public string CompanyName { get; set; }
+        public string CompanyCc { get; set; }
+        public string CompanyEmailDisclaimer { get; set; }
     }
 }

@@ -17,6 +17,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
 
         /// <summary>Updates a customer in the database.</summary>
         void UpdateCustomerDetails(CustomerInputModel customer, long id);
+        void UpdateCustomerEmail(CustomerEmailInputModel customer, long id);
 
         /// <summary>Removes a customer from the database.</summary>
         void DeleteCustomerById(long id);

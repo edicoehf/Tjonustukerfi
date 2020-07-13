@@ -98,7 +98,7 @@ namespace ThjonustukerfiWebAPI
 			// Adding for Order
 			services.AddTransient<IOrderService, OrderService>();
 			services.AddTransient<IOrderRepo, OrderRepo>();
-			// Adding foor SetupTables
+			// Adding for SetupTables
 			services.AddTransient<IBaseSetup, BaseSetup>();
 
 			// Adding for Information

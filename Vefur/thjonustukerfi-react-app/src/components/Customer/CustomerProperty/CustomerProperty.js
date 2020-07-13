@@ -1,5 +1,5 @@
 import React from "react";
-import { TableRow, TableCell } from "@material-ui/core";
+import { TableRow, TableCell, TextField } from "@material-ui/core";
 import { titleType, nameType, valueType } from "../../../types";
 
 /**
@@ -11,10 +11,10 @@ import { titleType, nameType, valueType } from "../../../types";
  * @category Customer
  */
 
-const CustomerProperty = ({ title, name, value }) => {
+const CustomerProperty = ({ title, name, value, editable, editHandler, enterHandler }) => {
     return (
         <>
-            {value ? (
+            {value || editable ? (
                 <TableRow
                     key={name}
                     title={name}
@@ -26,7 +26,23 @@ const CustomerProperty = ({ title, name, value }) => {
                         {title}:
                     </TableCell>
                     <TableCell className="customer-details-content-cell">
-                        {value}
+                    {editable && value !== null ? (
+                            <TextField
+                                value={value}
+                                name={name}
+                                onChange={(ev) => {
+                                    editHandler(ev.target.value);
+                                   // ev.preventDefault();
+                                }}
+                                onKeyPress={(ev) => {
+                                    if (ev.key === 'Enter') {
+                                        enterHandler(ev.target.value);
+                                        ev.preventDefault();
+                                    }
+                              }}/>
+                        ) : (
+                            value
+                        )}
                     </TableCell>
                 </TableRow>
             ) : (
@@ -35,6 +51,11 @@ const CustomerProperty = ({ title, name, value }) => {
         </>
     );
 };
+
+/*
+                        {editable ? (<input type="text" />) : ({value})}
+
+ */
 
 CustomerProperty.propTypes = {
     /** Title of the property, e.g. "Name" */

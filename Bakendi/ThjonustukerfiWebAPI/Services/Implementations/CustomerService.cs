@@ -32,6 +32,8 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             return customerDTO;
         }
         public void UpdateCustomerDetails(CustomerInputModel customer, long id) => _customerRepo.UpdateCustomerDetails(customer, id);
+        public void UpdateCustomerEmail(CustomerEmailInputModel customer, long id) => _customerRepo.UpdateCustomerEmail(customer, id);
+        
         public List<OrderDTO> DeleteCustomerById(long id)
         {
             List<OrderDTO> activeOrders = _orderRepo.GetActiveOrdersByCustomerId(id);   // doesn't need to throw any exception, will just return an empty list if none is found

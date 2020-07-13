@@ -23,7 +23,7 @@ const useCreateOrder = (initCb) => {
     const [cb, setCb] = React.useState(null);
 
     React.useEffect(() => {
-        // If the a order has been set and request is not being processed, then create
+        // If the order has been set and request is not being processed, then issue a create request:
         if (order && !isProcessing) {
             // Process has started
             setProcessing(true);
@@ -34,12 +34,9 @@ const useCreateOrder = (initCb) => {
                 .createOrder(order)
                 .then((data) => {
 
-                    console.log("Order created:");
-                    console.log(data);
-
                     // Success, so set the new order ID for export
                     setOrderId(data.id);
-                    //console.log(orderId);
+                    
                     // Set error as null in case it was earlier set due to error
                     setError(null);
 

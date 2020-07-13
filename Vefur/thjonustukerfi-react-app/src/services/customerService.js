@@ -127,6 +127,20 @@ const updateCustomer = (customer) => {
         .catch((error) => Promise.reject(error));
 };
 
+const updateCustomerEmail = (emailObj, id) => {
+
+    return fetch(api_endpoint + id + "/email", {
+        method: "PATCH",
+        body: JSON.stringify(emailObj),
+        headers: {
+            "Content-Type": "application/json",
+            crossDomain: true,
+        },
+    })
+        .then(handleErrors)
+        .catch((error) => Promise.reject(error));
+}
+
 /**
  * Gets all orders related to the customer with given ID from API
  *
@@ -156,4 +170,5 @@ export default {
     updateCustomer,
     forceDeleteCustomerById,
     getOrdersByCustomerId,
+    updateCustomerEmail
 };

@@ -93,18 +93,20 @@ namespace ThjonustukerfiWebAPI.Setup
         /// <summary>Fills all config variables that need to be set.</summary>
         private void LoadConfig(ConfigClass config)
         {
-            Constants.sendEmail = config.SendEmail;                                 // Set email option
-            Constants.sendSMS = config.SendSMS;                                     // Set SMS option
-            Constants.Locations = config.Locations;                                 // Set item possible locations
-            Constants.CompanyEmail = config.CompanyEmail;                           // Set the company email
-            Constants.CompanyName = config.CompanyName;                             // Set the company name
-            BarcodeImageDimensions.Height = config.BarcodeImageDimensions.Height;   // Set barcode image height
-            BarcodeImageDimensions.Width = config.BarcodeImageDimensions.Width;     // Set barcode image width
+            Constants.sendEmail              = config.SendEmail;                      // Set email option
+            Constants.sendSMS                = config.SendSMS;                        // Set SMS option
+            Constants.Locations              = config.Locations;                      // Set item possible locations
+            Constants.CompanyEmail           = config.CompanyEmail;                   // Set the company email
+            Constants.CompanyCc              = config.CompanyCc;
+            Constants.CompanyEmailDisclaimer = config.CompanyEmailDisclaimer;
+            Constants.CompanyName            = config.CompanyName;                    // Set the company name
+            BarcodeImageDimensions.Height    = config.BarcodeImageDimensions.Height;  // Set barcode image height
+            BarcodeImageDimensions.Width     = config.BarcodeImageDimensions.Width;   // Set barcode image width
 
-            _services = config.Services;            // Set services
+            _services      = config.Services;            // Set services
             _serviceStates = config.ServiceStates;  // Set service states
-            _states = config.States;                // Set states
-            _categories = config.Categories;        // Set categories
+            _states        = config.States;                // Set states
+            _categories    = config.Categories;        // Set categories
         }
 
         /// <summary>

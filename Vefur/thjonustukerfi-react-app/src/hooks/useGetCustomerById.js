@@ -26,6 +26,12 @@ const useGetCustomerById = (id) => {
             .getCustomerById(id)
             .then((customer) => {
                 // Set customer that was fetched
+                console.log("Customer fetched:");
+                console.log(customer);
+                if (customer.email === null) {
+                    customer.email = '';
+                    console.log("Customer email changed to an empty string");
+                }
                 setCustomer(customer);
                 // Set error as null incase it was earlier set due to error
                 setError(null);
@@ -36,7 +42,7 @@ const useGetCustomerById = (id) => {
                 setIsProcessing(false);
             });
     }, [id]);
-    return { customer, error, isProcessing };
+    return { customer, error, isProcessing, setCustomer };
 };
 
 export default useGetCustomerById;

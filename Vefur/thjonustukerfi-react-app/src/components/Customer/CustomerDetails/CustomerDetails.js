@@ -1,11 +1,13 @@
 import React from "react";
 import CustomerProperty from "../CustomerProperty/CustomerProperty";
 import useGetCustomerById from "../../../hooks/useGetCustomerById";
+import useUpdateCustomerEmail from "../../../hooks/useUpdateCustomerEmail";
 import { TableContainer, Table, Paper, TableBody } from "@material-ui/core";
 import "./CustomerDetails.css";
 import { idType } from "../../../types/index";
 import ProgressComponent from "../../Feedback/ProgressComponent/ProgressComponent";
 import CustomerPendingOrdersModal from "../CustomerPendingOrdersModal/CustomerPendingOrdersModal";
+import SuccessToaster from "../../Feedback/SuccessToaster/SuccessToaster";
 
 /**
  * A table containing all details of the customer with the given ID
@@ -15,8 +17,23 @@ import CustomerPendingOrdersModal from "../CustomerPendingOrdersModal/CustomerPe
  */
 
 const CustomerDetails = ({ id }) => {
+
+    const [emailUpdateSuccess, setEmailUpdateSuccess] = React.useState(false);
+
+    // The creation has been marked successful, time for a new one (reset)
+    const receivedEmailUpdateSuccess = () => {
+        setEmailUpdateSuccess(false);
+    };
+    const handleEmailUpdateSuccess = () => {
+        console.log("Email successfully updated");
+        setEmailUpdateSuccess(true);
+    };
+
     // Fetch details about customer
-    const { customer, error, isProcessing } = useGetCustomerById(id);
+    const { customer, error, isProcessing, setCustomer } = useGetCustomerById(id);
+    const { updateEmailError, handleUpdateEmail, isProcessingEmail } = useUpdateCustomerEmail(
+        handleEmailUpdateSuccess
+    );
     // To display notification modal regarding ready orders
     const [readyOrdersModalOpen, setReadyOrdersModalOpen] = React.useState(
         true
@@ -25,6 +42,22 @@ const CustomerDetails = ({ id }) => {
     const handleClose = () => {
         setReadyOrdersModalOpen(false);
     };
+
+    const onEnterEmail = (newEmail) => {
+        customer.email = newEmail;
+        const emailObj = {
+            id: customer.id,
+            email: newEmail
+        };
+        //console.log(emailObj);
+        handleUpdateEmail(emailObj);
+    }
+
+    const onChangeEmail = (newEmail) => {
+        const customerCopy = JSON.parse(JSON.stringify(customer));
+        customerCopy.email = newEmail;
+        setCustomer(customerCopy);
+    }
 
     return (
         <div className="customer-details">
@@ -38,31 +71,39 @@ const CustomerDetails = ({ id }) => {
                                     title="Nafn"
                                     name="name"
                                     value={customer.name}
+                                    editable={false}
                                 />
                                 <CustomerProperty
                                     title="Kennitala"
                                     name="ssn"
                                     value={customer.ssn}
+                                    editable={false}
                                 />
                                 <CustomerProperty
                                     title="Sími"
                                     name="phone"
                                     value={customer.phone}
+                                    editable={false}
                                 />
                                 <CustomerProperty
                                     title="Netfang"
                                     name="email"
                                     value={customer.email}
+                                    editable={true}
+                                    enterHandler={onEnterEmail}
+                                    editHandler={onChangeEmail}
                                 />
                                 <CustomerProperty
                                     title="Heimilisfang"
                                     name="address"
                                     value={customer.address}
+                                    editable={false}
                                 />
                                 <CustomerProperty
                                     title="Póstnúmer"
                                     name="postalcode"
                                     value={customer.postalCode}
+                                    editable={false}
                                 />
                             </TableBody>
                         </Table>
@@ -78,6 +119,12 @@ const CustomerDetails = ({ id }) => {
             ) : (
                 <p className="error">Gat ekki sótt viðskiptavin</p>
             )}
+            <SuccessToaster
+                success={emailUpdateSuccess}
+                receivedSuccess={receivedEmailUpdateSuccess}
+                message="Tölvupóstur hefur verið uppfærður"
+            />
+
         </div>
     );
 };

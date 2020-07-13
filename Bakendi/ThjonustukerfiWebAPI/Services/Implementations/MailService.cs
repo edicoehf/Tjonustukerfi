@@ -19,15 +19,15 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         public static void SendOrderNotification(OrderDTO order, CustomerDetailsDTO customer, double weeksSinceReady)
         {
             var emailAddress = customer.Email;
-            var subject = $"{Constants.CompanyName} - Áminning um tilbúna pöntun";
-            var body = new BodyBuilder();
-            body.HtmlBody = $"<h2>Góðan daginn {order.Customer}.</h2>";
-            body.HtmlBody += $"<p>Þú átt ósótta pöntun hjá okkur (nr. {order.Id}) sem kláraðist fyrir {weeksSinceReady} vikum.<br>Pöntun:</p>";
+            var subject      = $"{Constants.CompanyName} - Áminning um tilbúna pöntun";
+            var body         = new BodyBuilder();
+            body.HtmlBody    = $"<h2>Góðan daginn {order.Customer}.</h2>";
+            body.HtmlBody    += $"<p>Þú átt ósótta pöntun hjá okkur (nr. {order.Id}) sem kláraðist fyrir {weeksSinceReady} vikum.<br>Pöntun:</p>";
             
             body.HtmlBody += "<ul>";
             foreach (var item in order.Items)
             {
-                body.HtmlBody += $"<li> {item.Category} - {item.Service} - staða: {item.State}</li>";
+                body.HtmlBody += $"<li> {item.Category} - {item.Service}, magn: {item.Quantity} - staða: {item.State}</li>";
             }
             body.HtmlBody += "</ul><br>";
 
@@ -39,9 +39,15 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             image.ContentId = MimeKit.Utils.MimeUtils.GenerateMessageId();
             body.HtmlBody += string.Format(@"<h3>Strikamerki:</h3> <img src=""cid:{0}"">", image.ContentId);
 
+            if (!string.IsNullOrEmpty(Constants.CompanyEmailDisclaimer))
+            {
+                body.HtmlBody += "<br>";
+                body.HtmlBody += Constants.CompanyEmailDisclaimer;
+            }
+
             body.HtmlBody += $"<p>Kær kveðja {Constants.CompanyName}</p>";
 
-            MailService.Sendmail(emailAddress, subject, body);
+            MailService.Sendmail(emailAddress, subject, body, Constants.CompanyCc);
         }
 
         public static void sendOrderReceived(OrderDTO order, CustomerDetailsDTO customer)
@@ -69,6 +75,12 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
                 var image = body.LinkedResources.Add("Barcode", bCode.Encoded_Image_Bytes);
                 image.ContentId = MimeKit.Utils.MimeUtils.GenerateMessageId();
                 body.HtmlBody += string.Format(@"<h3>Strikamerki:</h3> <img src=""cid:{0}"">", image.ContentId);
+
+                if (!string.IsNullOrEmpty(Constants.CompanyEmailDisclaimer))
+                {
+                    body.HtmlBody += "<br>";
+                    body.HtmlBody += Constants.CompanyEmailDisclaimer;
+                }
 
                 body.HtmlBody += $"<p>Kær kveðja {Constants.CompanyName}</p>";
 
@@ -100,6 +112,12 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             var image = body.LinkedResources.Add("Barcode", bCode.Encoded_Image_Bytes);
             image.ContentId = MimeKit.Utils.MimeUtils.GenerateMessageId();
             body.HtmlBody += string.Format(@"<h3>Strikamerki:</h3> <img src=""cid:{0}"">", image.ContentId);
+
+            if (!string.IsNullOrEmpty(Constants.CompanyEmailDisclaimer))
+            {
+                body.HtmlBody += "<br>";
+                body.HtmlBody += Constants.CompanyEmailDisclaimer;
+            }
 
             body.HtmlBody += $"<p>Kær kveðja {Constants.CompanyName}</p>";
 
@@ -135,7 +153,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         }
 
         /// <summary>Sends an email message via SMTP server with credentials from the environment variable file.</summary>
-        private static async void Sendmail (string emailAddress, string subject, BodyBuilder bodyBuilder)
+        private static async void Sendmail (string emailAddress, string subject, BodyBuilder bodyBuilder, string cc = null)
         {
             try
             {
@@ -153,6 +171,11 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
                     message.To.Add(new MailboxAddress(emailAddress));                                       // Add customer email
                     message.Subject = subject;                                                              // Add email subject
                     message.Body = bodyBuilder.ToMessageBody();                                             // Constructs the message
+
+                    if (!string.IsNullOrEmpty(cc))
+                    {
+                        message.Cc.Add(new MailboxAddress(cc));
+                    }
 
                     //_log.Info("About to send email to:" + emailAddress);
                     //_log.Info(message.Body);

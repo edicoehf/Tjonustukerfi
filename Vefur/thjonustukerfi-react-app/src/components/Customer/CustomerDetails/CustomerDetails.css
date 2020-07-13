@@ -39,3 +39,7 @@
   color: var(--error-color);
   font-weight: bold;
 }
+
+.MuiAlert-filledSuccess {
+  background-color: #4caf50 !important;
+}

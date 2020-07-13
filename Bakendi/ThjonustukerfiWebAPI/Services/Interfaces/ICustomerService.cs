@@ -18,6 +18,7 @@ namespace ThjonustukerfiWebAPI.Services.Interfaces
 
         /// <summary>Updates a customer with the given ID and input.</summary>
         void UpdateCustomerDetails(CustomerInputModel customer, long id);
+        void UpdateCustomerEmail(CustomerEmailInputModel customer, long id);
 
         /// <summary>Deletes a customer with the given ID.</summary>
         /// <returns>An empty list if person is deleted, else list of active orders for that customer.</returns>
