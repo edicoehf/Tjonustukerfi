@@ -58,6 +58,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             entity.Phone        = customer.Phone;
             entity.Address      = customer.Address;
             entity.PostalCode   = customer.PostalCode;
+            entity.Comment      = customer.Comment;
             entity.DateModified = DateTime.Now;
 
             _dbContext.SaveChanges();

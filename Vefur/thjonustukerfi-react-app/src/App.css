@@ -11,3 +11,14 @@
 .main-container {
     margin-bottom: 2em;
 }
+
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid gray;
+}
+
+.class-version {
+    text-align: center;
+}

@@ -105,6 +105,12 @@ const CustomerDetails = ({ id }) => {
                                     value={customer.postalCode}
                                     editable={false}
                                 />
+                                <CustomerProperty
+                                    title="Athugasemdir"
+                                    name="comment"
+                                    value={customer.comment}
+                                    editable={false}
+                                />
                             </TableBody>
                         </Table>
                     </TableContainer>

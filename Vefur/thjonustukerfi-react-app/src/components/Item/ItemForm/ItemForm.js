@@ -305,8 +305,6 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
                                     name="amount"
                                     className="select amount"
                                     value={values.amount}
-                                    type="number"
-                                    inputProps={{ min: "1" }}
                                     InputLabelProps={{
                                         shrink: true,
                                     }}

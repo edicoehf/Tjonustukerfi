@@ -19,6 +19,7 @@ const initialState = {
     email: "",
     postalCode: "",
     address: "",
+    comment: ""
 };
 
 /**
@@ -105,6 +106,16 @@ const CustomerInputForm = ({
                         errorMessage={errors.postalCode}
                         onInput={handleChange}
                     />
+                    <TextInput
+                        name="comment"
+                        value={values.comment}
+                        htmlId="comment"
+                        className="comment-input"
+                        label="Athugasemdir"
+                        errorMessage={errors.comment}
+                        onInput={handleChange}
+                    />
+
                 </Paper>
                 <ProgressButton isLoading={isProcessing}>
                     <Button

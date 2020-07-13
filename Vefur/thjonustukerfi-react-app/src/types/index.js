@@ -70,6 +70,7 @@ export const customerType = shape({
     //email: string.isRequired, Most of the initial data is without an email address
     postalCode: string,
     address: string,
+    comment: string
 });
 
 export const customersType = arrayOf(customerType);

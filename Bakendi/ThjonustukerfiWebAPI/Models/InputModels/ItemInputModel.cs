@@ -18,7 +18,7 @@ namespace ThjonustukerfiWebAPI.Models.InputModels
         public string OtherCategory { get; set; }
         public string OtherService { get; set; }
         public string Details { get; set; }
-        public int Quantity {get; set;}
+        public string Quantity {get; set;}
 
         //*     Overrides     *//
         public static bool operator ==(ItemInputModel i1, ItemInputModel i2)
