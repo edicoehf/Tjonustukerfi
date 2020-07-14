@@ -248,7 +248,7 @@ describe("<ItemForm />", () => {
             fill.props().onChange({
                 target: { name: "filleted", value: "Flakað" },
             });
-            expect(fill.props().value).not.toBe("Óflakað");
+            expect(fill.props().value).not.toBe("Nei");
         });
     });
 

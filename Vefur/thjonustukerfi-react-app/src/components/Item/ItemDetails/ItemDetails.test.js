@@ -94,7 +94,7 @@ describe("<ItemDetails />", () => {
 
     it("Should display item filleted correctly", () => {
         expect(wrapper.find(".details-item-content-cell").at(6).text()).toBe(
-            "Óflakað"
+            "Nei"
         );
     });
 

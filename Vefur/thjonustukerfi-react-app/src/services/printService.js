@@ -48,8 +48,13 @@ const internalPrintOrder = (order, device) => {
 
 const internalPrintSingleLabel = (item, device) => {
 
-//    var jsonData = JSON.parse(item.JSON);
+    // For some reason, we get the JSON object either as a string or as an object,
+    // so we try to handle both cases:
     var jsonData = item.json;
+    if (typeof jsonData === 'string') {
+        jsonData = JSON.parse(jsonData);
+    }
+
     var category = item.category;
     if (jsonData && jsonData.otherCategory && jsonData.otherCategory.length > 0) {
         category = jsonData.otherCategory;

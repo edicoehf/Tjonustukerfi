@@ -105,8 +105,8 @@ const ItemDetails = ({ id, updated, receivedUpdate, componentLoading }) => {
                                         </TableCell>
                                         <TableCell className="details-item-content-cell">
                                             {other.filleted
-                                                ? "Flakað"
-                                                : "Óflakað"}
+                                                ? "Já"
+                                                : "Nei"}
                                         </TableCell>
                                     </TableRow>
                                     <TableRow className="details-item-row">

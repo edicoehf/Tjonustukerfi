@@ -66,8 +66,8 @@ const ViewItems = ({ items, remove }) => {
                                     </TableCell>
                                     <TableCell className="item-cell-filleted">
                                         {item.filleted === "filleted"
-                                            ? "Flakað"
-                                            : "Óflakað"}
+                                            ? "Já"
+                                            : "Nei"}
                                     </TableCell>
                                     <TableCell className="item-cell-sliced">
                                         {item.sliced === "sliced"

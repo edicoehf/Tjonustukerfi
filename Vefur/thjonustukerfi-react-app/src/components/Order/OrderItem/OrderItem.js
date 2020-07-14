@@ -38,7 +38,7 @@ const OrderItem = ({ item, border }) => {
                 {otherService ? otherService : service}
             </TableCell>
             <TableCell className="order-item-filleted">
-                {filleted ? "Flakað" : "Óflakað"}
+                {filleted ? "Já" : "Nei"}
             </TableCell>
             <TableCell className="order-item-sliced">
                 {sliced ? "Bitar" : "Heilt Flak"}

@@ -162,7 +162,7 @@ describe("<PrintItemView />", () => {
                     .children()
                     .at(1)
                     .text()
-            ).toBe(testItem.json.filleted ? "Flakað" : "Óflakað");
+            ).toBe(testItem.json.filleted ? "Já" : "Nei");
         });
         it("should have the correct sliced", () => {
             expect(

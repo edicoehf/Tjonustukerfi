@@ -66,7 +66,7 @@ const PrintItemView = ({ id, width, height }) => {
                                 </div>
                                 <div className="print-item-filleted">
                                     <b>Flökun: </b>
-                                    {item.json.filleted ? "Flakað" : "Óflakað"}
+                                    {item.json.filleted ? "Já" : "Nei"}
                                 </div>
                                 <div className="print-item-sliced">
                                     <b>Pökkun: </b>
