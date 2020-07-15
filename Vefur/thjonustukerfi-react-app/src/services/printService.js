@@ -85,17 +85,25 @@ const internalPrintSingleLabel = (item, device) => {
 ^CF0,40
 ^FO50,30^FDPöntun nr ${item.orderId} - vara nr. ${item.id}^FS
 ^FO50,80^FDDagsetning: ${dateFormat(item.dateCreated)}^FS
-^FO50,150^GB700,1,3^FS
+^FO50,140^GB700,1,3^FS
 
 ^FX Second section with recipient address and permit information.
 ^CFA,30
-^FO50,180^FDTegund:   ${category}^FS
-^FO50,220^FDÞjónusta: ${service}^FS
-^FO50,260^FDFlökun:   ${filleted}^FS
-^FO50,300^FDPökkun:   ${sliced}^FS
-^FO50,340^FDMagn:     ${item.quantity}^FS
+^FO50,170^FDTegund:   ${category}^FS
+^FO50,210^FDÞjónusta: ${service}^FS
+^FO50,250^FDFlökun:   ${filleted}^FS
+^FO50,290^FDPökkun:   ${sliced}^FS
+^FO50,330^FDMagn:     ${item.quantity}^FS
+`;
+
+if (item.details && item.details.length > 0) {
+    strPrintData += `^FO50,370^FDAnnað:    ${item.details}^FS`;
+} else {
+    strPrintData += `^FO50,380^GB700,1,3^FS`;
+}
+
+strPrintData += `
 ^CFA,15
-^FO50,390^GB700,1,3^FS
 
 ^FX Third section with barcode.
 ^BY5,2,140
