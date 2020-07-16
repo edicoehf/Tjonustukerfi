@@ -59,7 +59,7 @@ describe("<OrderItem />", () => {
     it("Should display filleted correctly", () => {
         expect(
             wrapper.find(".order-item-filleted").at(0).childAt(0).text()
-        ).toBe("Flakað");
+        ).toBe("Já");
     });
 
     it("Should display sliced correctly", () => {

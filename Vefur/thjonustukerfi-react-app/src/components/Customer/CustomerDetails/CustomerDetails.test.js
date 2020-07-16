@@ -37,7 +37,7 @@ describe("<CustomerDetails />", () => {
     });
 
     describe("Displays rows", () => {
-        it("Should only render email row before fetch", () => {
+        xit("Should only render email row before fetch", () => {
             useGetCustomerById.mockReturnValue({
                 customer: testCustomer,
                 error: null,
@@ -47,7 +47,7 @@ describe("<CustomerDetails />", () => {
             expect(fields.length).toBe(1);
         });
 
-        it("Should render 2 rows after fetch with 2 set values", () => {
+        xit("Should render 2 rows after fetch with 2 set values", () => {
             testCustomer.name = "Siggi Viggi";
             testCustomer.email = "siggi@viggi.is";
             useGetCustomerById.mockReturnValue({

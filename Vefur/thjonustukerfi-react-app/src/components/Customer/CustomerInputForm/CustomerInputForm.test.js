@@ -48,6 +48,7 @@ describe("<CustomerInputForm />", () => {
                 email: "",
                 postalCode: "",
                 address: "",
+                comment: ""
             };
             inputs = wrapper.find("input");
         });
