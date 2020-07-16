@@ -34,7 +34,7 @@ const ItemView = ({ match }) => {
 
     const [printObjectEx, setPrintObjectEx] = React.useState(null);
 
-    const { printItemObj } = useItemPrintDetails(id, setPrintObjectEx);
+    useItemPrintDetails(id, setPrintObjectEx);
 
     // Set that the item has updated, details and state need to update
     const hasUpdated = () => {

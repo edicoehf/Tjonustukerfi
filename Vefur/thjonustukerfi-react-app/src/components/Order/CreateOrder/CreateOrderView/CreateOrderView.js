@@ -32,8 +32,8 @@ const CreateOrderView = () => {
     // Set the creation of the order successful
     const handleSuccess = (data) => {
         setSuccess(true);
-        console.log("CreateOrderView:handleSuccess");
-        console.log(data);
+//        console.log("CreateOrderView:handleSuccess");
+//        console.log(data);
         PrintService.printOrder(data);
     };
 

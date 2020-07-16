@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@material-ui/core";
 import AddBoxIcon from "@material-ui/icons/AddBox";
-import EditIcon from "@material-ui/icons/Edit";
+import CheckIcon from "@material-ui/icons/Check";
 import PickCustomerModal from "../PickCustomerModal/PickCustomerModal";
 import "./AddCustomer.css";
 import CustomerDetails from "../../../Customer/CustomerDetails/CustomerDetails";
@@ -48,7 +48,7 @@ const AddCustomer = ({ customer, addCustomer }) => {
                             variant="contained"
                             color="primary"
                             size="large"
-                            startIcon={<EditIcon />}
+                            startIcon={<CheckIcon />}
                             onClick={handleOpen}
                         >
                             Velja annan viðskiptavin

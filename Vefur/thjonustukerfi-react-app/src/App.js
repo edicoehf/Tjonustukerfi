@@ -63,7 +63,7 @@ function App() {
                 </Switch>
             </div>
             <div className="footer">
-                <div className="app-version">Útgáfa 1.0.7</div>
+                <div className="app-version">Útgáfa 1.0.8</div>
             </div>
         </div>
     );

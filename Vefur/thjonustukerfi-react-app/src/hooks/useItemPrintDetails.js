@@ -39,7 +39,7 @@ const useItemPrintDetails = (id, setFn) => {
                 // Set details that were fetched
                 setIsLoading(false);
             });
-    }, [id]);
+    }, [id, setFn]);
 
     return { item, error, isLoading };
 };

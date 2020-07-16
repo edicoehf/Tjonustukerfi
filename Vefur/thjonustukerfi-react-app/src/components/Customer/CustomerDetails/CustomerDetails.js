@@ -2,7 +2,8 @@ import React from "react";
 import CustomerProperty from "../CustomerProperty/CustomerProperty";
 import useGetCustomerById from "../../../hooks/useGetCustomerById";
 import useUpdateCustomerEmail from "../../../hooks/useUpdateCustomerEmail";
-import { TableContainer, Table, Paper, TableBody } from "@material-ui/core";
+import { TableContainer, Table, TableRow, TableCell, Paper, TableBody, Button } from "@material-ui/core";
+import EditIcon from "@material-ui/icons/Edit";
 import "./CustomerDetails.css";
 import { idType } from "../../../types/index";
 import ProgressComponent from "../../Feedback/ProgressComponent/ProgressComponent";
@@ -31,7 +32,7 @@ const CustomerDetails = ({ id }) => {
 
     // Fetch details about customer
     const { customer, error, isProcessing, setCustomer } = useGetCustomerById(id);
-    const { updateEmailError, handleUpdateEmail, isProcessingEmail } = useUpdateCustomerEmail(
+    const { handleUpdateEmail } = useUpdateCustomerEmail(
         handleEmailUpdateSuccess
     );
     // To display notification modal regarding ready orders
@@ -45,10 +46,14 @@ const CustomerDetails = ({ id }) => {
 
     const onEnterEmail = (newEmail) => {
         customer.email = newEmail;
+    }
+
+    const handleCustomerSave = () => {
         const emailObj = {
-            id: customer.id,
-            email: newEmail
+            id:    customer.id,
+            email: customer.email
         };
+
         //console.log(emailObj);
         handleUpdateEmail(emailObj);
     }
@@ -111,6 +116,27 @@ const CustomerDetails = ({ id }) => {
                                     value={customer.comment}
                                     editable={false}
                                 />
+                <TableRow
+                    className="customer-details-row with-border"
+                >
+                    <TableCell className="customer-details-title-cell">
+                    </TableCell>
+                    <TableCell className="customer-details-content-cell">
+                        <Button
+                            className="edt-btn"
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            startIcon={<EditIcon />}
+                            onClick={handleCustomerSave}
+                        >
+                            Uppfæra
+                        </Button>
+
+                    </TableCell>
+</TableRow>
+
+
                             </TableBody>
                         </Table>
                     </TableContainer>
