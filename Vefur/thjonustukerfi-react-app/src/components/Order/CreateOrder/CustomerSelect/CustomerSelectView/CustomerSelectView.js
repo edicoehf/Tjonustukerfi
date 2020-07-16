@@ -20,9 +20,9 @@ const CustomerSelectView = ({ addCustomer }) => {
     // Get all the customers
     const { customers, error, isLoading } = useGetAllCustomers();
     // Order customers by name
-    customers.sort((a, b) => a.name.localeCompare(b.name));
+    // customers.sort((a, b) => a.name.localeCompare(b.name));
     // Filter customers by searchbar input
-    const { searchResults, handleChange, searchTerm } = useSearchBar(customers, "name,phone");
+    const { searchResults, handleChange, searchTerm } = useSearchBar(customers, "name,phone", 20);
     const searchBarPlaceHolder = "Leita eftir nafni eða síma";
 
     return (
@@ -42,16 +42,14 @@ const CustomerSelectView = ({ addCustomer }) => {
                     <p className="error">Gat ekki sótt viðskiptavini</p>
                 ) : customers.length === 0 ? (
                     <p className="error">Engir viðskiptavinir í gagnagrunni</p>
-                ) : (!searchResults) ? (
-                    <p>
+                ) : (!searchResults || searchResults.length === 0) ? (
+                    <p className="error">
                         Sláðu inn hluta úr nafni eða símanúmeri viðskiptavinar til að leita
                     </p>
                 ) : ( searchResults.length === 0 ) ? (
                     <p className="error">
                         Engir viðskiptavinir fundust með þessum leitarskilyrðum
                     </p>
-                ) : (searchResults === null || searchResults === undefined || searchResults.map === undefined ) ? (
-                    <span>Smu</span>
                 ) : (
                     <Paper elevation={3} className="customer-select-list">
                         <List className="list-of-customers">

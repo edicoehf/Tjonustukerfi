@@ -25,6 +25,9 @@ const useGetAllCustomers = () => {
             .getAllCustomers()
             .then((customers) => {
                 // Set customeres that were fetched
+
+                customers.sort((a, b) => a.name.localeCompare(b.name));
+                
                 setCustomers(customers);
                 // Set error as null incase it was earlier set due to error
                 setError(null);

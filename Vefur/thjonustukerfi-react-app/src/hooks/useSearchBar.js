@@ -10,17 +10,13 @@ import useDebounce from './useDebouncedSearch';
  * @category Input
  * @subcategory Hooks
  */
-const useSearchBar = (filterList, initKey) => {
+const useSearchBar = (filterList, initKey, limit) => {
     // The input in the searchbar
     const [searchTerm, setSearchTerm] = React.useState("");
     // The filtered list:
     const [searchResults, setSearchResults] = React.useState([]);
     // Use 'name' key if nothing is provided
     const key = initKey || "name";
-    var keys = [];
-    if (key.includes(",")) {
-        keys = key.split(",");
-    }
     // Watch for changes in the input
     const handleChange = (event) => {
         setSearchTerm(event.target.value);
@@ -29,22 +25,36 @@ const useSearchBar = (filterList, initKey) => {
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
     React.useEffect(() => {
-        // Filter by searchterm
+        //console.log("About to execute search bar effect");
+        //console.log("Length of filterList: " + filterList.length);
+        //console.log("Debounced search term is: " + debouncedSearchTerm);
+        var keys = [];
+        if (key.includes(",")) {
+            keys = key.split(",");
+        }
+            // Filter by searchterm
         var results = [];
         if (keys.length === 2) {
             // The second item may not be a string...
             results = filterList.filter((filterListItem) =>
-            filterListItem[keys[0]].toLowerCase().includes(debouncedSearchTerm.toLowerCase()) || filterListItem[keys[1]].toString().toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+                filterListItem[keys[0]].toLowerCase().includes(debouncedSearchTerm.toLowerCase()) || filterListItem[keys[1]].toString().toLowerCase().includes(debouncedSearchTerm.toLowerCase())
             );
         } else {
             results = filterList.filter((filterListItem) =>
-            filterListItem[key].toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+                filterListItem[key].toLowerCase().includes(debouncedSearchTerm.toLowerCase())
             );
         }
+
+        if (limit) {
+            results = results.slice(0, 20);
+            setSearchResults(results);
+        } else {
+            setSearchResults(results);
+        }
         // Set the results
-        setSearchResults(results);
-    }, [debouncedSearchTerm]);
-//    }, [filterList, key, keys, debouncedSearchTerm]);
+    }, [key, debouncedSearchTerm, filterList, limit]);
+    // For the moment, we must NOT include filterList in the dependency array. For some reason, the effect seems to run m
+    //}, [key, debouncedSearchTerm]);
 
     return { searchResults, handleChange, searchTerm };
 };
