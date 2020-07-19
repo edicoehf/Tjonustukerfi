@@ -83,7 +83,7 @@ const internalPrintSingleLabel = (item, device) => {
 
 ^FX Top section with logo, name and address.
 ^CF0,40
-^FO50,30^FDPöntun nr ${item.orderId} - vara nr. ${item.id}^FS
+^FO50,30^FDPöntun nr ${item.orderId}^FS
 ^FO50,80^FDDagsetning: ${dateFormat(item.dateCreated)}^FS
 ^FO50,140^GB700,1,3^FS
 
