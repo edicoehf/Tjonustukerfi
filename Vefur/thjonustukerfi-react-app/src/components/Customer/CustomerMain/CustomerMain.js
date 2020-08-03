@@ -20,7 +20,7 @@ const CustomerMain = () => {
     // Sort the customers alphabetically
     customers.sort((a, b) => a.name.localeCompare(b.name));
     // Filter customers with the searchbar input
-    const { searchResults, handleChange, searchTerm } = useSearchBar(customers, "name,phone");
+    const { searchResults, handleChange, searchTerm } = useSearchBar(customers, "name,phone", 30);
 
     // Get the history
     const history = useHistory();

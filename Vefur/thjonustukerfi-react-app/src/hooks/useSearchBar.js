@@ -46,7 +46,7 @@ const useSearchBar = (filterList, initKey, limit) => {
         }
 
         if (limit) {
-            results = results.slice(0, 20);
+            results = results.slice(0, limit);
             setSearchResults(results);
         } else {
             setSearchResults(results);

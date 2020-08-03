@@ -22,9 +22,14 @@ const useGetAllOrders = () => {
         setIsLoading(true);
         // Get orders
         orderService
-            .getAllOrders()
+            .getAllRawOrders()
             .then((orders) => {
-                // Set orderes that were fetched
+                // Set orders that were fetched:
+                //console.log("Orders have been fetched and are:");
+                //console.log(orders)
+                orders = orders.sort((a,b) => -a.dateCreated.localeCompare(b.dateCreated));
+                //console.log("Orders after sorting:");
+                //console.log(orders);
                 setOrders(orders);
                 // Set error as null incase it was earlier set due to error
                 setError(null);

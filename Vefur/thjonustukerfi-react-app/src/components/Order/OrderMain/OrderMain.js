@@ -18,7 +18,8 @@ const OrderMain = () => {
     // Use search bar hook, filter all orders using the searchbar input
     const { searchResults, handleChange, searchTerm } = useSearchBar(
         orders,
-        "customer,id"
+        "customer,id",
+        30
     );
 
     return (

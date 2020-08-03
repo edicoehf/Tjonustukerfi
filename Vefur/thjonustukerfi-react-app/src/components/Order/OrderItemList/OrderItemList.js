@@ -42,8 +42,11 @@ const OrderItemList = ({ items }) => {
                     <TableCell className="order-item-barcode">
                         <b>Strikamerki</b>
                     </TableCell>
-                    <TableCell className="order-item-list-id">
+                    <TableCell className="order-item-list-state">
                         <b>Staða</b>
+                    </TableCell>
+                    <TableCell className="order-item-list-location">
+                        <b>Staðsetning</b>
                     </TableCell>
                     <TableCell className="order-item-list-quantity">
                         <b>Magn</b>

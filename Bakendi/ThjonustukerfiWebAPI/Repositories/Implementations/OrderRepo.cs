@@ -196,6 +196,25 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             return GetOrderDTOwithOrderList(ordersEntity);
         }
 
+        public IEnumerable<OrderDTO> GetAllRawOrders()
+        {
+            var result = from o in _dbContext.Order
+                join c in _dbContext.Customer on o.CustomerId equals c.Id
+                select new OrderDTO
+                {
+                    Id            = o.Id,
+                    CustomerId    = c.Id,
+                    Customer      = c.Name,
+                    CustomerEmail = c.Email,
+                    Barcode       = o.Barcode,
+                    DateCreated   = o.DateCreated,
+                    DateModified  = o.DateModified,
+                    DateCompleted = o.DateCompleted,
+                    Items         = new List<ItemDTO>() // Not sent in this API to speed up things...
+                };
+            return result;
+        }
+
         public void CompleteOrder(long orderId)
         {
             var orderEntity = _dbContext.Order.FirstOrDefault(o => o.Id == orderId);    // find entity
@@ -385,7 +404,6 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             barcode++;
 
             return barcode.ToString();
-
         }
 
         /// <summary>Used to add multiple items in order input</summary>
@@ -461,8 +479,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
 
             // add customer name and email
             var customer = _dbContext.Customer.FirstOrDefault(c => c.Id == dto.CustomerId);
-            dto.Customer = customer.Name;
-            dto.CustomerEmail = customer.Email;
+            dto.Customer        = customer.Name;
+            dto.CustomerEmail   = customer.Email;
+            dto.CustomerComment = customer.Comment;
 
             // Loop through all items in the order and add them to the DTO
             var itemList = _dbContext.ItemOrderConnection.Where(c => c.OrderId == order.Id).ToList();

@@ -87,6 +87,27 @@ const getAllOrders = () => {
         .catch((error) => Promise.reject(error));
 };
 
+
+/**
+ * Get all orders from the API
+ *
+ * @returns List of orders
+ *
+ * @category Order
+ * @subcategory Services
+ */
+const getAllRawOrders = () => {
+    return fetch(api_endpoint + "raw", {
+        method: "GET",
+        headers: {
+            crossDomain: true,
+        },
+    })
+        .then(handleErrors)
+        .then(handleData)
+        .catch((error) => Promise.reject(error));
+};
+
 /**
  * Update order in the API
  *
@@ -153,6 +174,7 @@ export default {
     getOrderById,
     createOrder,
     getAllOrders,
+    getAllRawOrders,
     deleteOrderById,
     updateOrderById,
     checkoutOrderById,

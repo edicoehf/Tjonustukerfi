@@ -1,9 +1,9 @@
 .order-details div.MuiPaper-root .order-item-list-row {
     display: grid;
-    grid-template-columns: 8% 17% 17% 12% 11% 11% 16% 8%;
+    grid-template-columns: 8% 17% 17% 8% 11% 11% 8% 12% 8%;
     grid-template-areas:
-        "id category service filleted sliced barcode state quantity"
-        ". details details details details details details details";
+        "id category service filleted sliced barcode state location quantity"
+        ". details details details details details details details details";
 
 }
 
@@ -39,6 +39,11 @@
 
 .order-details div.MuiPaper-root .order-item-state {
     grid-area: state;
+    align-self: center;
+}
+
+.order-details div.MuiPaper-root .order-item-location {
+    grid-area: location;
     align-self: center;
 }
 

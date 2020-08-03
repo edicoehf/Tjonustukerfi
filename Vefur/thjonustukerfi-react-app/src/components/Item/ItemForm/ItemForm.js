@@ -34,7 +34,7 @@ const initialState = {
     otherService: "",
     amount: 1,
     sliced: "sliced",
-    filleted: "notFilleted",
+    filleted: "filleted",
     details: "",
     categories: null,
     services: null,
@@ -291,6 +291,11 @@ const ItemForm = ({ existingItem, categories, services, submitHandler }) => {
                                 value="sliced"
                                 control={<Radio />}
                                 label="Bitar"
+                            />
+                            <FormControlLabel
+                                value="undisclosed"
+                                control={<Radio />}
+                                label="Ótilgreint"
                             />
                         </RadioGroup>
                         {!isExistingItem && (

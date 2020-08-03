@@ -46,6 +46,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             }
 
             body.HtmlBody += $"<p>Kær kveðja {Constants.CompanyName}</p>";
+            body.HtmlBody += "Opnunartími:  Mán - Fös frá 9 til 17.";
 
             MailService.Sendmail(emailAddress, subject, body, Constants.CompanyCc);
         }
@@ -83,6 +84,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
                 }
 
                 body.HtmlBody += $"<p>Kær kveðja {Constants.CompanyName}</p>";
+                body.HtmlBody += "Opnunartími:  Mán - Fös frá 9 til 17.";
 
                 MailService.Sendmail(emailAddress, subject, body);
             }
@@ -120,6 +122,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             }
 
             body.HtmlBody += $"<p>Kær kveðja {Constants.CompanyName}</p>";
+            body.HtmlBody += "Opnunartími:  Mán - Fös frá 9 til 17.";
 
             MailService.Sendmail(emailAddress, subject, body);
         }
@@ -148,6 +151,7 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             }
 
             body.HtmlBody += $"<p>Kær kveðja {Constants.CompanyName}</p>";
+            body.HtmlBody += "Opnunartími:  Mán - Fös frá 9 til 17.";
 
             MailService.Sendmail(emailAddress, subject, body);
         }

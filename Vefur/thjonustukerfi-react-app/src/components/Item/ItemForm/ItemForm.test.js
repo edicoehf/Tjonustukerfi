@@ -59,7 +59,7 @@ describe("<ItemForm />", () => {
             service: null,
             amount: 1,
             sliced: "sliced",
-            filleted: "notFilleted",
+            filleted: "filleted",
             details: "",
             otherCategory: "",
             otherService: "",
@@ -231,7 +231,7 @@ describe("<ItemForm />", () => {
 
         it("Should be nonempty string at start", () => {
             const fill = findByName(radios, "filleted");
-            expect(fill.props().value).toBe("notFilleted");
+            expect(fill.props().value).toBe("filleted");
         });
 
         it("Should capture filleted correctly onChange", () => {

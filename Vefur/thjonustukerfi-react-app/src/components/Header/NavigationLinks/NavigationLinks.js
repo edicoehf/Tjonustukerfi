@@ -22,7 +22,7 @@ const NavigationLinks = () => {
             </Link>
             <Link className="navbar-item" to="/new-order">
                 <MenuItem selected={router.pathname === "/new-order"}>
-                    Ný Pöntun
+                    Ný pöntun
                 </MenuItem>
             </Link>
             <Link className="navbar-item" to="/customers">
@@ -32,7 +32,7 @@ const NavigationLinks = () => {
             </Link>
             <Link className="navbar-item" to="/new-customer">
                 <MenuItem selected={router.pathname === "/new-customer"}>
-                    Nýr Viðskiptavinur
+                    Nýr viðskiptavinur
                 </MenuItem>
             </Link>
             <Link className="navbar-item" to="/item-search">

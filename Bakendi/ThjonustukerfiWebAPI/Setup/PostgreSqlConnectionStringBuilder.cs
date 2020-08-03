@@ -14,7 +14,7 @@ namespace ThjonustukerfiWebAPI.Setup
 	/// This class was found here:
 	/// https://stackoverflow.com/questions/51602947/using-entity-framework-asp-net-mvc-core-and-postgresql-with-heroku
 	/// and is helpful for Heroku deployment when using the built-in Postgres DB, since Heroku will add the connection
-	/// string to the app in a specific format, and this class nows how to parse that format.
+	/// string to the app in a specific format, and this class knows how to parse that format.
 	/// </summary>
 	public class PostgreSqlConnectionStringBuilder : DbConnectionStringBuilder
 	{

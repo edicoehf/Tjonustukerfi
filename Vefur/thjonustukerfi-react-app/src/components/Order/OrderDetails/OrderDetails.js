@@ -51,9 +51,6 @@ const OrderDetails = ({ id, update, receivedUpdate }) => {
                         <Table className="order-info">
                             <TableBody>
                                 <TableRow>
-                                    <TableCell className="order-barcode">
-                                        <b>Strikamerki:</b> {order.barcode}
-                                    </TableCell>
                                     <TableCell>
                                         <b>Viðskiptavinur: </b>
                                         <Link
@@ -63,6 +60,15 @@ const OrderDetails = ({ id, update, receivedUpdate }) => {
                                             {order.customer}
                                         </Link>
                                     </TableCell>
+                                    <TableCell className="order-barcode">
+                                        <b>Strikamerki:</b> {order.barcode}
+                                    </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell>
+                                        <b>Athugasemd:</b> {order.customerComment}
+                                    </TableCell>
+                                    <TableCell></TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell className="order-date">

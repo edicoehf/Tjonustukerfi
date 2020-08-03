@@ -36,7 +36,7 @@ const useOrderForm = (initialState, validate, submitHandler) => {
                         serviceId:     parseInt(item.service),
                         otherCategory: item.otherCategory,
                         otherService:  item.otherService,
-                        sliced:        item.sliced === "sliced" ? true : false,
+                        sliced:        item.sliced === "sliced" ? true : (item.sliced === "undisclosed" ? undefined : false),
                         filleted:      item.filleted === "filleted" ? true : false,
                         details:       item.details,
                         quantity:      item.amount.toString()

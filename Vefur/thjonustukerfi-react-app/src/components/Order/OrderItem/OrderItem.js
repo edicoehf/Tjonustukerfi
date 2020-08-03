@@ -13,7 +13,7 @@ const OrderItem = ({ item, border }) => {
     // Destruct item to get its properties
     const { id, category, service, barcode, state, json, details, quantity } = item;
     // Destruct json to get extra info
-    const { sliced, filleted, otherCategory, otherService } = json;
+    const { location, sliced, filleted, otherCategory, otherService } = json;
 
     // Get history
     const history = useHistory();
@@ -53,6 +53,7 @@ const OrderItem = ({ item, border }) => {
                 </TableCell>
             )}
             <TableCell className="order-item-state">{state}</TableCell>
+            <TableCell className="order-item-location">{location}</TableCell>
             <TableCell className="order-item-quantity">{quantity}</TableCell>
         </TableRow>
     );
