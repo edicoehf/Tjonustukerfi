@@ -44,6 +44,7 @@ const useForm = (initialState, validate, submitHandler) => {
     // Exported function for submitting form
     // Checks for errors and submits if error free
     const handleSubmit = (e) => {
+        console.log("Calling submit");
         e.preventDefault();
         const validationErrors = validate(values);
         setErrors(validationErrors);

@@ -66,7 +66,7 @@ const CustomerInputForm = ({
                         value={values.email}
                         htmlId="email"
                         className="email-input"
-                        label="Netfang *"
+                        label="Netfang"
                         errorMessage={errors.email}
                         onInput={handleChange}
                     />

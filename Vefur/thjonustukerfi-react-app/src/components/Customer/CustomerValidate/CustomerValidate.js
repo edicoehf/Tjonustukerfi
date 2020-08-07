@@ -19,12 +19,18 @@ const validateForm = (values) => {
     if (name.length >= 100) {
         errors.name = "Nafn verður að vera minna en 100 stafir";
     }
-    if (!validator.isEmail(email)) {
-        errors.email = "Ógilt netfang";
+
+    if (email !== "") {
+        if (!validator.isEmail(email)) {
+            errors.email = "Ógilt netfang";
+        }
     }
-    if (email === "") {
-        errors.email = "Netfang vantar";
-    }
+
+    // Email is now optional...
+    //if (email === "") {
+    //    errors.email = "Netfang vantar";
+    //}
+
     //const re = /^(0?[1-9]|[12][0-9]|3[01])(1[0-2]|0?[1-9])[0-9]{2}(-?)([0-9]{3})[890]$/;
     //if (ssn !== "" && re.exec(ssn)) {
     //    errors.ssn = "Ógild kennitala";

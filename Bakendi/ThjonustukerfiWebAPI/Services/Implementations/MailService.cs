@@ -164,11 +164,12 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
                 await Task.Run(() => 
                 {
                     var env = EnvironmentFileManager.LoadEvironmentFile();      // load env variables
-                    string smtpUsername, smtpPassword, smtpServer, smtpPort;    // variables needed to connect and send
+                    string smtpUsername, smtpPassword, smtpServer, smtpPort, smtpSecurity;    // variables needed to connect and send
                     env.TryGetValue("SMTP_USERNAME", out smtpUsername);         // get username
                     env.TryGetValue("SMTP_PASSWORD", out smtpPassword);         // get password
                     env.TryGetValue("SMTP_SERVER", out smtpServer);             // get server address
                     env.TryGetValue("SMTP_PORT", out smtpPort);                 // get server port
+                    env.TryGetValue("SMTP_SECURITY", out smtpSecurity);
 
                     var message = new MimeMessage();
                     message.From.Add(new MailboxAddress(Constants.CompanyName, Constants.CompanyEmail));    // Add company email info
@@ -181,14 +182,21 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
                         message.Cc.Add(new MailboxAddress(cc));
                     }
 
-                    //_log.Info("About to send email to:" + emailAddress);
+                    _log.Info("About to send email to:" + emailAddress);
                     //_log.Info(message.Body);
 
                     using (var client = new SmtpClient())   // Mailkit SmtpClient
                     {
+                        var securityOptions = MailKit.Security.SecureSocketOptions.None;
+                        if (smtpSecurity == "StartTls")
+                        {
+                            securityOptions = MailKit.Security.SecureSocketOptions.StartTls;
+                        }
+
                         // connect  Note:   mailkit has a connect function with the 3rd parameter as useSSL that you can set to false. This is
                         //                  not enough when connecting to some servers, this method will make sure their is no secure socket connection (if needed)
-                        client.Connect(smtpServer, int.Parse(smtpPort), MailKit.Security.SecureSocketOptions.None);
+                        //client.Connect(smtpServer, int.Parse(smtpPort), MailKit.Security.SecureSocketOptions.None);
+                        client.Connect(smtpServer, int.Parse(smtpPort), securityOptions);
 
                         // authenticate
                         client.Authenticate(smtpUsername, smtpPassword);

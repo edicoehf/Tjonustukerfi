@@ -21,20 +21,32 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             _dbContext = context;
             _mapper = mapper;
         }
+
         public IEnumerable<CustomerDTO> GetAllCustomers()
         {
             return _mapper.Map<IEnumerable<CustomerDTO>>(_dbContext.Customer.ToList());
         }
+
         public long CreateCustomer(CustomerInputModel customer)
         {
-            var check = _dbContext.Customer.FirstOrDefault(p => p.Email == customer.Email);
-            if(check != null) { throw new InvalidIdException("This person already exists."); }
+            // If an email is present (which may not necessarily be the case now),
+            // then the email must be unique.
+            if (!string.IsNullOrEmpty(customer.Email))
+            {
+                var check = _dbContext.Customer.FirstOrDefault(p => p.Email == customer.Email);
+                if(check != null) 
+                {
+                    throw new InvalidIdException("This person already exists."); 
+                }
+            }
+
             // Mapping from input to entity and adding to database
             var entity = _dbContext.Customer.Add(_mapper.Map<Customer>(customer)).Entity;
             _dbContext.SaveChanges();
 
             return entity.Id;
         }
+
         public CustomerDetailsDTO GetCustomerById(long id)
         {
             // Get customer customer entity form database
