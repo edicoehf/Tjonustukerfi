@@ -66,7 +66,7 @@ const OrderDetails = ({ id, update, receivedUpdate }) => {
                                 </TableRow>
                                 <TableRow>
                                     <TableCell>
-                                        <b>Athugasemd:</b> {order.customerComment}
+                                        <b>Athugasemd:</b> <span class="customer-comment"> {order.customerComment}</span>
                                     </TableCell>
                                     <TableCell></TableCell>
                                 </TableRow>

@@ -20,14 +20,18 @@ namespace ThjonustukerfiWebAPI.Providers.SMS
 
 			phoneNumber = phoneNumber.Replace("-", "").Replace(" ", "");
 
-			var request = new RestRequest("/smap/push", Method.POST);
-			request.AddParameter("L", Username);
-			request.AddParameter("P", Password);
-			request.AddParameter("msisdn", phoneNumber);
-			request.AddParameter("T", msgConverted);
+			//var request = new RestRequest("/smap/push", Method.POST);
+			var request = new RestRequest("/smap/push", Method.GET);
+			request.AddParameter("L",      Username,     ParameterType.GetOrPost);
+			request.AddParameter("P",      Password,     ParameterType.QueryStringWithoutEncode);
+			request.AddParameter("msisdn", phoneNumber,  ParameterType.GetOrPost);
+			request.AddParameter("T",      msgConverted, ParameterType.GetOrPost);
 
 			try
 			{
+				var fullUrl = client.BuildUri(request);
+				log.Info($"SMS: about to send request for URI {fullUrl}");
+
 				client.ExecuteAsync(request, response =>
 				{
 					log.Info("SMS Service response: " + response.Content);

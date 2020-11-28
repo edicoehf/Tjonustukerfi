@@ -20,6 +20,9 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         private IOrderRepo _orderRepo;
         private ICustomerRepo _customerRepo;
         private IMapper _mapper;
+
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(ItemService));
+
         public ItemService(IItemRepo itemRepo, IInfoRepo infoRepo, IOrderRepo orderRepo, ICustomerRepo customerRepo, IMapper mapper)
         {
             _itemRepo = itemRepo;
@@ -158,12 +161,22 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
         {
             if (_orderRepo.OrderPickupReady(orderId))
             {
-                var order = _orderRepo.GetOrderById(orderId);   // get order
-                var customer = _customerRepo.GetCustomerById(order.CustomerId); // get customer
+                var order    = _orderRepo.GetOrderById(orderId);
+                var customer = _customerRepo.GetCustomerById(order.CustomerId);
 
                 if(Constants.sendEmail) { MailService.sendOrderComplete(order, customer); }
-                else if(Constants.sendSMS) { /* send SMS */ }
-                
+
+                if(Constants.sendSMS)
+                {
+                    if (!string.IsNullOrEmpty(customer.Phone))
+                    {
+                        SMSService.sendOrderCompleteSMS(order, customer);
+                    }
+                    else
+                    {
+                        _log.Error("No Phone number registered for customer " + customer.Name);
+                    }
+                }
             }
         }
     }

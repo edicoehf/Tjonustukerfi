@@ -21,17 +21,20 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
             var emailAddress = customer.Email;
             var subject      = $"{Constants.CompanyName} - Áminning um tilbúna pöntun";
             var body         = new BodyBuilder();
-            body.HtmlBody    = $"<h2>Góðan daginn {order.Customer}.</h2>";
-            body.HtmlBody    += $"<p>Þú átt ósótta pöntun hjá okkur (nr. {order.Id}) sem kláraðist fyrir {weeksSinceReady} vikum.<br>Pöntun:</p>";
-            
-            body.HtmlBody += "<ul>";
-            foreach (var item in order.Items)
-            {
-                body.HtmlBody += $"<li> {item.Category} - {item.Service}, magn: {item.Quantity} - staða: {item.State}</li>";
-            }
-            body.HtmlBody += "</ul><br>";
+            body.HtmlBody    = $"<h2>Góðan daginn,</h2>";
+            body.HtmlBody    += $"<p>Þú átt ósótta pöntun hjá okkur (nr. {order.Id}).<br>";
 
-            // encode to image
+            if (order.Items != null)
+            {
+                body.HtmlBody += "<ul>";
+                foreach (var item in order.Items)
+                {
+                    body.HtmlBody += $"<li> {item.Category} - {item.Service}, magn: {item.Quantity} - staða: {item.State}</li>";
+                }
+                body.HtmlBody += "</ul><br>";
+            }
+
+            // Encode barcode to image:
             var bCode = new Barcode(); // get barcode lib class
             bCode.Encode(BarcodeLib.TYPE.CODE128, order.Barcode, Color.Black, Color.White, BarcodeImageDimensions.Width, BarcodeImageDimensions.Height);
 
@@ -47,6 +50,9 @@ namespace ThjonustukerfiWebAPI.Services.Implementations
 
             body.HtmlBody += $"<p>Kær kveðja {Constants.CompanyName}</p>";
             body.HtmlBody += "Opnunartími:  Mán - Fös frá 9 til 17.";
+
+            _log.Info($"About to send the following email to {emailAddress}:");
+            _log.Info(body);
 
             MailService.Sendmail(emailAddress, subject, body, Constants.CompanyCc);
         }

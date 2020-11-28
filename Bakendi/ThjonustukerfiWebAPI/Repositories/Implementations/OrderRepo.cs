@@ -17,6 +17,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
     {
         private DataContext _dbContext;
         private IMapper _mapper;
+
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(OrderRepo));
+
         public OrderRepo(DataContext context, IMapper mapper)
         {
             _dbContext = context;
@@ -315,10 +318,17 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             var order = _dbContext.Order.FirstOrDefault(o => o.Id == orderId);  // get order
             if(order == null) { throw new NotFoundException($"Order with ID {orderId} was not found."); }
 
-            var itemOrderConnections = _dbContext.ItemOrderConnection.Where(ioc => ioc.OrderId == orderId).ToList();
+            var result = InternalOrderPickupReady(order);
+            return result.Item1;
+        }
 
-            if(itemOrderConnections.Count == 0) { return false; }   // if no item exists in order, then it isn't complete
-            if(order.DateCompleted != null) { return false; }   // order is already complete and customer has picked it up
+        public Tuple<bool, List<Item>> InternalOrderPickupReady(Order order)
+        {
+            var itemOrderConnections = _dbContext.ItemOrderConnection.Where(ioc => ioc.OrderId == order.Id).ToList();
+            var itemList = new List<Item>();
+
+            if(itemOrderConnections.Count == 0) { return new Tuple<bool, List<Item>>(false, itemList); }   // if no item exists in order, then it isn't complete
+            if(order.DateCompleted != null) { return new Tuple<bool, List<Item>>(false, itemList); }   // order is already complete and customer has picked it up
 
             foreach (var itemConnection in itemOrderConnections)
             {
@@ -330,20 +340,39 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
                 var itemStep = _dbContext.ServiceState.FirstOrDefault(ss => ss.ServiceId == item.ServiceId && ss.StateId == item.StateId).Step;
 
                 // if the item is not in the next to last step or last step it is not ready to be picked up
-                if(itemStep != (lastStep - 1) && itemStep != lastStep) { return false; }
+                if(itemStep != (lastStep - 1) && itemStep != lastStep) 
+                {
+                    return new Tuple<bool, List<Item>>(false, itemList);
+                }
+                else
+                {
+                    itemList.Add(item);
+                }
             }
 
-            return true;
+            return new Tuple<bool, List<Item>>(true, itemList);
         }
 
-        public List<Order> GetOrdersReadyForPickup()
+        public List<Order> GetOrdersReadyForPickup(long? customerId = null)
         {
             // Get all orders that are ready for pickup
-            var orders = _dbContext.Order.ToList();
+            var orderQuery = _dbContext.Order.AsQueryable();
+            if (customerId != null)
+            {
+                orderQuery = orderQuery.Where(x => x.CustomerId == customerId);
+            }
+            var orders = orderQuery.ToList();
             var readyOrders = new List<Order>();
             foreach (var order in orders)
             {
-                if(OrderPickupReady(order.Id)) { readyOrders.Add(order); }
+                var result = InternalOrderPickupReady(order);
+                if (result.Item1 == true)
+                {
+                    // TODO: add items to order object!
+//                    order
+                    readyOrders.Add(order);
+                }
+//                if(OrderPickupReady(order.Id)) { readyOrders.Add(order); }
             }
 
             return readyOrders; // return the DTO of all these orders
@@ -352,9 +381,9 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
         public List<OrderDTO> GetOrdersReadyForPickupByCustomerID(long customerId)
         {
             // get orders ready for pickup with this customer
-            var orders = GetOrdersReadyForPickup().Where(o => o.CustomerId == customerId).ToList();
+            var orders = GetOrdersReadyForPickup(customerId);
 
-            return GetOrderDTOwithOrderList(orders);    // map orders to DTO
+            return GetOrderDTOwithOrderList(orders);
         }
 
         public void IncrementNotification(long orderId)
@@ -362,9 +391,14 @@ namespace ThjonustukerfiWebAPI.Repositories.Implementations
             var order = _dbContext.Order.FirstOrDefault(o => o.Id == orderId);
             if(order != null)
             {
-                order.NotificationCount++;
+                _log.Info($"OrderRepo.IncrementNotification: order found, current NotificationCount is {order.NotificationCount}");
+                order.NotificationCount = order.NotificationCount + 1;
 
                 _dbContext.SaveChanges();
+            }
+            else
+            {
+                _log.Info("OrderRepo.IncrementNotification: order NOT found");
             }
         }
 

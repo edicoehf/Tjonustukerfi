@@ -54,3 +54,8 @@
 .order-details .error {
     margin-top: 1em;
 }
+
+.order-details .customer-comment {
+    color: red;
+    font-weight: bold;
+}

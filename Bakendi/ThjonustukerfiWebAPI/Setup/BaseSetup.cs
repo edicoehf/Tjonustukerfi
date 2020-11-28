@@ -19,6 +19,8 @@ namespace ThjonustukerfiWebAPI.Setup
         private List<State> _states;
         private List<Category> _categories;
 
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(BaseSetup));
+
         public BaseSetup(DataContext context)
         {
             _dbContext = context;
@@ -32,10 +34,10 @@ namespace ThjonustukerfiWebAPI.Setup
 
             _dbContext.Database.Migrate();
 
-            var DB_Services = _dbContext.Set<Service>().ToList();
+            var DB_Services      = _dbContext.Set<Service>().ToList();
             var DB_ServiceStates = _dbContext.Set<ServiceState>().ToList();
-            var DB_States = _dbContext.Set<State>().ToList();
-            var DB_Categories = _dbContext.Set<Category>().ToList();
+            var DB_States        = _dbContext.Set<State>().ToList();
+            var DB_Categories    = _dbContext.Set<Category>().ToList();
 
             bool change = false;
 
@@ -103,10 +105,10 @@ namespace ThjonustukerfiWebAPI.Setup
             BarcodeImageDimensions.Height    = config.BarcodeImageDimensions.Height;  // Set barcode image height
             BarcodeImageDimensions.Width     = config.BarcodeImageDimensions.Width;   // Set barcode image width
 
-            _services      = config.Services;            // Set services
-            _serviceStates = config.ServiceStates;  // Set service states
-            _states        = config.States;                // Set states
-            _categories    = config.Categories;        // Set categories
+            _services      = config.Services;
+            _serviceStates = config.ServiceStates;
+            _states        = config.States;
+            _categories    = config.Categories;
         }
 
         /// <summary>
@@ -123,8 +125,13 @@ namespace ThjonustukerfiWebAPI.Setup
             // get environment variables
             string SMTP_USERNAME = Environment.GetEnvironmentVariable("SMTP_USERNAME");
             string SMTP_PASSWORD = Environment.GetEnvironmentVariable("SMTP_PASSWORD");
-            string SMTP_SERVER = Environment.GetEnvironmentVariable("SMTP_SERVER");
-            string SMTP_PORT = Environment.GetEnvironmentVariable("SMTP_PORT");
+            string SMTP_SERVER   = Environment.GetEnvironmentVariable("SMTP_SERVER");
+            string SMTP_PORT     = Environment.GetEnvironmentVariable("SMTP_PORT");
+
+            string SMS_USER      = Environment.GetEnvironmentVariable("SMS_USER");
+            string SMS_PASS      = Environment.GetEnvironmentVariable("SMS_PASS");
+            string SMS_URL       = Environment.GetEnvironmentVariable("SMS_URL");
+            string SMS_BACKEND   = Environment.GetEnvironmentVariable("SMS_BACKEND");
 
             // if any of these variables are not set, then do not continue
             if(SMTP_USERNAME == null || SMTP_PASSWORD == null || SMTP_SERVER == null || SMTP_PORT == null) { return; }
@@ -132,6 +139,8 @@ namespace ThjonustukerfiWebAPI.Setup
             // if the file doesn't exist, use the .env variables
             if(!File.Exists(envPath))
             {
+                _log.Error(".env file doesn't exist, will create it from scratch");
+
                 var path = "Config/EnvironmentVariables";
 
                 System.IO.Directory.CreateDirectory(path);
@@ -142,21 +151,43 @@ namespace ThjonustukerfiWebAPI.Setup
                     outputFile.WriteLine($"SMTP_PASSWORD={SMTP_PASSWORD}");
                     outputFile.WriteLine($"SMTP_SERVER={SMTP_SERVER}");
                     outputFile.WriteLine($"SMTP_PORT={SMTP_PORT}");
+
+                    outputFile.WriteLine($"SMS_USER={SMS_USER}");
+                    outputFile.WriteLine($"SMS_PASS={SMS_PASS}");
+                    outputFile.WriteLine($"SMS_URL={SMS_URL}");
+                    outputFile.WriteLine($"SMS_BACKEND={SMS_BACKEND}");
                 }
             }
             else    // if it does exist, check if the environment variables have changed
             {
+                _log.Error(".env file DOES exist, check if it needs updating");
+
                 var envVar = EnvironmentFileManager.LoadEvironmentFile();
 
                 string smtpUsername, smtpPassword, smtpServer, smtpPort;
-                envVar.TryGetValue("SMTP_USERNAME", out smtpUsername);         // get username
-                envVar.TryGetValue("SMTP_PASSWORD", out smtpPassword);         // get password
-                envVar.TryGetValue("SMTP_SERVER", out smtpServer);             // get server address
-                envVar.TryGetValue("SMTP_PORT", out smtpPort);                 // get server port
+                string smsUser, smsPass, smsUrl, smsBackend;
+                envVar.TryGetValue("SMTP_USERNAME", out smtpUsername);
+                envVar.TryGetValue("SMTP_PASSWORD", out smtpPassword);
+                envVar.TryGetValue("SMTP_SERVER",   out smtpServer);
+                envVar.TryGetValue("SMTP_PORT",     out smtpPort);
+                envVar.TryGetValue("SMS_USER",      out smsUser);
+                envVar.TryGetValue("SMS_PASS",      out smsPass);
+                envVar.TryGetValue("SMS_URL",       out smsUrl);
+                envVar.TryGetValue("SMS_BACKEND",   out smsBackend);
 
-                // reset env file if any values are not equal or set
-                if(SMTP_USERNAME != smtpUsername || SMTP_PASSWORD != smtpPassword || SMTP_SERVER != smtpServer || SMTP_PORT != smtpPort)
+                // Reset env file if any values are not equal or set
+                if(SMTP_USERNAME != smtpUsername 
+                || SMTP_PASSWORD != smtpPassword 
+                || SMTP_SERVER   != smtpServer
+                || SMTP_PORT     != smtpPort
+                || SMS_USER      != smsUser
+                || SMS_PASS      != smsPass
+                || SMS_URL       != smsUrl
+                || SMS_BACKEND   != smsBackend)
                 {
+                    // Not really an error though...
+                    _log.Error("Some value in the env file does not match with the environment variables, will write new values to env file");
+
                     File.WriteAllText(envPath, string.Empty);
 
                     var path = "Config/EnvironmentVariables";
@@ -166,6 +197,11 @@ namespace ThjonustukerfiWebAPI.Setup
                         outputFile.WriteLine($"SMTP_PASSWORD={SMTP_PASSWORD}");
                         outputFile.WriteLine($"SMTP_SERVER={SMTP_SERVER}");
                         outputFile.WriteLine($"SMTP_PORT={SMTP_PORT}");
+
+                        outputFile.WriteLine($"SMS_USER={SMS_USER}");
+                        outputFile.WriteLine($"SMS_PASS={SMS_PASS}");
+                        outputFile.WriteLine($"SMS_URL={SMS_URL}");
+                        outputFile.WriteLine($"SMS_BACKEND={SMS_BACKEND}");
                     }
                 }
             }

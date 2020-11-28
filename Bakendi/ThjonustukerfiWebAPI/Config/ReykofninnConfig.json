@@ -86,7 +86,7 @@
         { "name": "Fugl",         "id": 9 },
         { "name": "Annað",        "id": 10 }
     ],
-    "sendSMS":      false,
+    "sendSMS":      true,
     "sendEmail":    true,
     "companyEmail": "noreply@reykofninn.is",
     "companyCC":    "kari@reykofninn.is",

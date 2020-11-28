@@ -52,7 +52,7 @@ namespace ThjonustukerfiWebAPI.Repositories.Interfaces
 
         /// <summary>Gets all order Entities that are ready for pickup</summary>
         /// <returns>List of Order</returns>
-        List<Order> GetOrdersReadyForPickup();
+        List<Order> GetOrdersReadyForPickup(long? customerId = null);
 
         /// <summary>Increments order notifaction count by one given the order ID</summary>
         void IncrementNotification(long orderId);
